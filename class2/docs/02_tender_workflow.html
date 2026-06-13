@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>02 投標文件工作流 - Skyline Class02</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .version-switch {
+      position: absolute;
+      top: 2rem;
+      right: 4rem;
+      background: rgba(99, 102, 241, 0.2);
+      border: 1px solid var(--color-primary-light);
+      padding: 0.5rem 1rem;
+      border-radius: 99px;
+      color: var(--color-primary-light);
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    .version-switch:hover {
+      background: var(--color-primary);
+      color: white;
+      text-decoration: none;
+      box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+    }
+    .step-badge {
+      display: inline-block;
+      background: var(--color-primary);
+      color: white;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      margin-right: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 側邊欄導覽 -->
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      Skyline Class <span>class2</span>
+    </div>
+    
+    <div class="sidebar-menu-title">引導總覽</div>
+    <ul class="sidebar-menu">
+      <li><a href="../README.html" class="sidebar-link">🚀 專案啟動說明</a></li>
+      <li><a href="../workbench/index.html" class="sidebar-link">🧭 教材工作台</a></li>
+    </ul>
+
+    <div class="sidebar-menu-title">核心教材</div>
+    <ul class="sidebar-menu">
+      <li><a href="01_course_map.html" class="sidebar-link">🗺️ 01 課程地圖</a></li>
+      <li><a href="02_tender_workflow.html" class="sidebar-link active">⚙️ 02 投標工作流</a></li>
+      <li><a href="03_multi_ai_collaboration.html" class="sidebar-link">👥 03 Multi-AI 協作</a></li>
+      <li><a href="04_artifact_management.html" class="sidebar-link">🛡️ 04 Artifact 管理</a></li>
+    </ul>
+
+    <div class="sidebar-menu-title">輔助工具</div>
+    <ul class="sidebar-menu">
+      <li><a href="../memo.html" class="sidebar-link">📝 未來規劃備忘錄</a></li>
+    </ul>
+  </nav>
+
+  <!-- 主內容區 -->
+  <main class="main-content">
+    <a href="02_tender_workflow.md" class="version-switch">📄 檢視 Markdown 版本</a>
+    
+    <div class="card">
+      <h1>02 投標文件工作流：從大型 RFP 到結構化交付</h1>
+      <p>在企業環境中，處理<strong>大型招標文件（RFP, Request for Proposal）</strong>與準備投標書是一項高難度、高壓力的工作。本單元將為您解析傳統企業的痛點，並展示如何利用 AI 工作流將此流程全面升級。</p>
+    </div>
+
+    <h2>🛑 企業的真實痛點</h2>
+    <p>當企業面對一個 200 頁的政府或大型企業招標說明書時，通常會面臨以下挑戰：</p>
+    <ul>
+      <li><strong>時間壓力極大：</strong>從招標公告到截止投標通常僅有 14 至 30 天，時間非常緊迫。</li>
+      <li><strong>閱讀瓶頸：</strong>文件冗長、法律條款複雜，人工閱讀容易遺漏關鍵要求（如必備資格、罰則、交付時程）。</li>
+      <li><strong>跨部門協作混亂：</strong>技術團隊、財務團隊與法務團隊各自撰寫，缺乏統一的架構與一致的寫作風格。</li>
+      <li><strong>合規風險高：</strong>只要遺漏一個合規要件，整份投標書就可能在資格審查階段被直接淘汰。</li>
+    </ul>
+
+    <h2>⚙️ AI 端到端工作流設計 (End-to-End Workflow)</h2>
+    <p>為了解決上述痛點，我們不只是讓 AI 來「寫草稿」，而是設計了一個<strong>端到端的多角色協作工作流</strong>。</p>
+
+    <h3>🔄 工作流圖示 (Workflow Visualization)</h3>
+    <div class="mermaid-container">
+      <pre class="mermaid">
+        graph TD
+            RFP[1. 原始 RFP 輸入] --> NLM[2. NotebookLM 知識消化]
+            NLM --> Matrix[3. 生成需求矩陣]
+            Matrix --> SMF[4. smf 轉譯為寫作架構]
+            SMF --> AAA[5. aaa 產出投標書草案]
+            AAA --> CCC[6. ccc 品質挑戰與漏洞查核]
+            CCC -->|修正建議| AAA
+            CCC -->|審核通過| FALO[7. FALO PM 版本封存與治理]
+            FALO --> Deliverable[8. 最終 Artifact 交付]
+
+            style RFP fill:#1e1b4b,stroke:#6366f1,stroke-width:2px,color:#fff
+            style Deliverable fill:#115e59,stroke:#14b8a6,stroke-width:2px,color:#fff
+      </pre>
+    </div>
+
+    <h2>📝 工作流步驟詳解</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>步驟</th>
+          <th>階段名稱</th>
+          <th>負責工具/角色</th>
+          <th>輸入 (Input)</th>
+          <th>處理過程 (Process)</th>
+          <th>輸出 (Output)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="step-badge">1</span></td>
+          <td><strong>知識導入與消化</strong></td>
+          <td>NotebookLM</td>
+          <td>原始 PDF/Word 招標文件。</td>
+          <td>快速建立索引，消化合約與背景知識。</td>
+          <td>知識問答庫與重點摘要。</td>
+        </tr>
+        <tr>
+          <td><span class="step-badge">2</span></td>
+          <td><strong>需求矩陣提取</strong></td>
+          <td>smf (ChatGPT)</td>
+          <td>NotebookLM 重點摘要。</td>
+          <td>識別所有「必須符合」的合規要件。</td>
+          <td>招標需求矩陣表。</td>
+        </tr>
+        <tr>
+          <td><span class="step-badge">3</span></td>
+          <td><strong>教材/草案編寫</strong></td>
+          <td>aaa (Antigravity)</td>
+          <td>需求矩陣與 ff 指導方向。</td>
+          <td>負責結構化 Markdown 的編寫與格式化。</td>
+          <td>投標文件草案 (Draft.md)。</td>
+        </tr>
+        <tr>
+          <td><span class="step-badge">4</span></td>
+          <td><strong>品質挑戰與查核</strong></td>
+          <td>ccc (AI Reviewer)</td>
+          <td>投標文件草案與原始 RFP。</td>
+          <td>尋找邏輯漏洞或潛在合規風險。</td>
+          <td>挑戰報告與修改意見。</td>
+        </tr>
+        <tr>
+          <td><span class="step-badge">5</span></td>
+          <td><strong>版本與專案治理</strong></td>
+          <td>FALO PM</td>
+          <td>通過審查的草案。</td>
+          <td>進行版本化管理，封存為可交付企業資產。</td>
+          <td>最終 Artifact (V1.0.md)。</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>💎 企業主管關心的「商業價值」</h2>
+    <p>透過這套工作流，企業能獲得的不再只是「寫得比較快」，而是：</p>
+    <ul>
+      <li><strong>合規率提升至 100%：</strong>透過需求矩陣與 ccc 角色的雙重把關，確保無任何招標要件遺漏。</li>
+      <li><strong>準備時間縮短 70%：</strong>AI 自動化提取大綱與起草，讓人類專家（ff）能專注在核心商業策略與定價，而非繁瑣的文書作業。</li>
+      <li><strong>資產可傳承：</strong>所有過程產出的需求矩陣、技術架構、審核意見都透過 Artifact 機制留存，成為公司未來的投標範本庫。</li>
+    </ul>
+
+    <div class="alert alert-note">
+      <div class="alert-note-title">🧭 下一步引導</div>
+      <p>了解工作流的整體架構後，您可能會好奇：這些 AI 角色在技術與邏輯上是如何互動的？請前往 <a href="03_multi_ai_collaboration.html"><strong>單元 03：Multi-AI 協作說明</strong></a>，我們將深入剖析 Class02 的核心主角與協作機制。</p>
+    </div>
+  </main>
+
+  <!-- 引入 Mermaid JS -->
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'dark',
+      themeVariables: {
+        background: 'transparent',
+        primaryColor: '#6366f1',
+        primaryTextColor: '#f8fafc',
+        primaryBorderColor: '#818cf8',
+        lineColor: '#14b8a6',
+        secondaryColor: '#1e1b4b',
+        tertiaryColor: '#0f172a'
+      }
+    });
+  </script>
+</body>
+</html>

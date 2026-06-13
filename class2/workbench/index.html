@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skyline Class02 教材工作台</title>
+  <link rel="stylesheet" href="../docs/style.css">
+  <style>
+    .version-switch {
+      position: absolute;
+      top: 2rem;
+      right: 4rem;
+      background: rgba(99, 102, 241, 0.2);
+      border: 1px solid var(--color-primary-light);
+      padding: 0.5rem 1rem;
+      border-radius: 99px;
+      color: var(--color-primary-light);
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    .version-switch:hover {
+      background: var(--color-primary);
+      color: white;
+      text-decoration: none;
+      box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+    }
+    .persona-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      transition: all 0.3s;
+    }
+    .persona-card:hover {
+      background: rgba(99, 102, 241, 0.05);
+      border-color: rgba(99, 102, 241, 0.2);
+    }
+    .persona-title {
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      color: var(--color-secondary);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 側邊欄導覽 -->
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      Skyline Class <span>class2</span>
+    </div>
+    
+    <div class="sidebar-menu-title">引導總覽</div>
+    <ul class="sidebar-menu">
+      <li><a href="../README.html" class="sidebar-link">🚀 專案啟動說明</a></li>
+      <li><a href="index.html" class="sidebar-link active">🧭 教材工作台</a></li>
+    </ul>
+
+    <div class="sidebar-menu-title">核心教材</div>
+    <ul class="sidebar-menu">
+      <li><a href="../docs/01_course_map.html" class="sidebar-link">🗺️ 01 課程地圖</a></li>
+      <li><a href="../docs/02_tender_workflow.html" class="sidebar-link">⚙️ 02 投標工作流</a></li>
+      <li><a href="../docs/03_multi_ai_collaboration.html" class="sidebar-link">👥 03 Multi-AI 協作</a></li>
+      <li><a href="../docs/04_artifact_management.html" class="sidebar-link">🛡️ 04 Artifact 管理</a></li>
+    </ul>
+
+    <div class="sidebar-menu-title">輔助工具</div>
+    <ul class="sidebar-menu">
+      <li><a href="../memo.html" class="sidebar-link">📝 未來規劃備忘錄</a></li>
+    </ul>
+  </nav>
+
+  <!-- 主內容區 -->
+  <main class="main-content">
+    <a href="index.md" class="version-switch">📄 檢視 Markdown 版本</a>
+    
+    <div class="card">
+      <h1>Skyline Class02 教材工作台 (Workbench)</h1>
+      <p>歡迎來到 **Skyline Class02 教材工作台**。本工作台是為了協助學員與企業主管快速理解 <strong>「AI 如何從聊天對話框轉型為企業工作流」</strong> 的實作示範基地。</p>
+      <p>在這裡，我們以一個典型的企業情境——<strong>「投標文件與大型合約協作」</strong> 為主軸，解構如何利用不同的 AI 角色與管理工具，建立一個自動化、可治理的 AI 文件工程。</p>
+    </div>
+
+    <h2>🧭 快速導覽通道</h2>
+    <p>下圖為本次課程的單元推進關係圖：</p>
+    
+    <div class="mermaid-container">
+      <pre class="mermaid">
+        graph TD
+            Start[開始：專案啟動] --> Map[01. 課程地圖]
+            Map --> Flow[02. 投標文件工作流]
+            Flow --> MultiAI[03. Multi-AI 協作]
+            MultiAI --> Artifact[04. Artifact 管理]
+            Artifact --> Demo[未來規劃：展示 Web App]
+      </pre>
+    </div>
+
+    <ul>
+      <li><a href="../docs/01_course_map.html"><strong>單元 01：課程地圖</strong></a> —— <em>「從問答到工作流的思維轉變」</em>。理解 Horizon 到 Skyline 的學習路徑，以及 Class02 的核心知識點。</li>
+      <li><a href="../docs/02_tender_workflow.html"><strong>單元 02：投標文件工作流說明</strong></a> —— <em>「如何用 AI 吞下大型投標文件？」</em>。解析企業在處理大型 RFP（需求建議書）時的痛點，以及如何建立端到端（End-to-End）的 AI 工作流。</li>
+      <li><a href="../docs/03_multi_ai_collaboration.html"><strong>單元 03：Multi-AI 協作說明</strong></a> —— <em>「當 NotebookLM 遇上 Antigravity 與 FALO PM」</em>。說明三個核心工具/角色在工作流中扮演的「理解、整理、管理」鐵三角。</li>
+      <li><a href="../docs/04_artifact_management.html"><strong>單元 04：Artifact 管理機制</strong></a> —— <em>「把 AI 的產出變成企業真正的資產」</em>。說明如何建立 AI 產出物的生命週期管理、命名規範與品質審查門檻。</li>
+    </ul>
+
+    <h2>🎯 依角色情境導讀</h2>
+    <p>如果您是不同背景的讀者，建議可以從以下情境切入：</p>
+
+    <div class="persona-card">
+      <div class="persona-title">💼 我是企業主管 / 決策者</div>
+      <p>您最關心的是 <strong>AI 能否落地、降低風險與提高產出效率</strong>。</p>
+      <p>💡 建議優先閱讀：<a href="../docs/02_tender_workflow.html">02 投標文件工作流說明</a> 與 <a href="../docs/04_artifact_management.html">04 Artifact 管理機制</a>。</p>
+    </div>
+
+    <div class="persona-card">
+      <div class="persona-title">📋 我是專案經理 (PM) / 流程規劃者</div>
+      <p>您關心的是 <strong>AI 之間如何協同工作、進度如何追蹤</strong>。</p>
+      <p>💡 建議優先閱讀：<a href="../docs/03_multi_ai_collaboration.html">03 Multi-AI 協作說明</a> 與 <a href="../docs/01_course_map.html">01 課程地圖</a>。</p>
+    </div>
+
+    <div class="persona-card">
+      <div class="persona-title">💻 我是教材工程師 / 展示開發者</div>
+      <p>您關心的是 <strong>Markdown 文件工程、檔案結構與前端 Demo 展示</strong>。</p>
+      <p>💡 建議優先閱讀：<a href="../docs/01_course_map.html">01 課程地圖</a> 與根目錄 <a href="../README.html">README.html</a> 中的角色定義。</p>
+    </div>
+
+    <h2>🚀 未來展示規劃</h2>
+    <p>在後續的專案推進中，我們將在 <code>demo/</code> 目錄中建立一個 HTML/CSS/JS 的實體網頁展示，將這套投標文件工作流與 Multi-AI 的協作過程視覺化，讓企業主管能以最直覺的方式體驗 AI 治理的威力。</p>
+  </main>
+
+  <!-- 引入 Mermaid JS -->
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'dark',
+      themeVariables: {
+        background: 'transparent',
+        primaryColor: '#6366f1',
+        primaryTextColor: '#f8fafc',
+        primaryBorderColor: '#818cf8',
+        lineColor: '#14b8a6',
+        secondaryColor: '#1e1b4b',
+        tertiaryColor: '#0f172a'
+      }
+    });
+  </script>
+</body>
+</html>

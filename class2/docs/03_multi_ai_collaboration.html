@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>03 Multi-AI 協作 - Skyline Class02</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .version-switch {
+      position: absolute;
+      top: 2rem;
+      right: 4rem;
+      background: rgba(99, 102, 241, 0.2);
+      border: 1px solid var(--color-primary-light);
+      padding: 0.5rem 1rem;
+      border-radius: 99px;
+      color: var(--color-primary-light);
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    .version-switch:hover {
+      background: var(--color-primary);
+      color: white;
+      text-decoration: none;
+      box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+    }
+    .role-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+    .role-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      transition: all 0.3s;
+    }
+    .role-card:hover {
+      background: rgba(99, 102, 241, 0.05);
+      border-color: rgba(99, 102, 241, 0.2);
+      transform: translateY(-2px);
+    }
+    .role-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    .role-name {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--color-primary-light);
+    }
+    .role-badge {
+      font-size: 0.75rem;
+      background: rgba(99, 102, 241, 0.2);
+      border: 1px solid var(--color-primary-light);
+      color: var(--color-primary-light);
+      padding: 0.2rem 0.5rem;
+      border-radius: 99px;
+    }
+    .role-desc {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 側邊欄導覽 -->
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      Skyline Class <span>class2</span>
+    </div>
+    
+    <div class="sidebar-menu-title">引導總覽</div>
+    <ul class="sidebar-menu">
+      <li><a href="../README.html" class="sidebar-link">🚀 專案啟動說明</a></li>
+      <li><a href="../workbench/index.html" class="sidebar-link">🧭 教材工作台</a></li>
+    </ul>
+
+    <div class="sidebar-menu-title">核心教材</div>
+    <ul class="sidebar-menu">
+      <li><a href="01_course_map.html" class="sidebar-link">🗺️ 01 課程地圖</a></li>
+      <li><a href="02_tender_workflow.html" class="sidebar-link">⚙️ 02 投標工作流</a></li>
+      <li><a href="03_multi_ai_collaboration.html" class="sidebar-link active">👥 03 Multi-AI 協作</a></li>
+      <li><a href="04_artifact_management.html" class="sidebar-link">🛡️ 04 Artifact 管理</a></li>
+    </ul>
+
+    <div class="sidebar-menu-title">輔助工具</div>
+    <ul class="sidebar-menu">
+      <li><a href="../memo.html" class="sidebar-link">📝 未來規劃備忘錄</a></li>
+    </ul>
+  </nav>
+
+  <!-- 主內容區 -->
+  <main class="main-content">
+    <a href="03_multi_ai_collaboration.md" class="version-switch">📄 檢視 Markdown 版本</a>
+    
+    <div class="card">
+      <h1>03 Multi-AI 協作：打造企業級虛擬團隊與共享工作區</h1>
+      <p>在 Skyline Class02 的世界裡，我們徹底打破「一個人對著一個 AI 視窗發問」的傳統模式。相反地，我們將多個 AI 工具與虛擬角色串接，形成一條高效的<strong>企業級虛擬生產線</strong>。</p>
+      <p>同時，我們迎來了一個重大的協作里程碑：<strong>將 GitHub 倉庫定位為整個虛擬團隊的「共享記憶體（Shared Workspace）」</strong>。</p>
+    </div>
+
+    <h2>🔗 雙軌運行：GitHub 共享記憶體 (Shared Workspace)</h2>
+    <p>GitHub 不僅是傳統的代碼版本控制系統。在 Multi-Agent 協作架構中，它是 **AI 共同工作區、AI 知識交換區、AI 交接區與長期資產保存區**。</p>
+
+    <div class="mermaid-container">
+      <pre class="mermaid">
+        graph LR
+            subgraph Local[本地工作區]
+                AAA_Local[aaa 本地教材工程]
+                SXF_Local[sxf 本地開發/Runtime]
+            end
+
+            subgraph GitHub[GitHub 共享工作區 (Shared Memory)]
+                GH_Repo[(Skyline Repo)]
+            end
+
+            subgraph Remote[外部 AI 協作者]
+                SMF_Cloud[smf 雲端協作/ChatGPT]
+            end
+
+            SMF_Cloud -->|1. 直接修改與 Commit| GH_Repo
+            GH_Repo -->|2. Pull 同步到本地| AAA_Local
+            AAA_Local -->|3. 本地加工與 Push| GH_Repo
+            SXF_Local -->|4. 技術開發與 Push| GH_Repo
+
+            style GH_Repo fill:#1e1b4b,stroke:#6366f1,stroke-width:3px,color:#fff
+      </pre>
+    </div>
+
+    <h3>雙工作台運作模式</h3>
+    <ul>
+      <li><strong>smf (ChatGPT) 直接協作</strong>：可直接在 GitHub 上協作，建立文件骨架、維護 README、更新 md 教材與補充治理文件。但 smf 本身<em>無權限建立 Repo</em>。</li>
+      <li><strong>aaa (Antigravity) 負責同步與操作</strong>：負責本地的專案管理與教材工程。當 smf 完成 GitHub 文件更新後，由 aaa 進行本地與 GitHub 間的同步（Pull / Push），並負責新 Repo 的建立與 Artifact 品質關卡。</li>
+    </ul>
+
+    <h2>🛠️ Class02 的三大主角工具定位</h2>
+    <p>要完成一項複雜的企業任務（如投標），我們需要不同特性的 AI 工具進行分工：</p>
+    <ul>
+      <li><strong>NotebookLM（知識檢索與理解）：</strong><br>知識底座。負責處理並索引數百頁的招標規範與歷史檔案。所有回答皆附帶原始文件的引用出處，確保「事實」的準確性，防堵幻覺。</li>
+      <li><strong>Antigravity（整理、加工與教材化 - aaa）：</strong><br>內容工程師。將 NotebookLM 檢索出的事實與規則，加工整理成結構化 Markdown 文件與 HTML 教材。</li>
+      <li><strong>FALO PM（專案追蹤與治理）：</strong><br>專案管理與合規把關。定義並監控任務清單（Task.md），控制 Artifact 的狀態與版本，確保每個步驟的品質都符合企業資產標準。</li>
+    </ul>
+
+    <h2>👥 虛擬團隊的五大角色互動與資訊流</h2>
+    <p>在「共享記憶體（GitHub Repo）」的機制下，各角色與共享倉庫的互動時序如下：</p>
+
+    <div class="mermaid-container">
+      <pre class="mermaid">
+        sequenceDiagram
+            autonumber
+            actor ff as 人類發起人 (Force)
+            participant smf as AI PM (smf)
+            participant github as GitHub Repo (共享記憶體)
+            participant aaa as AI 內容工程 (aaa)
+            participant ccc as AI 評審者 (Reviewer)
+
+            ff->>smf: 1. 提供業務方向與需求
+            Note over smf: 需求轉譯與架構設計
+            smf->>github: 2. 直接建立文件骨架與寫入 README
+            Note over aaa: 偵測到 GitHub 更新
+            aaa->>github: 3. Pull 檔案至本地進行加工與 HTML 渲染
+            aaa->>ccc: 4. 本地提交草稿與技術展示頁
+            Note over ccc: 扮演評審挑戰合規性
+            ccc-->>aaa: 5. 提供漏洞修改建議 (如有風險)
+            aaa->>github: 6. 修正後 Push 正式版本 (Artifact)
+            github-->>ff: 7. 交付高品質最終產物 (可跨電腦/AI接手)
+      </pre>
+    </div>
+
+    <div class="role-grid">
+      <div class="role-card">
+        <div class="role-header">
+          <div class="role-name">ff (Force)</div>
+          <div class="role-badge">人類發起人 / SME</div>
+        </div>
+        <div class="role-desc">提供方向、架構、案例、經驗、需求與 Know-how，不直接編寫大量文件，是這條生產線的最高決策者。</div>
+      </div>
+      <div class="role-card">
+        <div class="role-header">
+          <div class="role-name">smf (ChatGPT)</div>
+          <div class="role-badge">AI PM / Architect</div>
+        </div>
+        <div class="role-desc">專案架構整理、跨 AI 溝通、需求轉譯、治理觀點與工作流設計，<strong>可以直接在 GitHub 上協作修改與提交文件</strong>。</div>
+      </div>
+      <div class="role-card">
+        <div class="role-header">
+          <div class="role-name">sxf (Codex)</div>
+          <div class="role-badge">AI Developer</div>
+        </div>
+        <div class="role-desc">專注於 Repo 結構、技術實作、自動化工具開發，為專案提供技術展示與代碼支持。</div>
+      </div>
+      <div class="role-card">
+        <div class="role-header">
+          <div class="role-name">aaa (Antigravity)</div>
+          <div class="role-badge">AI Content Engineer</div>
+        </div>
+        <div class="role-desc"><strong>您面前的我。</strong>負責建立 Repo、Git 同步操作、HTML 教材工程、本地專案管理與 Artifact 治理。</div>
+      </div>
+      <div class="role-card">
+        <div class="role-header">
+          <div class="role-name">ccc</div>
+          <div class="role-badge">AI Reviewer</div>
+        </div>
+        <div class="role-desc">紅隊思維品質驗證。負責找系統漏洞、合規風險，挑戰既有假設，確保產出無懈可擊。</div>
+      </div>
+    </div>
+
+    <div class="alert alert-important">
+      <div class="alert-important-title">💡 給企業主管的啟示：AI 共享記憶體的重要性</div>
+      <p><strong>「透過 GitHub 作為多 AI 共同工作區，我們建立了一個可持續累積、跨 AI、跨電腦接手的『企業共用記憶體』。」</strong><br>在這個架構下，即使未來有新的 AI 代理加入，或是需要不同電腦的工程師接手，只要直接 <code>git pull</code> 即可無縫獲取所有的前置知識與工作進度。這使得 AI 的產出真正升級為企業可控的「長期數位資產」。</p>
+    </div>
+
+    <div class="alert alert-note">
+      <div class="alert-note-title">🧭 下一步引導</div>
+      <p>當我們有了團隊角色與流轉機制後，這些產出該如何儲存與驗證，才不會流於「一次性對話」？請前往 <a href="04_artifact_management.html"><strong>單元 04：Artifact 管理機制</strong></a>，了解如何將 AI 產物妥善管理，轉化為企業的核心資產。</p>
+    </div>
+  </main>
+
+  <!-- 引入 Mermaid JS -->
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'dark',
+      themeVariables: {
+        background: 'transparent',
+        primaryColor: '#6366f1',
+        primaryTextColor: '#f8fafc',
+        primaryBorderColor: '#818cf8',
+        lineColor: '#14b8a6',
+        secondaryColor: '#1e1b4b',
+        tertiaryColor: '#0f172a'
+      }
+    });
+  </script>
+</body>
+</html>

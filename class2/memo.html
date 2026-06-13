@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>未來規劃備忘錄 - Skyline Class02</title>
+  <link rel="stylesheet" href="docs/style.css">
+  <style>
+    .version-switch {
+      position: absolute;
+      top: 2rem;
+      right: 4rem;
+      background: rgba(20, 184, 166, 0.2);
+      border: 1px solid var(--color-secondary);
+      padding: 0.5rem 1rem;
+      border-radius: 99px;
+      color: var(--color-secondary);
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    .version-switch:hover {
+      background: var(--color-secondary);
+      color: white;
+      text-decoration: none;
+      box-shadow: 0 0 15px rgba(20, 184, 166, 0.4);
+    }
+    .todo-container {
+      margin-top: 2rem;
+    }
+    .todo-item {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      display: flex;
+      gap: 1.25rem;
+      align-items: flex-start;
+      transition: all 0.3s;
+    }
+    .todo-item:hover {
+      background: rgba(99, 102, 241, 0.03);
+      border-color: rgba(99, 102, 241, 0.2);
+      transform: translateX(4px);
+    }
+    .todo-checkbox-wrapper {
+      padding-top: 0.25rem;
+    }
+    .todo-checkbox {
+      width: 22px;
+      height: 22px;
+      cursor: pointer;
+      accent-color: var(--color-secondary);
+      transition: transform 0.2s;
+    }
+    .todo-checkbox:active {
+      transform: scale(0.8);
+    }
+    .todo-content {
+      flex: 1;
+    }
+    .todo-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 0.5rem;
+      transition: color 0.3s, text-decoration 0.3s;
+    }
+    .todo-item.completed .todo-title {
+      color: var(--text-muted);
+      text-decoration: line-through;
+    }
+    .todo-desc {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .todo-item.completed .todo-desc {
+      opacity: 0.6;
+    }
+    .todo-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      font-weight: 600;
+      margin-top: 0.5rem;
+    }
+    .badge-high {
+      background: rgba(236, 72, 153, 0.15);
+      border: 1px solid var(--color-accent);
+      color: var(--color-accent);
+    }
+    .badge-medium {
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid var(--color-primary-light);
+      color: var(--color-primary-light);
+    }
+    .badge-low {
+      background: rgba(20, 184, 166, 0.15);
+      border: 1px solid var(--color-secondary);
+      color: var(--color-secondary);
+    }
+    .progress-bar-container {
+      background: rgba(255, 255, 255, 0.05);
+      height: 8px;
+      border-radius: 99px;
+      margin-bottom: 2rem;
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+      transition: width 0.4s ease;
+    }
+    .progress-text {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 側邊欄導覽 -->
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      Skyline Class <span>class2</span>
+    </div>
+    
+    <div class="sidebar-menu-title">引導總覽</div>
+    <ul class="sidebar-menu">
+      <li><a href="README.html" class="sidebar-link">🚀 專案啟動說明</a></li>
+      <li><a href="workbench/index.html" class="sidebar-link">🧭 教材工作台</a></li>
+    </ul>
+
+    <div class="sidebar-menu-title">核心教材</div>
+    <ul class="sidebar-menu">
+      <li><a href="docs/01_course_map.html" class="sidebar-link">🗺️ 01 課程地圖</a></li>
+      <li><a href="docs/02_tender_workflow.html" class="sidebar-link">⚙️ 02 投標工作流</a></li>
+      <li><a href="docs/03_multi_ai_collaboration.html" class="sidebar-link">👥 03 Multi-AI 協作</a></li>
+      <li><a href="docs/04_artifact_management.html" class="sidebar-link">🛡️ 04 Artifact 管理</a></li>
+    </ul>
+
+    <div class="sidebar-menu-title">輔助工具</div>
+    <ul class="sidebar-menu">
+      <li><a href="memo.html" class="sidebar-link active">📝 未來規劃備忘錄</a></li>
+    </ul>
+  </nav>
+
+  <!-- 主內容區 -->
+  <main class="main-content">
+    <a href="workbench/index.html" class="version-switch">🧭 返回工作台主頁</a>
+    
+    <div class="card">
+      <h1>📝 未來規劃備忘錄 (Memo)</h1>
+      <p>本備忘錄用於記錄 ff (Force) 與團隊未來規劃的靈感、待辦事項與研究課題。以防遺忘，並為後續 Skyline Class 專案發展預做鋪墊。本頁面支援本機進度保存功能。</p>
+      
+      <div class="progress-text">
+        <span>任務完成度</span>
+        <span id="progress-percent">0%</span>
+      </div>
+      <div class="progress-bar-container">
+        <div class="progress-bar" id="todo-progress"></div>
+      </div>
+    </div>
+
+    <div class="todo-container">
+      
+      <!-- 任務 1 -->
+      <div class="todo-item" data-id="task-1">
+        <div class="todo-checkbox-wrapper">
+          <input type="checkbox" class="todo-checkbox" id="check-1">
+        </div>
+        <div class="todo-content">
+          <label for="check-1" class="todo-title">1. AI Agent 長文件輸出</label>
+          <div class="todo-desc">研究如何突破現有 AI 模型的 Context 輸出限制，設計穩健的長文件遞迴寫作與連貫性維持工作流，以產出數十頁甚至上百頁的商業計劃書或合約書。</div>
+          <span class="todo-badge badge-high">優先度：高</span>
+        </div>
+      </div>
+
+      <!-- 任務 2 -->
+      <div class="todo-item" data-id="task-2">
+        <div class="todo-checkbox-wrapper">
+          <input type="checkbox" class="todo-checkbox" id="check-2">
+        </div>
+        <div class="todo-content">
+          <label for="check-2" class="todo-title">2. AI Cowork 實用小工具開發與教學</label>
+          <div class="todo-desc">開發並整理適合團隊日常使用的輔助工具，例如專屬 Prompt 管理器，以及針對特定工作場景的 Chrome 瀏覽器外掛開發與教學教材。</div>
+          <span class="todo-badge badge-medium">優先度：中</span>
+        </div>
+      </div>
+
+      <!-- 任務 3 -->
+      <div class="todo-item" data-id="task-3">
+        <div class="todo-checkbox-wrapper">
+          <input type="checkbox" class="todo-checkbox" id="check-3">
+        </div>
+        <div class="todo-content">
+          <label for="check-3" class="todo-title">3. 企業級 AI 協作平台與治理系統</label>
+          <div class="todo-desc">規劃一個能同步 Google Apps Script (GAS) 的協作平台，便於在行動端或外部即時獲取重要資訊。平台內部需支援多角色交談、完整對話歷史記錄，並引入 AI 分析引擎以監控、掌控專案進度與品質。</div>
+          <span class="todo-badge badge-high">優先度：高</span>
+        </div>
+      </div>
+
+      <!-- 任務 4 -->
+      <div class="todo-item" data-id="task-4">
+        <div class="todo-checkbox-wrapper">
+          <input type="checkbox" class="todo-checkbox" id="check-4">
+        </div>
+        <div class="todo-content">
+          <label for="check-4" class="todo-title">4. NotebookLM CLI 的深入運用</label>
+          <div class="todo-desc">探索 NotebookLM CLI 工具的運用。使其能夠作為獨立的查詢手段，或是深度整合至 AI 協作平台中，作為自動化 FAQ 解答與標準作業程序 (SOP) 檢索的底座。</div>
+          <span class="todo-badge badge-medium">優先度：中</span>
+        </div>
+      </div>
+
+      <!-- 任務 5 -->
+      <div class="todo-item" data-id="task-5">
+        <div class="todo-checkbox-wrapper">
+          <input type="checkbox" class="todo-checkbox" id="check-5">
+        </div>
+        <div class="todo-content">
+          <label for="check-5" class="todo-title">5. 其他新一代 QA 與 SOP 查詢模式研究</label>
+          <div class="todo-desc">除了 NotebookLM 外，評估與實驗其他前沿的檢索增強生成 (RAG) 技術、動態向量資料庫，以及知識圖譜 (Knowledge Graph) 在企業 SOP 快速檢索中的應用。</div>
+          <span class="todo-badge badge-low">優先度：低</span>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- 本機記憶 JS 邏輯 -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const checkboxes = document.querySelectorAll('.todo-checkbox');
+      const progressPercent = document.getElementById('progress-percent');
+      const todoProgress = document.getElementById('todo-progress');
+
+      // 更新進度條
+      function updateProgress() {
+        const total = checkboxes.length;
+        const checked = document.querySelectorAll('.todo-checkbox:checked').length;
+        const percent = total > 0 ? Math.round((checked / total) * 100) : 0;
+        
+        todoProgress.style.width = `${percent}%`;
+        progressPercent.textContent = `${percent}%`;
+      }
+
+      // 載入 localStorage 儲存的狀態
+      checkboxes.forEach(checkbox => {
+        const todoItem = checkbox.closest('.todo-item');
+        const taskId = todoItem.dataset.id;
+        const isCompleted = localStorage.getItem(taskId) === 'true';
+        
+        checkbox.checked = isCompleted;
+        if (isCompleted) {
+          todoItem.classList.add('completed');
+        }
+
+        // 監聽 Checkbox 變更
+        checkbox.addEventListener('change', (e) => {
+          if (e.target.checked) {
+            todoItem.classList.add('completed');
+            localStorage.setItem(taskId, 'true');
+          } else {
+            todoItem.classList.remove('completed');
+            localStorage.setItem(taskId, 'false');
+          }
+          updateProgress();
+        });
+      });
+
+      // 初始化進度
+      updateProgress();
+    });
+  </script>
+</body>
+</html>
