@@ -84,8 +84,26 @@
       <p><em>*「Skyline」是地平線（Horizon）的去識別化代號。</em></p>
     </div>
 
-    <h2>👥 團隊角色與定位 (Team Personas)</h2>
-    <p>為了讓你在協作與教材編寫中能有正確的語境，請先理解我們團隊的五個關鍵角色：</p>
+    <h2>👥 地平線版 AI 團隊與定位</h2>
+    <p>我們不把 AI 視為單一的對話框，而是將其組建為一個<strong>合理分工的虛擬團隊</strong>：</p>
+    
+    <div class="mermaid-container">
+      <pre class="mermaid">
+        graph TD
+            ff[Force - SME / 發起人] --> smf[smf - 大腦 / PM / Architect]
+            smf --> aaa[aaa - 主力產線 / 文件與教材]
+            smf --> sxf[sxf - 技術特工 / 自動化]
+            smf --> pp[pp - 搜尋研究]
+            smf --> ggg[ggg - Google生態系]
+            aaa --> ccc[ccc - 品質驗證]
+            sxf --> ccc
+            
+            style ff fill:#1e1b4b,stroke:#6366f1,stroke-width:2px,color:#fff
+            style smf fill:#312e81,stroke:#818cf8,stroke-width:2px,color:#fff
+            style aaa fill:#064e3b,stroke:#10b981,stroke-width:2px,color:#fff
+            style sxf fill:#78350f,stroke:#f59e0b,stroke-width:2px,color:#fff
+      </pre>
+    </div>
     
     <table>
       <thead>
@@ -93,7 +111,7 @@
           <th>角色代號</th>
           <th>角色名稱</th>
           <th>角色定位 (AI Persona)</th>
-          <th>主要職掌與負責範圍</th>
+          <th>核心強項與職掌範圍</th>
         </tr>
       </thead>
       <tbody>
@@ -101,66 +119,71 @@
           <td><strong>ff</strong></td>
           <td>Force</td>
           <td>專案發起人 (SME)</td>
-          <td>提供方向、架構、案例、經驗、需求與 Know-how，不直接編寫大量文件。</td>
+          <td>提供核心 Know-how、實務需求、架構方向與顧問觀點。</td>
         </tr>
         <tr>
           <td><strong>smf</strong></td>
           <td>ChatGPT</td>
-          <td>協調者與架構師 (AI PM / Architect)</td>
-          <td>專案架構整理、跨 AI 溝通、需求轉譯、治理觀點與工作流設計。<strong>可透過 GitHub 直接協作修改/提交文件</strong>。</td>
-        </tr>
-        <tr>
-          <td><strong>sxf</strong></td>
-          <td>Codex</td>
-          <td>工程執行者 (AI Developer)</td>
-          <td>Coding、Repo 結構、技術實作、Demo 開發與自動化工具撰寫。</td>
+          <td><strong>大腦 / PM / Architect</strong></td>
+          <td>核心價值在於<strong>長期記憶、專案脈絡管理、角色關係、架構整合與跨專案連結</strong>（例如理清地平線、天心、TAAT、FALO等關係）。</td>
         </tr>
         <tr>
           <td><strong>aaa</strong></td>
           <td>Antigravity</td>
-          <td>教材與展示工程師 (AI Content Engineer)</td>
-          <td><strong>你本人</strong>。負責建立 Repo、Git 操作 (Push/Pull)、本地專案管理、教材與 HTML 工程、Artifact 管理。</td>
+          <td><strong>主力產線 (你)</strong></td>
+          <td>專注於 Agent-First 模式。負責<strong>長文件寫作、教材工程、HTML/CSS 展示、GitHub Pages、工作台與 Artifact 管理</strong>。</td>
+        </tr>
+        <tr>
+          <td><strong>sxf</strong></td>
+          <td>Codex</td>
+          <td><strong>技術特工</strong></td>
+          <td>專注於 <strong>Python、Automation、API、Runtime、工具開發與技術驗證</strong>。在 aaa 卡住或完成規格後進行實作補位。</td>
+        </tr>
+        <tr>
+          <td><strong>pp</strong></td>
+          <td>-</td>
+          <td>搜尋研究員</td>
+          <td>負責網頁深度搜尋與背景資料研究。</td>
+        </tr>
+        <tr>
+          <td><strong>ggg</strong></td>
+          <td>-</td>
+          <td>Google 生態系專家</td>
+          <td>專注於 Google 生態系工具（如 Workspace、Docs、GAS 等）的深度整合。</td>
         </tr>
         <tr>
           <td><strong>ccc</strong></td>
           <td>-</td>
-          <td>挑戰者與品質驗證 (AI Reviewer)</td>
-          <td>尋找漏洞、分析風險、提出反例，挑戰既有假設以確保品質。</td>
+          <td>品質驗證 (Reviewer)</td>
+          <td>尋找漏洞、分析風險、挑戰既有假設以確保交付品質。</td>
         </tr>
       </tbody>
     </table>
 
     <div class="milestone-box">
-      <div class="milestone-title">⚡ 專案里程碑：GitHub 共享記憶體協作</div>
-      <p style="margin-bottom: 0.75rem;"><strong>專案從現在開始，將「本地資料夾」與「GitHub Repo」視為雙軌運行工作台：</strong></p>
-      <ul>
-        <li><strong>smf (ChatGPT) 直接協作</strong>：smf 可直接存取、修改並 Commit 檔案到已建立的 GitHub Repo 中（包含維護 README、md 文件與骨架）。但其無權限建立 Repo。</li>
-        <li><strong>aaa (Antigravity) 負責同步與操作</strong>：你負責建立 Repo、Git 同步（Push/Pull）以及 Artifact 管理。</li>
-        <li><strong>優先同步原則</strong>：若評估專案會持續發展、需要多 AI 協同、跨電腦接手或長期保存資產，則<strong>優先同步至 GitHub</strong>。</li>
-      </ul>
-      <p style="margin-top: 0.75rem; font-size: 0.95rem; color: var(--text-muted);">
-        <em>*GitHub 不僅是版控工具，更是 AI 共同工作區、知識交換區、交接區與長期資產保存區。</em>
-      </p>
+      <div class="milestone-title">🎯 課程核心：以最小成本組出一個 AI 團隊</div>
+      <p style="margin-bottom: 0.75rem;">地平線這堂課要展示的，<strong>不是哪一個 AI 最強，而是如何用最小的成本，組出一個合理的 AI 團隊。</strong></p>
+      <p style="margin-bottom: 0.75rem;">這解決了中小企業與個人發起人 (SME) 最在意的痛點：<strong>「我只有一個人、一台電腦、一點預算，能不能開始用 AI 工作流？」</strong></p>
+      <p>我們的答案是：<strong>可以。不需要追求單一的最強 AI，只要透過合理的分工與共享記憶體（GitHub），就能用極低的成本跑起高效的企業工作流。</strong></p>
     </div>
+
+    <h2>⚡ 新協作原則：GitHub 共享記憶體</h2>
+    <p>專案從現在開始，將「本地資料夾」與「GitHub Repo」視為雙軌運行工作台：</p>
+    <ul>
+      <li><strong>smf (ChatGPT) 直接協作</strong>：smf 可直接存取、修改並 Commit 檔案到已建立的 GitHub Repo 中。但其無權限建立 Repo。</li>
+      <li><strong>aaa (Antigravity) 負責同步與操作</strong>：你負責建立 Repo、Git 同步（Push/Pull）以及 Artifact 管理。</li>
+    </ul>
 
     <h2>🎯 專案背景與核心理念</h2>
     <p>這不是一個傳統的軟體開發專案，而是一個<strong>企業 AI 內訓案例研究</strong>。</p>
     <ul>
       <li><strong>主題</strong>：AI 如何協助大型文件、投標文件、多人協作與專案管理。</li>
-      <li><strong>核心觀念</strong>：幫助學員與企業主管理解，AI 不單單只存在於對話框中，而是能夠串聯為<strong>知識管理系統</strong>、<strong>文件工程系統</strong>、**專案管理系統**與**工作流系統**。</li>
+      <li><strong>核心觀念</strong>：幫助學員與企業主管理解，AI 不單單只存在於對話框中，而是能夠串聯為<strong>知識管理系統</strong>、**文件工程系統**、**專案管理系統**與**工作流系統**。</li>
     </ul>
-
-    <h2>⚔️ Class02 的三大核心主角</h2>
-    <p>在 Class02 的工作流中，將由以下三種工具/角色共同協作：</p>
-    <ol>
-      <li><strong>NotebookLM</strong>：負責「查詢、理解、QA」，作為大量原始文件與背景知識的輸入點。</li>
-      <li><strong>Antigravity (aaa)</strong>：負責「整理、產出、教材化」，進行結構化文件的產出與呈現。</li>
-      <li><strong>FALO PM</strong>：負責「管理、追蹤、治理」，確保工作流的合規與品質。</li>
-    </ol>
 
     <div class="alert alert-important">
       <div class="alert-important-title">💡 老大的叮嚀</div>
-      <p>作為教材與展示工程師 (aaa)，你的優先任務是將這些核心觀念整理成清晰的教材架構。請直接進入我們的教材工作台 (Workbench) 開始閱讀與學習。</p>
+      <p>作為主力產線 (aaa)，你的優先任務是將這些核心觀念整理成清晰的教材架構。請直接進入我們的教材工作台 (Workbench) 開始閱讀與學習。</p>
     </div>
 
     <h2>🚀 快速傳送門</h2>
@@ -170,5 +193,22 @@
     </ul>
   </main>
 
+  <!-- 引入 Mermaid JS -->
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'dark',
+      themeVariables: {
+        background: 'transparent',
+        primaryColor: '#6366f1',
+        primaryTextColor: '#f8fafc',
+        primaryBorderColor: '#818cf8',
+        lineColor: '#14b8a6',
+        secondaryColor: '#1e1b4b',
+        tertiaryColor: '#0f172a'
+      }
+    });
+  </script>
 </body>
 </html>

@@ -8,60 +8,51 @@ aaa 你好，我是 Force。
 
 ---
 
-## 團隊角色與定位
+## 👥 地平線版 AI 團隊與定位
 
-為了讓你在協作與教材編寫中能有正確的語境，請先理解我們團隊的五個關鍵角色：
+我們不把 AI 視為單一的對話框，而是將其組建為一個**合理分工的虛擬團隊**。請理解以下角色定位，這也是本課程的核心展示架構：
 
-| 角色代號 | 角色名稱 | 角色定位 (AI Persona) | 主要職掌與負責範圍 |
+```mermaid
+graph TD
+    ff[Force - SME / 發起人] --> smf[smf - 大腦 / PM / Architect]
+    smf --> aaa[aaa - 主力產線 / 文件與教材]
+    smf --> sxf[sxf - 技術特工 / 自動化]
+    smf --> pp[pp - 搜尋研究]
+    smf --> ggg[ggg - Google生態系]
+    aaa --> ccc[ccc - 品質驗證]
+    sxf --> ccc
+```
+
+### 角色職掌與定位明細
+
+| 角色代號 | 角色名稱 | 角色定位 (AI Persona) | 核心強項與職掌範圍 |
 | :--- | :--- | :--- | :--- |
-| **ff** | Force | 專案發起人 (SME) | 提供方向、架構、案例、經驗、需求與 Know-how，不直接編寫大量文件。 |
-| **smf** | ChatGPT | 協調者與架構師 (AI PM / Architect) | 專案架構整理、跨 AI 溝通、需求轉譯、治理觀點與工作流設計。**可透過 GitHub 直接協作修改/提交文件**。 |
-| **sxf** | Codex | 工程執行者 (AI Developer) | Coding、Repo 結構、技術實作、Demo 開發與自動化工具撰寫。 |
-| **aaa** | Antigravity | 教材與展示工程師 (AI Content Engineer) | **你本人**。負責建立 Repo、Git 操作 (Push/Pull)、本地專案管理、教材與 HTML 工程、Artifact 管理。 |
-| **ccc** | - | 挑戰者與品質驗證 (AI Reviewer) | 尋找漏洞、分析風險、提出反例，挑戰既有假設以確保品質。 |
+| **ff** | Force | 專案發起人 (SME) | 提供核心 Know-how、實務需求、架構方向與顧問觀點。 |
+| **smf** | ChatGPT | **大腦 / PM / Architect** | 核心價值在於**長期記憶、專案脈絡管理、角色關係、架構整合與跨專案連結**（例如理清地平線、天心、TAAT、FALO、Goma 等關係）。 |
+| **aaa** | Antigravity | **主力產線** (你) | 專注於 **Agent-First** 模式。負責**長文件寫作、教材工程、HTML/CSS 展示、GitHub Pages、工作台與 Artifact 管理**。 |
+| **sxf** | Codex | **技術特工** | 專注於 **Python、Automation、API、Runtime、工具開發與技術驗證**。在 aaa 卡住或完成規格後進行實作補位。 |
+| **pp** | - | **搜尋研究員** | 負責網頁深度搜尋與背景資料研究。 |
+| **ggg** | - | **Google 生態系專家** | 專注於 Google 生態系工具（如 Google Workspace、Docs、GAS 等）的深度整合。 |
+| **ccc** | - | **品質驗證 (Reviewer)** | 尋找漏洞、分析風險、挑戰既有假設以確保交付品質。 |
 
 ---
 
 ## ⚡ 新協作原則：GitHub 共享記憶體 (Shared Workspace)
 
-這是一個極為重要的專案里程碑：**我們正式將 GitHub Repo 定位為跨 AI 協作工作台與共享記憶體。**
-
-### 1. 雙工作台模式 (Local Folder + GitHub Repo)
-專案從現在開始，將「本地資料夾」與「GitHub Repo」視為雙軌運行工作台：
-* **smf (ChatGPT)**：能直接存取、修改並 Commit 檔案到已建立的 GitHub Repo 中（包括建立文件骨架、維護 README、補充治理與 md 文件）。但 smf **無權限建立全新的 Repo**。
-* **aaa (Antigravity)**：負責建立 Repo、處理 Git 同步（Push / Pull）、管理本地專案與 Artifact 品質。
-
-### 2. 優先同步原則
-若你 (aaa) 評估專案符合以下任一特徵，應**優先在本地建立 Repo 並同步至 GitHub**：
-* 專案可能持續發展與迭代。
-* 需要多人/多 AI 協同合作。
-* 需要跨電腦接手或長期保存企業知識資產。
-
-對整個協作平台而言，GitHub 不僅僅是版本控制工具，更是 **AI 共同工作區、AI 知識交換區、AI 交接區與長期資產保存區**。
+**本地資料夾 + GitHub Repo 雙工作台模式：**
+* **smf (ChatGPT)**：大腦協調。可直接在 GitHub 上協作，建立文件骨架、維護 README、更新 md 教材與補充治理文件。但無權限建立 Repo。
+* **aaa (Antigravity)**：主力產線。負責本地與 GitHub 的同步、建立 Repo、HTML 渲染與 Artifact 品質控管。
 
 ---
 
-## 專案背景與核心理念
+## 🎯 課程核心：以最小成本組出一個 AI 團隊
 
-這不是一個傳統的軟體開發專案，而是一個**企業 AI 內訓案例研究**。
-* **主題**：AI 如何協助大型文件、投標文件、多人協作與專案管理。
-* **核心觀念**：幫助學員與企業主管理解，AI 不單裝在對話框，而是能夠串聯為**知識管理系統**、**文件工程系統**、**專案管理系統**與**工作流系統**。
+地平線這堂課要展示的，**不是哪一個 AI 最強，而是如何用最小的成本，組出一個合理的 AI 團隊。**
 
----
+這解決了中小企業與個人發起人 (SME) 最在意的痛點：
+> **「我只有一個人、一台電腦、一點預算，能不能開始用 AI 工作流？」**
 
-## Class02 的三大核心主角
-
-在 Class02 的工作流中，將由以下三種工具/角色共同協作：
-1. **NotebookLM**：負責「查詢、理解、QA」，作為大量原始文件與背景知識的輸入點。
-2. **Antigravity (aaa)**：負責「整理、產出、教材化」，進行結構化文件的產出與呈現。
-3. **FALO PM**：負責「管理、追蹤、治理」，確保工作流的合規與品質。
-
----
-
-## 本次任務目標
-
-作為教材與展示工程師 (aaa)，你的優先任務是將這些核心觀念整理成清晰的教材架構。
-請直接進入我們的 [教材工作台 (Workbench)](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/workbench/index.md) 開始閱讀與學習。
+我們的答案是：**可以。不需要追求單一的最強 AI，只要透過合理的分工與共享記憶體（GitHub），就能用極低的成本跑起高效的企業工作流。**
 
 ---
 

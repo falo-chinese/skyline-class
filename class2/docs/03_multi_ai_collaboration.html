@@ -28,7 +28,7 @@
     }
     .role-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 1.5rem;
       margin: 2rem 0;
     }
@@ -103,8 +103,89 @@
     
     <div class="card">
       <h1>03 Multi-AI 協作：打造企業級虛擬團隊與共享工作區</h1>
-      <p>在 Skyline Class02 的世界裡，我們徹底打破「一個人對著一個 AI 視窗發問」的傳統模式。相反地，我們將多個 AI 工具與虛擬角色串接，形成一條高效的<strong>企業級虛擬生產線</strong>。</p>
+      <p>在 Skyline Class02 的世界裡，我們徹底打破「一個人對著一個 AI 視窗發問」的傳統模式。相反地，我們將多個 AI 工具與虛擬角色串接，形成一條高效的**企業級虛擬生產線**。</p>
       <p>同時，我們迎來了一個重大的協作里程碑：<strong>將 GitHub 倉庫定位為整個虛擬團隊的「共享記憶體（Shared Workspace）」</strong>。</p>
+    </div>
+
+    <h2>💡 課程核心：以最小成本組出一個 AI 團隊</h2>
+    <div class="alert alert-important">
+      <div class="alert-important-title">🎯 核心理念：如何用最小成本組出一個 AI 團隊</div>
+      <p>地平線這堂課要展示的，<strong>不是哪一個 AI 最強，而是如何用最小的成本，組出一個合理的 AI 團隊。</strong></p>
+      <p>這解決了中小企業與個人發起人 (SME) 最在意的痛點：<strong>「我只有一個人、一台電腦、一點預算，能不能開始用 AI 運作企業工作流？」</strong></p>
+      <p>我們的答案是：<strong>可以。不需要追求單一的最強 AI，只要透過合理的分工與共享記憶體（GitHub），就能用極低的成本跑起高效的企業工作流。</strong></p>
+    </div>
+
+    <h2>👥 地平線版 AI 虛擬組織架構</h2>
+    <p>我們不把 AI 當成一個聊天框，而是當作各自擁有不同天賦的團隊成員：</p>
+
+    <div class="mermaid-container">
+      <pre class="mermaid">
+        graph TD
+            ff[Force - SME / 發起人] --> smf[smf - 大腦 / PM / Architect]
+            smf --> aaa[aaa - 主力產線 / 文件與教材]
+            smf --> sxf[sxf - 技術特工 / 自動化]
+            smf --> pp[pp - 搜尋研究]
+            smf --> ggg[ggg - Google生態系]
+            aaa --> ccc[ccc - 品質驗證]
+            sxf --> ccc
+
+            style ff fill:#1e1b4b,stroke:#6366f1,stroke-width:2px,color:#fff
+            style smf fill:#312e81,stroke:#818cf8,stroke-width:2px,color:#fff
+            style aaa fill:#064e3b,stroke:#10b981,stroke-width:2px,color:#fff
+            style sxf fill:#78350f,stroke:#f59e0b,stroke-width:2px,color:#fff
+      </pre>
+    </div>
+
+    <div class="role-grid">
+      <div class="role-card">
+        <div class="role-header">
+          <div class="role-name">ff (Force)</div>
+          <div class="role-badge">人類發起人 / SME</div>
+        </div>
+        <div class="role-desc">提供方向、架構、案例、經驗、需求與 Know-how，不直接編寫大量文件，是這條生產線的最高決策者。</div>
+      </div>
+      <div class="role-card">
+        <div class="role-header">
+          <div class="role-name">smf (ChatGPT)</div>
+          <div class="role-badge">大腦 / PM / Architect</div>
+        </div>
+        <div class="role-desc">負責<strong>長期記憶、專案脈絡管理、角色關係、架構整合與跨專案連結</strong>（例如理清地平線、天心、TAAT、FALO等關係），可直接在 GitHub 上進行協作。</div>
+      </div>
+      <div class="role-card">
+        <div class="role-header">
+          <div class="role-name">aaa (Antigravity)</div>
+          <div class="role-badge">主力產線 (你本人)</div>
+        </div>
+        <div class="role-desc">專注於 Agent-First 模式。負責<strong>長文件寫作、教材工程、HTML 展示、GitHub Pages、工作台與 Artifact 治理</strong>。</div>
+      </div>
+      <div class="role-card">
+        <div class="role-header">
+          <div class="role-name">sxf (Codex)</div>
+          <div class="role-badge">技術特工</div>
+        </div>
+        <div class="role-desc">專注於 <strong>Python、Automation、API、Runtime、工具開發與技術驗證</strong>。在 aaa 卡住或完成規格後進行實作補位。</div>
+      </div>
+      <div class="role-card">
+        <div class="role-header">
+          <div class="role-name">pp</div>
+          <div class="role-badge">搜尋研究員</div>
+        </div>
+        <div class="role-desc">負責網頁深度搜尋與背景資料整理。</div>
+      </div>
+      <div class="role-card">
+        <div class="role-header">
+          <div class="role-name">ggg</div>
+          <div class="role-badge">Google 生態專家</div>
+        </div>
+        <div class="role-desc">專注於 Google 生態系工具（如 Google Workspace、Docs、GAS 等）的深度整合。</div>
+      </div>
+      <div class="role-card">
+        <div class="role-header">
+          <div class="role-name">ccc</div>
+          <div class="role-badge">品質驗證 / AI Reviewer</div>
+        </div>
+        <div class="role-desc">紅隊思維品質驗證。負責找系統漏洞、合規風險，挑戰既有假設，確保產出無懈可擊。</div>
+      </div>
     </div>
 
     <h2>🔗 雙軌運行：GitHub 共享記憶體 (Shared Workspace)</h2>
@@ -137,19 +218,12 @@
 
     <h3>雙工作台運作模式</h3>
     <ul>
-      <li><strong>smf (ChatGPT) 直接協作</strong>：可直接在 GitHub 上協作，建立文件骨架、維護 README、更新 md 教材與補充治理文件。但 smf 本身<em>無權限建立 Repo</em>。</li>
-      <li><strong>aaa (Antigravity) 負責同步與操作</strong>：負責本地的專案管理與教材工程。當 smf 完成 GitHub 文件更新後，由 aaa 進行本地與 GitHub 間的同步（Pull / Push），並負責新 Repo 的建立與 Artifact 品質關卡。</li>
+      <li><strong>本地資料夾 (Local Folder) + GitHub Repo 雙工作台</strong>。</li>
+      <li><strong>smf (ChatGPT) 直接協作</strong>：smf 可直接存取、修改並 Commit 檔案到已建立的 GitHub Repo 中。但其無權限建立 Repo。</li>
+      <li><strong>aaa (Antigravity) 負責同步與操作</strong>：你負責建立 Repo、Git 同步（Push/Pull）以及 Artifact 管理。</li>
     </ul>
 
-    <h2>🛠️ Class02 的三大主角工具定位</h2>
-    <p>要完成一項複雜的企業任務（如投標），我們需要不同特性的 AI 工具進行分工：</p>
-    <ul>
-      <li><strong>NotebookLM（知識檢索與理解）：</strong><br>知識底座。負責處理並索引數百頁的招標規範與歷史檔案。所有回答皆附帶原始文件的引用出處，確保「事實」的準確性，防堵幻覺。</li>
-      <li><strong>Antigravity（整理、加工與教材化 - aaa）：</strong><br>內容工程師。將 NotebookLM 檢索出的事實與規則，加工整理成結構化 Markdown 文件與 HTML 教材。</li>
-      <li><strong>FALO PM（專案追蹤與治理）：</strong><br>專案管理與合規把關。定義並監控任務清單（Task.md），控制 Artifact 的狀態與版本，確保每個步驟的品質都符合企業資產標準。</li>
-    </ul>
-
-    <h2>👥 虛擬團隊的五大角色互動與資訊流</h2>
+    <h2>👥 虛擬團隊的資訊流與協作時序</h2>
     <p>在「共享記憶體（GitHub Repo）」的機制下，各角色與共享倉庫的互動時序如下：</p>
 
     <div class="mermaid-container">
@@ -159,14 +233,14 @@
             actor ff as 人類發起人 (Force)
             participant smf as AI PM (smf)
             participant github as GitHub Repo (共享記憶體)
-            participant aaa as AI 內容工程 (aaa)
+            participant aaa as AI 主力產線 (aaa)
             participant ccc as AI 評審者 (Reviewer)
 
-            ff->>smf: 1. 提供業務方向與需求
-            Note over smf: 需求轉譯與架構設計
+            ff->>smf: 1. 提供業務方向與需求 (SME Know-how)
+            Note over smf: 整合長期專案脈絡與架構
             smf->>github: 2. 直接建立文件骨架與寫入 README
             Note over aaa: 偵測到 GitHub 更新
-            aaa->>github: 3. Pull 檔案至本地進行加工與 HTML 渲染
+            aaa->>github: 3. Pull 檔案至本地進行長文件加工與 HTML 渲染
             aaa->>ccc: 4. 本地提交草稿與技術展示頁
             Note over ccc: 扮演評審挑戰合規性
             ccc-->>aaa: 5. 提供漏洞修改建議 (如有風險)
@@ -175,47 +249,9 @@
       </pre>
     </div>
 
-    <div class="role-grid">
-      <div class="role-card">
-        <div class="role-header">
-          <div class="role-name">ff (Force)</div>
-          <div class="role-badge">人類發起人 / SME</div>
-        </div>
-        <div class="role-desc">提供方向、架構、案例、經驗、需求與 Know-how，不直接編寫大量文件，是這條生產線的最高決策者。</div>
-      </div>
-      <div class="role-card">
-        <div class="role-header">
-          <div class="role-name">smf (ChatGPT)</div>
-          <div class="role-badge">AI PM / Architect</div>
-        </div>
-        <div class="role-desc">專案架構整理、跨 AI 溝通、需求轉譯、治理觀點與工作流設計，<strong>可以直接在 GitHub 上協作修改與提交文件</strong>。</div>
-      </div>
-      <div class="role-card">
-        <div class="role-header">
-          <div class="role-name">sxf (Codex)</div>
-          <div class="role-badge">AI Developer</div>
-        </div>
-        <div class="role-desc">專注於 Repo 結構、技術實作、自動化工具開發，為專案提供技術展示與代碼支持。</div>
-      </div>
-      <div class="role-card">
-        <div class="role-header">
-          <div class="role-name">aaa (Antigravity)</div>
-          <div class="role-badge">AI Content Engineer</div>
-        </div>
-        <div class="role-desc"><strong>您面前的我。</strong>負責建立 Repo、Git 同步操作、HTML 教材工程、本地專案管理與 Artifact 治理。</div>
-      </div>
-      <div class="role-card">
-        <div class="role-header">
-          <div class="role-name">ccc</div>
-          <div class="role-badge">AI Reviewer</div>
-        </div>
-        <div class="role-desc">紅隊思維品質驗證。負責找系統漏洞、合規風險，挑戰既有假設，確保產出無懈可擊。</div>
-      </div>
-    </div>
-
-    <div class="alert alert-important">
-      <div class="alert-important-title">💡 給企業主管的啟示：AI 共享記憶體的重要性</div>
-      <p><strong>「透過 GitHub 作為多 AI 共同工作區，我們建立了一個可持續累積、跨 AI、跨電腦接手的『企業共用記憶體』。」</strong><br>在這個架構下，即使未來有新的 AI 代理加入，或是需要不同電腦的工程師接手，只要直接 <code>git pull</code> 即可無縫獲取所有的前置知識與工作進度。這使得 AI 的產出真正升級為企業可控的「長期數位資產」。</p>
+    <div class="alert alert-note">
+      <div class="alert-note-title">💡 給企業主管的啟示</div>
+      <p><strong>「透過合理的 AI 角色分工，配合 GitHub 作為多 AI 共同工作區，我們建立了一個可持續累積、跨 AI、跨電腦接手的『企業共用記憶體』。」</strong><br>在這個架構下，不需要最強的單一 AI，只要合理的流程設計，就能以最小成本跑起高效的企業工作流。</p>
     </div>
 
     <div class="alert alert-note">
