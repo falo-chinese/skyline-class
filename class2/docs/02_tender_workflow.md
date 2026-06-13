@@ -26,16 +26,16 @@ graph TD
     %% 節點定義
     RFP[1. 原始 RFP 輸入] --> NLM[2. NotebookLM 知識消化]
     NLM --> Matrix[3. 生成需求矩陣]
-    Matrix --> SMF[4. smf 轉譯為寫作架構]
-    SMF --> AAA[5. aaa 產出投標書草案]
-    AAA --> CCC[6. ccc 品質挑戰與漏洞查核]
-    CCC -->|修正建議| AAA
-    CCC -->|審核通過| FALO[7. FALO PM 版本封存與治理]
+    Matrix --> PM[4. PM 轉譯為寫作架構]
+    PM --> Content[5. Content 產出投標書草案]
+    Content --> Reviewer[6. Reviewer 品質挑戰與漏洞查核]
+    Reviewer -->|修正建議| Content
+    Reviewer -->|審核通過| FALO[7. FALO PM 版本封存與治理]
     FALO --> Deliverable[8. 最終 Artifact 交付]
 
     %% 樣式定義
-    style RFP fill:#f9f,stroke:#333,stroke-width:2px
-    style Deliverable fill:#9f9,stroke:#333,stroke-width:2px
+    style RFP fill:#1e1b4b,stroke:#6366f1,stroke-width:2px,color:#fff
+    style Deliverable fill:#115e59,stroke:#14b8a6,stroke-width:2px,color:#fff
 ```
 
 ---
@@ -45,9 +45,9 @@ graph TD
 | 步驟 | 階段名稱 | 負責工具/角色 | 輸入 (Input) | 處理過程 (Process) | 輸出 (Output) |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **1** | **知識導入與消化** | **NotebookLM** | 原始 PDF/Word 招標文件。 | 快速建立索引，並消化合約、技術、法規等跨領域背景知識。 | 知識問答庫與重點摘要。 |
-| **2** | **需求矩陣提取** | **smf (ChatGPT)** | NotebookLM 重點摘要。 | 識別所有「必須符合 (Must-Have)」的合規要件與技術規格要求。 | 招標需求矩陣表 (Requirement Matrix)。 |
-| **3** | **教材/草案編寫** | **aaa (Antigravity)** | 需求矩陣與 SME (ff) 的指導方向。 | 負責結構化 Markdown 的編寫，確保格式規範、表達清晰、切合痛點。 | 投標文件草案 (Draft.md)。 |
-| **4** | **品質挑戰與查核** | **ccc (AI Reviewer)** | 投標文件草案與原始 RFP 要求。 | 扮演嚴苛的審查委員，尋找草案中的邏輯漏洞、未滿足的招標要件或潛在合規風險。 | 挑戰報告與修改修正意見。 |
+| **2** | **需求矩陣提取** | **PM (大腦/架構師)** | NotebookLM 重點摘要。 | 識別所有「必須符合 (Must-Have)」的合規要件與技術規格要求。 | 招標需求矩陣表 (Requirement Matrix)。 |
+| **3** | **教材/草案編寫** | **Content (主力產線)** | 需求矩陣與 SME (Force) 的指導方向。 | 負責結構化 Markdown 的編寫，確保格式規範、表達清晰、切合痛點。 | 投標文件草案 (Draft.md)。 |
+| **4** | **品質挑戰與查核** | **Reviewer (品質驗證)** | 投標文件草案與原始 RFP 要求。 | 扮演嚴苛的審查委員，尋找草案中的邏輯漏洞、未滿足的招標要件或潛在合規風險。 | 挑戰報告與修改修正意見。 |
 | **5** | **版本與專案治理** | **FALO PM** | 通過審查的草案。 | 對文件進行版本化管理，封存為可交付的企業資產，並追蹤後續維護進度。 | 最終 Artifact (V1.0.md)。 |
 
 ---
@@ -55,12 +55,12 @@ graph TD
 ## 💎 企業主管關心的「商業價值」
 
 透過這套工作流，企業能獲得的不再只是「寫得比較快」，而是：
-* **合規率提升至 100%**：透過需求矩陣與 ccc 角色的雙重把關，確保無任何招標要件遺漏。
-* **準備時間縮短 70%**：AI 自動化提取大綱與起草，讓人類專家（ff）能專注在核心商業策略與定價，而非繁瑣的文書作業。
+* **合規率提升至 100%**：透過需求矩陣與 Reviewer 角色的雙重把關，確保無任何招標要件遺漏。
+* **準備時間縮短 70%**：AI 自動化提取大綱與起草，讓人類專家 (Force) 能專注在核心商業策略與定價，而非繁瑣的文書作業。
 * **資產可傳承**：所有過程產出的需求矩陣、技術架構、審核意見都透過 Artifact 機制留存，成為公司未來的投標範本庫。
 
 ---
 
 ## 🎯 下一步引導
 了解工作流的整體架構後，您可能會好奇：這些 AI 角色在技術與邏輯上是如何互動的？
-請前往 **[單元 03：Multi-AI 協作說明](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/docs/03_multi_ai_collaboration.md)**，我們將深入剖析 Class02 的核心主角與協作機制。
+請前往 **[單元 03：Multi-AI 協作說明](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/docs/03_multi_ai_collaboration.html)**，我們將深入剖析 Class02 的核心主角與協作機制。

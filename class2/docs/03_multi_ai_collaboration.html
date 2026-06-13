@@ -110,79 +110,79 @@
     <h2>💡 課程核心：以最小成本組出一個 AI 團隊</h2>
     <div class="alert alert-important">
       <div class="alert-important-title">🎯 核心理念：如何用最小成本組出一個 AI 團隊</div>
-      <p>地平線這堂課要展示的，<strong>不是哪一個 AI 最強，而是如何用最小的成本，組出一個合理的 AI 團隊。</strong></p>
+      <p>Skyline 這堂課要展示的，<strong>不是哪一個 AI 最強，而是如何用最小的成本，組出一個合理的 AI 團隊。</strong></p>
       <p>這解決了中小企業與個人發起人 (SME) 最在意的痛點：<strong>「我只有一個人、一台電腦、一點預算，能不能開始用 AI 運作企業工作流？」</strong></p>
       <p>我們的答案是：<strong>可以。不需要追求單一的最強 AI，只要透過合理的分工與共享記憶體（GitHub），就能用極低的成本跑起高效的企業工作流。</strong></p>
     </div>
 
-    <h2>👥 地平線版 AI 虛擬組織架構</h2>
+    <h2>👥 Skyline AI 虛擬組織架構</h2>
     <p>我們不把 AI 當成一個聊天框，而是當作各自擁有不同天賦的團隊成員：</p>
 
     <div class="mermaid-container">
       <pre class="mermaid">
         graph TD
-            ff[Force - SME / 發起人] --> smf[smf - 大腦 / PM / Architect]
-            smf --> aaa[aaa - 主力產線 / 文件與教材]
-            smf --> sxf[sxf - 技術特工 / 自動化]
-            smf --> pp[pp - 搜尋研究]
-            smf --> ggg[ggg - Google生態系]
-            aaa --> ccc[ccc - 品質驗證]
-            sxf --> ccc
+            ff[Force - SME / 發起人] --> PM[PM - 大腦 / PM / Architect]
+            PM --> Content[Content - 主力產線 / 文件與教材]
+            PM --> Dev[Dev - 技術特工 / 自動化]
+            PM --> Search[Search - 搜尋研究]
+            PM --> Google[Google - 生態專家]
+            Content --> Reviewer[Reviewer - 品質驗證]
+            Dev --> Reviewer
 
             style ff fill:#1e1b4b,stroke:#6366f1,stroke-width:2px,color:#fff
-            style smf fill:#312e81,stroke:#818cf8,stroke-width:2px,color:#fff
-            style aaa fill:#064e3b,stroke:#10b981,stroke-width:2px,color:#fff
-            style sxf fill:#78350f,stroke:#f59e0b,stroke-width:2px,color:#fff
+            style PM fill:#312e81,stroke:#818cf8,stroke-width:2px,color:#fff
+            style Content fill:#064e3b,stroke:#10b981,stroke-width:2px,color:#fff
+            style Dev fill:#78350f,stroke:#f59e0b,stroke-width:2px,color:#fff
       </pre>
     </div>
 
     <div class="role-grid">
       <div class="role-card">
         <div class="role-header">
-          <div class="role-name">ff (Force)</div>
+          <div class="role-name">Force (ff)</div>
           <div class="role-badge">人類發起人 / SME</div>
         </div>
         <div class="role-desc">提供方向、架構、案例、經驗、需求與 Know-how，不直接編寫大量文件，是這條生產線的最高決策者。</div>
       </div>
       <div class="role-card">
         <div class="role-header">
-          <div class="role-name">smf (ChatGPT)</div>
+          <div class="role-name">PM</div>
           <div class="role-badge">大腦 / PM / Architect</div>
         </div>
-        <div class="role-desc">負責<strong>長期記憶、專案脈絡管理、角色關係、架構整合與跨專案連結</strong>（例如理清地平線、天心、TAAT、FALO等關係），可直接在 GitHub 上進行協作。</div>
+        <div class="role-desc">負責<strong>長期記憶、專案脈絡管理、角色關係、架構整合與跨專案連結</strong>（例如理清 Skyline、天心、TAAT、FALO等關係），可直接在 GitHub 上進行協作。</div>
       </div>
       <div class="role-card">
         <div class="role-header">
-          <div class="role-name">aaa (Antigravity)</div>
-          <div class="role-badge">主力產線 (你本人)</div>
+          <div class="role-name">Content</div>
+          <div class="role-badge">主力產線</div>
         </div>
         <div class="role-desc">專注於 Agent-First 模式。負責<strong>長文件寫作、教材工程、HTML 展示、GitHub Pages、工作台與 Artifact 治理</strong>。</div>
       </div>
       <div class="role-card">
         <div class="role-header">
-          <div class="role-name">sxf (Codex)</div>
+          <div class="role-name">Dev</div>
           <div class="role-badge">技術特工</div>
         </div>
-        <div class="role-desc">專注於 <strong>Python、Automation、API、Runtime、工具開發與技術驗證</strong>。在 aaa 卡住或完成規格後進行實作補位。</div>
+        <div class="role-desc">專注於 <strong>Python、Automation、API、Runtime、工具開發與技術驗證</strong>。在 Content 卡住或完成規格後進行實作補位。</div>
       </div>
       <div class="role-card">
         <div class="role-header">
-          <div class="role-name">pp</div>
+          <div class="role-name">Search</div>
           <div class="role-badge">搜尋研究員</div>
         </div>
         <div class="role-desc">負責網頁深度搜尋與背景資料整理。</div>
       </div>
       <div class="role-card">
         <div class="role-header">
-          <div class="role-name">ggg</div>
+          <div class="role-name">Google</div>
           <div class="role-badge">Google 生態專家</div>
         </div>
         <div class="role-desc">專注於 Google 生態系工具（如 Google Workspace、Docs、GAS 等）的深度整合。</div>
       </div>
       <div class="role-card">
         <div class="role-header">
-          <div class="role-name">ccc</div>
-          <div class="role-badge">品質驗證 / AI Reviewer</div>
+          <div class="role-name">Reviewer</div>
+          <div class="role-badge">品質驗證 / Reviewer</div>
         </div>
         <div class="role-desc">紅隊思維品質驗證。負責找系統漏洞、合規風險，挑戰既有假設，確保產出無懈可擊。</div>
       </div>
@@ -195,22 +195,22 @@
       <pre class="mermaid">
         graph LR
             subgraph Local[本地工作區]
-                AAA_Local[aaa 本地教材工程]
-                SXF_Local[sxf 本地開發/Runtime]
+                Content_Local[Content 本地教材工程]
+                Dev_Local[Dev 本地開發/Runtime]
             end
 
             subgraph GitHub[GitHub 共享工作區 (Shared Memory)]
                 GH_Repo[(Skyline Repo)]
             end
 
-            subgraph Remote[外部 AI 協作者]
-                SMF_Cloud[smf 雲端協作/ChatGPT]
+            subgraph Remote[外部 AI 協同]
+                PM_Cloud[PM 雲端協作]
             end
 
-            SMF_Cloud -->|1. 直接修改與 Commit| GH_Repo
-            GH_Repo -->|2. Pull 同步到本地| AAA_Local
-            AAA_Local -->|3. 本地加工與 Push| GH_Repo
-            SXF_Local -->|4. 技術開發與 Push| GH_Repo
+            PM_Cloud -->|1. 直接修改與 Commit| GH_Repo
+            GH_Repo -->|2. Pull 同步到本地| Content_Local
+            Content_Local -->|3. 本地加工與 Push| GH_Repo
+            Dev_Local -->|4. 技術開發與 Push| GH_Repo
 
             style GH_Repo fill:#1e1b4b,stroke:#6366f1,stroke-width:3px,color:#fff
       </pre>
@@ -219,8 +219,8 @@
     <h3>雙工作台運作模式</h3>
     <ul>
       <li><strong>本地資料夾 (Local Folder) + GitHub Repo 雙工作台</strong>。</li>
-      <li><strong>smf (ChatGPT) 直接協作</strong>：smf 可直接存取、修改並 Commit 檔案到已建立的 GitHub Repo 中。但其無權限建立 Repo。</li>
-      <li><strong>aaa (Antigravity) 負責同步與操作</strong>：你負責建立 Repo、Git 同步（Push/Pull）以及 Artifact 管理。</li>
+      <li><strong>PM (大腦/架構師) 直接協作</strong>：PM 可直接存取、修改並 Commit 檔案到已建立的 GitHub Repo 中。但其無權限建立 Repo。</li>
+      <li><strong>Content (主力產線) 負責同步與操作</strong>：你負責建立 Repo、Git 同步（Push/Pull）以及 Artifact 管理。</li>
     </ul>
 
     <h2>👥 虛擬團隊的資訊流與協作時序</h2>
@@ -231,20 +231,20 @@
         sequenceDiagram
             autonumber
             actor ff as 人類發起人 (Force)
-            participant smf as AI PM (smf)
+            participant PM as AI 大腦 (PM)
             participant github as GitHub Repo (共享記憶體)
-            participant aaa as AI 主力產線 (aaa)
-            participant ccc as AI 評審者 (Reviewer)
+            participant Content as AI 主力產線 (Content)
+            participant Reviewer as AI 評審者 (Reviewer)
 
-            ff->>smf: 1. 提供業務方向與需求 (SME Know-how)
-            Note over smf: 整合長期專案脈絡與架構
-            smf->>github: 2. 直接建立文件骨架與寫入 README
-            Note over aaa: 偵測到 GitHub 更新
-            aaa->>github: 3. Pull 檔案至本地進行長文件加工與 HTML 渲染
-            aaa->>ccc: 4. 本地提交草稿與技術展示頁
-            Note over ccc: 扮演評審挑戰合規性
-            ccc-->>aaa: 5. 提供漏洞修改建議 (如有風險)
-            aaa->>github: 6. 修正後 Push 正式版本 (Artifact)
+            ff->>PM: 1. 提供業務方向與需求 (SME Know-how)
+            Note over PM: 整合長期專案脈絡與架構
+            PM->>github: 2. 直接建立文件骨架與寫入 README
+            Note over Content: 偵測到 GitHub 更新
+            Content->>github: 3. Pull 檔案至本地進行長文件加工與 HTML 渲染
+            Content->>Reviewer: 4. 本地提交草稿與技術展示頁
+            Note over Reviewer: 扮演評審挑戰合規性
+            Reviewer-->>Content: 5. 提供漏洞修改建議 (如有風險)
+            Content->>github: 6. 修正後 Push 正式版本 (Artifact)
             github-->>ff: 7. 交付高品質最終產物 (可跨電腦/AI接手)
       </pre>
     </div>

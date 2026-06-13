@@ -37,20 +37,19 @@ graph TD
 ### 💼 我是企業主管 / 決策者
 > 您最關心的是 **AI 能否落地、降低風險與提高產出效率**。
 > * 建議閱讀順序：
->   1. [02 投標文件工作流說明](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/docs/02_tender_workflow.md) (理解商業價值與痛點解決)
->   2. [04 Artifact 管理機制](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/docs/04_artifact_management.md) (理解如何實施品質治理與控管風險)
+>   1. [02 投標文件工作流說明](file:///Users/force/Google_Antigravity/skyline/skyline-class/class2/docs/02_tender_workflow.md) (理解商業價值與痛點解決)
+>   2. [04 Artifact 管理機制](file:///Users/force/Google_Antigravity/skyline/skyline-class/class2/docs/04_artifact_management.md) (理解如何實施品質治理與控管風險)
 
 ### 📋 我是專案經理 (PM) / 流程規劃者
 > 您關心的是 **AI 之間如何協同工作、進度如何追蹤**。
 > * 建議閱讀順序：
->   1. [03 Multi-AI 協作說明](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/docs/03_multi_ai_collaboration.md) (理解角色分工與訊息流轉)
->   2. [01 課程地圖](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/docs/01_course_map.md) (理解整體知識框架與實踐步驟)
+>   1.💡 建議優先閱讀：<a href="../docs/01_course_map.html">01 課程地圖</a> (理解整體知識框架與實踐步驟)。
 
 ### 💻 我是教材工程師 / 展示開發者
 > 您關心的是 **Markdown 文件工程、檔案結構與前端 Demo 展示**。
-> * 建議閱讀順序：
->   1. [01 課程地圖](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/docs/01_course_map.md) (熟悉整體 Repo 結構)
->   2. 閱讀 `README.md` 中關於 [aaa 任務與團隊角色](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/README.md) 的設定。
+> * 建議優先閱讀：
+>   1. [01 課程地圖](file:///Users/force/Google_Antigravity/skyline/skyline-class/class2/docs/01_course_map.md) (熟悉整體 Repo 結構)
+>   2. 閱讀 `README.md` 中關於 [主力產線任務與團隊角色](file:///Users/force/Google_Antigravity/skyline/skyline-class/class2/README.md) 的設定。
 
 ---
 

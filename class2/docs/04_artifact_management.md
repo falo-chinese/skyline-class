@@ -24,17 +24,17 @@
 
 ```mermaid
 stateDiagram-v2
-    [*] --> Draft : 1. 建立 (aaa/sxf)
+    [*] --> Draft : 1. 建立 (Content/Dev)
     Draft --> InReview : 2. 提交本地審查 (Submit)
-    InReview --> Approved : 3. ccc 審查通過 (Approve)
-    InReview --> Draft : 3. ccc 退回修改 (Reject)
+    InReview --> Approved : 3. Reviewer 審查通過 (Approve)
+    InReview --> Draft : 3. Reviewer 退回修改 (Reject)
     Approved --> Syncing : 4. 本地封存 (FALO PM)
     Syncing --> Archived_GH : 5. Git Push 至 GitHub 共享記憶體
-    Archived_GH --> [*] : 6. 重用與分發 (smf/其他AI)
+    Archived_GH --> [*] : 6. 重用與分發 (PM/其他AI)
 ```
 
 ### 1. 建立 (Creation)
-* **執行角色**：AI 執行者（如 aaa、sxf）在本地建立，或 smf (ChatGPT) 直接在 GitHub Repo 建立骨架並拉取（Pull）到本地。
+* **執行角色**：AI 執行者（如 Content、Dev）在本地建立，或 PM (大腦/架構師) 直接在 GitHub Repo 建立骨架並拉取（Pull）到本地。
 * **規範**：必須使用統一的 Markdown 模板，並在檔案頂部或元數據中標記屬性。
 
 ### 2. 元數據標記 (Metadata Definition)
@@ -44,22 +44,22 @@ stateDiagram-v2
 artifact_id: ART-2026-TENDER-01
 title: 招標需求比對矩陣
 version: V1.0.0
-author: aaa (Antigravity)
-reviewer: ccc (AI Reviewer)
+author: Content (主力產線)
+reviewer: Reviewer (品質驗證)
 status: In-Review # [Draft, In-Review, Approved, Archived]
 last_updated: 2026-06-13
 ---
 ```
 
-### 3. 品質評審關卡 (Review Gate - ccc 角色)
+### 3. 品質評審關卡 (Review Gate - Reviewer 角色)
 這是企業 AI 治理中最關鍵的一步。**未經評審的 Draft 絕不能直接交付或 Commit 至 main 分支。**
-* 審查者（ccc）會針對合規性、一致性、正確性進行紅隊挑戰。
-* 若不合格，退回 Draft 階段由 aaa 進行修正；若合格，則變更狀態為 `Approved`。
+* 審查者（Reviewer）會針對合規性、一致性、正確性進行紅隊挑戰。
+* 若不合格，退回 Draft 階段由 Content 進行修正；若合格，則變更狀態為 `Approved`。
 
 ### 4. 版本控制、歸檔與 GitHub 同步 (Versioning & GH Sync)
 * **工具**：FALO PM、Git、GitHub。
-* **做法**：對 Approved 的 Artifact 進行語義化版本標記（例如 `V1.0.0`），由 aaa 透過 Git `Push` 同步至 **GitHub 遠端倉庫（共享記憶體）**，這能確保：
-  1. 外部的 **smf (ChatGPT)** 或其他 AI 可以直接獲取最新的已審核資產。
+* **做法**：對 Approved 的 Artifact 進行語義化版本標記（例如 `V1.0.0`），由 Content 透過 Git `Push` 同步至 **GitHub 遠端倉庫（共享記憶體）**，這能確保：
+  1. 外部的 **PM (大腦/架構師)** 或其他 AI 可以直接獲取最新的已審核資產。
   2. 專案能跨電腦、跨人/AI 進行交接，不流失進度。
 
 ### 5. 重用與分發 (Reuse & Distribution)
@@ -70,7 +70,7 @@ last_updated: 2026-06-13
 ## 🛡️ 企業 AI 治理 (AI Governance) 核心原則
 
 實施 Artifact 管理與雙工作台同步後，企業可以有效落實以下治理政策：
-1. **防堵幻覺風險**：所有交付物均有 ccc (AI Reviewer) 的審核與修改紀錄，並標明知識源引自何處。
+1. **防堵幻覺風險**：所有交付物均有 Reviewer (品質驗證) 的審核與修改紀錄，並標明知識源引自何處。
 2. **追溯權責**：當文件出錯時，藉由 Git 的 Commit History 與元數據，可以輕易追溯是哪一個版本的 Artifact、由哪一個 AI 角色生成、由誰審核通過。
 3. **消除知識孤島**：本地與遠端雙軌同步，所有 AI 與人類專家都基於同一個 GitHub 共享記憶體工作，杜絕對話框暗資料。
 
@@ -78,4 +78,4 @@ last_updated: 2026-06-13
 
 ## 🎯 下一步引導
 至此，您已完成了 Skyline Class02 教材工作台的所有理論單元學習。
-接下來，您可以返回 [教材工作台主控台 (Workbench)](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/workbench/index.md) 進行複習，或是前往 [未來規劃備忘錄](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/memo.html) 查看未來的開發與協作規劃。
+接下來，您可以返回 [教材工作台主控台 (Workbench)](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/workbench/index.html) 進行複習，或是前往 [未來規劃備忘錄](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/memo.html) 查看未來的開發與協作規劃。

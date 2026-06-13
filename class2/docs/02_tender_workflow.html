@@ -93,11 +93,11 @@
         graph TD
             RFP[1. 原始 RFP 輸入] --> NLM[2. NotebookLM 知識消化]
             NLM --> Matrix[3. 生成需求矩陣]
-            Matrix --> SMF[4. smf 轉譯為寫作架構]
-            SMF --> AAA[5. aaa 產出投標書草案]
-            AAA --> CCC[6. ccc 品質挑戰與漏洞查核]
-            CCC -->|修正建議| AAA
-            CCC -->|審核通過| FALO[7. FALO PM 版本封存與治理]
+            Matrix --> PM[4. PM 轉譯為寫作架構]
+            PM --> Content[5. Content 產出投標書草案]
+            Content --> Reviewer[6. Reviewer 品質挑戰與漏洞查核]
+            Reviewer -->|修正建議| Content
+            Reviewer -->|審核通過| FALO[7. FALO PM 版本封存與治理]
             FALO --> Deliverable[8. 最終 Artifact 交付]
 
             style RFP fill:#1e1b4b,stroke:#6366f1,stroke-width:2px,color:#fff
@@ -129,7 +129,7 @@
         <tr>
           <td><span class="step-badge">2</span></td>
           <td><strong>需求矩陣提取</strong></td>
-          <td>smf (ChatGPT)</td>
+          <td>PM (大腦/架構師)</td>
           <td>NotebookLM 重點摘要。</td>
           <td>識別所有「必須符合」的合規要件。</td>
           <td>招標需求矩陣表。</td>
@@ -137,15 +137,15 @@
         <tr>
           <td><span class="step-badge">3</span></td>
           <td><strong>教材/草案編寫</strong></td>
-          <td>aaa (Antigravity)</td>
-          <td>需求矩陣與 ff 指導方向。</td>
+          <td>Content (主力產線)</td>
+          <td>需求矩陣與 Force 指導方向。</td>
           <td>負責結構化 Markdown 的編寫與格式化。</td>
           <td>投標文件草案 (Draft.md)。</td>
         </tr>
         <tr>
           <td><span class="step-badge">4</span></td>
           <td><strong>品質挑戰與查核</strong></td>
-          <td>ccc (AI Reviewer)</td>
+          <td>Reviewer (品質驗證)</td>
           <td>投標文件草案與原始 RFP。</td>
           <td>尋找邏輯漏洞或潛在合規風險。</td>
           <td>挑戰報告與修改意見。</td>
@@ -164,8 +164,8 @@
     <h2>💎 企業主管關心的「商業價值」</h2>
     <p>透過這套工作流，企業能獲得的不再只是「寫得比較快」，而是：</p>
     <ul>
-      <li><strong>合規率提升至 100%：</strong>透過需求矩陣與 ccc 角色的雙重把關，確保無任何招標要件遺漏。</li>
-      <li><strong>準備時間縮短 70%：</strong>AI 自動化提取大綱與起草，讓人類專家（ff）能專注在核心商業策略與定價，而非繁瑣的文書作業。</li>
+      <li><strong>合規率提升至 100%：</strong>透過需求矩陣與 Reviewer 角色的雙重把關，確保無任何招標要件遺漏。</li>
+      <li><strong>準備時間縮短 70%：</strong>AI 自動化提取大綱與起草，讓人類專家 (Force) 能專注在核心商業策略與定價，而非繁瑣的文書作業。</li>
       <li><strong>資產可傳承：</strong>所有過程產出的需求矩陣、技術架構、審核意見都透過 Artifact 機制留存，成為公司未來的投標範本庫。</li>
     </ul>
 

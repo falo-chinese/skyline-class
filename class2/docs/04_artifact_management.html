@@ -62,7 +62,7 @@
     
     <div class="card">
       <h1>04 Artifact 管理機制：將 AI 產出轉化為企業資產</h1>
-      <p>在傳統的 AI 使用情境中，產出的資料往往分散在員工個人的對話歷史紀錄中。這類資料被稱為<strong>「暗資料 (Dark Data)」</strong>——它們不可控、不可被版本管理、更無法被企業共享。</p>
+      <p>在傳統的 AI 使用情境中，產出的資料往往分散在員工個人的對話歷史紀錄中。這類資料被稱為**「暗資料 (Dark Data)」**——它們不可控、不可被版本管理、更無法被企業共享。</p>
       <p>為了解決這個問題，<strong>Skyline Class02</strong> 引入了 <strong>Artifact (產出物/資產) 管理機制</strong>。同時，結合了 **GitHub 共享記憶體 (Shared Workspace)** 機制，本單元將詳細說明如何將 AI 產出進行結構化管理、同步與品質治理。</p>
     </div>
 
@@ -72,7 +72,7 @@
     <ul>
       <li><strong>需求矩陣表：</strong>招標要件比對的結構化清單。</li>
       <li><strong>投標書特定章節草稿：</strong>編寫完成並通過初核的文件。</li>
-      <li><strong>合規性審查報告：</strong>由評審角色 (ccc) 產出的風險與漏洞修正建議。</li>
+      <li><strong>合規性審查報告：</strong>由評審角色 (Reviewer) 產出的風險與漏洞修正建議。</li>
       <li><strong>展示前端頁面：</strong>視覺化呈現的程式碼。</li>
     </ul>
 
@@ -82,38 +82,38 @@
     <div class="mermaid-container">
       <pre class="mermaid">
         stateDiagram-v2
-            [*] --> Draft : 1. 建立 (aaa/sxf)
+            [*] --> Draft : 1. 建立 (Content/Dev)
             Draft --> InReview : 2. 提交本地審查 (Submit)
-            InReview --> Approved : 3. ccc 審查通過 (Approve)
-            InReview --> Draft : 3. ccc 退回修改 (Reject)
+            InReview --> Approved : 3. Reviewer 審查通過 (Approve)
+            InReview --> Draft : 3. Reviewer 退回修改 (Reject)
             Approved --> Syncing : 4. 本地封存 (FALO PM)
             Syncing --> Archived_GH : 5. Git Push 至 GitHub 共享記憶體
-            Archived_GH --> [*] : 6. 重用與分發 (smf/其他AI)
+            Archived_GH --> [*] : 6. 重用與分發 (PM/其他AI)
       </pre>
     </div>
 
     <ol>
-      <li><strong>1. 建立 (Creation)：</strong>由 AI 執行者（如 aaa、sxf）在本地建立，或 smf (ChatGPT) 直接在 GitHub Repo 建立骨架並拉取（Pull）到本地。</li>
+      <li><strong>1. 建立 (Creation)：</strong>由 AI 執行者（如 Content、Dev）在本地建立，或 PM (大腦/架構師) 直接在 GitHub Repo 建立骨架並拉取（Pull）到本地。</li>
       <li><strong>2. 元數據標記 (Metadata)：</strong>每個 Artifact 頂部都應包含明確的元數據以供未來系統化檢索：
         <pre><code class="language-yaml">---
 artifact_id: ART-2026-TENDER-01
 title: 招標需求比對矩陣
 version: V1.0.0
-author: aaa (Antigravity)
-reviewer: ccc (AI Reviewer)
+author: Content (主力產線)
+reviewer: Reviewer (品質驗證)
 status: In-Review # [Draft, In-Review, Approved, Archived]
 last_updated: 2026-06-13
 ---</code></pre>
       </li>
-      <li><strong>3. 品質評審關卡 (Review Gate - ccc)：</strong><strong>未經評審的 Draft 絕不能直接使用。</strong>由 ccc 針對合規與幻覺進行紅隊挑戰，合格變更為 <code>Approved</code>，不合格退回 <code>Draft</code>。</li>
-      <li><strong>4. 版本控制與 GitHub 同步 (Versioning & Sync)：</strong>利用 FALO PM 與 Git，對 Approved 的資產標記語義化版本（如 <code>V1.0.0</code>），並由 aaa 透過 Git <code>Push</code> 同步至 <strong>GitHub 遠端倉庫（共享記憶體）</strong>，這能確保 smf 或其他 AI 隨時獲取最新已核可資產，並實現跨電腦無縫交接。</li>
+      <li><strong>3. 品質評審關卡 (Review Gate - Reviewer)：</strong><strong>未經評審的 Draft 絕不能直接使用。</strong>由 Reviewer 針對合規與幻覺進行紅隊挑戰，合格變更為 <code>Approved</code>，不合格退回 <code>Draft</code>。</li>
+      <li><strong>4. 版本控制與 GitHub 同步 (Versioning & Sync)：</strong>利用 FALO PM 與 Git，對 Approved 的資產標記語義化版本（如 <code>V1.0.0</code>），並由 Content 透過 Git <code>Push</code> 同步至 <strong>GitHub 遠端倉庫（共享記憶體）</strong>，這能確保 PM 或其他 AI 隨時獲取最新已核可資產，並實現跨電腦無縫交接。</li>
       <li><strong>5. 重用與分發 (Reuse)：</strong>歸檔於 GitHub 的 Artifact 重新導入 <strong>NotebookLM</strong> 成為未來新專案的黃金範本背景知識。</li>
     </ol>
 
     <h2>🛡️ 企業 AI 治理 (AI Governance) 核心原則</h2>
     <p>實施 Artifact 管理與雙工作台同步後，企業可以有效落實以下治理政策：</p>
     <ul>
-      <li><strong>防堵幻覺風險：</strong>所有交付物均有 ccc 的審核與修改紀錄，並標明原始出處引用。</li>
+      <li><strong>防堵幻覺風險：</strong>所有交付物均有 Reviewer 的審核與修改紀錄，並標明原始出處引用。</li>
       <li><strong>追溯權責：</strong>藉由 Git 的 Commit History 與元數據，可以清晰追溯是哪一個版本的 Artifact、由哪一個 AI 角色生成。</li>
       <li><strong>消除知識孤島：</strong>本地與遠端雙軌同步，所有 AI 與人類專家都基於同一個 GitHub 共享記憶體工作，杜絕對話框暗資料。</li>
     </ul>
