@@ -874,3 +874,24 @@ function escapeHtml(text) {
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
 }
+
+function copyToClipboard(text) {
+  if (!text) return;
+  navigator.clipboard.writeText(text).then(() => {
+    showToast("📋 已複製到剪貼簿！");
+  }).catch(err => {
+    // Fallback using legacy textarea copy method
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    textarea.style.position = "fixed"; // Avoid scrolling to bottom
+    document.body.appendChild(textarea);
+    textarea.select();
+    try {
+      document.execCommand("copy");
+      showToast("📋 已複製到剪貼簿！(備用)");
+    } catch (e) {
+      showToast("複製失敗，請手動複製", "error");
+    }
+    document.body.removeChild(textarea);
+  });
+}

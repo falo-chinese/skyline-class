@@ -13,7 +13,13 @@
     "*://localhost/*",
     "*://127.0.0.1/*",
     "*://falo-taiwan.github.io/*",
-    "*://falo-chinese.github.io/*"
+    "*://falo-chinese.github.io/*",
+    "*://chatgpt.com/*",
+    "*://*.chatgpt.com/*",
+    "*://gemini.google.com/*",
+    "*://claude.ai/*",
+    "*://*.claude.ai/*",
+    "*://notebooklm.google.com/*"
   ],
   "background": {
     "service_worker": "background.js"
