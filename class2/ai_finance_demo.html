@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 財會與稅務自動化專案 - Skyline Class02</title>
+  <link rel="stylesheet" href="docs/style.css">
+  <style>
+    .version-switch {
+      position: absolute;
+      top: 2rem;
+      right: 4rem;
+      background: rgba(20, 184, 166, 0.2);
+      border: 1px solid var(--color-secondary);
+      padding: 0.5rem 1rem;
+      border-radius: 99px;
+      color: var(--color-secondary);
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    .version-switch:hover {
+      background: var(--color-secondary);
+      color: white;
+      text-decoration: none;
+      box-shadow: 0 0 15px rgba(20, 184, 166, 0.4);
+    }
+    .live-demo-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--color-accent);
+      color: var(--color-bg);
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 700;
+      text-decoration: none;
+      margin-top: 1.5rem;
+      margin-bottom: 2rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(20, 184, 166, 0.3);
+    }
+    .live-demo-btn:hover {
+      background: #14b8a6;
+      box-shadow: 0 6px 18px rgba(20, 184, 166, 0.5);
+      transform: translateY(-2px);
+      color: var(--color-bg);
+      text-decoration: none;
+    }
+    .media-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 1.75rem;
+      margin-bottom: 2rem;
+    }
+    .media-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 0.5rem;
+    }
+    .image-grid {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+      margin-bottom: 12px;
+    }
+    .image-item {
+      flex: 1;
+      min-width: 300px;
+    }
+    .image-label {
+      margin-top: 0;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .media-img {
+      max-width: 100%;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .media-video {
+      width: 100%;
+      max-height: 480px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 側邊欄導覽 -->
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      Skyline Class <span>class2</span>
+    </div>
+    
+    <div class="sidebar-menu-title">引導總覽</div>
+    <ul class="sidebar-menu">
+      <li><a href="README.html" class="sidebar-link">🚀 專案啟動說明</a></li>
+      <li><a href="workbench/index.html" class="sidebar-link">🧭 教材工作台</a></li>
+      <li><a href="falo_set_menu.html" class="sidebar-link">🍱 FALO 模型菜組合包範例</a></li>
+    </ul>
+
+    <div class="sidebar-menu-title">核心教材</div>
+    <ul class="sidebar-menu">
+      <li><a href="docs/01_course_map.html" class="sidebar-link">🗺️ 01 課程地圖</a></li>
+      <li><a href="docs/02_tender_workflow.html" class="sidebar-link">⚙️ 02 投標工作流</a></li>
+      <li><a href="docs/03_multi_ai_collaboration.html" class="sidebar-link">👥 03 Multi-AI 協作</a></li>
+      <li><a href="docs/04_artifact_management.html" class="sidebar-link">🛡️ 04 Artifact 管理</a></li>
+    </ul>
+
+    <div class="sidebar-menu-title">輔助工具</div>
+    <ul class="sidebar-menu">
+      <li><a href="memo.html" class="sidebar-link">📝 未來規劃備忘錄</a></li>
+      <li><a href="reference/class02-antigravity/index.html" class="sidebar-link">📚 歷史版本參考</a></li>
+    </ul>
+
+    <div class="sidebar-menu-title">架構共識</div>
+    <ul class="sidebar-menu">
+      <li><a href="local_ai_pm_architecture.html" class="sidebar-link">🖥️ 地端 AI PM 人機架構</a></li>
+      <li><a href="notebooklm_master_guide.html" class="sidebar-link">📘 NotebookLM 企業導讀</a></li>
+    </ul>
+
+    <div class="sidebar-menu-title">相關專案</div>
+    <ul class="sidebar-menu">
+      <li><a href="https://falo-taiwan.github.io/video-analysis-optimization/" target="_blank" class="sidebar-link">🎥 影音分析與優化專案</a></li>
+      <li><a href="ai_finance_demo.html" class="sidebar-link active">📊 AI 財會與稅務自動化專案</a></li>
+    </ul>
+  </nav>
+
+  <!-- 主內容區 -->
+  <main class="main-content">
+    <a href="ai_finance_demo.md" class="version-switch">📄 檢視 Markdown 版本</a>
+    
+    <div class="card">
+      <h1>📊 AI 財會與稅務自動化專案 (AI Finance POC)</h1>
+      <p>這是一個基於 AI 技術的財會自動化概念驗證（POC）專案。專案具體展示了如何將 AI 結合到會計勾稽與稅務申報的工作流中，以大幅降低人工出錯率並提升底稿核對的效率。</p>
+      
+      <a href="https://falo-taiwan.github.io/ai-finance-demo1/" target="_blank" class="live-demo-btn">🌐 進入線上 Live Demo 測試平台</a>
+    </div>
+
+    <!-- 專案源起 -->
+    <div class="media-card">
+      <div class="media-title">💬 專案源起與日常工作痛點討論</div>
+      <p>本專案源自於團隊日常對於「財務底稿與報稅自動化」及「紙本簽名薪資清冊稽核」等痛點的真實討論。討論過程中催生了以 AI 多模態技術解決會計人工登錄漏洞的想法：</p>
+      
+      <div class="image-grid">
+        <div class="image-item">
+          <div class="image-label">💬 財務申報與底稿自動化痛點</div>
+          <img src="reference/falo-prompt-manager/docs/falo_finance_motivation.jpg" alt="自動化財務申報之日常對話痛點" class="media-img">
+        </div>
+        <div class="image-item">
+          <div class="image-label">💬 薪資清冊掃描與防呆構想</div>
+          <img src="reference/falo-prompt-manager/docs/falo_finance_release.jpg" alt="紙本清冊掃描與扣繳申報之靈感" class="media-img">
+        </div>
+      </div>
+    </div>
+
+    <!-- 實機畫面 -->
+    <div class="media-card">
+      <div class="media-title">🖥️ 實機運作畫面 (AI 多模態辨識與算式糾錯)</div>
+      <p>平台主畫面的左側載入了由 AI 模擬生成的薪資印領清冊示範影像，右側展示了 AI 結構化資料提取結果。AI 自動比對出人工計算的實領錯誤，以及防呆檢驗出簽名處的「代簽」異常：</p>
+      
+      <img src="reference/falo-prompt-manager/docs/falo_finance_dashboard.jpg" alt="AI 財會系統實機畫面" class="media-img" style="margin-top: 10px;">
+    </div>
+
+    <!-- 操作影片 -->
+    <div class="media-card">
+      <div class="media-title">🎥 一鍵模擬測試與自動勾稽操作示範影片</div>
+      <p>以下為該財會 POC 平台的自動化操作與測試示範影片。影片展示了載入大表、科目語意自動對齊、借貸平衡稽核、稅外調整，以及紙本薪資單 OCR 掃描糾錯的完整工作流：</p>
+      
+      <video src="reference/falo-prompt-manager/docs/falo_finance_demo.mp4" controls class="media-video">您的瀏覽器不支援播放此影片。</video>
+    </div>
+
+    <!-- 技術原理解析 -->
+    <div class="card" style="margin-top: 2.5rem;">
+      <h3>🎯 核心解決方案與技術特點</h3>
+      <ul>
+        <li><strong>試算表大表勾稽自動化</strong>：透過 AI 進行科目名稱的「語意對齊」，自動匹配不一致的帳目名稱並自動計算借貸平衡，執行營所稅帳外調整（如交際費超限自動扣除）。</li>
+        <li><strong>多模態紙本 OCR 掃描</strong>：利用多模態 AI 自動識別紙本印領清冊的行列格子，精準抓取「給付總額、扣繳稅額、實領金額」，自動重算公式以指出算式錯誤。</li>
+        <li><strong>簽名比對與防呆防弊</strong>：利用多模態視覺比對同一個人的多次簽章筆跡，若有異常（例如多處簽名筆跡一致疑似代簽）會自動滑出警告日誌，並一鍵匯出符合扣繳申報格式的 CSV 檔。</li>
+      </ul>
+    </div>
+  </main>
+
+</body>
+</html>
