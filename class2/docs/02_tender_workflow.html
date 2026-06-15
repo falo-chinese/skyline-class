@@ -86,18 +86,18 @@
       <p>本單元將詳細拆解，主管如何透過三道企業治理防線，確保 AI 在受控且 100% 安全的軌道上運作。</p>
     </div>
 
-    <!-- 1. 資安防線 -->
+    <!-- 1. 資料管制與審查防線 -->
     <div class="defense-card">
-      <div class="defense-title" style="color: #67e8f9;">🔒 第一道防線：資安防線 (Data Privacy & Built-in AI)</div>
-      <p>為了滿足企業資安與法規對「敏感資料不上雲」的硬性要求，我們設計了 <strong>「地端安全沙盒與 Built-in AI」</strong> 的雙軌數據戰略：</p>
+      <div class="defense-title" style="color: #67e8f9;">🔒 第一道防線：資料管制與審查防線 (Data Control & NotebookLM Audit)</div>
+      <p>為了滿足企業在實際營運中對「敏感資料權限隔離與查詢稽核」的日常要求，我們以 <strong>AI NotebookLM</strong> 的存取機制為核心主軸：</p>
       <ul style="margin-top: 1rem;">
         <li style="margin-bottom: 0.5rem;">
-          <strong>地端安全沙盒 (Chrome Built-in AI / Gemini Nano)</strong>：
-          對於極敏感的財務報表、核心實績原始合約、或去重清洗等前置 ETL 工作，AI 直接在 100% 斷網的本機沙盒內執行。這不僅不需要耗費外部 API 費率，也徹底杜絕了機密資料離地的資安風險。
+          <strong>實務落地：NotebookLM 分流與知識庫限定 (Access Control)</strong>：
+          針對一般員工的查詢，系統透過中介網關限制其僅能閱讀「已獲得授權的特定知識庫/書庫」（例如：歷史得標案例庫），無法越權讀取高度敏感的財務原件。同時，後端自動保留完整的查詢與對話稽核日誌 (Audit Logs)，以備日後安全審查。這已能 100% 滿足此專案與多數企業的實際落地情境。
         </li>
         <li style="margin-bottom: 0.5rem;">
-          <strong>去敏感化雲端組裝</strong>：
-          地端 AI 將混亂的原始文件進行清洗並進行去識別化（去除金額、公司人名等敏感欄位）後，產出結構乾淨的 Markdown 摘要。隨後，這份「無害文本」才會上傳至雲端協作區，進行大規模的 Prompt 拼裝與 RAG 檢索。
+          <strong>高階拓展：地端安全沙盒與 Built-in AI (未來合作 Reference)</strong>：
+          作為未來的策略擴展與實力展現，我們預留了地端本機沙盒的防禦通道。對於極敏感數據（如財務報表或去重清洗），可先在 100% 斷網的本機沙盒（使用 Chrome Built-in AI / Gemini Nano）進行前置去敏感化 ETL，隨後才與雲端大模型進行安全拼裝。這可作為未來高端安全合作的技術藍圖。
         </li>
       </ul>
     </div>

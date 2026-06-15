@@ -24,7 +24,7 @@ graph TD
 * **[單元 01：Agent 智能邊界與指揮官思維](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/docs/01_course_map.md)**
   * *「從問答到一條龍 Agent 的能耐跨越」* —— 對比舊式單點問答與新式端到端工作流的 Token 消耗效率與作業極限。
 * **[單元 02：企業 AI 落地之安全、合規與誠信防線](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/docs/02_tender_workflow.md)**
-  * *「高階主管如何防禦風險？」* —— 深入探討本地安全沙盒（Gemini Nano）避免外洩、誠信紅線拒絕幻覺，以及 Sofia 人員失效自動備降機制。
+  * *「高階主管如何防禦風險？」* —— 深入探討 NotebookLM 知識庫存取分流與日誌稽核、誠信紅線拒絕幻覺，以及 Sofia 人員失效自動備降機制，並以 Chrome Built-in AI 作為未來策略拓展藍圖。
 * **[單元 03：實戰對帳：智能投標工作流端到端演練](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/docs/03_multi_ai_collaboration.md)**
   * *「看 Agent 如何吞下政府智慧文件大標案」* —— 直擊 Agent 如何自主完成 RFP 拆解、 Delta 增量組裝、比對 2h/4h SLA 成本衝突並產出 Gap Checklist。
 * **[單元 04：決策者視角：真理中心與一鍵收割同步機制](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/docs/04_artifact_management.md)**
@@ -38,7 +38,8 @@ graph TD
 
 ### ❓ 1. AI 會不會把公司極敏感的財務資料或商業機密洩漏上雲？
 > **防線解答**：
-> 我們採用 **地端安全沙盒與 Built-in AI (Gemini Nano) 技術**。敏感資料在前置 ETL 清洗時 100% 斷網運行於本機，去敏感化後才與雲端大模型進行無縫拼裝。
+> 我們在實務落地以 **AI NotebookLM 的存取管制與稽核日誌** 為核心主軸。系統透過中介網關限制一般同仁僅能閱讀「已獲得授權的特定知識庫」（如歷史得標案例庫），無法越權讀取敏感財務原件。同時，系統會自動留存完整查詢與對話稽核日誌，滿足企業的合規安全管理。
+> 此外，針對極敏感數據（如財務報表或去重清洗），我們預留了 **地端本機安全沙盒與 Built-in AI (Gemini Nano)** 作為未來高階合作的擴展技術藍圖，在 100% 斷網的本機進行去敏感化前置處理。
 > * 📄 詳見：**[單元 02：企業 AI 落地之安全、合規與誠信防線](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/docs/02_tender_workflow.md)**
 
 ### ❓ 2. AI 經常胡說八道（幻覺），如果寫錯標書或契約導致廢標，誰來負責？
