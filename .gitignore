@@ -1,4 +1,5 @@
-backup/
+backup/*
+!backup/*.py
 .DS_Store
 
 # Production data with real names and Google Sheets links (sensitive, not uploaded to GitHub)
