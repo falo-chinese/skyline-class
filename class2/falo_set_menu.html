@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FALO 模型菜組合包範例 - Skyline Class02</title>
+  <link rel="stylesheet" href="docs/style.css">
+  <!-- 頁面切換按鈕專用樣式 -->
+  <style>
+    .version-switch {
+      position: absolute;
+      top: 2rem;
+      right: 4rem;
+      background: rgba(99, 102, 241, 0.2);
+      border: 1px solid var(--color-primary-light);
+      padding: 0.5rem 1rem;
+      border-radius: 99px;
+      color: var(--color-primary-light);
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    .version-switch:hover {
+      background: var(--color-primary);
+      color: white;
+      text-decoration: none;
+      box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+    }
+    .dish-list li {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      list-style-type: none;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .dish-list li:hover {
+      transform: translateY(-2px);
+      border-color: var(--color-primary-light);
+    }
+    .dish-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .dish-details {
+      margin-left: 2rem;
+    }
+    .dish-details p {
+      margin: 0.4rem 0;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 側邊欄導覽 -->
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      Skyline Class <span>class2</span>
+    </div>
+    
+    <div class="sidebar-menu-title">引導總覽</div>
+    <ul class="sidebar-menu">
+      <li><a href="README.html" class="sidebar-link">🚀 專案啟動說明</a></li>
+      <li><a href="workbench/index.html" class="sidebar-link">🧭 教材工作台</a></li>
+      <li><a href="falo_set_menu.html" class="sidebar-link active">🍱 FALO 模型菜組合包範例</a></li>
+    </ul>
+
+    <div class="sidebar-menu-title">核心教材</div>
+    <ul class="sidebar-menu">
+      <li><a href="docs/01_course_map.html" class="sidebar-link">🗺️ 01 課程地圖</a></li>
+      <li><a href="docs/02_tender_workflow.html" class="sidebar-link">⚙️ 02 投標工作流</a></li>
+      <li><a href="docs/03_multi_ai_collaboration.html" class="sidebar-link">👥 03 Multi-AI 協作</a></li>
+      <li><a href="docs/04_artifact_management.html" class="sidebar-link">🛡️ 04 Artifact 管理</a></li>
+    </ul>
+
+    <div class="sidebar-menu-title">輔助工具</div>
+    <ul class="sidebar-menu">
+      <li><a href="memo.html" class="sidebar-link">📝 未來規劃備忘錄</a></li>
+      <li><a href="reference/class02-antigravity/index.html" class="sidebar-link">📚 歷史版本參考</a></li>
+    </ul>
+  </nav>
+
+  <!-- 主內容區 -->
+  <main class="main-content">
+    <a href="falo_set_menu.md" class="version-switch">📄 檢視 Markdown 版本</a>
+    
+    <div class="card">
+      <h1>🍱 FALO 模型菜組合包範例：企業智能投標工作流</h1>
+      <p>為幫助學員與企業主管（如辜總、陳董）直觀理解，我們將前述所有獨立模組（ETL、Prompt、RAG、PM）串接，形成一套完整的 <strong>「FALO 模型菜組合包 (Set Meal)」</strong> 實戰範例：</p>
+    </div>
+
+    <!-- 流程圖 -->
+    <div class="mermaid-container">
+      <pre class="mermaid">
+        flowchart LR
+            A[🥗 前菜: ETL 轉運站<br>FALO Mini Station] -->|1. 洗出 Markdown 文本| B[🍲 主菜: Prompt 平台<br>Prompt Manager]
+            B -->|2. 拼裝 Prompt + 變數| C[🍛 湯品: 知識庫網關<br>AI_NotebookLM]
+            C -->|3. 智慧分流與 RAG 檢索| D[🍨 甜點: 品質稽核與日誌<br>AI PM 系統]
+            
+            style A fill:#0f172a,stroke:#00f0ff,stroke-width:2px,color:#fff
+            style B fill:#0f172a,stroke:#9d4edd,stroke-width:2px,color:#fff
+            style C fill:#0f172a,stroke:#10b981,stroke-width:2px,color:#fff
+            style D fill:#0f172a,stroke:#f59e0b,stroke-width:2px,color:#fff
+      </pre>
+    </div>
+
+    <!-- 模型菜詳細介紹 -->
+    <ul class="dish-list" style="padding-left: 0;">
+      <li>
+        <div class="dish-title">🥗 前菜：資料前置清洗與 ETL (FALO Mini Station)</div>
+        <div class="dish-details">
+          <p><strong>功能</strong>：同仁複製混亂的客戶投標需求（RFP），或直接截圖上傳。</p>
+          <p><strong>輸出</strong>：Mini Station 執行輕量級 OCR 與 ETL 清洗，自動過濾雜訊，產出結構乾淨的 Markdown 格式文本。</p>
+        </div>
+      </li>
+      
+      <li>
+        <div class="dish-title">🍲 主菜：指令包裝與變數代入 (FALO Prompt Manager)</div>
+        <div class="dish-details">
+          <p><strong>功能</strong>：調用 Prompt 平台內建的 <code>[標前需求預判 Checklist]</code> 範本，自動套入變數（如公司名稱、技術參數）。</p>
+          <p><strong>輸出</strong>：拼裝成上下文完整、語意清晰、免去人工手動複製修改的「高精度 Prompt」。</p>
+        </div>
+      </li>
+      
+      <li>
+        <div class="dish-title">🍛 湯品：智慧分流與安全檢索 (AI_NotebookLM 網關)</div>
+        <div class="dish-details">
+          <p><strong>功能</strong>：將 Prompt 自動發送至網關後端。網關先向 <code>Master Router Notebook</code> 提問解析：「該問哪個書庫？」隨後將問題投遞至目標書庫（如：歷史得標案例庫）進行檢索。</p>
+          <p><strong>輸出</strong>：安全取得經由沙盒保護的標案可行性評估，同仁接觸不到敏感的原始文件。</p>
+        </div>
+      </li>
+      
+      <li>
+        <div class="dish-title">🍨 甜點：日誌合規與進度管控 (AI PM 系統)</div>
+        <div class="dish-details">
+          <p><strong>功能</strong>：網關在執行問答時，自動透過 GAS 將對話內容與 FinOps Token 費用記錄在 Google Sheet 資料庫中，並由 AI PM 自動更新專案追蹤進度與交付成果稽核。</p>
+          <p><strong>輸出</strong>：產出透明、合規的專案進度與成本控管日誌。</p>
+        </div>
+      </li>
+    </ul>
+
+    <div class="card" style="margin-top: 2.5rem;">
+      <h3>🎯 核心採用哲學</h3>
+      <p>這套 FALO 模型菜完美呈現了我們對企業落地 AI 的雙軌思維：</p>
+      <ul>
+        <li><strong>強目標 Agent 導向 (Executives)</strong>：高階主管可直接指引高自主性 agentic 系統 (如 Antigravity / AIDE) 進行多階分析及決策。</li>
+        <li><strong>協作平台與範本管理 (Employees)</strong>：一般員工透過輕量級 ETL 工具 (Mini Station) 與審查過的範本選單 (Prompt Manager)，在合規、低成本下完成日常高頻協作。</li>
+      </ul>
+    </div>
+  </main>
+
+  <!-- 引入 Mermaid JS -->
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'dark',
+      themeVariables: {
+        background: 'transparent',
+        primaryColor: '#6366f1',
+        primaryTextColor: '#f8fafc',
+        primaryBorderColor: '#818cf8',
+        lineColor: '#14b8a6',
+        secondaryColor: '#1e1b4b',
+        tertiaryColor: '#0f172a'
+      }
+    });
+  </script>
+</body>
+</html>

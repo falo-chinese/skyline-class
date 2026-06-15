@@ -58,6 +58,7 @@
     <ul class="sidebar-menu">
       <li><a href="../README.html" class="sidebar-link">🚀 專案啟動說明</a></li>
       <li><a href="index.html" class="sidebar-link active">🧭 教材工作台</a></li>
+      <li><a href="../falo_set_menu.html" class="sidebar-link">🍱 FALO 模型菜組合包範例</a></li>
     </ul>
 
     <div class="sidebar-menu-title">核心教材</div>
@@ -71,6 +72,7 @@
     <div class="sidebar-menu-title">輔助工具</div>
     <ul class="sidebar-menu">
       <li><a href="../memo.html" class="sidebar-link">📝 未來規劃備忘錄</a></li>
+      <li><a href="../reference/class02-antigravity/index.html" class="sidebar-link">📚 歷史版本參考</a></li>
     </ul>
   </nav>
 
@@ -90,7 +92,8 @@
     <div class="mermaid-container">
       <pre class="mermaid">
         graph TD
-            Start[開始：專案啟動] --> Map[01. 課程地圖]
+            Start[開始：專案啟動] --> SetMenu[FALO 模型菜組合包]
+            SetMenu --> Map[01. 課程地圖]
             Map --> Flow[02. 投標文件工作流]
             Flow --> MultiAI[03. Multi-AI 協作]
             MultiAI --> Artifact[04. Artifact 管理]
@@ -99,6 +102,7 @@
     </div>
 
     <ul>
+      <li><a href="../falo_set_menu.html"><strong>FALO 模型菜組合包範例</strong></a> —— <em>「企業智能投標工作流的實戰案例」</em>。串接 ETL 轉運站、Prompt 平台、知識庫網關與 AI PM 系統的完整「模型菜」實戰。</li>
       <li><a href="../docs/01_course_map.html"><strong>單元 01：課程地圖</strong></a> —— <em>「從問答到工作流的思維轉變」</em>。理解 Skyline 的學習路徑，以及 Class02 的核心知識點。</li>
       <li><a href="../docs/02_tender_workflow.html"><strong>單元 02：投標文件工作流說明</strong></a> —— <em>「如何用 AI 吞下大型投標文件？」</em>。解析企業在處理大型 RFP（需求建議書）時的痛點，以及如何建立端到端（End-to-End）的 AI 工作流。</li>
       <li><a href="../docs/03_multi_ai_collaboration.html"><strong>單元 03：Multi-AI 協作說明</strong></a> —— <em>「大腦、主力產線與技術特工的協同」</em>。說明核心工具/角色在工作流中扮演的「理解、整理、管理」鐵三角。</li>
@@ -126,17 +130,17 @@
       <p>💡 建議優先閱讀：<a href="../docs/01_course_map.html">01 課程地圖</a> 與根目錄 <a href="../README.html">README.html</a> 中的角色定義（特別是 **主力產線** 的任務設定）。</p>
     </div>
 
-    <h2 style="margin-top: 2.5rem;">📦 核心教學知識骨架 (Class 02 Antigravity 核心交付包)</h2>
-    <p>我們已將講師 ff 顧問實戰沉澱的 Class 02 知識骨架與 AIDE 長文件工程交付母稿完整收錄，作為本課程的<strong>底層核心知識骨架</strong>：</p>
+    <h2 style="margin-top: 2.5rem;">🚀 未來展示規劃</h2>
+    <p>在後續的專案推進中，我們將在 <code>demo/</code> 目錄中建立一個 HTML/CSS/JS 的實體網頁展示，將這套投標文件工作流與 Multi-AI 的協作過程視覺化，讓企業主管能以最直覺的方式體驗 AI 治理的威力。</p>
+
+    <h2 style="margin-top: 2.5rem;">📚 歷史版本參考 (Class 02 Antigravity 原始交付包)</h2>
+    <p>我們已將講師 ff 顧問實戰沉澱的 Class 02 原始知識骨架與 AIDE 長文件工程交付母稿收錄於此，供後續重構參考：</p>
     <ul>
       <li><strong><a href="../reference/class02-antigravity/class02_teaching_delivery_pack.html" target="_blank">講師實際教學交付母稿 (class02_teaching_delivery_pack)</a></strong>：3 小時精準課程流向、授課逐字稿、SLA衝突/誠信紅線/PM備降等 AIDE 雙軌對帳 Live Demo 指令集。</li>
       <li><strong><a href="../reference/class02-antigravity/class02_practice_workbook.html" target="_blank">學員實作手冊指南 (class02_practice_workbook)</a></strong>：八大關鍵步驟的 AIDE 長文件工程實作指南。</li>
       <li><strong><a href="../reference/class02-antigravity/knowledge_engineering_lessons_learned.html" target="_blank">知識工程心得沉澱 (knowledge_engineering_lessons_learned)</a></strong>：記錄了 <em>「不要把長文件當文章寫，要把文件當代碼來編譯與治理 (Document as Code)」</em> 的核心方法論發現。</li>
       <li><strong><a href="../reference/class02-antigravity.zip">下載完整交付包 (class02-antigravity.zip)</a></strong>：包含模擬招標書（RFP）、內部實績元件、學員空白模板、大腦引導規章及預期產出文件等完整數據庫。</li>
     </ul>
-
-    <h2 style="margin-top: 2.5rem;">🚀 未來展示規劃</h2>
-    <p>在後續的專案推進中，我們將在 <code>demo/</code> 目錄中建立一個 HTML/CSS/JS 的實體網頁展示，將這套投標文件工作流與 Multi-AI 的協作過程視覺化，讓企業主管能以最直覺的方式體驗 AI 治理的威力。</p>
   </main>
 
   <!-- 引入 Mermaid JS -->
