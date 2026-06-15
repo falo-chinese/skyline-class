@@ -137,7 +137,8 @@
         <div class="dish-title">🍲 主菜：指令包裝與變數代入 (FALO Prompt Manager)</div>
         <div class="dish-details">
           <p><strong>功能</strong>：調用 Prompt 平台內建的 <code>[標前需求預判 Checklist]</code> 範本，自動套入變數（如公司名稱、技術參數）。</p>
-          <p><strong>衛星外掛 (Chrome Extension)</strong>：為了加速日常工作流，我們同時提供了 <strong>FALO Prompt Manager 衛星外掛版 (Chrome Extension)</strong>。該外掛直接承接地端主 Prompt 中心的資料庫，常駐於瀏覽器側邊欄 (Side Panel)，當同仁開啟 ChatGPT, Gemini, Claude 等 AI 網站時，可在側邊欄填入變數後「一鍵自動填入」對話框，免去手動複製貼上。
+          <p><strong>精簡與完整雙模式切換 (v2.2 新增)</strong>：主網頁右上角提供模式切換鈕，預設為「精簡模式」（Compact Mode），可將行政與次要欄位（如用途說明、人工檢查點、預期輸出等）自動隱藏，讓同仁以極度清爽的介面快速進行 Prompt 拷貝與變數代入；切換回「完整模式」則重新顯現所有管理欄位，達到「功能保留、視覺極簡」且保留 localStorage 狀態記憶之效果。</p>
+          <p><strong>衛星外掛 (Chrome Extension)</strong>：為了加速日常工作流，我們同時提供了 <strong>FALO Prompt Manager 衛星外掛版 (Chrome Extension)</strong>。該外掛直接承接地端主 Prompt 中心的資料庫，常駐於瀏覽器側邊欄 (Side Panel)，當同仁開啟 ChatGPT, Gemini, Claude 等 AI 網站時，可在側邊欄填入變數後「一鍵自動填入」對話框，免去手動複製貼上。同時在 v2.2 修復了選定不同卡片時置頂變數不更新之同步 Bug。
           <br>• <strong>雙向身分握手連線</strong>：外掛與地端 PWA 具備安全身分互認標籤，PWA 右上角會顯示「🛰️ 衛星外掛連線狀態」（綠燈表示已連線並顯示客戶端標記，外掛關閉超時 6 秒後自動亮灰燈離線），大幅提升安全與透明度。
           <br>• <strong>多主控台切換 (1對多)</strong>：外掛支援同時偵測多個開啟的真理中心分頁，並在頂部自動提供「下拉式選單」供一鍵選取要拉取/推送的目標中心。</p>
           <p><strong>外掛與 NotebookLM 整合工作流示意</strong>：<br><img src="reference/falo-prompt-manager/docs/notebooklm_extension_flow.png" alt="FALO Prompt Manager 搭配 NotebookLM 填充示意圖" style="max-width: 100%; max-height: 450px; border-radius: 6px; border: 1px solid rgba(255, 255, 255, 0.08); margin-top: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);"></p>
