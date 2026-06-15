@@ -1,0 +1,876 @@
+// FALO Prompt Manager - Satellite Chrome Extension JS
+// Handles local storage, variables caching, DOM injection, CRUD, and Live Sync with PWA.
+
+const STORAGE_KEYS = {
+  database: "falo_prompt_manager_database_v03",
+  variables: "falo_prompt_manager_variables_v03",
+  theme: "falo_prompt_manager_theme_v03"
+};
+
+// Global State
+let currentDb = [];
+let cachedVariables = {};
+let activeTagFilter = null;
+let currentSearchQuery = "";
+let expandedCardId = null;
+
+// Target PWA URL patterns for Live Sync
+const PWA_PATTERNS = [
+  "*://localhost/*",
+  "*://127.0.0.1/*",
+  "*://falo-taiwan.github.io/prompt-demo/*",
+  "*://falo-chinese.github.io/prompt-demo/*"
+];
+
+// DOM Elements
+const els = {
+  categoryAccordion: document.getElementById("categoryAccordion"),
+  searchInput: document.getElementById("searchInput"),
+  tagsFilterContainer: document.getElementById("tagsFilterContainer"),
+  dbSourceText: document.getElementById("dbSourceText"),
+  dbCountText: document.getElementById("dbCountText"),
+  syncIndicator: document.getElementById("syncIndicator"),
+  syncStatusText: document.getElementById("syncStatusText"),
+  syncPullBtn: document.getElementById("syncPullBtn"),
+  syncPushBtn: document.getElementById("syncPushBtn"),
+  importBtn: document.getElementById("importBtn"),
+  exportBtn: document.getElementById("exportBtn"),
+  resetBtn: document.getElementById("resetBtn"),
+  fileInput: document.getElementById("fileInput"),
+  addPromptBtn: document.getElementById("addPromptBtn"),
+  
+  // Modal Elements
+  editModal: document.getElementById("editModal"),
+  closeModalBtn: document.getElementById("closeModalBtn"),
+  cancelModalBtn: document.getElementById("cancelModalBtn"),
+  promptForm: document.getElementById("promptForm"),
+  editCardId: document.getElementById("editCardId"),
+  formCategory: document.getElementById("formCategory"),
+  formTitle: document.getElementById("formTitle"),
+  formDescription: document.getElementById("formDescription"),
+  formPromptText: document.getElementById("formPromptText"),
+  formTags: document.getElementById("formTags"),
+  formStatus: document.getElementById("formStatus"),
+  formTargetAI: document.getElementById("formTargetAI"),
+  formHumanReview: document.getElementById("formHumanReview"),
+  modalTitle: document.getElementById("modalTitle"),
+  toast: document.getElementById("toast")
+};
+
+// -------------------------------------------------------------
+// 1. Initialization & Database Load
+// -------------------------------------------------------------
+
+document.addEventListener("DOMContentLoaded", async () => {
+  await loadState();
+  initEventListeners();
+  checkPwaTabStatus();
+  // Poll PWA tab status every 5 seconds
+  setInterval(checkPwaTabStatus, 5000);
+});
+
+// Load state from chrome.storage.local
+async function loadState() {
+  try {
+    const data = await chrome.storage.local.get([STORAGE_KEYS.database, STORAGE_KEYS.variables]);
+    
+    if (data[STORAGE_KEYS.database] && Array.isArray(data[STORAGE_KEYS.database])) {
+      currentDb = data[STORAGE_KEYS.database];
+      els.dbSourceText.textContent = "外掛儲存區";
+    } else {
+      // Load bundled default prompts
+      await resetToDefaultDatabase();
+      return;
+    }
+    
+    cachedVariables = data[STORAGE_KEYS.variables] || {};
+    renderUI();
+  } catch (err) {
+    showToast("讀取資料失敗: " + err.message, "error");
+  }
+}
+
+// Save state to chrome.storage.local
+async function saveState() {
+  await chrome.storage.local.set({
+    [STORAGE_KEYS.database]: currentDb,
+    [STORAGE_KEYS.variables]: cachedVariables
+  });
+  updateStats();
+}
+
+// Reset to bundled prompts
+async function resetToDefaultDatabase() {
+  try {
+    const response = await fetch("default_prompts.json");
+    if (!response.ok) throw new Error("無法讀取預設 Prompt 檔案");
+    const defaults = await response.json();
+    currentDb = defaults;
+    await saveState();
+    els.dbSourceText.textContent = "內建教材題庫";
+    renderUI();
+    showToast("已成功重設為預設教材庫");
+  } catch (err) {
+    showToast("載入預設資料失敗: " + err.message, "error");
+  }
+}
+
+// -------------------------------------------------------------
+// 2. UI Rendering & Filtering
+// -------------------------------------------------------------
+
+function renderUI() {
+  renderTagsFilter();
+  renderAccordion();
+  updateStats();
+}
+
+function updateStats() {
+  let count = 0;
+  currentDb.forEach(cat => {
+    if (cat.items) count += cat.items.length;
+  });
+  els.dbCountText.textContent = count + " 張卡片";
+}
+
+// Render Tag Pills filter at top
+function renderTagsFilter() {
+  const tagsSet = new Set();
+  currentDb.forEach(cat => {
+    if (cat.items) {
+      cat.items.forEach(card => {
+        if (card.tags && Array.isArray(card.tags)) {
+          card.tags.forEach(tag => tagsSet.add(tag.trim()));
+        }
+      });
+    }
+  });
+
+  const uniqueTags = Array.from(tagsSet).sort();
+  
+  let html = "";
+  if (uniqueTags.length > 0) {
+    html = uniqueTags.map(tag => {
+      const activeClass = activeTagFilter === tag ? "active" : "";
+      return `<span class="tag-pill ${activeClass}" data-tag="${tag}">${tag}</span>`;
+    }).join("");
+  }
+  
+  els.tagsFilterContainer.innerHTML = html;
+  
+  // Attach tags click listener
+  els.tagsFilterContainer.querySelectorAll(".tag-pill").forEach(pill => {
+    pill.addEventListener("click", () => {
+      const tag = pill.getAttribute("data-tag");
+      if (activeTagFilter === tag) {
+        activeTagFilter = null; // Toggle off
+      } else {
+        activeTagFilter = tag;
+      }
+      renderUI();
+    });
+  });
+}
+
+// Render main Categories and Prompt Cards
+function renderAccordion() {
+  els.categoryAccordion.innerHTML = "";
+  
+  const query = currentSearchQuery.toLowerCase().trim();
+  
+  currentDb.forEach(cat => {
+    // Filter cards in this category
+    const filteredCards = (cat.items || []).filter(card => {
+      // Tag filter
+      if (activeTagFilter && (!card.tags || !card.tags.includes(activeTagFilter))) {
+        return false;
+      }
+      // Text search query
+      if (query !== "") {
+        const inTitle = card.title && card.title.toLowerCase().includes(query);
+        const inDesc = card.description && card.description.toLowerCase().includes(query);
+        const inPrompt = card.promptText && card.promptText.toLowerCase().includes(query);
+        const inTags = card.tags && card.tags.some(t => t.toLowerCase().includes(query));
+        return inTitle || inDesc || inPrompt || inTags;
+      }
+      return true;
+    });
+
+    if (filteredCards.length === 0 && query !== "") {
+      return; // Skip category if searching and no match
+    }
+
+    const catGroup = document.createElement("div");
+    catGroup.className = "acc-group";
+    // Keep category open by default if searching or filtering
+    if (query !== "" || activeTagFilter) {
+      catGroup.classList.add("open");
+    }
+
+    const catHeader = document.createElement("div");
+    catHeader.className = "acc-header";
+    catHeader.innerHTML = `
+      <div class="acc-header-left">
+        <span class="acc-icon">▶</span>
+        <span class="acc-title" title="${cat.title}">${cat.title}</span>
+      </div>
+      <span class="acc-badge">${filteredCards.length}</span>
+    `;
+
+    const catBody = document.createElement("div");
+    catBody.className = "acc-body";
+    
+    const cardsList = document.createElement("div");
+    cardsList.className = "cards-list";
+
+    filteredCards.forEach(card => {
+      const isExpanded = expandedCardId === card.id;
+      const cardEl = document.createElement("div");
+      cardEl.className = `prompt-card ${isExpanded ? "expanded" : ""}`;
+      cardEl.setAttribute("data-card-id", card.id);
+
+      const tagsHtml = (card.tags || []).map(t => `<span class="card-tag">${t}</span>`).join("");
+      const statusHtml = card.status ? `<span class="card-status ${card.status}">${card.status}</span>` : "";
+
+      let detailsHtml = "";
+      if (isExpanded) {
+        // Parse variables in promptText
+        const vars = parseVariables(card.promptText);
+        let variablesForm = "";
+        
+        if (vars.length > 0) {
+          const varInputs = vars.map(v => {
+            const val = cachedVariables[v] || "";
+            return `
+              <div class="var-input-group">
+                <label for="var-${card.id}-${v}">[${v}]</label>
+                <input type="text" class="var-input" id="var-${card.id}-${v}" data-var-name="${v}" value="${val}" placeholder="輸入 ${v} 的值...">
+              </div>
+            `;
+          }).join("");
+
+          variablesForm = `
+            <div class="variables-panel" data-card-id="${card.id}">
+              <div class="detail-section-title" style="margin-bottom: 4px;">代入變數</div>
+              <div class="variables-list">${varInputs}</div>
+            </div>
+          `;
+        }
+
+        // Expected Output
+        const expOutputHtml = card.expectedOutput ? `
+          <div class="card-details-box">
+            <div class="detail-section-title">預期 AI 輸出</div>
+            <div class="expected-output">${card.expectedOutput}</div>
+          </div>
+        ` : "";
+
+        // Human Review Points
+        const reviewPointsHtml = (card.humanReviewPoints && card.humanReviewPoints.length > 0) ? `
+          <div class="card-details-box">
+            <div class="detail-section-title">🕵️‍♂️ 人工核對重點</div>
+            <ul style="padding-left: 14px; font-size: 11px; color: var(--text-secondary);">
+              ${card.humanReviewPoints.map(p => `<li>${p}</li>`).join("")}
+            </ul>
+          </div>
+        ` : "";
+
+        detailsHtml = `
+          <div class="card-details-box">
+            <div class="detail-section-title">指令範本本文</div>
+            <div class="prompt-template-preview">${escapeHtml(card.promptText)}</div>
+          </div>
+          ${variablesForm}
+          ${expOutputHtml}
+          ${reviewPointsHtml}
+          <div class="card-actions">
+            <button class="btn btn-outline btn-copy" data-card-id="${card.id}">📋 複製</button>
+            <button class="btn btn-primary btn-fill" data-card-id="${card.id}">⚡ 填入對話框</button>
+          </div>
+          <div class="card-edit-row">
+            <button class="text-btn btn-edit" data-card-id="${card.id}">編輯卡片</button>
+            <button class="text-btn text-btn-danger btn-delete" data-card-id="${card.id}">刪除</button>
+          </div>
+        `;
+      }
+
+      cardEl.innerHTML = `
+        <div class="card-header-row">
+          <span class="card-title">${card.title}</span>
+          ${statusHtml}
+        </div>
+        <div class="card-desc">${card.description || "無用途說明。"}</div>
+        <div class="card-tags">${tagsHtml}</div>
+        ${detailsHtml}
+      `;
+
+      // Event listeners inside card
+      cardEl.addEventListener("click", (e) => {
+        // Prevent expansion if clicking inputs/buttons inside expanded panel
+        if (e.target.closest("input") || e.target.closest("button") || e.target.closest("select") || e.target.closest(".variables-panel")) {
+          return;
+        }
+        
+        if (expandedCardId === card.id) {
+          expandedCardId = null;
+        } else {
+          expandedCardId = card.id;
+        }
+        renderAccordion();
+      });
+
+      // Expanded sub-actions
+      if (isExpanded) {
+        // Variable input cache on change
+        cardEl.querySelectorAll(".var-input").forEach(input => {
+          input.addEventListener("input", (e) => {
+            const varName = e.target.getAttribute("data-var-name");
+            const val = e.target.value;
+            cachedVariables[varName] = val;
+            chrome.storage.local.set({ [STORAGE_KEYS.variables]: cachedVariables });
+          });
+        });
+
+        // Copy button
+        cardEl.querySelector(".btn-copy").addEventListener("click", () => {
+          const compiled = compilePrompt(card);
+          copyToClipboard(compiled);
+        });
+
+        // Fill dialog button
+        cardEl.querySelector(".btn-fill").addEventListener("click", () => {
+          const compiled = compilePrompt(card);
+          fillIntoTab(compiled);
+        });
+
+        // Edit button
+        cardEl.querySelector(".btn-edit").addEventListener("click", () => {
+          openEditModal(card.id);
+        });
+
+        // Delete button
+        cardEl.querySelector(".btn-delete").addEventListener("click", () => {
+          if (confirm(`確定要刪除「${card.title}」提示詞卡片嗎？`)) {
+            deleteCard(card.id);
+          }
+        });
+      }
+
+      cardsList.appendChild(cardEl);
+    });
+
+    catBody.appendChild(cardsList);
+    catGroup.appendChild(catHeader);
+    catGroup.appendChild(catBody);
+    
+    // Toggle accordion group collapse
+    catHeader.addEventListener("click", () => {
+      catGroup.classList.toggle("open");
+    });
+
+    els.categoryAccordion.appendChild(catGroup);
+  });
+
+  if (els.categoryAccordion.children.length === 0) {
+    els.categoryAccordion.innerHTML = `
+      <div style="text-align: center; color: var(--text-muted); padding: 40px 10px;">
+        無符合搜尋或篩選條件的提示詞卡片。
+      </div>
+    `;
+  }
+}
+
+// -------------------------------------------------------------
+// 3. Variable Parsing & Compilation
+// -------------------------------------------------------------
+
+function parseVariables(text) {
+  if (!text) return [];
+  // Matches both [Variable] and {{Variable}}
+  const regex = /\[([A-Za-z0-9_]+)\]|\{\{([A-Za-z0-9_]+)\}\}/g;
+  const vars = new Set();
+  let match;
+  while ((match = regex.exec(text)) !== null) {
+    const varName = match[1] || match[2];
+    if (varName) vars.add(varName);
+  }
+  return Array.from(vars);
+}
+
+function compilePrompt(card) {
+  let text = card.promptText;
+  const vars = parseVariables(text);
+  vars.forEach(v => {
+    const val = cachedVariables[v] || `[${v}]`; // Fallback to label if empty
+    // Replace all occurrences of [v]
+    const escapedVar = v.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+    const regex = new RegExp(`\\[${escapedVar}\\]|\\{\\{${escapedVar}\\}\\}`, "g");
+    text = text.replace(regex, val);
+  });
+  return text;
+}
+
+// -------------------------------------------------------------
+// 4. Live Sync with PWA (Pull/Push)
+// -------------------------------------------------------------
+
+// Search open tabs to see if a PWA is active
+async function findPwaTab() {
+  const tabs = await chrome.tabs.query({});
+  for (const tab of tabs) {
+    if (!tab.url) continue;
+    // Check if URL matches any pattern
+    const matched = PWA_PATTERNS.some(pat => {
+      const regexStr = "^" + pat.split("*").map(s => s.replace(/[-\/\\^$+?.()|[\]{}]/g, '\\$&')).join(".*") + "$";
+      return new RegExp(regexStr).test(tab.url);
+    });
+    if (matched) return tab;
+  }
+  return null;
+}
+
+async function checkPwaTabStatus() {
+  const tab = await findPwaTab();
+  if (tab) {
+    els.syncIndicator.className = "status-indicator connected";
+    els.syncStatusText.textContent = "偵測到地端 PWA 網頁";
+    els.syncPullBtn.disabled = false;
+    els.syncPushBtn.disabled = false;
+  } else {
+    els.syncIndicator.className = "status-indicator disconnected";
+    els.syncStatusText.textContent = "未偵測到地端 PWA";
+    els.syncPullBtn.disabled = true;
+    els.syncPushBtn.disabled = true;
+  }
+}
+
+// Pull data from open PWA Tab's localStorage
+async function pullFromPwa() {
+  const tab = await findPwaTab();
+  if (!tab) {
+    showToast("找不到地端 PWA 分頁，請先開啟地端網頁", "error");
+    return;
+  }
+
+  showToast("正在拉取地端資料...");
+  
+  try {
+    // Execute script in PWA tab context to get localStorage data
+    chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      func: () => {
+        return {
+          database: localStorage.getItem("falo_prompt_manager_database_v03"),
+          variables: localStorage.getItem("falo_prompt_manager_variables_v03")
+        };
+      }
+    }, async (results) => {
+      if (!results || !results[0] || !results[0].result) {
+        showToast("無法讀取網頁端儲存區", "error");
+        return;
+      }
+      
+      const { database, variables } = results[0].result;
+      
+      if (!database) {
+        showToast("地端 PWA 尚未建立資料庫 (請先在地端初始化)", "error");
+        return;
+      }
+
+      try {
+        const parsedDb = JSON.parse(database);
+        // Schema check
+        if (!Array.isArray(parsedDb)) throw new Error("資料格式應為陣列");
+        
+        currentDb = parsedDb;
+        if (variables) {
+          cachedVariables = { ...cachedVariables, ...JSON.parse(variables) };
+        }
+        
+        await saveState();
+        els.dbSourceText.textContent = "同步自地端網頁";
+        renderUI();
+        showToast("🔄 資料已成功拉取並同步！");
+      } catch (err) {
+        showToast("拉取資料解析失敗: " + err.message, "error");
+      }
+    });
+  } catch (err) {
+    showToast("同步失敗: " + err.message, "error");
+  }
+}
+
+// Push data to PWA Tab's localStorage and refresh it
+async function pushToPwa() {
+  const tab = await findPwaTab();
+  if (!tab) {
+    showToast("找不到地端 PWA 分頁，請先開啟地端網頁", "error");
+    return;
+  }
+
+  showToast("正在推送外掛變更至地端...");
+
+  try {
+    const dbStr = JSON.stringify(currentDb);
+    const varStr = JSON.stringify(cachedVariables);
+    
+    chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      args: [dbStr, varStr],
+      func: (db, vars) => {
+        localStorage.setItem("falo_prompt_manager_database_v03", db);
+        localStorage.setItem("falo_prompt_manager_variables_v03", vars);
+        // Dispatch custom event to notify page if it's listening
+        window.dispatchEvent(new CustomEvent("faloDbSync", { detail: { updated: true } }));
+        // Reload tab to reflect changes immediately
+        location.reload();
+        return true;
+      }
+    }, (results) => {
+      if (results && results[0] && results[0].result) {
+        showToast("📤 成功推送變更！地端網頁已重新整理。");
+      } else {
+        showToast("推送失敗，無法寫入地端", "error");
+      }
+    });
+  } catch (err) {
+    showToast("推送同步出錯: " + err.message, "error");
+  }
+}
+
+// -------------------------------------------------------------
+// 5. File Import & Export
+// -------------------------------------------------------------
+
+function exportJson() {
+  const dataStr = JSON.stringify(currentDb, null, 2);
+  const blob = new Blob([dataStr], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  
+  const stamp = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+  const filename = `falo_prompt_export_${stamp}.json`;
+  
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast("已成功匯出 JSON 備份");
+}
+
+function triggerImport() {
+  els.fileInput.click();
+}
+
+function handleFileImport(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  
+  const reader = new FileReader();
+  reader.onload = async (event) => {
+    try {
+      const imported = JSON.parse(event.target.result);
+      
+      // Basic validation
+      let dataToLoad = null;
+      if (Array.isArray(imported)) {
+        dataToLoad = imported;
+      } else if (imported && Array.isArray(imported.database)) {
+        dataToLoad = imported.database; // Handles full backups
+      } else {
+        throw new Error("匯入格式必須為 Category 陣列或備份 JSON");
+      }
+      
+      currentDb = dataToLoad;
+      await saveState();
+      els.dbSourceText.textContent = "匯入自檔案";
+      renderUI();
+      showToast("📥 匯入成功！");
+    } catch (err) {
+      showToast("匯入失敗: " + err.message, "error");
+    }
+  };
+  reader.readAsText(file);
+}
+
+// -------------------------------------------------------------
+// 6. Autofill into active tab (DOM Injection)
+// -------------------------------------------------------------
+
+async function fillIntoTab(compiledPrompt) {
+  const [activeTab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  if (!activeTab) {
+    showToast("找不到作用中的網頁分頁", "error");
+    return;
+  }
+  
+  const url = activeTab.url || "";
+  const isAIPage = ["chatgpt.com", "gemini.google.com", "claude.ai", "notebooklm.google.com"].some(domain => url.includes(domain));
+  
+  if (!isAIPage) {
+    showToast("請切換至 AI 對話網頁（ChatGPT, Gemini, Claude 等）再填入！", "error");
+    return;
+  }
+  
+  showToast("正在注入 Prompt...");
+  
+  try {
+    // Send message to Content Script on active tab
+    chrome.tabs.sendMessage(activeTab.id, {
+      action: "fillPrompt",
+      text: compiledPrompt
+    }, (response) => {
+      // Handles fallback or success response
+      if (chrome.runtime.lastError) {
+        // Content script might not be loaded yet or unsupported, try script execution fallback
+        fallbackInject(activeTab.id, compiledPrompt);
+      } else if (response && response.success) {
+        showToast("⚡ 已成功填入輸入框！");
+      } else {
+        showToast("填入失敗: 找不到輸入框", "error");
+      }
+    });
+  } catch (err) {
+    showToast("填充指令發送失敗: " + err.message, "error");
+  }
+}
+
+// Fallback script execution if content.js isn't ready
+function fallbackInject(tabId, text) {
+  chrome.scripting.executeScript({
+    target: { tabId: tabId },
+    args: [text],
+    func: (promptText) => {
+      // Look for editable areas
+      const inputSelectors = [
+        '#prompt-textarea',
+        'div[contenteditable="true"]',
+        'textarea',
+        '[placeholder*="ChatGPT"]',
+        '[placeholder*="Gemini"]',
+        '[placeholder*="對話"]',
+        '[placeholder*="ask"]'
+      ];
+      
+      let element = null;
+      for (const selector of inputSelectors) {
+        element = document.querySelector(selector);
+        if (element) break;
+      }
+      
+      if (!element) return false;
+      
+      if (element.tagName === 'TEXTAREA' || element.tagName === 'INPUT') {
+        element.value = promptText;
+      } else if (element.getAttribute('contenteditable') === 'true') {
+        // Clear children
+        element.innerHTML = '';
+        const p = document.createElement('p');
+        p.innerText = promptText;
+        element.appendChild(p);
+      }
+      
+      // Dispatch events to trigger React/Vue update
+      element.dispatchEvent(new Event('input', { bubbles: true }));
+      element.dispatchEvent(new Event('change', { bubbles: true }));
+      element.focus();
+      return true;
+    }
+  }, (results) => {
+    if (results && results[0] && results[0].result) {
+      showToast("⚡ (備用通道) 已成功填入輸入框！");
+    } else {
+      showToast("無法定位輸入框，請手動複製貼上", "error");
+    }
+  });
+}
+
+// -------------------------------------------------------------
+// 7. Card CRUD (Quick Editor)
+// -------------------------------------------------------------
+
+function openEditModal(cardId = null) {
+  // Populate category select
+  els.formCategory.innerHTML = currentDb.map(cat => `
+    <option value="${cat.id}">${cat.title}</option>
+  `).join("");
+
+  if (cardId) {
+    // Edit mode
+    els.modalTitle.textContent = "編輯提示詞卡片";
+    els.editCardId.value = cardId;
+    
+    // Find card and category
+    let foundCard = null;
+    let foundCatId = null;
+    currentDb.forEach(cat => {
+      if (cat.items) {
+        const c = cat.items.find(item => item.id === cardId);
+        if (c) {
+          foundCard = c;
+          foundCatId = cat.id;
+        }
+      }
+    });
+
+    if (foundCard) {
+      els.formCategory.value = foundCatId;
+      els.formTitle.value = foundCard.title || "";
+      els.formDescription.value = foundCard.description || "";
+      els.formPromptText.value = foundCard.promptText || "";
+      els.formTags.value = (foundCard.tags || []).join(", ");
+      els.formStatus.value = foundCard.status || "stable";
+      els.formTargetAI.value = foundCard.targetAI || "";
+      els.formHumanReview.value = (foundCard.humanReviewPoints || []).join("\n");
+    }
+  } else {
+    // Add mode
+    els.modalTitle.textContent = "新增提示詞卡片";
+    els.editCardId.value = "";
+    els.promptForm.reset();
+    els.formStatus.value = "stable";
+  }
+  
+  els.editModal.classList.add("show");
+}
+
+function closeEditModal() {
+  els.editModal.classList.remove("show");
+}
+
+async function handleFormSubmit(e) {
+  e.preventDefault();
+  
+  const cardId = els.editCardId.value;
+  const catId = els.formCategory.value;
+  const title = els.formTitle.value.trim();
+  const description = els.formDescription.value.trim();
+  const promptText = els.formPromptText.value;
+  const tags = els.formTags.value.split(",").map(t => t.trim()).filter(t => t !== "");
+  const status = els.formStatus.value;
+  const targetAI = els.formTargetAI.value.trim();
+  const humanReviewPoints = els.formHumanReview.value.split("\n").map(l => l.trim()).filter(l => l !== "");
+
+  if (!title || !promptText) {
+    showToast("標題與 Prompt 本文為必填欄位！", "error");
+    return;
+  }
+
+  // Remove card from old location if editing (to handle category changes)
+  if (cardId) {
+    currentDb.forEach(cat => {
+      if (cat.items) {
+        cat.items = cat.items.filter(item => item.id !== cardId);
+      }
+    });
+  }
+
+  const newCardId = cardId || "card-" + Date.now();
+  const cardData = {
+    id: newCardId,
+    title,
+    description,
+    promptText,
+    tags,
+    status,
+    variables: parseVariables(promptText),
+    targetAI,
+    humanReviewPoints
+  };
+
+  // Find target category and push
+  const targetCategory = currentDb.find(cat => cat.id === catId);
+  if (targetCategory) {
+    if (!targetCategory.items) targetCategory.items = [];
+    targetCategory.items.push(cardData);
+  } else {
+    showToast("找不到所屬分類", "error");
+    return;
+  }
+
+  await saveState();
+  closeEditModal();
+  renderUI();
+  showToast(cardId ? "✏️ 卡片已更新！" : "➕ 卡片已成功建立！");
+}
+
+async function deleteCard(cardId) {
+  let deleted = false;
+  currentDb.forEach(cat => {
+    if (cat.items) {
+      const originalLength = cat.items.length;
+      cat.items = cat.items.filter(item => item.id !== cardId);
+      if (cat.items.length < originalLength) {
+        deleted = true;
+      }
+    }
+  });
+
+  if (deleted) {
+    if (expandedCardId === cardId) expandedCardId = null;
+    await saveState();
+    renderUI();
+    showToast("🗑️ 卡片已刪除");
+  } else {
+    showToast("找不到欲刪除的卡片", "error");
+  }
+}
+
+// -------------------------------------------------------------
+// 8. Event Listeners & Helpers
+// -------------------------------------------------------------
+
+function initEventListeners() {
+  // Search box
+  els.searchInput.addEventListener("input", (e) => {
+    currentSearchQuery = e.target.value;
+    renderUI();
+  });
+  
+  // Sync actions
+  els.syncPullBtn.addEventListener("click", pullFromPwa);
+  els.syncPushBtn.addEventListener("click", pushToPwa);
+  
+  // File actions
+  els.importBtn.addEventListener("click", triggerImport);
+  els.exportBtn.addEventListener("click", exportJson);
+  els.resetBtn.addEventListener("click", () => {
+    if (confirm("您確定要將資料重置為內建教材庫嗎？這將覆蓋現有外掛內的變更！")) {
+      resetToDefaultDatabase();
+    }
+  });
+  els.fileInput.addEventListener("change", handleFileImport);
+  
+  // Floating button (Add Card)
+  els.addPromptBtn.addEventListener("click", () => openEditModal(null));
+  
+  // Modal close
+  els.closeModalBtn.addEventListener("click", closeEditModal);
+  els.cancelModalBtn.addEventListener("click", closeEditModal);
+  els.promptForm.addEventListener("submit", handleFormSubmit);
+  
+  // Close modal when clicking background overlay
+  els.editModal.addEventListener("click", (e) => {
+    if (e.target === els.editModal) closeEditModal();
+  });
+}
+
+function showToast(message, type = "success") {
+  els.toast.textContent = message;
+  els.toast.className = `toast ${type === "error" ? "error" : ""} show`;
+  setTimeout(() => {
+    els.toast.classList.remove("show");
+  }, 3000);
+}
+
+function escapeHtml(text) {
+  if (!text) return "";
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}

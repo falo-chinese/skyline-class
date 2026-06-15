@@ -20,7 +20,7 @@ graph TD
 ```
 
 * **[FALO 模型菜組合包範例](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/falo_set_menu.md)**
-  * *「企業智能投標工作流的實戰案例」* —— 串接 ETL 轉運站、Prompt 平台、知識庫網關與 AI PM 系統的完整「模型菜」實戰。
+  * *「企業智能投標工作流的實戰案例」* —— 串接 ETL 轉運站、Prompt 平台（含 **Chrome 衛星外掛** 隨手取用與雙向同步）、知識庫網關與 AI PM 系統的完整「模型菜」實戰。
 * **[單元 01：Agent 智能邊界與指揮官思維](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/docs/01_course_map.md)**
   * *「從問答到一條龍 Agent 的能耐跨越」* —— 對比舊式單點問答與新式端到端工作流的 Token 消耗效率與作業極限。
 * **[單元 02：企業 AI 落地之安全、合規與誠信防線](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/docs/02_tender_workflow.md)**

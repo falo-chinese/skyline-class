@@ -19,7 +19,7 @@ v1.01 是 Prompt Manager 教材版的第一個公開展示整理版。它保留 
 | `packages/local-html` | v1.01 | 清爽風格本地 PWA，含 Warm 主題、即時欄位預覽、Voice / OCR 入口 |
 | `packages/shared-schema` | 初版 | Prompt Card schema 文件與 JSON Schema |
 | `packages/shared-schema/capability-pack.schema.json` | 藍圖 | Runtime 階段預留，不進 v0.3 主線 |
-| `packages/chrome-extension` | 預留 | 尚未實作 |
+| `packages/chrome-extension` | v1.00 | Chrome 擴充外掛版已完成：側邊欄常駐、標準 JSON 檔案匯入導出、Live Tab 雙向同步、主流 AI 網頁自動填入 |
 | `packages/gas-sync` | 預留 | 尚未實作 |
 | `examples` | 初版 | 共用範例資料 |
 
