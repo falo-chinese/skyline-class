@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>02 投標文件工作流 - Skyline Class02</title>
+  <title>02 企業 AI 落地之安全、合規與誠信防線 - Skyline Class02</title>
   <link rel="stylesheet" href="style.css">
   <style>
     .version-switch {
@@ -26,15 +26,23 @@
       text-decoration: none;
       box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
     }
-    .step-badge {
-      display: inline-block;
-      background: var(--color-primary);
-      color: white;
-      padding: 0.2rem 0.6rem;
-      border-radius: 4px;
+    .defense-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 1.75rem;
+      margin-bottom: 2rem;
+    }
+    .defense-title {
+      font-size: 1.25rem;
       font-weight: 700;
-      font-size: 0.85rem;
-      margin-right: 0.5rem;
+      color: white;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 0.5rem;
     }
   </style>
 </head>
@@ -73,107 +81,53 @@
     <a href="02_tender_workflow.md" class="version-switch">📄 檢視 Markdown 版本</a>
     
     <div class="card">
-      <h1>02 投標文件工作流：從大型 RFP 到結構化交付</h1>
-      <p>在企業環境中，處理<strong>大型招標文件（RFP, Request for Proposal）</strong>與準備投標書是一項高難度、高壓力的工作。本單元將為您解析傳統企業的痛點，並展示如何利用 AI 工作流將此流程全面升級。</p>
+      <h1>🛡️ 單元 02：企業 AI 落地之安全、合規與誠信防線 (Security, Compliance & Integrity)</h1>
+      <p>當企業將 AI 應用於高價值的商業場景（如合約審查、政府標案）時，決策者最擔心的不是 AI 能不能寫，而是 <strong>「資安外洩、虛構幻覺與合規失效」</strong> 等重大風險。</p>
+      <p>本單元將詳細拆解，主管如何透過三道企業治理防線，確保 AI 在受控且 100% 安全的軌道上運作。</p>
     </div>
 
-    <h2>🛑 企業的真實痛點</h2>
-    <p>當企業面對一個 200 頁的政府或大型企業招標說明書時，通常會面臨以下挑戰：</p>
-    <ul>
-      <li><strong>時間壓力極大：</strong>從招標公告到截止投標通常僅有 14 至 30 天，時間非常緊迫。</li>
-      <li><strong>閱讀瓶頸：</strong>文件冗長、法律條款複雜，人工閱讀容易遺漏關鍵要求（如必備資格、罰則、交付時程）。</li>
-      <li><strong>跨部門協作混亂：</strong>技術團隊、財務團隊與法務團隊各自撰寫，缺乏統一的架構與一致的寫作風格。</li>
-      <li><strong>合規風險高：</strong>只要遺漏一個合規要件，整份投標書就可能在資格審查階段被直接淘汰。</li>
-    </ul>
-
-    <h2>⚙️ AI 端到端工作流設計 (End-to-End Workflow)</h2>
-    <p>為了解決上述痛點，我們不只是讓 AI 來「寫草稿」，而是設計了一個<strong>端到端的多角色協作工作流</strong>。</p>
-
-    <h3>🔄 工作流圖示 (Workflow Visualization)</h3>
-    <div class="mermaid-container">
-      <pre class="mermaid">
-        graph TD
-            RFP[1. 原始 RFP 輸入] --> NLM[2. NotebookLM 知識消化]
-            NLM --> Matrix[3. 生成需求矩陣]
-            Matrix --> PM[4. PM 轉譯為寫作架構]
-            PM --> Content[5. Content 產出投標書草案]
-            Content --> Reviewer[6. Reviewer 品質挑戰與漏洞查核]
-            Reviewer -->|修正建議| Content
-            Reviewer -->|審核通過| FALO[7. FALO PM 版本封存與治理]
-            FALO --> Deliverable[8. 最終 Artifact 交付]
-
-            style RFP fill:#1e1b4b,stroke:#6366f1,stroke-width:2px,color:#fff
-            style Deliverable fill:#115e59,stroke:#14b8a6,stroke-width:2px,color:#fff
-      </pre>
+    <!-- 1. 資安防線 -->
+    <div class="defense-card">
+      <div class="defense-title" style="color: #67e8f9;">🔒 第一道防線：資安防線 (Data Privacy & Built-in AI)</div>
+      <p>為了滿足企業資安與法規對「敏感資料不上雲」的硬性要求，我們設計了 <strong>「地端安全沙盒與 Built-in AI」</strong> 的雙軌數據戰略：</p>
+      <ul style="margin-top: 1rem;">
+        <li style="margin-bottom: 0.5rem;">
+          <strong>地端安全沙盒 (Chrome Built-in AI / Gemini Nano)</strong>：
+          對於極敏感的財務報表、核心實績原始合約、或去重清洗等前置 ETL 工作，AI 直接在 100% 斷網的本機沙盒內執行。這不僅不需要耗費外部 API 費率，也徹底杜絕了機密資料離地的資安風險。
+        </li>
+        <li style="margin-bottom: 0.5rem;">
+          <strong>去敏感化雲端組裝</strong>：
+          地端 AI 將混亂的原始文件進行清洗並進行去識別化（去除金額、公司人名等敏感欄位）後，產出結構乾淨的 Markdown 摘要。隨後，這份「無害文本」才會上傳至雲端協作區，進行大規模的 Prompt 拼裝與 RAG 檢索。
+        </li>
+      </ul>
     </div>
 
-    <h2>📝 工作流步驟詳解</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>步驟</th>
-          <th>階段名稱</th>
-          <th>負責工具/角色</th>
-          <th>輸入 (Input)</th>
-          <th>處理過程 (Process)</th>
-          <th>輸出 (Output)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><span class="step-badge">1</span></td>
-          <td><strong>知識導入與消化</strong></td>
-          <td>NotebookLM</td>
-          <td>原始 PDF/Word 招標文件。</td>
-          <td>快速建立索引，消化合約與背景知識。</td>
-          <td>知識問答庫與重點摘要。</td>
-        </tr>
-        <tr>
-          <td><span class="step-badge">2</span></td>
-          <td><strong>需求矩陣提取</strong></td>
-          <td>PM (大腦/架構師)</td>
-          <td>NotebookLM 重點摘要。</td>
-          <td>識別所有「必須符合」的合規要件。</td>
-          <td>招標需求矩陣表。</td>
-        </tr>
-        <tr>
-          <td><span class="step-badge">3</span></td>
-          <td><strong>教材/草案編寫</strong></td>
-          <td>Content (主力產線)</td>
-          <td>需求矩陣與 Force 指導方向。</td>
-          <td>負責結構化 Markdown 的編寫與格式化。</td>
-          <td>投標文件草案 (Draft.md)。</td>
-        </tr>
-        <tr>
-          <td><span class="step-badge">4</span></td>
-          <td><strong>品質挑戰與查核</strong></td>
-          <td>Reviewer (品質驗證)</td>
-          <td>投標文件草案與原始 RFP。</td>
-          <td>尋找邏輯漏洞或潛在合規風險。</td>
-          <td>挑戰報告與修改意見。</td>
-        </tr>
-        <tr>
-          <td><span class="step-badge">5</span></td>
-          <td><strong>版本與專案治理</strong></td>
-          <td>FALO PM</td>
-          <td>通過審查的草案。</td>
-          <td>進行版本化管理，封存為可交付企業資產。</td>
-          <td>最終 Artifact (V1.0.md)。</td>
-        </tr>
-      </tbody>
-    </table>
+    <!-- 2. 誠信防線 -->
+    <div class="defense-card">
+      <div class="defense-title" style="color: #fda4af;">🛑 第二道防線：誠信防線 (Integrity Redline vs. Hallucination)</div>
+      <p>傳統 AI 在面對資訊缺漏時，容易為了迎合指令而「胡說八道」（幻覺）。這在政府標案中是絕對會被廢標且面臨法律責任的死穴。</p>
+      <p>我們在 AI PM 系統中嵌入了 <strong>「誠信紅線 (Integrity Checklist)」</strong> 治理機制：</p>
+      <ul style="margin-top: 1rem;">
+        <li style="margin-bottom: 0.5rem;"><strong>案例實戰</strong>：在本次智慧文件標案中，公司雖然有高達 450 萬元的「鼎盛 ERP 專案」歷史實績。但系統稽核發現，該專案缺少了客戶簽章的驗收公文。</li>
+        <li style="margin-bottom: 0.5rem;"><strong>紅線防禦</strong>：此時，AI PM <strong>嚴禁為了合規而虛構、美化或編造任何客戶公文</strong>。系統會強制觸發誠信紅線，<strong>主動排除此案</strong>，並自動改用 100% 公文齊備但金額略低的「繁星智慧檔案專案 (350 萬元)」進行安全防禦，確保投標資料的 100% 真實性。</li>
+      </ul>
+    </div>
 
-    <h2>💎 企業主管關心的「商業價值」</h2>
-    <p>透過這套工作流，企業能獲得的不再只是「寫得比較快」，而是：</p>
-    <ul>
-      <li><strong>合規率提升至 100%：</strong>透過需求矩陣與 Reviewer 角色的雙重把關，確保無任何招標要件遺漏。</li>
-      <li><strong>準備時間縮短 70%：</strong>AI 自動化提取大綱與起草，讓人類專家 (Force) 能專注在核心商業策略與定價，而非繁瑣的文書作業。</li>
-      <li><strong>資產可傳承：</strong>所有過程產出的需求矩陣、技術架構、審核意見都透過 Artifact 機制留存，成為公司未來的投標範本庫。</li>
-    </ul>
+    <!-- 3. 合規備降防線 -->
+    <div class="defense-card">
+      <div class="defense-title" style="color: #fde047;">🔄 第三道防線：合規備降防線 (Compliance Fallback & Sofia Active)</div>
+      <p>人員持證與資歷死穴是投標時的另一個重災區。例如，若預設的 PM 志明 (Sophia的前任) 其 PMP 國際證照已於 2024 年底失效，直接投標將導致廢標。</p>
+      <p>AI Agent 的 <strong>「Sofia 自動備降防線」</strong> 運作如下：</p>
+      <ol style="margin-top: 1rem; padding-left: 1.5rem;">
+        <li style="margin-bottom: 0.5rem;"><strong>自主對比</strong>：Agent 在對帳外部政府招標文件（RFP）的「人員證照硬性限制」與內部人才庫時，發現志明的證照已失效。</li>
+        <li style="margin-bottom: 0.5rem;"><strong>自動警報與調撥</strong>：Agent 不會默默忽略此漏洞。它會立即發送「人員資歷死穴預警」，並<strong>自動啟動備降方案——將 PM 資格移轉給證照齊全的 Sophia (林淑芬)</strong>。</li>
+        <li style="margin-bottom: 0.5rem;"><strong>成本與 SLA 控制</strong>：Sophia 的接管可能導致內部成本增加。Agent 會自動在後端計算並更新專案追蹤報告，向高階主管彈出「預算微調與 SLA 合規確認提醒」，由主管授權放行。</li>
+      </ol>
+    </div>
 
-    <div class="alert alert-note">
-      <div class="alert-note-title">🧭 下一步引導</div>
-      <p>了解工作流的整體架構後，您可能會好奇：這些 AI 角色在技術與邏輯上是如何互動的？請前往 <a href="03_multi_ai_collaboration.html"><strong>單元 03：Multi-AI 協作說明</strong></a>，我們將深入剖析 Class02 的核心主角與協作機制。</p>
+    <div class="alert alert-tip">
+      <div class="alert-tip-title">💡 接下來</div>
+      <p>建立了這三道防線後，我們便能安心讓 AI 團隊去啃大型標案。接下來，請前往 <strong><a href="03_multi_ai_collaboration.html">單元 03：實戰對帳：智能投標工作流端到端演練</a></strong>，您將親自體驗這套雙軌防線如何在真實標案中發揮威力。</p>
     </div>
   </main>
 

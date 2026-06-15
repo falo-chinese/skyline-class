@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>03 Multi-AI 協作 - Skyline Class02</title>
+  <title>03 實戰對帳：智能投標工作流端到端演練 - Skyline Class02</title>
   <link rel="stylesheet" href="style.css">
   <style>
     .version-switch {
@@ -26,46 +26,25 @@
       text-decoration: none;
       box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
     }
-    .role-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-      margin: 2rem 0;
+    .checklist-table th {
+      text-align: left;
     }
-    .role-card {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 1.5rem;
-      transition: all 0.3s;
+    .badge-status {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: bold;
     }
-    .role-card:hover {
-      background: rgba(99, 102, 241, 0.05);
-      border-color: rgba(99, 102, 241, 0.2);
-      transform: translateY(-2px);
+    .badge-yellow {
+      background: rgba(234, 179, 8, 0.2);
+      color: #fde047;
+      border: 1px solid rgba(234, 179, 8, 0.4);
     }
-    .role-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1rem;
-    }
-    .role-name {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: var(--color-primary-light);
-    }
-    .role-badge {
-      font-size: 0.75rem;
-      background: rgba(99, 102, 241, 0.2);
-      border: 1px solid var(--color-primary-light);
-      color: var(--color-primary-light);
-      padding: 0.2rem 0.5rem;
-      border-radius: 99px;
-    }
-    .role-desc {
-      color: var(--text-muted);
-      font-size: 0.95rem;
+    .badge-green {
+      background: rgba(16, 185, 129, 0.2);
+      color: #6ee7b7;
+      border: 1px solid rgba(16, 185, 129, 0.4);
     }
   </style>
 </head>
@@ -104,161 +83,113 @@
     <a href="03_multi_ai_collaboration.md" class="version-switch">📄 檢視 Markdown 版本</a>
     
     <div class="card">
-      <h1>03 Multi-AI 協作：打造企業級虛擬團隊與共享工作區</h1>
-      <p>在 Skyline Class02 的世界裡，我們徹底打破「一個人對著一個 AI 視窗發問」的傳統模式。相反地，我們將多個 AI 工具與虛擬角色串接，形成一條高效的**企業級虛擬生產線**。</p>
-      <p>同時，我們迎來了一個重大的協作里程碑：<strong>將 GitHub 倉庫定位為整個虛擬團隊的「共享記憶體（Shared Workspace）」</strong>。</p>
+      <h1>👥 單元 03：實戰對帳：智能投標工作流端到端演練 (Tender Workflow & SLA Conflict)</h1>
+      <p>本單元將以一個真實且極具挑戰性的 <strong>「政府智慧文件政務工程標案」</strong> 為背景，展示 Pro 等級 AI Agent 如何自主運行端到端的工作流，解決複雜的技術對帳與管理衝突。</p>
     </div>
 
-    <h2>💡 課程核心：以最小成本組出一個 AI 團隊</h2>
-    <div class="alert alert-important">
-      <div class="alert-important-title">🎯 核心理念：如何用最小成本組出一個 AI 團隊</div>
-      <p>Skyline 這堂課要展示的，<strong>不是哪一個 AI 最強，而是如何用最小的成本，組出一個合理的 AI 團隊。</strong></p>
-      <p>這解決了中小企業與個人發起人 (SME) 最在意的痛點：<strong>「我只有一個人、一台電腦、一點預算，能不能開始用 AI 運作企業工作流？」</strong></p>
-      <p>我們的答案是：<strong>可以。不需要追求單一的最強 AI，只要透過合理的分工與共享記憶體（GitHub），就能用極低的成本跑起高效的企業工作流。</strong></p>
+    <h2>🏢 實戰情境背景</h2>
+    <div class="card">
+      <ul>
+        <li style="margin-bottom: 0.5rem;"><strong>招標對象</strong>：政府政務機關 (200 頁 RFP 需求書)。</li>
+        <li style="margin-bottom: 0.5rem;"><strong>🌐 外部招標硬性要求 (Client Compliance)</strong>：
+          <ul>
+            <li>技術承諾：系統故障必須於 <strong>2小時內響應並排除 (2h SLA)</strong>，低於此承諾直接廢標。</li>
+            <li>財務資格：必須提供 300 萬元以上之「政府智慧檔案/ERP 專案」歷史實績，且必須附帶客戶簽章的驗收公文。</li>
+            <li>團隊資歷：專案經理 (PM) 必須持有有效的 PMP 國際證照。</li>
+          </ul>
+        </li>
+        <li style="margin-bottom: 0.5rem;"><strong>🛡️ 內部治理與成本控制要求 (Corporate Governance)</strong>：
+          <ul>
+            <li>誠信紅線：絕不能虛構或美化任何缺少物理簽章的驗收公文。</li>
+            <li>成本紅線：內部預設技術團隊響應時間為 4h SLA。若要升級為 2h SLA，會產生高額值班加班成本，<strong>必須強制觸發內部成本預警與主管審批</strong>。</li>
+          </ul>
+        </li>
+      </ul>
     </div>
 
-    <h2>👥 Skyline AI 虛擬組織架構</h2>
-    <p>我們不把 AI 當成一個聊天框，而是當作各自擁有不同天賦的團隊成員：</p>
+    <h2>🔄 Agent 一條龍作業流向</h2>
+    <p>面對上述衝突，傳統上需要 PM、財務、法務及技術特工開會數天對帳。而 Agent 團隊則在一條龍工作流中自主完成：</p>
 
+    <!-- 流程圖 -->
     <div class="mermaid-container">
       <pre class="mermaid">
-        graph TD
-            ff[Force - SME / 發起人] --> PM[PM - 大腦 / PM / Architect]
-            PM --> Content[Content - 主力產線 / 文件與教材]
-            PM --> Dev[Dev - 技術特工 / 自動化]
-            PM --> Search[Search - 搜尋研究]
-            PM --> Google[Google - 生態專家]
-            Content --> Reviewer[Reviewer - 品質驗證]
-            Dev --> Reviewer
-
-            style ff fill:#1e1b4b,stroke:#6366f1,stroke-width:2px,color:#fff
-            style PM fill:#312e81,stroke:#818cf8,stroke-width:2px,color:#fff
-            style Content fill:#064e3b,stroke:#10b981,stroke-width:2px,color:#fff
-            style Dev fill:#78350f,stroke:#f59e0b,stroke-width:2px,color:#fff
+        flowchart TD
+            Start[載入招標 RFP] --> Parser[1. RFP 自主拆解]
+            Parser --> Gap[2. 雙軌合規差距比對]
+            Gap --> Composition[3. Delta 補丁與備降組裝]
+            Composition --> Audit[4. 輸出雙軌對帳 Gap Checklist]
+            
+            style Start fill:#0f172a,stroke:#6366f1,stroke-width:2px,color:#fff
+            style Parser fill:#0f172a,stroke:#a855f7,stroke-width:2px,color:#fff
+            style Gap fill:#0f172a,stroke:#3b82f6,stroke-width:2px,color:#fff
+            style Composition fill:#0f172a,stroke:#06b6d4,stroke-width:2px,color:#fff
+            style Audit fill:#0f172a,stroke:#10b981,stroke-width:2px,color:#fff
       </pre>
     </div>
 
-    <div class="role-grid">
-      <div class="role-card">
-        <div class="role-header">
-          <div class="role-name">Force (ff)</div>
-          <div class="role-badge">人類發起人 / SME</div>
-        </div>
-        <div class="role-desc">提供方向、架構、案例、經驗、需求與 Know-how，不直接編寫大量文件，是這條生產線的最高決策者。</div>
-      </div>
-      <div class="role-card">
-        <div class="role-header">
-          <div class="role-name">PM</div>
-          <div class="role-badge">大腦 / PM / Architect</div>
-        </div>
-        <div class="role-desc">負責<strong>長期記憶、專案脈絡管理、角色關係、架構整合與跨專案連結</strong>（例如理清 Skyline、天心、TAAT、FALO等關係），可直接在 GitHub 上進行協作。</div>
-      </div>
-      <div class="role-card">
-        <div class="role-header">
-          <div class="role-name">Content</div>
-          <div class="role-badge">主力產線</div>
-        </div>
-        <div class="role-desc">專注於 Agent-First 模式。負責<strong>長文件寫作、教材工程、HTML 展示、GitHub Pages、工作台與 Artifact 治理</strong>。</div>
-      </div>
-      <div class="role-card">
-        <div class="role-header">
-          <div class="role-name">Dev</div>
-          <div class="role-badge">技術特工</div>
-        </div>
-        <div class="role-desc">專注於 <strong>Python、Automation、API、Runtime、工具開發與技術驗證</strong>。在 Content 卡住或完成規格後進行實作補位。</div>
-      </div>
-      <div class="role-card">
-        <div class="role-header">
-          <div class="role-name">Search</div>
-          <div class="role-badge">搜尋研究員</div>
-        </div>
-        <div class="role-desc">負責網頁深度搜尋與背景資料整理。</div>
-      </div>
-      <div class="role-card">
-        <div class="role-header">
-          <div class="role-name">Google</div>
-          <div class="role-badge">Google 生態專家</div>
-        </div>
-        <div class="role-desc">專注於 Google 生態系工具（如 Google Workspace、Docs、GAS 等）的深度整合。</div>
-      </div>
-      <div class="role-card">
-        <div class="role-header">
-          <div class="role-name">Reviewer</div>
-          <div class="role-badge">品質驗證 / Reviewer</div>
-        </div>
-        <div class="role-desc">紅隊思維品質驗證。負責找系統漏洞、合規風險，挑戰既有假設，確保產出無懈可擊。</div>
-      </div>
-    </div>
-
-    <h2>🔗 雙軌運行：GitHub 共享記憶體 (Shared Workspace)</h2>
-    <p>GitHub 不僅是傳統的代碼版本控制系統。在 Multi-Agent 協作架構中，它是 **AI 共同工作區、AI 知識交換區、AI 交接區與長期資產保存區**。</p>
-
-    <div class="mermaid-container">
-      <pre class="mermaid">
-        graph LR
-            subgraph Local[本地工作區]
-                Content_Local[Content 本地教材工程]
-                Dev_Local[Dev 本地開發/Runtime]
-            end
-
-            subgraph GitHub[GitHub 共享工作區 (Shared Memory)]
-                GH_Repo[(Skyline Repo)]
-            end
-
-            subgraph Remote[外部 AI 協同]
-                PM_Cloud[PM 雲端協作]
-            end
-
-            PM_Cloud -->|1. 直接修改與 Commit| GH_Repo
-            GH_Repo -->|2. Pull 同步到本地| Content_Local
-            Content_Local -->|3. 本地加工與 Push| GH_Repo
-            Dev_Local -->|4. 技術開發與 Push| GH_Repo
-
-            style GH_Repo fill:#1e1b4b,stroke:#6366f1,stroke-width:3px,color:#fff
-      </pre>
-    </div>
-
-    <h3>雙工作台運作模式</h3>
     <ul>
-      <li><strong>本地資料夾 (Local Folder) + GitHub Repo 雙工作台</strong>。</li>
-      <li><strong>PM (大腦/架構師) 直接協作</strong>：PM 可直接存取、修改並 Commit 檔案到已建立的 GitHub Repo 中。但其無權限建立 Repo。</li>
-      <li><strong>Content (主力產線) 負責同步與操作</strong>：你負責建立 Repo、Git 同步（Push/Pull）以及 Artifact 管理。</li>
+      <li style="margin-bottom: 0.75rem;"><strong>1. RFP 自主拆解與提取 (RFP Parser)</strong>
+        <p>Agent 自動閱讀招標文件，無感過濾廢話，精準提取出「2h SLA 響應」、「300 萬實績與公文」、「PM 持有 PMP」三大關鍵硬性廢標條款。</p>
+      </li>
+      <li style="margin-bottom: 0.75rem;"><strong>2. 雙軌對帳與差距分析 (Gap Audit)</strong>
+        <p>Agent 主動讀取內部資料庫，對比發現三處嚴重衝突：</p>
+        <ul>
+          <li><strong>資歷死穴</strong>：預設 PM 志明的 PMP 證照已於 2024 年底過期 (廢標風險)。</li>
+          <li><strong>誠信衝突</strong>：預設的 450 萬「鼎盛專案」因無客戶簽章驗收單，觸發誠信紅線，不能強行使用。</li>
+          <li><strong>SLA 升級警告</strong>：外部要求的 2h SLA 比內部的 4h SLA 響應時間短，會引發成本調撥預警（黃燈）。</li>
+        </ul>
+      </li>
+      <li style="margin-bottom: 0.75rem;"><strong>3. Delta 補丁與備降組裝 (Composition)</strong>
+        <p>Agent 自主產生補丁解決方案：</p>
+        <ul>
+          <li><strong>人員備降</strong>：自動替換為證照齊全的 Sophia (林淑芬) 擔任投標 PM。</li>
+          <li><strong>實績替代</strong>：自動排除鼎盛專案，改用 100% 公文齊備的「繁星智慧檔案專案 (350 萬元)」進行防禦（滿足 300 萬門檻）。</li>
+          <li><strong>SLA 成本計算</strong>：自動估算升級至 2h SLA 的人力成本增幅，草擬內部成本調撥同意書，等待主管授權。</li>
+        </ul>
+      </li>
     </ul>
 
-    <h2>👥 虛擬團隊的資訊流與協作時序</h2>
-    <p>在「共享記憶體（GitHub Repo）」的機制下，各角色與共享倉庫的互動時序如下：</p>
+    <h2>📊 決策中控台：雙軌對帳 Gap Checklist</h2>
+    <p>最終，Agent 將數百頁文件及複雜對帳過程，濃縮為決策者中控台上的<strong>一頁式合規查核表</strong>：</p>
 
-    <div class="mermaid-container">
-      <pre class="mermaid">
-        sequenceDiagram
-            autonumber
-            actor ff as 人類發起人 (Force)
-            participant PM as AI 大腦 (PM)
-            participant github as GitHub Repo (共享記憶體)
-            participant Content as AI 主力產線 (Content)
-            participant Reviewer as AI 評審者 (Reviewer)
+    <table class="comparison-table checklist-table">
+      <thead>
+        <tr>
+          <th>對帳項目</th>
+          <th>外部招標要求 (RFP)</th>
+          <th>內部防禦狀態</th>
+          <th>合規燈號</th>
+          <th>採取的自動補丁措施</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>SLA 技術響應</strong></td>
+          <td>必須滿足 2h 響應</td>
+          <td>內部為 4h，需要升級</td>
+          <td><span class="badge-status badge-yellow">⚠️ 黃燈</span></td>
+          <td>自動計算溢價成本，已產出成本調撥單待簽核。</td>
+        </tr>
+        <tr>
+          <td><strong>歷史專案實績</strong></td>
+          <td>金額 > 300 萬且公文齊全</td>
+          <td>繁星智慧專案 (350 萬，公文完整)</td>
+          <td><span class="badge-status badge-green">🟢 綠燈</span></td>
+          <td>啟動誠信紅線防禦，主動排除無驗收單的鼎盛專案。</td>
+        </tr>
+        <tr>
+          <td><strong>專案經理持證</strong></td>
+          <td>必須持有有效 PMP 證照</td>
+          <td>志明證照過期，Sophia 有效</td>
+          <td><span class="badge-status badge-green">🟢 綠燈</span></td>
+          <td>自動移轉 PM 資格給備降 PM Sophia 接管。</td>
+        </tr>
+      </tbody>
+    </table>
 
-            ff->>PM: 1. 提供業務方向與需求 (SME Know-how)
-            Note over PM: 整合長期專案脈絡與架構
-            PM->>github: 2. 直接建立文件骨架與寫入 README
-            Note over Content: 偵測到 GitHub 更新
-            Content->>github: 3. Pull 檔案至本地進行長文件加工與 HTML 渲染
-            Content->>Reviewer: 4. 本地提交草稿與技術展示頁
-            Note over Reviewer: 扮演評審挑戰合規性
-            Reviewer-->>Content: 5. 提供漏洞修改建議 (如有風險)
-            Content->>github: 6. 修正後 Push 正式版本 (Artifact)
-            github-->>ff: 7. 交付高品質最終產物 (可跨電腦/AI接手)
-      </pre>
-    </div>
-
-    <div class="alert alert-note">
-      <div class="alert-note-title">💡 給企業主管的啟示</div>
-      <p><strong>「透過合理的 AI 角色分工，配合 GitHub 作為多 AI 共同工作區，我們建立了一個可持續累積、跨 AI、跨電腦接手的『企業共用記憶體』。」</strong><br>在這個架構下，不需要最強的單一 AI，只要合理的流程設計，就能以最小成本跑起高效的企業工作流。</p>
-    </div>
-
-    <div class="alert alert-note">
-      <div class="alert-note-title">🧭 下一步引導</div>
-      <p>當我們有了團隊角色與流轉機制後，這些產出該如何儲存與驗證，才不會流於「一次性對話」？請前往 <a href="04_artifact_management.html"><strong>單元 04：Artifact 管理機制</strong></a>，了解如何將 AI 產物妥善管理，轉化為企業的核心資產。</p>
+    <div class="alert alert-tip" style="margin-top: 2.5rem;">
+      <div class="alert-tip-title">💡 接下來</div>
+      <p>透過這張合規查核表，總經理可以在一分鐘內掌握全局，並授權放行。接下來，請前往 <strong><a href="04_artifact_management.html">單元 04：決策者視角：真理中心與一鍵收割同步機制</a></strong>，您將親自掌握如何將通過核准的黃金知識安全地更新回公司的核心資料庫中。</p>
     </div>
   </main>
 

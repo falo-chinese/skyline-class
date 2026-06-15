@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>01 課程地圖 - Skyline Class02</title>
+  <title>01 Agent 智能邊界與指揮官思維 - Skyline Class02</title>
   <link rel="stylesheet" href="style.css">
   <style>
     .version-switch {
@@ -27,7 +27,7 @@
       box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
     }
     .comparison-table th {
-      width: 50%;
+      width: 33%;
     }
   </style>
 </head>
@@ -66,132 +66,91 @@
     <a href="01_course_map.md" class="version-switch">📄 檢視 Markdown 版本</a>
     
     <div class="card">
-      <h1>01 課程地圖：從單點問答到系統化 AI 工作流</h1>
-      <p>歡迎來到 <strong>Skyline Class02 課程地圖</strong>。本單元將為您梳理本次課程的知識架構、學習路徑，以及從「問答階段」邁向「系統工作流（Skyline）」的思維轉變。</p>
+      <h1>🗺️ 單元 01：Agent 智能邊界與指揮官思維 (Agent Boundary & GM Command)</h1>
+      <p>在導入企業級 AI 時，許多主管常停留在「向 AI 提問、請 AI 寫草稿」的階段。這被稱為 <strong>Skyline 舊階段（單點問答模式）</strong>。</p>
+      <p>本單元將為您展示 <strong>Skyline 新階段（端到端一條龍工作流）</strong>，說明最高主管如何從「提示詞工程師」轉變為「AI 團隊指揮官」，理解 AI Agent 的整體能耐與能力邊界。</p>
     </div>
 
-    <h2>🚀 核心思維轉變：從問答到系統工作流</h2>
-    <p>在學習 AI 應用時，許多人停留在第一階段。本課程的目的，就是帶領學員跨越這道鴻溝：</p>
-
+    <h2>🚀 典範轉移：單點問答 vs. 一條龍工作流</h2>
     <table class="comparison-table">
       <thead>
         <tr>
-          <th>問答階段 (單點問答)</th>
-          <th>Skyline 階段 (系統工作流)</th>
+          <th>評估維度</th>
+          <th>Skyline 舊階段 (單點問答)</th>
+          <th>Skyline 新階段 (一條龍工作流)</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>
-            <strong>主要模式：</strong><br>
-            單一對話框、即問即答、隨機發揮。
-          </td>
-          <td>
-            <strong>主要模式：</strong><br>
-            多角色協作、端到端工作流、可預期的結構化產出。
-          </td>
+          <td><strong>互動模式</strong></td>
+          <td>單一對話框、即問即答、隨機發揮。</td>
+          <td>多角色虛擬團隊、端到端目標驅動。</td>
         </tr>
         <tr>
-          <td>
-            <strong>知識管理：</strong><br>
-            仰賴使用者複製貼上對話紀錄，零散且易遺失。
-          </td>
-          <td>
-            <strong>知識管理：</strong><br>
-            整合 <em>NotebookLM</em> 知識庫，產出具備版本控制的 <em>Artifact</em>。
-          </td>
+          <td><strong>主管角色</strong></td>
+          <td>提示詞工程師（手動寫長 Prompt、切分段落餵 AI）。</td>
+          <td>指揮官（下達目標與治理標準，由 Agent 自主調用工具）。</td>
         </tr>
         <tr>
-          <td>
-            <strong>角色定義：</strong><br>
-            AI 是一個通用的萬用助手。
-          </td>
-          <td>
-            <strong>角色定義：</strong><br>
-            AI 具有明確的分工（如架構師、主力產線、技術特工、品質驗證）。
-          </td>
+          <td><strong>Token 消耗效率</strong></td>
+          <td>效率低、重複提問造成大量 Token 浪費，無 FinOps 概念。</td>
+          <td>高效、Agent 自主規劃最小路徑，自動化檢索節省 Token 成本。</td>
         </tr>
         <tr>
-          <td>
-            <strong>企業應用：</strong><br>
-            個人效率提升。
-          </td>
-          <td>
-            <strong>企業應用：</strong><br>
-            企業知識資產化、自動化協作、流程合規與治理。
-          </td>
+          <td><strong>作業能耐 (Power)</strong></td>
+          <td>僅能處理單一文章摘要、簡單潤飾。</td>
+          <td>能自主讀寫檔案、調用 API、運行驗證腳本、修正錯誤。</td>
         </tr>
       </tbody>
     </table>
 
-    <h2>🗺️ Class02 核心知識架構</h2>
-    <p>本課程以「投標文件 (RFP) 協作與管理」為核心案例，設計了以下三個主要模組：</p>
+    <h2>🧠 Pro 等級 Agent 的核心作業能耐 (Capabilities)</h2>
+    <p>為甚麼現在的主管可以「放手」讓 AI 跑完工作流？因為 Pro 等級的 Agent 具備以下三大作業能耐：</p>
+    
+    <ul>
+      <li style="margin-bottom: 0.75rem;">
+        <strong>1. 自主規劃與路徑選擇 (Autonomous Planning)</strong>
+        <p>當您指引一個目標（例如 <code>/goal: 分析 200 頁政府智慧招標書是否符合公司承諾</code>），Agent 會自主拆解步驟，而不需要您一步步告訴它先做什麼。</p>
+      </li>
+      <li style="margin-bottom: 0.75rem;">
+        <strong>2. 多工具鏈調用與代碼執行 (Tool Use & Execution)</strong>
+        <p>Agent 不只會「說話」，它擁有手和腳。它可以自主搜尋地端檔案、寫出一段 Python 程式碼、並在沙盒中執行該程式碼來物理對比雲地檔案狀態，確保資料真實。</p>
+      </li>
+      <li style="margin-bottom: 0.75rem;">
+        <strong>3. 自我修正與品質查核 (Self-Correction & Review)</strong>
+        <p>當執行過程中遇到錯誤（例如某個套件未安裝、或比對檔案時出錯），Agent 會讀取錯誤日誌，自己修改代碼並重新執行，直到目標達成。</p>
+      </li>
+    </ul>
 
+    <h2>🚧 指揮官必須掌握的「能力邊界 (Boundaries)」</h2>
+    <p>身為總經理，您必須清楚劃分 AI 的<strong>作業邊界</strong>，這也是企業導入 AI 的核心治理方針：</p>
+
+    <!-- 流程圖 -->
     <div class="mermaid-container">
       <pre class="mermaid">
         graph TD
-            subgraph M1[模組一：知識輸入與解構]
-                A1[原始大型文件/招標說明書] --> A2(NotebookLM 知識庫導入)
-                A2 --> A3(知識解構與重點 QA 提取)
-            end
-
-            subgraph M2[模組二：AI 協作與加工]
-                B1(SME 需求輸入 Force) --> B2(AI 架構師轉譯)
-                B2 --> B3(AI 主力產線產出)
-                B3 --> B4(AI 評審者挑戰驗證)
-            end
-
-            subgraph M3[模組三：資產交付與治理]
-                C1(Artifact 品質控管門檻) --> C2(版本控制與儲存)
-                C2 --> C3(FALO PM 專案治理與進度追蹤)
-            end
-
-            M1 --> M2
-            M2 --> M3
+            GM[總經理的決策與治理防線<br>1. 資安合規 2. 誠信紅線] -->|指引與授權| Agent[AI Agent 一條龍自動化作業區<br>- 自主 RFP 拆解<br>- SLA 衝突初篩<br>- Delta 補丁生成]
+            style GM fill:#1e1b4b,stroke:#a855f7,stroke-width:2px,color:#fff
+            style Agent fill:#0f172a,stroke:#3b82f6,stroke-width:2px,color:#fff
       </pre>
     </div>
 
-    <h2>📖 各單元學習目標與文件對照</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>單元編號</th>
-          <th>教材主題</th>
-          <th>核心學習目標</th>
-          <th>對應教材文件</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>01</strong></td>
-          <td><strong>課程地圖</strong></td>
-          <td>建立「系統工作流」心態，掌握整體課程脈絡。</td>
-          <td><em>本文件</em></td>
-        </tr>
-        <tr>
-          <td><strong>02</strong></td>
-          <td><strong>投標文件工作流</strong></td>
-          <td>學習如何將複雜、多頁面的招標需求書 (RFP) 拆解成 AI 工作流步驟。</td>
-          <td><a href="02_tender_workflow.html">02_tender_workflow.html</a></td>
-        </tr>
-        <tr>
-          <td><strong>03</strong></td>
-          <td><strong>Multi-AI 協作</strong></td>
-          <td>掌握多個 AI 代理（NotebookLM、主力產線、FALO PM）與虛擬角色之間的分工與資訊流。</td>
-          <td><a href="03_multi_ai_collaboration.html">03_multi_ai_collaboration.html</a></td>
-        </tr>
-        <tr>
-          <td><strong>04</strong></td>
-          <td><strong>Artifact 管理</strong></td>
-          <td>學習企業級 of AI 產出物管理方法，包含命名、版本化與品質檢驗。</td>
-          <td><a href="04_artifact_management.html">04_artifact_management.html</a></td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="card">
+      <ul>
+        <li style="margin-bottom: 0.5rem;"><strong>放手區域 (Delegate to Agent)</strong>：大批量、高頻率、重複性高的合規比對，或需要閱讀數百頁招標書（RFP）的繁瑣工作。這部分交給 Agent，能在數分鐘內完成，且準確度超越疲憊的人類。</li>
+        <li style="margin-bottom: 0.5rem;"><strong>嚴守防線 (Retain Control)</strong>：
+          <ul>
+            <li><strong>資安防線</strong>：涉及極敏感商業機密的數據，必須限制其上雲（在地端安全沙盒執行 Gemini Nano）。</li>
+            <li><strong>誠信防線</strong>：AI 絕對不能為了滿足合規而無中生有捏造公文。</li>
+            <li><strong>決策防線</strong>：任何通過 AI 自動化產出的合規元件，在更新回公司核心資產庫（真理中心）之前，必須由您親自進行 <strong>「一鍵收割」</strong> 的最終簽核。</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
 
-    <div class="alert alert-note">
-      <div class="alert-note-title">🧭 學員指引</div>
-      <p>在閱讀完本課程地圖後，您已對整體框架有了基本認知。接下來，請前往 <a href="02_tender_workflow.html"><strong>單元 02：投標文件工作流說明</strong></a>，我們將以具體的招標情境，展示 AI 工作流是如何設計與運作的。</p>
+    <div class="alert alert-tip" style="margin-top: 2rem;">
+      <div class="alert-tip-title">💡 接下來</div>
+      <p>理解了 Agent 的能耐與邊界後，我們將在 <strong><a href="02_tender_workflow.html">單元 02：企業 AI 落地之安全、合規與誠信防線</a></strong> 中，為您拆解如何以技術防線將這些治理概念落地，確保 AI 在企業運作中 100% 安全無虞。</p>
     </div>
   </main>
 

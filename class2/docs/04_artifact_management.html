@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>04 Artifact 管理機制 - Skyline Class02</title>
+  <title>04 決策者視角：真理中心與一鍵收割同步機制 - Skyline Class02</title>
   <link rel="stylesheet" href="style.css">
   <style>
     .version-switch {
@@ -25,6 +25,23 @@
       color: white;
       text-decoration: none;
       box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+    }
+    .sync-step {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+    }
+    .sync-step-number {
+      display: inline-block;
+      background: var(--color-primary);
+      color: white;
+      padding: 0.1rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      margin-right: 0.5rem;
     }
   </style>
 </head>
@@ -63,67 +80,83 @@
     <a href="04_artifact_management.md" class="version-switch">📄 檢視 Markdown 版本</a>
     
     <div class="card">
-      <h1>04 Artifact 管理機制：將 AI 產出轉化為企業資產</h1>
-      <p>在傳統的 AI 使用情境中，產出的資料往往分散在員工個人的對話歷史紀錄中。這類資料被稱為**「暗資料 (Dark Data)」**——它們不可控、不可被版本管理、更無法被企業共享。</p>
-      <p>為了解決這個問題，<strong>Skyline Class02</strong> 引入了 <strong>Artifact (產出物/資產) 管理機制</strong>。同時，結合了 **GitHub 共享記憶體 (Shared Workspace)** 機制，本單元將詳細說明如何將 AI 產出進行結構化管理、同步與品質治理。</p>
+      <h1>🛡️ 單元 04：決策者視角：真理中心與一鍵收割同步機制 (SSOT & Trigger Sync)</h1>
+      <p>在企業級 AI 落地中，最危險的事情是「將所有員工產出的 AI 草稿直接匯入公司的知識庫」。這會導致垃圾數據混入核心庫，造成嚴重的 <strong>RAG 大腦污染 (RAG Pollution)</strong>。</p>
+      <p>本單元將為您拆解如何透過 <strong>「地端真理中心 (SSOT)」</strong> 與 <strong>「雲端協作沙盒 (Staging)」</strong> 的雙軌隔離，配合 <strong>「觸發式更新與一鍵收割」</strong> 機制，將決策控制權永遠保留在總經理手中。</p>
     </div>
 
-    <h2>❓ 什麼是 Artifact？</h2>
-    <p>在軟體工程與企業工作流中，<strong>Artifact</strong> 指的是「在工作流程中產生、具有高保存價值，且經過驗證的結構化產出物」。</p>
-    <p>在投標與文件協作情境中，典型的 Artifact 包含：</p>
-    <ul>
-      <li><strong>需求矩陣表：</strong>招標要件比對的結構化清單。</li>
-      <li><strong>投標書特定章節草稿：</strong>編寫完成並通過初核的文件。</li>
-      <li><strong>合規性審查報告：</strong>由評審角色 (Reviewer) 產出的風險與漏洞修正建議。</li>
-      <li><strong>展示前端頁面：</strong>視覺化呈現的程式碼。</li>
-    </ul>
+    <h2>🚫 隔離髒數據：防範 RAG 大腦污染</h2>
+    <p>RAG 知識檢索系統的黃金鐵律是 <strong>「高品質數據進，高品質答案出」</strong>：</p>
+    
+    <div class="card">
+      <ul>
+        <li style="margin-bottom: 0.75rem;">
+          <strong>雲端協作沙盒 (Staging)</strong>：
+          <p style="color: #9ca3af; margin-top: 0.25rem;">員工與 AI 特助日常拼裝、協作、撰寫草稿的臨時工作區。此處數據被物理隔離，大腦<strong>不進行檢索</strong>，不怕弄亂核心庫。</p>
+        </li>
+        <li style="margin-bottom: 0.75rem;">
+          <strong>地端真理中心 (SSOT - Single Source of Truth)</strong>：
+          <p style="color: #9ca3af; margin-top: 0.25rem;">公司的核心黃金資產庫（如主管的地端 File Server）。鎖定核心資產，對外唯讀，AI 大腦檢索的唯一真理來源。</p>
+        </li>
+      </ul>
+    </div>
 
-    <h2>🔄 Artifact 的生命週期管理與 Git 同步</h2>
-    <p>為了確保 AI 產出的品質與合規性，每一個 Artifact 都必須經歷以下五個生命週期階段，並藉由 <strong>GitHub 共享記憶體</strong> 進行多 AI / 跨電腦的交付同步：</p>
+    <h2>🔄 觸發式同步與「一鍵收割」流程</h2>
+    <p>當員工在雲端 Staging 中產出了「通過雙軌合規檢驗的黃金文件元件」時，我們如何安全、無感地將其收割回真理中心？</p>
+    <p>我們設計了以下程式化的<strong>觸發與同步機制</strong>：</p>
 
+    <!-- 流程圖 -->
     <div class="mermaid-container">
       <pre class="mermaid">
-        stateDiagram-v2
-            [*] --> Draft : 1. 建立 (Content/Dev)
-            Draft --> InReview : 2. 提交本地審查 (Submit)
-            InReview --> Approved : 3. Reviewer 審查通過 (Approve)
-            InReview --> Draft : 3. Reviewer 退回修改 (Reject)
-            Approved --> Syncing : 4. 本地封存 (FALO PM)
-            Syncing --> Archived_GH : 5. Git Push 至 GitHub 共享記憶體
-            Archived_GH --> [*] : 6. 重用與分發 (PM/其他AI)
+        flowchart TD
+            Staging[雲端 Staging 協作區<br>同仁自由協作] -->|1. 比對合規且無件缺| Checker[地端檢核程式<br>verify_cloud_stage.py]
+            Checker -->|2. 觸發提醒| Alert[主管中控台大螢幕<br>彈出治理同步報告]
+            Alert -->|3. 總經理確認| GM[一鍵收割授權]
+            GM -->|4. 安全反向寫入| SSOT[地端真理中心 SSOT<br>核心知識庫庫]
+            
+            style Staging fill:#0f172a,stroke:#a855f7,stroke-width:2px,color:#fff
+            style Checker fill:#0f172a,stroke:#3b82f6,stroke-width:2px,color:#fff
+            style Alert fill:#0f172a,stroke:#fda4af,stroke-width:2px,color:#fff
+            style GM fill:#1e1b4b,stroke:#a855f7,stroke-width:2px,color:#fff
+            style SSOT fill:#0f172a,stroke:#10b981,stroke-width:2px,color:#fff
       </pre>
     </div>
 
-    <ol>
-      <li><strong>1. 建立 (Creation)：</strong>由 AI 執行者（如 Content、Dev）在本地建立，或 PM (大腦/架構師) 直接在 GitHub Repo 建立骨架並拉取（Pull）到本地。</li>
-      <li><strong>2. 元數據標記 (Metadata)：</strong>每個 Artifact 頂部都應包含明確的元數據以供未來系統化檢索：
-        <pre><code class="language-yaml">---
-artifact_id: ART-2026-TENDER-01
-title: 招標需求比對矩陣
-version: V1.0.0
-author: Content (主力產線)
-reviewer: Reviewer (品質驗證)
-status: In-Review # [Draft, In-Review, Approved, Archived]
-last_updated: 2026-06-13
----</code></pre>
-      </li>
-      <li><strong>3. 品質評審關卡 (Review Gate - Reviewer)：</strong><strong>未經評審的 Draft 絕不能直接使用。</strong>由 Reviewer 針對合規與幻覺進行紅隊挑戰，合格變更為 <code>Approved</code>，不合格退回 <code>Draft</code>。</li>
-      <li><strong>4. 版本控制與 GitHub 同步 (Versioning & Sync)：</strong>利用 FALO PM 與 Git，對 Approved 的資產標記語義化版本（如 <code>V1.0.0</code>），並由 Content 透過 Git <code>Push</code> 同步至 <strong>GitHub 遠端倉庫（共享記憶體）</strong>，這能確保 PM 或其他 AI 隨時獲取最新已核可資產，並實現跨電腦無縫交接。</li>
-      <li><strong>5. 重用與分發 (Reuse)：</strong>歸檔於 GitHub 的 Artifact 重新導入 <strong>NotebookLM</strong> 成為未來新專案的黃金範本背景知識。</li>
-    </ol>
-
-    <h2>🛡️ 企業 AI 治理 (AI Governance) 核心原則</h2>
-    <p>實施 Artifact 管理與雙工作台同步後，企業可以有效落實以下治理政策：</p>
-    <ul>
-      <li><strong>防堵幻覺風險：</strong>所有交付物均有 Reviewer 的審核與修改紀錄，並標明原始出處引用。</li>
-      <li><strong>追溯權責：</strong>藉由 Git 的 Commit History 與元數據，可以清晰追溯是哪一個版本的 Artifact、由哪一個 AI 角色生成。</li>
-      <li><strong>消除知識孤島：</strong>本地與遠端雙軌同步，所有 AI 與人類專家都基於同一個 GitHub 共享記憶體工作，杜絕對話框暗資料。</li>
-    </ul>
-
-    <div class="alert alert-note">
-      <div class="alert-note-title">🧭 完成學習</div>
-      <p>恭喜您完成了 Skyline Class02 教材工作台的所有理論單元學習！您可以點擊返回 <a href="../workbench/index.html"><strong>🧭 教材工作台主控台 (Workbench)</strong></a> 進行導覽與複習。</p>
+    <div class="sync-step">
+      <p><span class="sync-step-number">1</span> <strong>自動比對與檢測 (verify_cloud_stage.py)</strong></p>
+      <p style="color: #9ca3af; margin-top: 0.25rem; margin-left: 2rem;">地端檢核程式會物理比對雲地狀態，自動查驗雲端產出是否 100% 符合公司的安全、合規與成本標準。</p>
     </div>
+
+    <div class="sync-step">
+      <p><span class="sync-step-number">2</span> <strong>主管中控台警報 (Trigger-Based Alert)</strong></p>
+      <p style="color: #9ca3af; margin-top: 0.25rem; margin-left: 2rem;">一旦通過驗證，<strong>中控台大螢幕會自動向總經理彈出「觸發式同步與治理提醒報告」</strong>，告知目前有黃金知識元件已備妥，請核示。</p>
+    </div>
+
+    <div class="sync-step">
+      <p><span class="sync-step-number">3</span> <strong>一鍵收割 (One-Click Sync)</strong></p>
+      <p style="color: #9ca3af; margin-top: 0.25rem; margin-left: 2rem;">總經理一鍵點擊核准，系統才將雲端精華檔案寫入並更新回地端真理中心。主管不出手，AI 的髒數據絕對無法跨越防線一步，確保核心資產的絕對純淨。</p>
+    </div>
+
+    <h2>🗺️ 總結：企業 AI 原生文件治理架構</h2>
+    <p>本課程所介紹的 Skyline 治理架構，能讓您以最低的系統成本，組建起一個具備高度防禦力與作業能耐的虛擬團隊：</p>
+    
+    <div class="card">
+      <ul>
+        <li style="margin-bottom: 0.5rem;"><strong>SME (指揮官)</strong> 下達目標，監管防線，擁有絕對的主導權。</li>
+        <li style="margin-bottom: 0.5rem;"><strong>Agent (Antigravity/AIDE)</strong> 一條龍自主執行 Delta 組裝與對帳，釋放大量行政時間。</li>
+        <li style="margin-bottom: 0.5rem;"><strong>微服務工具 (Mini Station / Prompt Manager)</strong> 讓基層同仁安全、快速套用核准模板協作，避免各出奇招。</li>
+        <li style="margin-bottom: 0.5rem;"><strong>真理中心與一鍵收割</strong> 確保數據不落地、不外洩、不污染。</li>
+      </ul>
+    </div>
+
+    <p style="margin-top: 2rem; text-align: center; color: #a855f7; font-weight: 700; font-size: 1.1rem;">
+      這是一套完全不需要高昂開發費用、能完美守護公司利潤與合規的企業落地解答！
+    </p>
+    
+    <div style="text-align: center; margin-top: 2rem;">
+      <a href="../workbench/index.html" class="sidebar-link" style="display: inline-block; background: var(--color-primary); color: white; padding: 0.75rem 2rem; border-radius: 8px; text-decoration: none; font-weight: bold;">🧭 返回教材工作台</a>
+    </div>
+
   </main>
 
   <!-- 引入 Mermaid JS -->

@@ -1,132 +1,68 @@
-# 03 Multi-AI 協作：打造企業級虛擬團隊與共享工作區
+# 👥 單元 03：實戰對帳：智能投標工作流端到端演練 (Tender Workflow & SLA Conflict)
 
-在 Skyline Class02 的世界裡，我們徹底打破「一個人對著一個 AI 視窗發問」的傳統模式。相反地，我們將多個 AI 工具與虛擬角色串接，形成一條高效的**企業級虛擬生產線**。
-
-同時，我們迎來了一個重大的協作里程碑：**將 GitHub 倉庫定位為整個虛擬團隊的「共享記憶體（Shared Workspace）」**。
+本單元將以一個真實且極具挑戰性的 **「政府智慧文件政務工程標案」** 為背景，展示 Pro 等級 AI Agent 如何自主運行端到端的工作流，解決複雜的技術對帳與管理衝突。
 
 ---
 
-## 💡 課程核心：以最小成本組出一個 AI 團隊
+## 🏢 實戰情境背景
 
-Skyline 這堂課要展示的，**不是哪一個 AI 最強，而是如何用最小的成本，組出一個合理的 AI 團隊。**
-
-這解決了中小企業與個人發起人 (SME) 最在意的痛點：
-> **「我只有一個人、一台電腦、一點預算，能不能開始用 AI 運作企業工作流？」**
-
-我們的答案是：**可以。不需要追求單一的最強 AI，只要透過合理的分工與共享記憶體（GitHub），就能用極低的成本跑起高效的企業工作流。**
+* **招標對象**：政府政務機關 (200 頁 RFP 需求書)。
+* **🌐 外部招標硬性要求 (Client Compliance)**：
+  1. 技術承諾：系統故障必須於 **2小時內響應並排除 (2h SLA)**，低於此承諾直接廢標。
+  2. 財務資格：必須提供 300 萬元以上之「政府智慧檔案/ERP 專案」歷史實績，且必須附帶客戶簽章的驗收公文。
+  3. 團隊資歷：專案經理 (PM) 必須持有有效的 PMP 國際證照。
+* **🛡️ 內部治理與成本控制要求 (Corporate Governance)**：
+  1. 誠信紅線：絕不能虛構或美化任何缺少物理簽章的驗收公文。
+  2. 成本紅線：內部預設技術團隊響應時間為 4h SLA。若要升級為 2h SLA，會產生高額值班加班成本，**必須強制觸發內部成本預警與主管審批**。
 
 ---
 
-## 👥 Skyline 虛擬組織架構
+## 🔄 Agent 一條龍作業流向
 
-我們不把 AI 當成一個聊天框，而是當作各自擁有不同天賦的**團隊成員**。以下是我們設計的虛擬組織架構：
+面對上述衝突，傳統上需要 PM、財務、法務及技術特工開會數天對帳。而 Agent 團隊則在一條龍工作流中自主完成：
 
 ```mermaid
-graph TD
-    ff[Force - SME / 發起人] --> PM[PM - 大腦 / PM / Architect]
-    PM --> Content[Content - 主力產線 / 文件與教材]
-    PM --> Dev[Dev - 技術特工 / 自動化]
-    PM --> Search[Search - 搜尋研究]
-    PM --> Google[Google - 生態專家]
-    Content --> Reviewer[Reviewer - 品質驗證]
-    Dev --> Reviewer
-
-    style ff fill:#1e1b4b,stroke:#6366f1,stroke-width:2px,color:#fff
-    style PM fill:#312e81,stroke:#818cf8,stroke-width:2px,color:#fff
-    style Content fill:#064e3b,stroke:#10b981,stroke-width:2px,color:#fff
-    style Dev fill:#78350f,stroke:#f59e0b,stroke-width:2px,color:#fff
+flowchart TD
+    Start[載入招標 RFP] --> Parser[1. RFP 自主拆解]
+    Parser --> Gap[2. 雙軌合規差距比對]
+    Gap --> Composition[3. Delta 補丁與備降組裝]
+    Composition --> Audit[4. 輸出雙軌對帳 Gap Checklist]
+    
+    style Start fill:#0f172a,stroke:#6366f1,stroke-width:2px,color:#fff
+    style Parser fill:#0f172a,stroke:#a855f7,stroke-width:2px,color:#fff
+    style Gap fill:#0f172a,stroke:#3b82f6,stroke-width:2px,color:#fff
+    style Composition fill:#0f172a,stroke:#06b6d4,stroke-width:2px,color:#fff
+    style Audit fill:#0f172a,stroke:#10b981,stroke-width:2px,color:#fff
 ```
 
-### 1. Force (ff - 人類發起人 / SME)
-* **職能**：**SME / 發起人**。
-* **主要提供**：核心 Know-how、需求、架構方向、顧問觀點。Force 不需要動手寫大量文件，他是方向的掌舵者。
+### 1. RFP 自主拆解與提取 (RFP Parser)
+Agent 自動閱讀招標文件，無感過濾廢話，精準提取出「2h SLA 響應」、「300 萬實績與公文」、「PM 持有 PMP」三大關鍵硬性廢標條款。
 
-### 2. PM (大腦 / PM / Architect)
-* **職能**：**大腦 / 協調者 / 架構師**。
-* **核心價值**：**長期記憶、專案脈絡管理、角色關係、架構整合與跨專案連結**（例如理清 Skyline、天心、TAAT、FALO、Goma 等關係）。PM 的核心價值不是寫大量代碼或文件，而是理清與管理跨專案的脈絡。
+### 2. 雙軌對帳與差距分析 (Gap Audit)
+Agent 主動讀取內部資料庫，對比發現三處嚴重衝突：
+* **資歷死穴**：預設 PM 志明的 PMP 證照已於 2024 年底過期 (廢標風險)。
+* **誠信衝突**：預設的 450 萬「鼎盛專案」因無客戶簽章驗收單，觸發誠信紅線，不能強行使用。
+* **SLA 升級警告**：外部要求的 2h SLA 比內部的 4h SLA 響應時間短，會引發成本調撥預警（黃燈）。
 
-### 3. Content (主力產線)
-* **職能**：**文件與教材產線 (主力產線)**。
-* **核心價值**：主力產線模型天然偏向 **Agent-First** 模式，最適合處理**長文件輸出、教材工程、HTML 展示、GitHub Pages、工作台引導與 Artifact 治理**。他是整個產線的實體產出發動機。
-
-### 4. Dev (技術特工)
-* **職能**：**技術特工**。
-* **核心價值**：最適合處理 **Python、Automation、API、Runtime、工具開發與技術驗證**。在 Content 卡住時進行補位，或者在 Content 完成規格與結構設計後進行技術代碼實作。
-
-### 5. Search (搜尋研究員) 與 Google (生態整合專家)
-* **Search** 負責網頁深度搜尋與背景資料整理。
-* **Google** 專注於 Google 生態系工具（如 Google Workspace、Docs、GAS 等）的深度整合。
-
-### 6. Reviewer (品質驗證)
-* **職能**：**品質驗證**。以紅隊思維專門找系統漏洞、合規風險，挑戰既有假設，確保交付無懈可擊。
+### 3. Delta 補丁與備降組裝 (Composition)
+Agent 自主產生補丁解決方案：
+* **人員備降**：自動替換為證照齊全的 Sophia (林淑芬) 擔任投標 PM。
+* **實績替代**：自動排除鼎盛專案，改用 100% 公文齊備的「繁星智慧檔案專案 (350 萬元)」進行防禦（滿足 300 萬門檻）。
+* **SLA 成本計算**：自動估算升級至 2h SLA 的人力成本增幅，草擬內部成本調撥同意書，等待主管授權。
 
 ---
 
-## 🔗 雙軌運行：GitHub 共享記憶體 (Shared Workspace)
+## 📊 決策中控台：雙軌對帳 Gap Checklist
 
-這是一個極具意義的專案里程碑：**將 GitHub 倉庫定位為整個虛擬團隊的「共享記憶體（Shared Workspace）」**。
+最終，Agent 將數百頁文件及複雜對帳過程，濃縮為決策者中控台上的**一頁式合規查核表**：
 
-```mermaid
-graph LR
-    subgraph Local[本地工作區]
-        Content_Local[Content 本地教材工程]
-        Dev_Local[Dev 本地開發/Runtime]
-    end
-
-    subgraph GitHub[GitHub 共享工作區 (Shared Memory)]
-        GH_Repo[(Skyline Repo)]
-    end
-
-    subgraph Remote[外部 AI 協者]
-        PM_Cloud[PM 雲端協作]
-    end
-
-    PM_Cloud -->|1. 直接修改與 Commit| GH_Repo
-    GH_Repo -->|2. Pull 同步到本地| Content_Local
-    Content_Local -->|3. 本地加工與 Push| GH_Repo
-    Dev_Local -->|4. 技術開發與 Push| GH_Repo
-
-    style GH_Repo fill:#1e1b4b,stroke:#6366f1,stroke-width:3px,color:#fff
-```
-
-### 雙工作台運作模式
-* **本地資料夾 (Local Folder) + GitHub Repo 雙工作台**。
-* **PM (大腦/架構師)**：大腦協調。可直接在 GitHub 上協作，建立文件骨架、維護 README、更新 md 教材與補充治理文件。但無權限建立 Repo。
-* **Content (主力產線)**：主力產線。負責本地與 GitHub 的同步、建立 Repo、HTML 渲染與 Artifact 品質控管。
+| 對帳項目 | 外部招標要求 (RFP) | 內部防禦狀態 | 合規燈號 | 採取的自動補丁措施 |
+| :--- | :--- | :--- | :---: | :--- |
+| **SLA 技術響應** | 必須滿足 2h 響應 | 內部為 4h，需要升級 | ⚠️ 黃燈 | 自動計算溢價成本，已產出成本調撥單待簽核。 |
+| **歷史專案實績** | 金額 > 300 萬且公文齊全 | 繁星智慧專案 (350 萬，公文完整) | 🟢 綠燈 | 啟動誠信紅線防禦，主動排除無驗收單的鼎盛專案。 |
+| **專案經理持證** | 必須持有有效 PMP 證照 | 志明證照過期，Sophia 有效 | 🟢 綠燈 | 自動移轉 PM 資格給備降 PM Sophia 接管。 |
 
 ---
 
-## 👥 虛擬團隊的資訊流與協作時序
-
-在「共享記憶體（GitHub Repo）」的機制下，各角色與共享倉庫的互動時序如下：
-
-```mermaid
-sequenceDiagram
-    autonumber
-    actor ff as 人類發起人 (Force)
-    participant PM as AI 大腦 (PM)
-    participant github as GitHub Repo (共享記憶體)
-    participant Content as AI 主力產線 (Content)
-    participant Reviewer as AI 評審者 (Reviewer)
-
-    ff->>PM: 1. 提供業務方向與需求 (SME Know-how)
-    Note over PM: 整合長期專案脈絡與架構
-    PM->>github: 2. 直接建立文件骨架與寫入 README
-    Note over Content: 偵測到 GitHub 更新
-    Content->>github: 3. Pull 檔案至本地進行長文件加工與 HTML 渲染
-    Content->>Reviewer: 4. 本地提交草稿與技術展示頁
-    Note over Reviewer: 扮演評審挑戰合規性
-    Reviewer-->>Content: 5. 提供漏洞修改建議 (如有風險)
-    Content->>github: 6. 修正後 Push 正式版本 (Artifact)
-    github-->>ff: 7. 交付高品質最終產物 (可跨電腦/AI接手)
-```
-
----
-
-## 💡 給企業主管的啟示：AI 共享記憶體與分工
-
-許多企業在引入 AI 時，只讓員工單打獨鬥，導致知識零碎、無法累積。
-Skyline 新協作原則告訴我們：
-> **「透過合理的 AI 角色分工，配合 GitHub 作為多 AI 共同工作區，我們建立了一個可持續累積、跨 AI、跨電腦接手的『企業共用記憶體』。」**
-
-在這個架構下，不需要最強的單一 AI，只要合理的流程設計，就能以最小成本跑起高效的企業工作流。
+> [!TIP]
+> 透過這張合規查核表，總經理可以在一分鐘內掌握全局，並授權放行。接下來，在 **[單元 04：決策者視角：真理中心與一鍵收割同步機制](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/docs/04_artifact_management.html)** 中，我們將說明如何將通過核准的黃金知識安全地更新回公司的核心資料庫中。

@@ -1,68 +1,52 @@
-# Skyline Class02 教材工作台主控台 (Workbench)
+# Skyline Class02 決策指揮官工作台 (GM Workbench)
 
-歡迎來到 Skyline Class02 教材工作台。本工作台是為了協助學員與企業主管快速理解 **「AI 如何從聊天對話框轉型為企業工作流」** 的實作示範基地。
+歡迎來到 **Skyline Class02 決策指揮官工作台**。本工作台專為企業最高決策者與主管設計。
 
-在這裡，我們以一個典型的企業情境——**「投標文件與大型合約協作」** 為主軸，解構如何利用不同的 AI 角色與管理工具，建立一個自動化、可治理的 AI 文件工程。
+我們不教您如何撰寫底層程式碼或進行瑣碎的提示詞微調。本工作台的核心目的，是向您展示：**當前最強的 Pro 等級 AI Agent (如 Antigravity / AIDE) 具備何種端到端的一條龍能耐，以及企業主管如何透過「安全、合規、誠信與控制權」這四道防線，建立可控且高效的 AI 治理工作流。**
 
 ---
 
 ## 🧭 快速導覽通道
 
-本工作台包含完整的引導與四大核心教材單元，請依序或針對特定主題進行閱讀：
+本工作台包含完整的「模型菜實務案例」與四大核心教材單元，請依序或針對特定管理痛點進行閱讀：
 
 ```mermaid
 graph TD
-    Start[開始：專案啟動] --> SetMenu[FALO 模型菜組合包]
-    SetMenu --> Map[01. 課程地圖]
-    Map --> Flow[02. 投標文件工作流]
-    Flow --> MultiAI[03. Multi-AI 協作]
-    MultiAI --> Artifact[04. Artifact 管理]
-    Artifact --> Demo[未來規劃：展示 Web App]
+    Start[開始：專案啟動說明] --> SetMenu[FALO 模型菜組合包]
+    SetMenu --> Map[01. Agent 智能邊界]
+    Map --> Flow[02. 安全合規與誠信防線]
+    Flow --> MultiAI[03. 實戰對帳演練]
+    MultiAI --> Artifact[04. 真理中心與一鍵收割]
 ```
 
 * **[FALO 模型菜組合包範例](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/falo_set_menu.md)**
-  * *「企業智能投標工作流的實戰案例」* —— 串接 ETL 轉運站、Prompt 平台、知識庫網關與 AI PM 系統的完整「模型菜」。
-* **[單元 01：課程地圖](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/docs/01_course_map.md)**
-  * *「從問答到工作流的思維轉變」* —— 理解 Horizon 到 Skyline 的學習路徑，以及 Class02 的核心知識點。
-* **[單元 02：投標文件工作流說明](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/docs/02_tender_workflow.md)**
-  * *「如何用 AI 吞下大型投標文件？」* —— 解析企業在處理大型 RFP（需求建議書）時的痛點，以及如何建立端到端（End-to-End）的 AI 工作流。
-* **[單元 03：Multi-AI 協作說明](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/docs/03_multi_ai_collaboration.md)**
-  * *「當 NotebookLM 遇上 Antigravity 與 FALO PM」* —— 說明三個核心工具/角色在工作流中扮演的「理解、整理、管理」鐵三角。
-* **[單元 04：Artifact 管理機制](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/docs/04_artifact_management.md)**
-  * *「把 AI 的產出變成企業真正的資產」* —— 說明如何建立 AI 產出物的生命週期管理、命名規範與品質審查門檻。
+  * *「企業智能投標工作流的實戰案例」* —— 串接 ETL 轉運站、Prompt 平台、知識庫網關與 AI PM 系統的完整「模型菜」實戰。
+* **[單元 01：Agent 智能邊界與指揮官思維](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/docs/01_course_map.md)**
+  * *「從問答到一條龍 Agent 的能耐跨越」* —— 對比舊式單點問答與新式端到端工作流的 Token 消耗效率與作業極限。
+* **[單元 02：企業 AI 落地之安全、合規與誠信防線](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/docs/02_tender_workflow.md)**
+  * *「高階主管如何防禦風險？」* —— 深入探討本地安全沙盒（Gemini Nano）避免外洩、誠信紅線拒絕幻覺，以及 Sofia 人員失效自動備降機制。
+* **[單元 03：實戰對帳：智能投標工作流端到端演練](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/docs/03_multi_ai_collaboration.md)**
+  * *「看 Agent 如何吞下政府智慧文件大標案」* —— 直擊 Agent 如何自主完成 RFP 拆解、 Delta 增量組裝、比對 2h/4h SLA 成本衝突並產出 Gap Checklist。
+* **[單元 04：決策者視角：真理中心與一鍵收割同步機制](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/docs/04_artifact_management.md)**
+  * *「如何確保決策控制權永遠在您手上？」* —— 詳解同仁協作 staging 沙盒防範知識庫污染（RAG Pollution），以及中控台「觸發式更新」與主管「一鍵收割」反向更新地端真理中心 (SSOT) 的控制鏈。
 
 ---
 
-## 🎯 依角色情境導讀
+## 🔒 決策指揮官（總經理）防嫌指引
 
-如果您是不同背景的讀者，建議可以從以下情境切入：
+如果您對 AI 導入企業仍抱持懷疑，建議您從以下痛點問題直接切入：
 
-### 💼 我是企業主管 / 決策者
-> 您最關心的是 **AI 能否落地、降低風險與提高產出效率**。
-> * 建議閱讀順序：
->   1. [02 投標文件工作流說明](file:///Users/force/Google_Antigravity/skyline/skyline-class/class2/docs/02_tender_workflow.md) (理解商業價值與痛點解決)
->   2. [04 Artifact 管理機制](file:///Users/force/Google_Antigravity/skyline/skyline-class/class2/docs/04_artifact_management.md) (理解如何實施品質治理與控管風險)
+### ❓ 1. AI 會不會把公司極敏感的財務資料或商業機密洩漏上雲？
+> **防線解答**：
+> 我們採用 **地端安全沙盒與 Built-in AI (Gemini Nano) 技術**。敏感資料在前置 ETL 清洗時 100% 斷網運行於本機，去敏感化後才與雲端大模型進行無縫拼裝。
+> * 📄 詳見：**[單元 02：企業 AI 落地之安全、合規與誠信防線](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/docs/02_tender_workflow.md)**
 
-### 📋 我是專案經理 (PM) / 流程規劃者
-> 您關心的是 **AI 之間如何協同工作、進度如何追蹤**。
-> * 建議閱讀順序：
->   1.💡 建議優先閱讀：<a href="../docs/01_course_map.html">01 課程地圖</a> (理解整體知識框架與實踐步驟)。
+### ❓ 2. AI 經常胡說八道（幻覺），如果寫錯標書或契約導致廢標，誰來負責？
+> **防線解答**：
+> 我們建立了 **「誠信紅線」** 與 **「Sofia 自動備降機制」**。AI 在比對實績時，若發現鼎盛專案缺少簽章公文，會強制遵循誠信鐵律拒絕編造，自動報警排除，並主動啟用 Sophia 作為合規備降 PM。
+> * 📄 詳見：**[單元 03：實戰對帳：智能投標工作流端到端演練](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/docs/03_multi_ai_collaboration.md)**
 
-### 💻 我是教材工程師 / 展示開發者
-> 您關心的是 **Markdown 文件工程、檔案結構與前端 Demo 展示**。
-> * 建議優先閱讀：
->   1. [01 課程地圖](file:///Users/force/Google_Antigravity/skyline/skyline-class/class2/docs/01_course_map.md) (熟悉整體 Repo 結構)
->   2. 閱讀 `README.md` 中關於 [主力產線任務與團隊角色](file:///Users/force/Google_Antigravity/skyline/skyline-class/class2/README.md) 的設定。
-
-## 🚀 未來展示規劃
-在後續的專案推進中，我們將在 `demo/` 目錄中建立一個 HTML/CSS/JS 的實體網頁展示，將這套投標文件工作流與 Multi-AI 的協作過程視覺化，讓企業主管能以最直覺的方式體驗 AI 治理的威力。
-
----
-
-## 📚 歷史版本參考 (Class 02 Antigravity 原始交付包)
-
-我們已將講師 **ff (Force)** 顧問實戰沉澱的 Class 02 原始知識骨架與 AIDE 長文件工程交付母稿收錄於此，供後續重構參考：
-* **[講師實際教學交付母稿 (class02_teaching_delivery_pack.md)](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/reference/class02-antigravity/class02_teaching_delivery_pack.md)**：3 小時精準課程流向、授課逐字稿、SLA衝突/誠信紅線/PM備降等 AIDE 雙軌對帳 Live Demo 指令集。
-* **[學員實作手冊指南 (class02_practice_workbook.md)](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/reference/class02-antigravity/class02_practice_workbook.md)**：八大關鍵步驟的 AIDE 長文件工程實作指南。
-* **[知識工程心得沉澱 (knowledge_engineering_lessons_learned.md)](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/reference/class02-antigravity/knowledge_engineering_lessons_learned.md)**：記錄了 *「不要把長文件當文章寫，要把文件當代碼來編譯與治理 (Document as Code)」* 的核心方法論發現。
-* **[下載完整交付包 (class02-antigravity.zip)](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/reference/class02-antigravity.zip)**：包含模擬招標書（RFP）、內部實績元件、學員空白模板、大腦引導規章及預期產出文件等完整數據庫。
+### ❓ 3. 一般同仁使用 AI 自由度太高，各問各的，公司知識資產如何沉澱，我又該如何控管？
+> **防線解答**：
+> 同仁的自由發揮僅在雲端 Staging 協作沙盒中進行。當 AI 驗證該產出通過雙軌合規時，系統會自動在主管中控台彈出 **「觸發式同步提醒」**。沒有您的 **「一鍵收割」** 授權，任何數據都不會更新回地端真理中心 (SSOT)。
+> * 📄 詳見：**[單元 04：決策者視角：真理中心與一鍵收割同步機制](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/docs/04_artifact_management.md)**
