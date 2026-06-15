@@ -190,9 +190,9 @@
           <input type="checkbox" class="todo-checkbox" id="check-2">
         </div>
         <div class="todo-content">
-          <label for="check-2" class="todo-title">2. AI Cowork 小工具與 Prompt 管理器整合</label>
-          <div class="todo-desc">開發並整理輔助工具。規劃將 <b>Prompt（提示詞）管理器開發為「地端＋雲端」雙版本，內含輕量級 ETL 與 OCR 能力，並預留接口可擴充整合重型工具（如重度 PDF 解析與大數據清洗）</b>。平台支援多種資料交換模式，可將優化好的 Prompt 跨平台分享/推播至 `ai-notebooklm` 執行會話，做為智能問答的智慧前置底座。</div>
-          <span class="todo-badge badge-medium">優先度：中</span>
+          <label for="check-2" class="todo-title">2. Prompt 平台 (FALO Mini Station)</label>
+          <div class="todo-desc">開發與精煉 Prompt 平台（FALO Mini Station）。定位為超輕量、隨叫隨用的資訊轉運站（Information Hub），內含輕量級 ETL 與 OCR 能力（如 Tesseract.js），支援雲端同步與多種資料交換模式，可將優化好的 Prompt 直接分享/發送給其他 AI 專案或網關端。</div>
+          <span class="todo-badge badge-high">優先度：高</span>
         </div>
       </div>
 
@@ -202,8 +202,8 @@
           <input type="checkbox" class="todo-checkbox" id="check-3">
         </div>
         <div class="todo-content">
-          <label for="check-3" class="todo-title">3. 設計以 ai-notebooklm 為核心的 AI PM 系統 POC</label>
-          <div class="todo-desc">以已開發的 ai-notebooklm 共享網關為底座核心，設計一個具備 GAS 雲端同步功能的 **AI PM 系統 POC**。系統內部支援<b>雙軌制對接</b>（A軌：共用高級帳號之排隊網關機制；B軌：一鍵直連 Google 官方專案之個人帳號跳轉通道），並引入 AI 分析引擎以監控、記錄與掌控專案的進度與交付物品質。</div>
+          <label for="check-3" class="todo-title">3. AI NotebookLM (企業知識共享網關)</label>
+          <div class="todo-desc">深入優化 `ai-notebooklm` 專案。透過中介網關解決多人安全共用高級帳號、敏感知識限定與防下載沙盒等痛點；導入智慧路由（目錄專案匹配），解決「我這個問題該問哪個知識庫」的根本難題；並支持排隊限制與個人帳號直連之雙軌制存取通道。</div>
           <span class="todo-badge badge-high">優先度：高</span>
         </div>
       </div>
@@ -214,8 +214,8 @@
           <input type="checkbox" class="todo-checkbox" id="check-4">
         </div>
         <div class="todo-content">
-          <label for="check-4" class="todo-title">4. NotebookLM CLI 的深入運用</label>
-          <div class="todo-desc">探索 NotebookLM CLI 的運用與整合。目前 <b>ai-notebooklm 已經開發地端，且雲端版本開發中</b>。未來將作為獨立的查詢手段，或是深度整合至 AI 協作平台中，作為自動化 FAQ 解答與標準作業程序 (SOP) 檢索的底座。</div>
+          <label for="check-4" class="todo-title">4. 設計與實作 AI PM 系統 POC</label>
+          <div class="todo-desc">獨立設計與實作 AI PM 系統。以 GAS 雲端資料庫為同步底座，支援多角色 AI 協作交談、對話日誌保存、產出品質稽核與專案進度追蹤，自動生成進度與合規報表，實現透明化、可控的專案交付流程。</div>
           <span class="todo-badge badge-medium">優先度：中</span>
         </div>
       </div>
@@ -226,9 +226,9 @@
           <input type="checkbox" class="todo-checkbox" id="check-5">
         </div>
         <div class="todo-content">
-          <label for="check-5" class="todo-title">5. 其他新一代 QA 與 SOP 查詢模式研究</label>
-          <div class="todo-desc">除了 NotebookLM 外，評估與實驗其他前沿的檢索增強生成 (RAG) 技術、動態向量資料庫，以及知識圖譜 (Knowledge Graph) 在企業 SOP 快速檢索中的應用。</div>
-          <span class="todo-badge badge-low">優先度：低</span>
+          <label for="check-5" class="todo-title">5. NotebookLM CLI 的深入運用</label>
+          <div class="todo-desc">探索 NotebookLM CLI 的運用與整合。目前 <b>ai-notebooklm 已經開發地端，且雲端版本開發中</b>。未來將作為獨立的查詢手段，或是深度整合至 AI 協作平台中，作為自動化 FAQ 解答與標準作業程序 (SOP) 檢索的底座。</div>
+          <span class="todo-badge badge-medium">優先度：中</span>
         </div>
       </div>
 
@@ -238,7 +238,19 @@
           <input type="checkbox" class="todo-checkbox" id="check-6">
         </div>
         <div class="todo-content">
-          <label for="check-6" class="todo-title">6. 資安觀念與實踐</label>
+          <label for="check-6" class="todo-title">6. 其他新一代 QA 與 SOP 查詢模式研究</label>
+          <div class="todo-desc">除了 NotebookLM 外，評估與實驗其他前沿的檢索增強生成 (RAG) 技術、動態向量資料庫，以及知識圖譜 (Knowledge Graph) 在企業 SOP 快速檢索中的應用。</div>
+          <span class="todo-badge badge-low">優先度：低</span>
+        </div>
+      </div>
+
+      <!-- 任務 7 -->
+      <div class="todo-item" data-id="task-7">
+        <div class="todo-checkbox-wrapper">
+          <input type="checkbox" class="todo-checkbox" id="check-7">
+        </div>
+        <div class="todo-content">
+          <label for="check-7" class="todo-title">7. 資安觀念與實踐</label>
           <div class="todo-desc">在 AI 協作工作流中導入企業級資安與合規性保護。參考並結合 <a href="https://falo-taiwan.github.io/content-cipher-lab/" target="_blank">Content Cipher Lab (文件加密實驗室)</a> 的技術，規劃敏感文件防洩密與加密傳輸機制。</div>
           <span class="todo-badge badge-high">優先度：高</span>
         </div>
