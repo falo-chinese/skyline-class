@@ -30,6 +30,12 @@
             <button class="theme-dot dot-warm" data-theme="warm" title="暖色模式 (Cozy Amber)"></button>
             <button class="theme-dot dot-cyber" data-theme="cyber" title="賽博模式 (Cyberpunk)"></button>
           </div>
+          <!-- Font Size Adjuster -->
+          <div class="font-size-adjuster" id="fontSizeAdjuster">
+            <button id="fontDecBtn" class="btn-adjust" title="縮小字型">-</button>
+            <span id="fontSizeLvl" class="adjust-lvl">3</span>
+            <button id="fontIncBtn" class="btn-adjust" title="放大字型">+</button>
+          </div>
         </div>
       </div>
       
@@ -74,6 +80,11 @@
       <span id="dbSourceText">內建教材庫</span>
       <span id="dbCountText">0 張卡片</span>
     </div>
+
+    <!-- Fixed Variables Panel (collapsible/sticky at top) -->
+    <section class="fixed-variables-container" id="fixedVariablesPanel" style="display: none;">
+      <!-- Renders dynamically when card with variables is expanded -->
+    </section>
 
     <!-- Categories Accordion Container -->
     <main class="main-content">

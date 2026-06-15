@@ -5,7 +5,8 @@ const STORAGE_KEYS = {
   database: "falo_prompt_manager_database_v03",
   variables: "falo_prompt_manager_variables_v03",
   theme: "falo_prompt_manager_theme_v03",
-  mode: "falo_prompt_manager_ui_mode_v03"
+  mode: "falo_prompt_manager_ui_mode_v03",
+  fontSize: "falo_prompt_manager_font_size_v03"
 };
 
 // Global State
@@ -16,6 +17,7 @@ let currentSearchQuery = "";
 let expandedCardId = null;
 let currentMode = "compact"; // Default is compact mode
 let currentTheme = "light";  // Default is light theme
+let currentFontSize = 3;     // Default font size level is 3 (1-5)
 const openCategoryIds = new Set(); // Stores manually toggled category IDs
 
 // Target PWA URL patterns for Live Sync
@@ -58,7 +60,11 @@ const els = {
   formTargetAI: document.getElementById("formTargetAI"),
   formHumanReview: document.getElementById("formHumanReview"),
   modalTitle: document.getElementById("modalTitle"),
-  toast: document.getElementById("toast")
+  toast: document.getElementById("toast"),
+  fontDecBtn: document.getElementById("fontDecBtn"),
+  fontIncBtn: document.getElementById("fontIncBtn"),
+  fontSizeLvl: document.getElementById("fontSizeLvl"),
+  fixedVariablesPanel: document.getElementById("fixedVariablesPanel")
 };
 
 // -------------------------------------------------------------
@@ -80,7 +86,8 @@ async function loadState() {
       STORAGE_KEYS.database, 
       STORAGE_KEYS.variables,
       STORAGE_KEYS.mode,
-      STORAGE_KEYS.theme
+      STORAGE_KEYS.theme,
+      STORAGE_KEYS.fontSize
     ]);
     
     // Load UI Mode (Default: compact)
@@ -90,6 +97,10 @@ async function loadState() {
     // Load Theme (Default: light)
     currentTheme = data[STORAGE_KEYS.theme] || "light";
     updateThemeClass();
+
+    // Load Font Size (Default: 3)
+    currentFontSize = data[STORAGE_KEYS.fontSize] || 3;
+    updateFontSizeClass();
     
     if (data[STORAGE_KEYS.database] && Array.isArray(data[STORAGE_KEYS.database])) {
       currentDb = data[STORAGE_KEYS.database];
@@ -135,6 +146,21 @@ function updateThemeClass() {
   });
 }
 
+function updateFontSizeClass() {
+  document.body.classList.remove("font-size-lvl-1", "font-size-lvl-2", "font-size-lvl-3", "font-size-lvl-4", "font-size-lvl-5");
+  document.body.classList.add(`font-size-lvl-${currentFontSize}`);
+  
+  if (els.fontSizeLvl) {
+    els.fontSizeLvl.textContent = currentFontSize;
+  }
+  if (els.fontDecBtn) {
+    els.fontDecBtn.disabled = (currentFontSize <= 1);
+  }
+  if (els.fontIncBtn) {
+    els.fontIncBtn.disabled = (currentFontSize >= 5);
+  }
+}
+
 // Save state to chrome.storage.local
 async function saveState() {
   await chrome.storage.local.set({
@@ -168,6 +194,7 @@ function renderUI() {
   renderTagsFilter();
   renderAccordion();
   updateStats();
+  updateFixedVariablesPanel();
 }
 
 function updateStats() {
@@ -285,29 +312,6 @@ function renderAccordion() {
 
       let detailsHtml = "";
       if (isExpanded) {
-        // Parse variables in promptText
-        const vars = parseVariables(card.promptText);
-        let variablesForm = "";
-        
-        if (vars.length > 0) {
-          const varInputs = vars.map(v => {
-            const val = cachedVariables[v] || "";
-            return `
-              <div class="var-input-group">
-                <label for="var-${card.id}-${v}">[${v}]</label>
-                <input type="text" class="var-input" id="var-${card.id}-${v}" data-var-name="${v}" value="${val}" placeholder="輸入 ${v} 的值...">
-              </div>
-            `;
-          }).join("");
-
-          variablesForm = `
-            <div class="variables-panel" data-card-id="${card.id}">
-              <div class="detail-section-title" style="margin-bottom: 4px;">代入變數</div>
-              <div class="variables-list">${varInputs}</div>
-            </div>
-          `;
-        }
-
         if (currentMode === "full") {
           // Expected Output
           const expOutputHtml = card.expectedOutput ? `
@@ -332,7 +336,6 @@ function renderAccordion() {
               <div class="detail-section-title">指令範本本文</div>
               <div class="prompt-template-preview">${escapeHtml(card.promptText)}</div>
             </div>
-            ${variablesForm}
             ${expOutputHtml}
             ${reviewPointsHtml}
             <div class="card-actions">
@@ -345,12 +348,11 @@ function renderAccordion() {
             </div>
           `;
         } else {
-          // Compact Mode: prompt text preview, variables, and actions
+          // Compact Mode: prompt text preview and actions
           detailsHtml = `
             <div class="card-details-box" style="margin-top: 4px; padding-top: 4px; border-top: none;">
               <div class="prompt-template-preview">${escapeHtml(card.promptText)}</div>
             </div>
-            ${variablesForm}
             <div class="card-actions">
               <button class="btn btn-outline btn-copy" data-card-id="${card.id}">📋 複製</button>
               <button class="btn btn-primary btn-fill" data-card-id="${card.id}">⚡ 填入對話框</button>
@@ -400,15 +402,6 @@ function renderAccordion() {
 
       // Expanded sub-actions
       if (isExpanded) {
-        // Variable input cache on change
-        cardEl.querySelectorAll(".var-input").forEach(input => {
-          input.addEventListener("input", (e) => {
-            const varName = e.target.getAttribute("data-var-name");
-            const val = e.target.value;
-            cachedVariables[varName] = val;
-            chrome.storage.local.set({ [STORAGE_KEYS.variables]: cachedVariables });
-          });
-        });
 
         // Copy button
         cardEl.querySelector(".btn-copy").addEventListener("click", () => {
@@ -464,6 +457,71 @@ function renderAccordion() {
       </div>
     `;
   }
+}
+
+function updateFixedVariablesPanel() {
+  if (!els.fixedVariablesPanel) return;
+  
+  if (!expandedCardId) {
+    els.fixedVariablesPanel.style.display = "none";
+    els.fixedVariablesPanel.innerHTML = "";
+    return;
+  }
+
+  // Find the expanded card
+  let activeCard = null;
+  for (const cat of currentDb) {
+    const found = (cat.items || []).find(item => item.id === expandedCardId);
+    if (found) {
+      activeCard = found;
+      break;
+    }
+  }
+
+  if (!activeCard) {
+    els.fixedVariablesPanel.style.display = "none";
+    els.fixedVariablesPanel.innerHTML = "";
+    return;
+  }
+
+  const vars = parseVariables(activeCard.promptText);
+  if (vars.length === 0) {
+    els.fixedVariablesPanel.style.display = "none";
+    els.fixedVariablesPanel.innerHTML = "";
+    return;
+  }
+
+  // Generate input fields for each variable
+  const varInputs = vars.map(v => {
+    const val = cachedVariables[v] || "";
+    return `
+      <div class="var-input-group">
+        <label for="fixed-var-${v}">[${v}]</label>
+        <input type="text" class="fixed-var-input" id="fixed-var-${v}" data-var-name="${v}" value="${escapeHtml(val)}" placeholder="輸入 ${v} 的值...">
+      </div>
+    `;
+  }).join("");
+
+  els.fixedVariablesPanel.innerHTML = `
+    <div class="detail-section-title" style="margin-bottom: 6px; color: var(--primary); font-size: var(--base-fs-11); display: flex; justify-content: space-between; align-items: center; text-transform: none;">
+      <span>🏷️ 變數帶入 (來自: ${escapeHtml(activeCard.title)})</span>
+      <span style="font-size: var(--base-fs-9); opacity: 0.7; font-weight: normal; text-transform: none;">(即時套用至複製或填入動作)</span>
+    </div>
+    <div class="variables-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px;">
+      ${varInputs}
+    </div>
+  `;
+  els.fixedVariablesPanel.style.display = "block";
+
+  // Bind input event listeners to save values dynamically
+  els.fixedVariablesPanel.querySelectorAll(".fixed-var-input").forEach(input => {
+    input.addEventListener("input", (e) => {
+      const varName = e.target.getAttribute("data-var-name");
+      const val = e.target.value;
+      cachedVariables[varName] = val;
+      chrome.storage.local.set({ [STORAGE_KEYS.variables]: cachedVariables });
+    });
+  });
 }
 
 // -------------------------------------------------------------
@@ -1168,6 +1226,23 @@ function initEventListeners() {
       await chrome.storage.local.set({ [STORAGE_KEYS.theme]: currentTheme });
       renderUI();
     });
+  });
+
+  // Font size adjuster
+  els.fontDecBtn.addEventListener("click", async () => {
+    if (currentFontSize > 1) {
+      currentFontSize--;
+      updateFontSizeClass();
+      await chrome.storage.local.set({ [STORAGE_KEYS.fontSize]: currentFontSize });
+    }
+  });
+
+  els.fontIncBtn.addEventListener("click", async () => {
+    if (currentFontSize < 5) {
+      currentFontSize++;
+      updateFontSizeClass();
+      await chrome.storage.local.set({ [STORAGE_KEYS.fontSize]: currentFontSize });
+    }
   });
   
   // Sync actions
