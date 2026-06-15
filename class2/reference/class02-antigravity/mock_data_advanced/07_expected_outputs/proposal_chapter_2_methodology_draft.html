@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 第二章：專案執行方法論 (進階標書草稿)</title>
+    <style>
+        
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.6;
+    color: #e2e8f0;
+    background-color: #0f172a;
+    max-width: 850px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+}
+h1, h2, h3, h4, h5, h6 {
+    color: #f8fafc;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    font-weight: 700;
+}
+h1 { font-size: 2.2rem; border-bottom: 1px solid #334155; padding-bottom: 0.5rem; }
+h2 { font-size: 1.6rem; border-bottom: 1px solid #1e293b; padding-bottom: 0.25rem; margin-top: 2rem; }
+h3 { font-size: 1.25rem; }
+a { color: #38bdf8; text-decoration: none; font-weight: 500; }
+a:hover { text-decoration: underline; }
+code {
+    background-color: #1e293b;
+    color: #f1f5f9;
+    padding: 0.15rem 0.3rem;
+    border-radius: 4px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 0.85em;
+}
+pre {
+    background-color: #1e293b;
+    padding: 1rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    border: 1px solid #334155;
+    margin: 1.5rem 0;
+}
+pre code {
+    background-color: transparent;
+    padding: 0;
+    border-radius: 0;
+    font-size: 0.85rem;
+    color: #f1f5f9;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.9rem;
+}
+th, td {
+    border: 1px solid #334155;
+    padding: 0.75rem;
+    text-align: left;
+}
+th {
+    background-color: #1e293b;
+    color: #f8fafc;
+    font-weight: bold;
+}
+tr:nth-child(even) {
+    background-color: rgba(30, 41, 59, 0.5);
+}
+blockquote {
+    border-left: 4px solid #38bdf8;
+    padding: 0.5rem 1rem;
+    background-color: rgba(30, 41, 59, 0.5);
+    margin: 1.5rem 0;
+    border-radius: 0 8px 8px 0;
+    color: #cbd5e1;
+}
+.alert {
+    padding: 1rem;
+    border-radius: 8px;
+    margin: 1.5rem 0;
+    border-left: 4px solid #3b82f6;
+}
+.alert-note {
+    background-color: rgba(59, 130, 246, 0.1);
+    border-left-color: #3b82f6;
+    color: #93c5fd;
+}
+.alert-tip {
+    background-color: rgba(16, 185, 129, 0.1);
+    border-left-color: #10b981;
+    color: #a7f3d0;
+}
+.alert-warning {
+    background-color: rgba(245, 158, 11, 0.1);
+    border-left-color: #f59e0b;
+    color: #fde047;
+}
+.alert-important {
+    background-color: rgba(139, 92, 246, 0.1);
+    border-left-color: #8b5cf6;
+    color: #ddd6fe;
+}
+.back-link {
+    display: inline-block;
+    font-size: 0.9rem;
+    color: #94a3b8;
+}
+.back-link:hover {
+    color: #f8fafc;
+}
+ul, ol {
+    padding-left: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+li {
+    margin-bottom: 0.5rem;
+}
+hr {
+    border: 0;
+    height: 1px;
+    background: #334155;
+    margin: 2rem 0;
+}
+
+    </style>
+</head>
+<body>
+    <div style="margin-bottom: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+        <a href="../../index.html" class="back-link">🌌 回 Class 02 課程入口首頁</a>
+        <span style="color: #475569;">|</span>
+        <a href="../README.html" class="back-link">📦 回 實作資料集導覽 (README)</a>
+    </div>
+    
+    <article>
+        <h1>🚀 第二章：專案執行方法論 (進階標書草稿)</h1>
+<br/>
+<p><strong>用途</strong>：展示 Agent 調用積木、對帳 SLA 落差並「自動小幅增強」為 2 小時後的 100% 合規草稿。</p>
+<br/>
+<hr/>
+<br/>
+<h2>第一節：星河 AIDE 文件工程方法論與一致性防線</h2>
+<p>星河科技股份有限公司（以下簡稱本公司）將採用標準之 AIDE 文件工程方法論，建立以下文件工程三道防線：</p>
+<ol>
+<li><strong>大腦事實對齊 (Smart Indexing)</strong>：所有新生成的系統規範與手冊，均自動與大腦事實連結比對，確保術語（如：文件結構化 OCR、批次處理）前後一致。</li>
+<li><strong>模組積木元件化 (Componentization)</strong>：將系統需求打碎為代碼化知識元件（如資安維護政策規範、SLA 響應標準），採用 AIDE 長文件工程一鍵編譯組裝。</li>
+<li><strong>版本 Diff 差分稽核防線</strong>：標書的每一次修改更新，均由 AIDE 系統自動生成實體 Diff 差分，方便主管 ff 進行高階避險與合規稽核。</li>
+</ol>
+<br/>
+<h2>第二節：日常維護服務與 2 小時 SLA 響應承諾 (SLA Auto-Enhanced)</h2>
+<p>本公司提供最高規格之 7x24 小時售後服務支援與政務系統保駕護航。</p>
+<p>針對招標機關（國家檔案數位發展委員會）之系統維護規定，本公司給予<strong>小幅增強 (Enhancement) 承諾</strong>：</p>
+<ul>
+<li><strong>緊急故障事件</strong>：<strong>星河技術人員承諾於接獲故障通知後，於 2 小時內抵達現場進行搶修、大腦健檢與索引修復</strong>（本承諾已超越本公司標準售後之 4 小時標準，提供政務級專案保障）。</li>
+<li><strong>一般事件</strong>：24 小時內完成系統優化與修復。</li>
+</ul>
+<br/>
+    </article>
+</body>
+</html>

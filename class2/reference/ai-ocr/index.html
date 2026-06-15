@@ -1,0 +1,3130 @@
+<!doctype html>
+<!-- Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved. -->
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0f766e">
+  <title>FALO OCR Workbench</title>
+  <meta name="author" content="FALO X TAAT x Force Cheng 2026/6/1">
+  <link rel="manifest" href="./ocr-manifest.webmanifest">
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <style>
+    /* Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved. */
+    :root {
+      --bg: #f7f8fb;
+      --panel: #ffffff;
+      --panel-soft: #f1f5f9;
+      --line: #dbe3ee;
+      --text: #172033;
+      --muted: #64748b;
+      --accent: #0f766e;
+      --accent-strong: #115e59;
+      --accent-soft: #ccfbf1;
+      --warning: #b45309;
+      --danger: #be123c;
+      --shadow: 0 14px 36px rgba(15, 23, 42, 0.08);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", sans-serif;
+      line-height: 1.55;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: color-mix(in srgb, var(--panel) 94%, transparent);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(12px);
+    }
+
+    .topbar-inner {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 22px;
+      line-height: 1.2;
+    }
+
+    .subtitle,
+    .note,
+    .status-line {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .actions,
+    .toolbar-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .button,
+    .select {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      color: var(--text);
+      min-height: 38px;
+      padding: 8px 11px;
+      font-weight: 800;
+    }
+
+    .button:hover,
+    .select:hover {
+      border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+      background: var(--panel-soft);
+    }
+
+    .button.primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    .button.draft {
+      background: #fef3c7;
+      border-color: #f59e0b;
+      color: #92400e;
+    }
+
+    .button.danger {
+      border-color: color-mix(in srgb, var(--danger) 44%, var(--line));
+      color: var(--danger);
+    }
+
+    .button:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+
+    .workspace {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 20px;
+      display: grid;
+      grid-template-columns: 360px minmax(0, 1fr);
+      gap: 16px;
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 15px;
+    }
+
+    .panel-title {
+      margin: 0 0 10px;
+      font-size: 16px;
+    }
+
+    .field-group {
+      display: grid;
+      gap: 12px;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      color: var(--text);
+      min-height: 40px;
+      padding: 9px 10px;
+    }
+
+    textarea {
+      min-height: 150px;
+      resize: vertical;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: 2px solid color-mix(in srgb, var(--accent) 22%, transparent);
+      border-color: var(--accent);
+    }
+
+    .image-preview {
+      min-height: 220px;
+      border: 1px dashed color-mix(in srgb, var(--muted) 54%, var(--line));
+      background: var(--panel-soft);
+      border-radius: var(--radius);
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      text-align: center;
+      color: var(--muted);
+      padding: 12px;
+    }
+
+    .image-preview img {
+      max-width: 100%;
+      max-height: 360px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .template-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 12px;
+    }
+
+    .pill-row {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent-strong);
+      padding: 3px 8px;
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .file-input {
+      display: none;
+    }
+
+    .toast {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      background: #0f172a;
+      color: #fff;
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      box-shadow: var(--shadow);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(8px);
+      transition: opacity 0.18s ease, transform 0.18s ease;
+      max-width: min(460px, calc(100vw - 40px));
+      font-size: 14px;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 920px) {
+      .workspace,
+      .template-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Collapsible sliding drawer overlay */
+    .drawer-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(15, 23, 42, 0.45);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    .drawer-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Sliding Drawer panel */
+    .drawer {
+      position: fixed;
+      top: 0;
+      right: -650px;
+      width: 650px;
+      max-width: 100%;
+      height: 100vh;
+      background: var(--panel);
+      box-shadow: -4px 0 24px rgba(15, 23, 42, 0.15);
+      z-index: 1001;
+      display: flex;
+      flex-direction: column;
+      transition: right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .drawer.active {
+      right: 0;
+    }
+
+    .drawer-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--panel-soft);
+    }
+    .drawer-header h2 {
+      margin: 0;
+      font-size: 16px;
+      color: var(--accent-strong);
+    }
+    .drawer-close {
+      background: transparent;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: var(--muted);
+      line-height: 1;
+      padding: 0 4px;
+    }
+    .drawer-close:hover {
+      color: var(--danger);
+    }
+
+    .drawer-body {
+      padding: 20px;
+      overflow-y: auto;
+      flex-grow: 1;
+    }
+
+    /* Current run details box styling */
+    .current-run-info {
+      padding: 12px 16px;
+      margin-bottom: 12px;
+      border: 1px solid var(--accent-soft);
+      border-radius: var(--radius);
+      background: var(--accent-soft);
+      color: var(--accent-strong);
+      font-size: 13px;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+    }
+    .current-run-layout {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .current-run-data {
+      line-height: 1.6;
+    }
+    .current-run-actions {
+      display: flex;
+      align-items: center;
+    }
+
+    /* Tab buttons inside drawer */
+    .drawer-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--line);
+      gap: 16px;
+      margin-top: 8px;
+    }
+    .drawer-tab-btn {
+      background: none;
+      border: none;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--muted);
+      border-bottom: 2px solid transparent;
+      transition: all 0.15s ease;
+      outline: none;
+    }
+    .drawer-tab-btn:hover {
+      color: var(--accent-strong);
+    }
+    .drawer-tab-btn.active {
+      color: var(--accent-strong);
+      border-bottom-color: var(--accent);
+      font-weight: 700;
+    }
+
+    /* Resize OCR output textarea and make it larger by default */
+    #ocrResult {
+      height: 380px;
+      resize: both;
+      min-height: 150px;
+    }
+
+    /* Floating image preview window */
+    .floating-window {
+      position: fixed;
+      top: 100px;
+      left: 100px;
+      width: 360px;
+      height: 270px;
+      min-width: 150px;
+      min-height: 120px;
+      background: rgba(15, 23, 42, 0.95);
+      border-radius: var(--radius);
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.25);
+      z-index: 2000;
+      resize: both;
+      overflow: hidden;
+      display: none;
+      border: 1px solid var(--line);
+      grid-template-rows: auto auto 1fr;
+      cursor: default;
+    }
+    .floating-image-viewport {
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      display: block;
+      padding: 14px;
+      cursor: default;
+    }
+    .floating-content {
+      width: max-content;
+      min-width: 100%;
+      min-height: 100%;
+      display: grid;
+      place-items: center;
+    }
+    .floating-window img {
+      display: block;
+      max-width: none;
+      max-height: none;
+      object-fit: contain;
+      pointer-events: none;
+      user-select: none;
+      transition: width 0.12s ease;
+    }
+    .floating-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+      padding: 8px;
+      background: rgba(15, 23, 42, 0.86);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      z-index: 2010;
+      cursor: move;
+      user-select: none;
+    }
+    .floating-title-row {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+      background: rgba(15, 23, 42, 0.72);
+      color: rgba(255, 255, 255, 0.88);
+      font-size: 13px;
+      font-weight: 800;
+      padding: 7px 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .floating-tool-btn {
+      background: rgba(15, 23, 42, 0.6);
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      min-width: 28px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 14px;
+      line-height: 1;
+      opacity: 0.92;
+      transition: opacity 0.2s ease;
+      padding: 0 8px;
+    }
+    .floating-tool-btn.active {
+      background: rgba(37, 99, 235, 0.9);
+    }
+    .floating-tool-btn:hover {
+      background: rgba(37, 99, 235, 0.85);
+    }
+    #floatingCloseBtn:hover {
+      background: var(--danger);
+    }
+    .floating-opacity-control {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding-left: 6px;
+      border-left: 1px solid rgba(255, 255, 255, 0.14);
+      color: rgba(255, 255, 255, 0.78);
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .floating-opacity-control input {
+      width: 78px;
+      accent-color: #60a5fa;
+    }
+    .floating-opacity-value {
+      width: 34px;
+      text-align: right;
+    }
+    .image-preview img {
+      cursor: pointer;
+      transition: opacity 0.2s ease;
+    }
+    .image-preview img:hover {
+      opacity: 0.85;
+    }
+
+    /* Dual OCR & Chrome Built-in AI Styles */
+    /* Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved. */
+    .ocr-results-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+    }
+    .ocr-results-container.dual-active {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 768px) {
+      .ocr-results-container.dual-active {
+        grid-template-columns: 1fr;
+      }
+    }
+    #ocrResultB {
+      height: 380px;
+      resize: both;
+      min-height: 150px;
+    }
+    .local-ai-badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+    .local-ai-badge.ready {
+      background: var(--accent-soft);
+      color: var(--accent-strong);
+    }
+    .local-ai-badge.downloading {
+      background: #fef3c7;
+      color: #b45309;
+    }
+    .local-ai-badge.no {
+      background: #ffe4e6;
+      color: #be123c;
+    }
+    .progress-bar-container {
+      width: 100%;
+      background-color: var(--panel-soft);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 6px;
+      display: none;
+      height: 8px;
+      border: 1px solid var(--line);
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background-color: var(--accent);
+      width: 0%;
+      transition: width 0.1s ease;
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div>
+        <h1>FALO OCR Workbench <span style="font-size: 13px; color: var(--accent);">v1.02</span></h1>
+        <p class="subtitle">獨立 PWA 元件：圖片 + OCR 操作 Prompt → 可編修文字結果。</p>
+      </div>
+      <div class="toolbar-actions">
+        <button class="button" id="topbarDualOcrBtn" type="button">⚡ 雙 OCR 模式</button>
+        <button class="button" id="topbarLogsBtn" type="button">📊 對帳日誌</button>
+        <button class="button" id="installButton" type="button">安裝 PWA</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="workspace">
+    <aside class="panel">
+      <h2 class="panel-title">圖片與 OCR 模式</h2>
+      <div class="field-group">
+        <div class="field">
+          <label for="imageInput">圖片 / 截圖 / 文件照片</label>
+          <input id="imageInput" type="file" accept="image/*,.png,.jpg,.jpeg,.webp">
+        </div>
+        <div class="image-preview" id="imagePreview">
+          <span>選擇圖片後會在這裡預覽。可支援直接執行 Gemini 線上辨識。</span>
+        </div>
+        <div class="field">
+          <label for="longSideSelect">辨識影像清晰度</label>
+          <select id="longSideSelect">
+            <option value="768">低</option>
+            <option value="1280" selected>中</option>
+            <option value="1600">高</option>
+            <option value="original">原檔</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="geminiKey">Gemini Cloud API Key</label>
+          <div style="display: flex; gap: 8px;">
+            <input id="geminiKey" type="password" placeholder="輸入 API 金鑰以啟用線上辨識" style="flex-grow: 1; min-width: 0;">
+            <button class="button" id="saveKeyBtn" type="button" style="min-height: 40px; white-space: nowrap;">儲存</button>
+            <button class="button danger" id="clearKeyBtn" type="button" style="min-height: 40px; white-space: nowrap;">清除</button>
+          </div>
+        </div>
+        <div class="field">
+          <label for="modelSelect">選擇 Gemini 模型 A</label>
+          <select id="modelSelect">
+            <option value="gemini-3.1-flash-lite" selected>gemini-3.1-flash-lite (推薦/最省用量)</option>
+            <option value="gemini-3.5-flash">gemini-3.5-flash (高精度/深度審查)</option>
+            <option value="gemini-2.5-flash-lite">gemini-2.5-flash-lite (基礎/輕量級對比)</option>
+            <option value="gemini-2.5-flash">gemini-2.5-flash (經典版/對比基準)</option>
+          </select>
+        </div>
+        <div class="field" id="modelSelectBContainer" style="display: none;">
+          <label for="modelSelectB">選擇 Gemini 模型 B (雙 OCR)</label>
+          <select id="modelSelectB">
+            <option value="gemini-3.1-flash-lite">gemini-3.1-flash-lite (推薦/最省用量)</option>
+            <option value="gemini-3.5-flash" selected>gemini-3.5-flash (高精度/深度審查)</option>
+            <option value="gemini-2.5-flash-lite">gemini-2.5-flash-lite (基礎/輕量級對比)</option>
+            <option value="gemini-2.5-flash">gemini-2.5-flash (經典版/對比基準)</option>
+          </select>
+        </div>
+        <button class="button primary" id="runOcrButton" type="button" style="width: 100%; min-height: 44px; margin-top: 10px; font-size: 15px;">⚡ 開始 Gemini OCR 辨識</button>
+        <div class="pill-row">
+          <span class="pill">動態最佳化</span>
+          <span class="pill">隱私保護</span>
+          <span class="pill">本機金鑰</span>
+        </div>
+        <p class="note">說明：建議根據實際狀況，選用解析度更高的圖像以獲得更佳辨識效果。</p>
+      </div>
+    </aside>
+
+    <section class="field-group">
+      <section class="panel">
+        <h2 class="panel-title">OCR 操作 Prompt 模板</h2>
+        <div class="field-group">
+          <div class="template-grid">
+            <div class="field">
+              <label for="templateSelect">選擇目前模板</label>
+              <select id="templateSelect"></select>
+            </div>
+            <div class="field">
+              <label for="templateTitle">編輯模板名稱</label>
+              <input id="templateTitle" type="text" placeholder="模板名稱">
+            </div>
+          </div>
+          <div class="template-grid" style="margin-top: 8px;">
+            <div class="field">
+              <label for="templateDescInput">編輯用途說明</label>
+              <input id="templateDescInput" type="text" placeholder="用途與說明">
+            </div>
+            <div class="field">
+              <label for="templateStatus">狀態 (Status)</label>
+              <input id="templateStatus" type="text" placeholder="例如: stable, beta">
+            </div>
+          </div>
+          <p class="note" id="templateDescription">選擇一組 OCR 操作 Prompt。</p>
+          <div class="actions" style="margin-top: 8px; margin-bottom: 8px;">
+            <button class="button primary" id="saveTemplateButton" type="button" style="background: var(--accent); color: white; border-color: var(--accent);">💾 儲存修改</button>
+            <button class="button" id="createTemplateButton" type="button" style="background: var(--accent-soft); color: var(--accent-strong); border-color: var(--accent);">➕ 新增為新模板</button>
+            <button class="button danger" id="deleteTemplateButton" type="button">🗑️ 刪除此模板</button>
+          </div>
+          <div class="field">
+            <label for="promptTemplate">OCR 操作 Prompt</label>
+            <textarea id="promptTemplate" placeholder="輸入或編輯 Prompt 內容"></textarea>
+          </div>
+          <div class="actions" style="margin-top: 10px;">
+            <button class="button" id="loadPresetButton" type="button">帶入預設</button>
+            <button class="button" id="restoreDefaultsButton" type="button">還原 5 組預設</button>
+            <button class="button" id="exportCsvButton" type="button">匯出 CSV 模板</button>
+            <button class="button" id="importTemplateButton" type="button">匯入模板全覆蓋</button>
+            <input class="file-input" id="templateFileInput" type="file" accept=".csv,application/json,.json,text/csv">
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2 class="panel-title">OCR 輸出文字區</h2>
+        <p class="note">實際辨識結果會投射到這裡；目前可手動貼上、編修並一鍵複製。</p>
+        <div class="field-group">
+          <!-- 本次辨識計費與耗時資訊 -->
+          <div class="current-run-info" id="currentRunInfo" style="display: none;">
+            <div class="current-run-layout">
+              <div class="current-run-data">
+                <strong>⚡ 本次辨識結果：</strong>
+                模型：<span id="currentModel" style="font-weight: 700;"></span> |
+                耗時：<span id="currentLatency" style="font-weight: 700;"></span> ms |
+                Tokens：<span id="currentTokens" style="font-weight: 700;"></span> |
+                估計計費：<span id="currentCostUsd" style="font-weight: 700;"></span> USD (約 NT$ <span id="currentCostTwd" style="font-weight: 700;"></span>)
+              </div>
+              <div class="current-run-actions">
+                <button class="button" id="openLogsDrawerBtn" type="button" style="padding: 4px 10px; font-size: 12px; font-weight: 600; border-color: var(--accent); color: var(--accent); background: var(--panel);">📊 查看歷史對帳日誌</button>
+              </div>
+            </div>
+          </div>
+          <div class="ocr-results-container" id="ocrResultsContainer">
+            <div class="field" id="fieldResultA" style="width: 100%;">
+              <label for="ocrResult" id="labelResultA">可編修結果</label>
+              <textarea id="ocrResult" placeholder="貼上或輸入 OCR 結果文字。"></textarea>
+            </div>
+            <div class="field" id="fieldResultB" style="width: 100%; display: none;">
+              <label for="ocrResultB">可編修結果 B</label>
+              <textarea id="ocrResultB" placeholder="結果 B (雙 OCR 模式)。"></textarea>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="button primary" id="insertPromptButton" type="button" style="background: var(--accent); color: white; border-color: var(--accent);">🧩 插入 Prompt</button>
+            <button class="button draft" id="copyResultButton" type="button">複製結果</button>
+            <button class="button" id="copyPromptButton" type="button">複製圖片用 Prompt</button>
+            <button class="button danger" id="clearResultButton" type="button">清空結果</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" id="localAiSection">
+        <h2 class="panel-title">🤖 Chrome Built-in AI (Gemini Nano) 本地比對與分析</h2>
+        <p class="note">使用 Chrome 瀏覽器內建 Gemini Nano 模型，進行本機 OCR 結果比對、摘要或文字校正，完全不消耗 API 額度。</p>
+        <div class="field-group">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding: 8px 12px; background: var(--panel-soft); border-radius: var(--radius); border: 1px solid var(--line);">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <strong>Nano 狀態：</strong>
+              <span class="local-ai-badge no" id="nanoStatusBadge">檢查中...</span>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button class="button" id="detectNanoBtn" type="button" style="padding: 4px 10px; font-size: 12px; min-height: auto;">🔄 檢測狀態</button>
+              <button class="button" id="downloadNanoBtn" type="button" style="padding: 4px 10px; font-size: 12px; min-height: auto;" disabled>📥 開始下載</button>
+              <button class="button danger" id="resetNanoBtn" type="button" style="padding: 4px 10px; font-size: 12px; min-height: auto;">🗑️ 清除對話</button>
+            </div>
+          </div>
+          
+          <!-- Download Progress Bar -->
+          <div class="progress-bar-container" id="nanoProgressContainer">
+            <div class="progress-bar-fill" id="nanoProgressBarFill"></div>
+          </div>
+          <p class="note" id="nanoProgressText" style="display: none; margin-top: 2px;">準備下載中...</p>
+
+          <div class="template-grid" style="margin-top: 8px;">
+            <div class="field">
+              <label for="nanoPromptSelect">選擇分析 Prompt 模板</label>
+              <select id="nanoPromptSelect"></select>
+            </div>
+            <div class="field">
+              <label for="nanoTemplateTitle">編輯模板名稱</label>
+              <input id="nanoTemplateTitle" type="text" placeholder="分析模板名稱">
+            </div>
+          </div>
+          <div class="field">
+            <label for="nanoTemplateDescription">編輯用途說明</label>
+            <input id="nanoTemplateDescription" type="text" placeholder="例如：雙 OCR 差異比對、模型 A 雲端審查">
+          </div>
+          <div class="actions" style="margin-top: 8px;">
+            <button class="button primary" id="saveNanoTemplateButton" type="button">💾 儲存分析 Prompt</button>
+            <button class="button" id="createNanoTemplateButton" type="button">➕ 新增分析 Prompt</button>
+            <button class="button danger" id="deleteNanoTemplateButton" type="button">🗑️ 刪除此分析 Prompt</button>
+            <button class="button" id="restoreNanoTemplatesButton" type="button">還原分析預設</button>
+          </div>
+
+          <div class="field">
+            <label for="nanoPromptInput">本地比對分析 Prompt</label>
+            <textarea id="nanoPromptInput" placeholder="請輸入本機比對分析指令..." style="min-height: 80px;"></textarea>
+          </div>
+
+          <div style="display: flex; gap: 10px; margin-top: 10px; width: 100%; flex-wrap: wrap;">
+            <button class="button primary" id="runNanoButton" type="button" style="flex: 1; min-width: 200px; min-height: 40px;" disabled>⚡ 啟動 Chrome Nano 比對分析</button>
+            <button class="button primary" id="runModelAAnalysisButton" type="button" style="flex: 1; min-width: 200px; min-height: 40px; background: #2563eb; border-color: #2563eb;">☁️ 用模型 A 雲端分析</button>
+            <button class="button" id="copyNanoPromptBtn" type="button" style="flex: 1; min-width: 200px; min-height: 40px; border-color: var(--accent); color: var(--accent); background: var(--accent-soft);">📋 複製組合字串 (手動貼給其他 AI)</button>
+          </div>
+
+          <div class="field">
+            <label for="nanoResult">本地 AI 分析結果</label>
+            <textarea id="nanoResult" placeholder="Chrome Gemini Nano 分析結果會投射在此處..." readonly style="height: 180px; background: var(--panel-soft); resize: both;"></textarea>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2 class="panel-title">PWA 狀態</h2>
+        <p class="status-line" id="pwaStatus">正在檢查 service worker。</p>
+        <p class="note">此頁可獨立安裝。完整 PWA 測試請用 localhost 或 HTTPS。</p>
+      </section>
+
+    </section>
+  </main>
+
+  <!-- Copyright Footer -->
+  <footer style="max-width: 1240px; margin: 20px auto; padding: 20px; text-align: center; color: var(--muted); font-size: 13px; border-top: 1px solid var(--line);">
+    <p>Copyright © FALO x TAAT x Force Cheng 2026/6/1. All rights reserved.</p>
+    <p style="margin-top: 4px; font-weight: 600;">此為 AI老師Force Cheng教學示範，如果商業用途請聯繫本人。</p>
+  </footer>
+
+  <!-- Log Drawer Overlay -->
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+
+  <!-- Log Drawer Panel -->
+  <div class="drawer" id="logsDrawer">
+    <div class="drawer-header" style="flex-direction: column; align-items: stretch; gap: 8px;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2>📊 對帳日誌與費率治理</h2>
+        <button class="drawer-close" id="drawerCloseBtn" type="button" aria-label="Close logs drawer">&times;</button>
+      </div>
+      <div class="drawer-tabs">
+        <button id="tabBtnLogs" class="drawer-tab-btn active" type="button">審計日誌</button>
+        <button id="tabBtnPricing" class="drawer-tab-btn" type="button">費率參考表</button>
+      </div>
+    </div>
+    <div class="drawer-body">
+      <!-- 頁籤一：審計日誌 -->
+      <div id="drawerTabContentLogs">
+        <p class="note" style="margin-top: 0; margin-bottom: 15px;">記錄每一次辨識、模板變更與文字操作。資料儲存於瀏覽器本機。</p>
+        <div class="field-group">
+          <div class="actions" style="margin-bottom: 12px; display: flex; gap: 8px; flex-wrap: wrap;">
+            <button class="button" id="exportLogsCsv" type="button">📤 匯出紀錄 (Excel/CSV)</button>
+            <button class="button" id="importLogsCsv" type="button">📥 匯入紀錄 (全覆蓋)</button>
+            <button class="button danger" id="clearLogsBtn" type="button">🗑️ 一鍵清空紀錄</button>
+            <input class="file-input" id="logFileInput" type="file" accept=".csv,text/csv">
+          </div>
+          <div style="max-height: 300px; overflow-y: auto; border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel-soft); margin-bottom: 15px;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 11px; text-align: left;" id="logTable">
+              <thead>
+                <tr style="background: var(--line); position: sticky; top: 0; z-index: 1;">
+                  <th style="padding: 6px 8px; border-bottom: 1px solid var(--line); white-space: nowrap;">交易編號 (ID)</th>
+                  <th style="padding: 6px 8px; border-bottom: 1px solid var(--line); white-space: nowrap;">時間</th>
+                  <th style="padding: 6px 8px; border-bottom: 1px solid var(--line); white-space: nowrap;">動作 / 模型</th>
+                  <th style="padding: 6px 8px; border-bottom: 1px solid var(--line); white-space: nowrap;">Tokens (I/O)</th>
+                  <th style="padding: 6px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; cursor: pointer; user-select: none;" id="costHeader" title="點擊切換顯示幣別">估計費用 (雙幣) 🔄</th>
+                  <th style="padding: 6px 8px; border-bottom: 1px solid var(--line); white-space: nowrap;">耗時</th>
+                  <th style="padding: 6px 8px; border-bottom: 1px solid var(--line); white-space: nowrap;">狀態</th>
+                </tr>
+              </thead>
+              <tbody id="logTableBody" style="cursor: pointer;">
+                <!-- Log rows will go here -->
+              </tbody>
+            </table>
+          </div>
+          
+          <!-- Detailed Audit Log Drawer Panel -->
+          <div id="logDetailView" style="padding: 12px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel); display: none;">
+            <h3 style="margin: 0 0 8px; font-size: 13px; color: var(--accent-strong);">🔍 詳細對帳審計資料 (<span id="detailTxId"></span>)</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; font-size: 12px;">
+              <div><strong>時間戳記：</strong> <span id="detailTime"></span></div>
+              <div><strong>呼叫模型：</strong> <span id="detailModel"></span></div>
+              <div><strong>API 金鑰遮罩：</strong> <span id="detailApiKey"></span></div>
+              <div><strong>HTTP 狀態碼：</strong> <span id="detailHttpStatus"></span></div>
+              <div><strong>API 執行耗時：</strong> <span id="detailLatency"></span> ms</div>
+              <div><strong>影像檔名：</strong> <span id="detailFileName"></span></div>
+              <div><strong>影像原始大小：</strong> <span id="detailOrigSize"></span></div>
+              <div><strong>送出影像大小：</strong> <span id="detailOptSize"></span> (<span id="detailDims"></span>)</div>
+              <div><strong>真實輸入 Tokens：</strong> <span id="detailPromptTokens"></span></div>
+              <div><strong>真實輸出 Tokens：</strong> <span id="detailOutputTokens"></span></div>
+              <div><strong>總共計費 Tokens：</strong> <span id="detailTotalTokens"></span></div>
+              <div><strong>估計計費：</strong> <span id="detailCost"></span> USD (約 NT$ <span id="detailCostTwd"></span>)</div>
+            </div>
+            <div style="margin-top: 10px; font-size: 12px;">
+              <strong>使用的 Prompt 指令：</strong>
+              <pre id="detailPromptText" style="margin: 4px 0 0; padding: 8px; background: var(--panel-soft); border-radius: 4px; overflow-x: auto; white-space: pre-wrap; word-break: break-all; max-height: 80px;"></pre>
+            </div>
+            <div style="margin-top: 10px; font-size: 12px;">
+              <strong>辨識結果 (前 300 字)：</strong>
+              <pre id="detailOcrResult" style="margin: 4px 0 0; padding: 8px; background: var(--panel-soft); border-radius: 4px; overflow-x: auto; white-space: pre-wrap; word-break: break-all; max-height: 80px;"></pre>
+            </div>
+            <div style="margin-top: 10px; font-size: 12px;">
+              <strong>原始 API 回應 JSON (Raw Response)：</strong>
+              <pre id="detailRawResponse" style="margin: 4px 0 0; padding: 8px; background: var(--panel-soft); border-radius: 4px; overflow-x: auto; font-family: monospace; font-size: 10px; max-height: 100px;"></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 頁籤二：費率參考表 -->
+      <div id="drawerTabContentPricing" style="display: none;">
+        <p class="note" style="margin-top: 0; margin-bottom: 12px;">Google Gemini API 官方算力計費費率對照參考。</p>
+        <div style="font-size: 12px; margin-bottom: 12px; padding: 8px; background: var(--panel-soft); border-radius: 4px; border-left: 3px solid var(--accent);">
+          <strong>最新調查時間：</strong>2026-06-02 16:11:15 (台北時間)
+        </div>
+        
+        <div style="overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); margin-bottom: 16px;">
+          <table style="width: 100%; border-collapse: collapse; font-size: 11px; text-align: left;">
+            <thead>
+              <tr style="background: var(--line);">
+                <th style="padding: 8px 10px; border-bottom: 1px solid var(--line); white-space: nowrap;">模型名稱 (Model Identifier)</th>
+                <th style="padding: 8px 10px; border-bottom: 1px solid var(--line); white-space: nowrap;">官方輸入 (USD/1M Tokens)</th>
+                <th style="padding: 8px 10px; border-bottom: 1px solid var(--line); white-space: nowrap;">官方輸出 (USD/1M Tokens)</th>
+                <th style="padding: 8px 10px; border-bottom: 1px solid var(--line); white-space: nowrap;">FALO 估算匯率折合 (TWD/1M)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom: 1px solid var(--line);">
+                <td style="padding: 8px 10px; font-weight: bold; color: var(--accent-strong);">gemini-3.1-flash-lite</td>
+                <td style="padding: 8px 10px; font-family: monospace; font-weight: 600;">$0.0375</td>
+                <td style="padding: 8px 10px; font-family: monospace; font-weight: 600;">$0.1500</td>
+                <td style="padding: 8px 10px; font-family: monospace; color: #115e59; font-weight: bold;">NT$1.1250 / NT$4.5000</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--line);">
+                <td style="padding: 8px 10px; font-weight: bold; color: var(--accent-strong);">gemini-3.5-flash</td>
+                <td style="padding: 8px 10px; font-family: monospace; font-weight: 600;">$0.0750</td>
+                <td style="padding: 8px 10px; font-family: monospace; font-weight: 600;">$0.3000</td>
+                <td style="padding: 8px 10px; font-family: monospace; color: #115e59; font-weight: bold;">NT$2.2500 / NT$9.0000</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--line);">
+                <td style="padding: 8px 10px; font-weight: bold; color: var(--accent-strong);">gemini-2.5-flash-lite</td>
+                <td style="padding: 8px 10px; font-family: monospace; font-weight: 600;">$0.0375</td>
+                <td style="padding: 8px 10px; font-family: monospace; font-weight: 600;">$0.1500</td>
+                <td style="padding: 8px 10px; font-family: monospace; color: #115e59; font-weight: bold;">NT$1.1250 / NT$4.5000</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--line);">
+                <td style="padding: 8px 10px; font-weight: bold; color: var(--accent-strong);">gemini-2.5-flash</td>
+                <td style="padding: 8px 10px; font-family: monospace; font-weight: 600;">$0.0750</td>
+                <td style="padding: 8px 10px; font-family: monospace; font-weight: 600;">$0.3000</td>
+                <td style="padding: 8px 10px; font-family: monospace; color: #115e59; font-weight: bold;">NT$2.2500 / NT$9.0000</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--line);">
+                <td style="padding: 8px 10px; font-weight: bold; color: var(--accent-strong);">gemini-1.5-pro / 2.5-pro</td>
+                <td style="padding: 8px 10px; font-family: monospace; font-weight: 600;">$1.2500</td>
+                <td style="padding: 8px 10px; font-family: monospace; font-weight: 600;">$5.0000</td>
+                <td style="padding: 8px 10px; font-family: monospace; color: #115e59; font-weight: bold;">NT$37.5000 / NT$150.0000</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <div style="background: var(--panel-soft); padding: 12px; border: 1px solid var(--line); border-radius: var(--radius); font-size: 12px; line-height: 1.55; color: var(--text);">
+          <strong style="color: var(--accent-strong);">📊 雙軌計費對帳備忘：</strong>
+          <ul style="margin: 6px 0 0; padding-left: 18px;">
+            <li>後台對帳日誌估算費用計算公式：<br><code>USD 成本 = (Input Tokens * Input USD Rate) + (Output Tokens * Output USD Rate)</code></li>
+            <li>台幣價格參考估計：<code>NTD = USD * 30</code></li>
+            <li>在 API Gateway 發生 <strong>Timeout</strong> 或 <strong>403/500 等連線錯誤</strong> 時，由於無實際算力消耗，計費 Tokens 將歸零，後台對帳金額記為 <code>0.000000</code>，確保內外帳目合規。</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Image Window -->
+  <div class="floating-window" id="floatingWindow">
+    <div class="floating-toolbar">
+      <button class="floating-tool-btn" id="floatingCloseBtn" type="button" aria-label="Close floating preview">&times;</button>
+      <button class="floating-tool-btn" id="floatingZoomOutBtn" type="button" aria-label="Zoom out">-</button>
+      <button class="floating-tool-btn" id="floatingZoomResetBtn" type="button" aria-label="Reset zoom">100%</button>
+      <button class="floating-tool-btn" id="floatingZoomInBtn" type="button" aria-label="Zoom in">+</button>
+      <button class="floating-tool-btn" data-floating-size="small" type="button" aria-label="Small preview window">小</button>
+      <button class="floating-tool-btn" data-floating-size="medium" type="button" aria-label="Medium preview window">中</button>
+      <button class="floating-tool-btn" data-floating-size="large" type="button" aria-label="Large preview window">大</button>
+      <button class="floating-tool-btn" data-floating-size="wide" type="button" aria-label="Wide preview window">滿</button>
+      <label class="floating-opacity-control" for="floatingOpacityRange">
+        透明
+        <input id="floatingOpacityRange" type="range" min="40" max="100" value="96">
+        <span class="floating-opacity-value" id="floatingOpacityValue">96%</span>
+      </label>
+    </div>
+    <div class="floating-title-row" id="floatingTitle">圖片預覽</div>
+    <div class="floating-image-viewport" id="floatingImageViewport">
+      <div class="floating-content" id="floatingContent">
+        <img id="floatingImg" src="" alt="Floating Preview">
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    // Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved.
+    const WATERMARK = "FALO x TAAT x Force Cheng 2026/6/1 (AI老師Force Cheng教學示範，商業用途請聯繫本人)";
+    const STORAGE_KEYS = {
+      templates: "falo_ocr_templates_v01",
+      selectedTemplate: "falo_ocr_selected_template_v01",
+      geminiKey: "falo_ocr_gemini_key_v01",
+      selectedModel: "falo_ocr_selected_model_v01",
+      selectedModelB: "falo_ocr_selected_model_b_v01",
+      selectedLongSide: "falo_ocr_selected_longside_v01",
+      dualOcrMode: "falo_ocr_dual_mode_v01",
+      nanoTemplates: "falo_nano_prompt_templates_v102",
+      selectedNanoTemplate: "falo_nano_selected_template_v101"
+    };
+
+    const DEFAULT_TEMPLATES = [
+      {
+        id: "general-document",
+        title: "一般文件 OCR",
+        description: "適合清楚文件、公告、教材截圖。保留段落與標題。",
+        prompt: "請辨識這張圖片中的文字。請盡量保留原始段落、標題、條列與閱讀順序。若有不確定的字，請以 [?] 標示，不要自行補不存在的內容。",
+        outputFormat: "plain_text",
+        useCase: "文件、公告、教材截圖",
+        status: "stable"
+      },
+      {
+        id: "table-form",
+        title: "表格 / 表單 OCR",
+        description: "適合表格、清單、報價單、欄位式文件。",
+        prompt: "請辨識圖片中的表格或表單內容。請保留欄位名稱、列順序與空白欄位。若欄位不確定，請填入 null 或 [?]。輸出請先給 Markdown 表格，再列出需要人工確認的欄位。",
+        outputFormat: "markdown_table",
+        useCase: "表格、清單、表單",
+        status: "stable"
+      },
+      {
+        id: "handwritten-note",
+        title: "手寫筆記 OCR",
+        description: "適合白板、手寫想法、拍照 idea。",
+        prompt: "請辨識這張手寫筆記或白板照片。請保留原本想法順序，將可辨識內容轉成乾淨文字。不確定的文字請標示 [?]，並在最後列出可能需要人工確認的地方。",
+        outputFormat: "structured_text",
+        useCase: "手寫筆記、白板、拍照 idea",
+        status: "stable"
+      },
+      {
+        id: "historical-document",
+        title: "歷史文件 OCR",
+        description: "適合老文件、掃描檔、低解析文字。",
+        prompt: "請以保守方式辨識這張歷史文件或掃描文件。請不要猜測缺失文字。請保留原始斷行、頁眉頁腳、日期、人名、地名與機關名稱。無法確認處請用 [?]，並列出辨識風險。",
+        outputFormat: "conservative_text",
+        useCase: "歷史文件、掃描檔、低解析文件",
+        status: "stable"
+      },
+      {
+        id: "receipt-evidence",
+        title: "單據 / 證據 OCR",
+        description: "適合發票、收據、憑證、稽核截圖。",
+        prompt: "請辨識圖片中的單據或證據資訊。請優先抽出日期、單位、金額、品項、編號、備註與可疑不清楚處。輸出請包含 rawText、fields、riskNotes、humanReviewPoints。不要保存或推測敏感資料以外的內容。",
+        outputFormat: "json_like",
+        useCase: "發票、收據、憑證、稽核截圖",
+        status: "stable"
+      }
+    ];
+
+    const DEFAULT_NANO_TEMPLATES = [
+      {
+        id: "compare-ab",
+        title: "比對結果 A 與 B 的文字差異",
+        description: "雙 OCR 模式：比較模型 A 與模型 B 的辨識差異。",
+        prompt: "請比對以下兩個 OCR 辨識結果的文字差異。\n\n【辨識模型資訊】\n- 結果 A 模型：{{MODEL_A}}\n- 結果 B 模型：{{MODEL_B}}\n\n請詳細列出不同點與字元遺漏或辨識錯字，並「盡量以 Markdown 表格」呈現差異對照（例如欄位包含「項目/差異處」、「結果 A ({{MODEL_A}})」、「結果 B ({{MODEL_B}})」、「分析備註」）。\n\n【結果 A】\n{{RESULT_A}}\n\n【結果 B】\n{{RESULT_B}}",
+        status: "stable"
+      },
+      {
+        id: "summary-a",
+        title: "摘要提取與整理",
+        description: "單 OCR 或雙 OCR：先整理結果 A 的重點。",
+        prompt: "請針對辨識出來的文字進行摘要整理，並以乾淨的結構化條列格式輸出關鍵資訊：\n\n【辨識文字】\n{{RESULT_A}}",
+        status: "stable"
+      },
+      {
+        id: "traditional-correction",
+        title: "繁簡轉換與校正",
+        description: "將 OCR 結果轉為繁體中文，並修正常見辨識錯字。",
+        prompt: "請將以下辨識出的文字統一轉換為繁體中文，修正明顯的文字錯誤與語病，並保持原文段落結構：\n\n【辨識文字】\n{{RESULT_A}}",
+        status: "stable"
+      },
+      {
+        id: "merged-output",
+        title: "匯總輸出",
+        description: "比對 OCR 結果 A/B 後，彙整出最可能、最適合書面使用的版本。",
+        prompt: "請比對以下兩個 OCR 辨識結果的文字後，彙整出最可能的版本。\n\n【辨識模型資訊】\n- 結果 A 模型：{{MODEL_A}}\n- 結果 B 模型：{{MODEL_B}}\n\n【結果 A】\n{{RESULT_A}}\n\n【結果 B】\n{{RESULT_B}}\n\n請輸出：\n1. 最可能的完整整合版本\n2. 有疑義或需要人工確認的地方\n3. A/B 差異對整合判斷的影響",
+        status: "stable"
+      }
+    ];
+
+    let templates = loadTemplates();
+    let nanoTemplates = loadNanoTemplates();
+    let deferredInstallPrompt = null;
+    let selectedImageFile = null;
+    let activeCurrencyMode = "dual";
+    let dualOcrMode = false;
+    let nanoSession = null;
+    let previewImageUrl = "";
+    let previewImageName = "圖片預覽";
+    let floatingImageOrientation = "neutral";
+    let activeFloatingSize = "medium";
+    let floatingNaturalWidth = 0;
+    let floatingNaturalHeight = 0;
+    let floatingZoom = 1;
+    const floatingZoomSteps = [0.10, 0.20, 0.50, 0.70, 1, 1.50, 2, 3, 4];
+    const floatingSizePresets = {
+      portrait: {
+        small: { width: 420, height: 560 },
+        medium: { width: 560, height: 760 },
+        large: { width: 720, height: 920 }
+      },
+      landscape: {
+        small: { width: 560, height: 420 },
+        medium: { width: 860, height: 560 },
+        large: { width: 1060, height: 700 }
+      },
+      neutral: {
+        small: { width: 420, height: 320 },
+        medium: { width: 720, height: 520 },
+        large: { width: 960, height: 680 }
+      },
+      wide: { widthRatio: 0.92, heightRatio: 0.82 }
+    };
+
+    const els = {
+      installButton: document.getElementById("installButton"),
+      imageInput: document.getElementById("imageInput"),
+      imagePreview: document.getElementById("imagePreview"),
+      geminiKey: document.getElementById("geminiKey"),
+      saveKeyBtn: document.getElementById("saveKeyBtn"),
+      clearKeyBtn: document.getElementById("clearKeyBtn"),
+      modelSelect: document.getElementById("modelSelect"),
+      modelSelectBContainer: document.getElementById("modelSelectBContainer"),
+      modelSelectB: document.getElementById("modelSelectB"),
+      longSideSelect: document.getElementById("longSideSelect"),
+      runOcrButton: document.getElementById("runOcrButton"),
+      templateSelect: document.getElementById("templateSelect"),
+      templateTitle: document.getElementById("templateTitle"),
+      templateDescInput: document.getElementById("templateDescInput"),
+      templateStatus: document.getElementById("templateStatus"),
+      templateDescription: document.getElementById("templateDescription"),
+      saveTemplateButton: document.getElementById("saveTemplateButton"),
+      createTemplateButton: document.getElementById("createTemplateButton"),
+      deleteTemplateButton: document.getElementById("deleteTemplateButton"),
+      loadPresetButton: document.getElementById("loadPresetButton"),
+      restoreDefaultsButton: document.getElementById("restoreDefaultsButton"),
+      exportCsvButton: document.getElementById("exportCsvButton"),
+      importTemplateButton: document.getElementById("importTemplateButton"),
+      templateFileInput: document.getElementById("templateFileInput"),
+      promptTemplate: document.getElementById("promptTemplate"),
+      ocrResultsContainer: document.getElementById("ocrResultsContainer"),
+      fieldResultA: document.getElementById("fieldResultA"),
+      labelResultA: document.getElementById("labelResultA"),
+      ocrResult: document.getElementById("ocrResult"),
+      fieldResultB: document.getElementById("fieldResultB"),
+      ocrResultB: document.getElementById("ocrResultB"),
+      insertPromptButton: document.getElementById("insertPromptButton"),
+      copyResultButton: document.getElementById("copyResultButton"),
+      copyPromptButton: document.getElementById("copyPromptButton"),
+      clearResultButton: document.getElementById("clearResultButton"),
+      exportLogsCsv: document.getElementById("exportLogsCsv"),
+      importLogsCsv: document.getElementById("importLogsCsv"),
+      clearLogsBtn: document.getElementById("clearLogsBtn"),
+      logFileInput: document.getElementById("logFileInput"),
+      logTableBody: document.getElementById("logTableBody"),
+      pwaStatus: document.getElementById("pwaStatus"),
+      toast: document.getElementById("toast"),
+      topbarDualOcrBtn: document.getElementById("topbarDualOcrBtn"),
+      topbarLogsBtn: document.getElementById("topbarLogsBtn"),
+      openLogsDrawerBtn: document.getElementById("openLogsDrawerBtn"),
+      drawerCloseBtn: document.getElementById("drawerCloseBtn"),
+      drawerOverlay: document.getElementById("drawerOverlay"),
+      logsDrawer: document.getElementById("logsDrawer"),
+      tabBtnLogs: document.getElementById("tabBtnLogs"),
+      tabBtnPricing: document.getElementById("tabBtnPricing"),
+      drawerTabContentLogs: document.getElementById("drawerTabContentLogs"),
+      drawerTabContentPricing: document.getElementById("drawerTabContentPricing"),
+      floatingWindow: document.getElementById("floatingWindow"),
+      floatingCloseBtn: document.getElementById("floatingCloseBtn"),
+      floatingImageViewport: document.getElementById("floatingImageViewport"),
+      floatingContent: document.getElementById("floatingContent"),
+      floatingImg: document.getElementById("floatingImg"),
+      floatingTitle: document.getElementById("floatingTitle"),
+      floatingZoomOutBtn: document.getElementById("floatingZoomOutBtn"),
+      floatingZoomResetBtn: document.getElementById("floatingZoomResetBtn"),
+      floatingZoomInBtn: document.getElementById("floatingZoomInBtn"),
+      floatingOpacityRange: document.getElementById("floatingOpacityRange"),
+      floatingOpacityValue: document.getElementById("floatingOpacityValue"),
+      // Nano Elements
+      nanoStatusBadge: document.getElementById("nanoStatusBadge"),
+      detectNanoBtn: document.getElementById("detectNanoBtn"),
+      downloadNanoBtn: document.getElementById("downloadNanoBtn"),
+      resetNanoBtn: document.getElementById("resetNanoBtn"),
+      nanoProgressContainer: document.getElementById("nanoProgressContainer"),
+      nanoProgressBarFill: document.getElementById("nanoProgressBarFill"),
+      nanoProgressText: document.getElementById("nanoProgressText"),
+      nanoPromptSelect: document.getElementById("nanoPromptSelect"),
+      nanoTemplateTitle: document.getElementById("nanoTemplateTitle"),
+      nanoTemplateDescription: document.getElementById("nanoTemplateDescription"),
+      nanoPromptInput: document.getElementById("nanoPromptInput"),
+      saveNanoTemplateButton: document.getElementById("saveNanoTemplateButton"),
+      createNanoTemplateButton: document.getElementById("createNanoTemplateButton"),
+      deleteNanoTemplateButton: document.getElementById("deleteNanoTemplateButton"),
+      restoreNanoTemplatesButton: document.getElementById("restoreNanoTemplatesButton"),
+      runNanoButton: document.getElementById("runNanoButton"),
+      runModelAAnalysisButton: document.getElementById("runModelAAnalysisButton"),
+      copyNanoPromptBtn: document.getElementById("copyNanoPromptBtn"),
+      nanoResult: document.getElementById("nanoResult")
+    };
+
+    function clone(value) {
+      return JSON.parse(JSON.stringify(value));
+    }
+
+    function loadTemplates() {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEYS.templates);
+        const parsed = stored ? JSON.parse(stored) : null;
+        return Array.isArray(parsed) && parsed.length ? parsed : clone(DEFAULT_TEMPLATES);
+      } catch (error) {
+        return clone(DEFAULT_TEMPLATES);
+      }
+    }
+
+    function saveTemplates() {
+      localStorage.setItem(STORAGE_KEYS.templates, JSON.stringify(templates));
+    }
+
+    function loadNanoTemplates() {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEYS.nanoTemplates);
+        const parsed = stored ? JSON.parse(stored) : null;
+        return Array.isArray(parsed) && parsed.length ? parsed : clone(DEFAULT_NANO_TEMPLATES);
+      } catch (error) {
+        return clone(DEFAULT_NANO_TEMPLATES);
+      }
+    }
+
+    function saveNanoTemplates() {
+      localStorage.setItem(STORAGE_KEYS.nanoTemplates, JSON.stringify(nanoTemplates));
+    }
+
+    function selectedNanoTemplate() {
+      return nanoTemplates.find((template) => template.id === els.nanoPromptSelect.value) || nanoTemplates[0];
+    }
+
+    function renderNanoTemplates() {
+      const selected = localStorage.getItem(STORAGE_KEYS.selectedNanoTemplate) || nanoTemplates[0]?.id || "";
+      els.nanoPromptSelect.replaceChildren();
+      nanoTemplates.forEach((template) => {
+        const option = document.createElement("option");
+        option.value = template.id;
+        option.textContent = template.title;
+        els.nanoPromptSelect.append(option);
+      });
+      if (nanoTemplates.some((template) => template.id === selected)) {
+        els.nanoPromptSelect.value = selected;
+      }
+      loadSelectedNanoTemplate();
+    }
+
+    function loadSelectedNanoTemplate() {
+      const template = selectedNanoTemplate();
+      if (!template) return;
+      els.nanoTemplateTitle.value = template.title || "";
+      els.nanoTemplateDescription.value = template.description || "";
+      els.nanoPromptInput.value = template.prompt || "";
+      localStorage.setItem(STORAGE_KEYS.selectedNanoTemplate, template.id);
+    }
+
+    function saveCurrentNanoTemplate() {
+      const template = selectedNanoTemplate();
+      if (!template) return;
+      const title = els.nanoTemplateTitle.value.trim();
+      const prompt = els.nanoPromptInput.value.trim();
+      if (!title || !prompt) {
+        showToast("分析 Prompt 模板需要名稱與內容。");
+        return;
+      }
+      template.title = title;
+      template.description = els.nanoTemplateDescription.value.trim();
+      template.prompt = prompt;
+      template.status = template.status || "stable";
+      saveNanoTemplates();
+      renderNanoTemplates();
+      els.nanoPromptSelect.value = template.id;
+      loadSelectedNanoTemplate();
+      showToast("已儲存分析 Prompt 模板。");
+      addLogEntry("儲存分析 Prompt", { model: title, rawResponse: `ID: ${template.id}` });
+    }
+
+    function createNewNanoTemplate() {
+      const title = els.nanoTemplateTitle.value.trim() || "自訂分析 Prompt";
+      const prompt = els.nanoPromptInput.value.trim();
+      if (!prompt) {
+        showToast("請先輸入分析 Prompt 內容。");
+        return;
+      }
+      const baseId = slugify(title, "nano-analysis");
+      const existingIds = nanoTemplates.map((template) => template.id);
+      let id = baseId;
+      let index = 2;
+      while (existingIds.includes(id)) {
+        id = `${baseId}-${index}`;
+        index += 1;
+      }
+      const template = {
+        id,
+        title,
+        description: els.nanoTemplateDescription.value.trim(),
+        prompt,
+        status: "custom"
+      };
+      nanoTemplates.push(template);
+      saveNanoTemplates();
+      renderNanoTemplates();
+      els.nanoPromptSelect.value = id;
+      loadSelectedNanoTemplate();
+      showToast("已新增分析 Prompt 模板。");
+      addLogEntry("新增分析 Prompt", { model: title, rawResponse: `ID: ${id}` });
+    }
+
+    function deleteCurrentNanoTemplate() {
+      const template = selectedNanoTemplate();
+      if (!template) return;
+      if (nanoTemplates.length <= 1) {
+        showToast("至少需要保留一組分析 Prompt 模板。");
+        return;
+      }
+      const confirmed = window.confirm(`確定刪除分析 Prompt 模板「${template.title}」？`);
+      if (!confirmed) return;
+      nanoTemplates = nanoTemplates.filter((item) => item.id !== template.id);
+      saveNanoTemplates();
+      localStorage.removeItem(STORAGE_KEYS.selectedNanoTemplate);
+      renderNanoTemplates();
+      showToast("已刪除分析 Prompt 模板。");
+      addLogEntry("刪除分析 Prompt", { model: template.title, rawResponse: `ID: ${template.id}` });
+    }
+
+    function restoreDefaultNanoTemplates() {
+      const confirmed = window.confirm("確定還原分析 Prompt 預設？目前分析模板清單會被全覆蓋。");
+      if (!confirmed) return;
+      nanoTemplates = clone(DEFAULT_NANO_TEMPLATES);
+      saveNanoTemplates();
+      localStorage.removeItem(STORAGE_KEYS.selectedNanoTemplate);
+      renderNanoTemplates();
+      showToast("已還原分析 Prompt 預設。");
+      addLogEntry("還原分析 Prompt", { model: "DEFAULT_NANO_TEMPLATES", rawResponse: `${nanoTemplates.length} 組預設` });
+    }
+
+    function calculateCost(model, inputTokens, outputTokens) {
+      let inputRate = 0.075 / 1000000;
+      let outputRate = 0.30 / 1000000;
+      
+      if (model.includes("gemini-3.5-flash")) {
+        inputRate = 0.075 / 1000000;
+        outputRate = 0.30 / 1000000;
+      } else if (model.includes("gemini-3.1-flash-lite")) {
+        inputRate = 0.075 / 1000000;
+        outputRate = 0.30 / 1000000;
+      }
+      
+      return (inputTokens * inputRate) + (outputTokens * outputRate);
+    }
+
+    function initDraggableWindow(el) {
+      // Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved.
+      let isDragging = false;
+      let startX = 0;
+      let startY = 0;
+      let initialLeft = 0;
+      let initialTop = 0;
+
+      el.addEventListener("mousedown", (e) => {
+        // Drag from the toolbar/title area only; keep controls and scroll viewport usable.
+        if (!e.target.closest(".floating-toolbar") && !e.target.closest(".floating-title-row")) return;
+        if (e.target.closest(".floating-tool-btn") || e.target.closest("input")) return;
+        
+        // Prevent dragging when resizing at the bottom-right corner
+        const rect = el.getBoundingClientRect();
+        if (e.clientX > rect.right - 20 && e.clientY > rect.bottom - 20) {
+          return;
+        }
+
+        isDragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        initialLeft = el.offsetLeft;
+        initialTop = el.offsetTop;
+        
+        el.style.transition = "none";
+        document.addEventListener("mousemove", onMouseMove);
+        document.addEventListener("mouseup", onMouseUp);
+        e.preventDefault();
+      });
+
+      function onMouseMove(e) {
+        if (!isDragging) return;
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+        el.style.left = `${initialLeft + dx}px`;
+        el.style.top = `${initialTop + dy}px`;
+        el.style.right = "auto";
+        el.style.bottom = "auto";
+      }
+
+      function onMouseUp() {
+        isDragging = false;
+        document.removeEventListener("mousemove", onMouseMove);
+        document.removeEventListener("mouseup", onMouseUp);
+      }
+    }
+
+    function addLogEntry(action, details = {}) {
+      // Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved.
+      const now = new Date();
+      const ms = String(now.getMilliseconds()).padStart(3, "0");
+      const timestamp = now.toLocaleString("zh-TW", { timeZone: "Asia/Taipei", hour12: false }) + "." + ms;
+      
+      const formatter = new Intl.DateTimeFormat("zh-TW", {
+        timeZone: "Asia/Taipei",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false
+      });
+      const parts = formatter.formatToParts(now);
+      const part = (type) => parts.find(p => p.type === type).value;
+      const yyyymmdd = `${part("year")}${part("month")}${part("day")}`;
+      const hhmmss = `${part("hour")}${part("minute")}${part("second")}`;
+      const rand = Math.floor(1000 + Math.random() * 9000);
+      const id = `TX-${yyyymmdd}-${hhmmss}-${rand}`;
+      
+      const entry = {
+        id,
+        timestamp,
+        action,
+        model: details.model || "",
+        apiKeyMasked: details.apiKeyMasked || "",
+        originalFileName: details.originalFileName || "",
+        originalFileSize: details.originalFileSize || 0,
+        preparedFileSize: details.preparedFileSize || 0,
+        imageWidth: details.imageWidth || 0,
+        imageHeight: details.imageHeight || 0,
+        promptSnippet: details.promptSnippet || "",
+        ocrResultSnippet: details.ocrResultSnippet || "",
+        latencyMs: details.latencyMs || 0,
+        httpStatus: details.httpStatus || 200,
+        promptTokens: details.promptTokens || 0,
+        candidatesTokens: details.candidatesTokens || 0,
+        totalTokens: details.totalTokens || 0,
+        estCostUsd: details.estCostUsd || 0,
+        rawResponse: details.rawResponse || "",
+        rawRequest: details.rawRequest || ""
+      };
+      
+      let logs = [];
+      try {
+        const stored = localStorage.getItem("falo_ocr_logs_v01");
+        if (stored) logs = JSON.parse(stored);
+      } catch (e) {
+        logs = [];
+      }
+      
+      if (!Array.isArray(logs)) logs = [];
+      logs.unshift(entry);
+      
+      if (logs.length > 1000) logs = logs.slice(0, 1000);
+      
+      localStorage.setItem("falo_ocr_logs_v01", JSON.stringify(logs));
+      renderLogs();
+    }
+
+    function showDrawerTab(tabName) {
+      if (tabName === 'logs') {
+        els.tabBtnLogs.classList.add('active');
+        els.tabBtnPricing.classList.remove('active');
+        els.drawerTabContentLogs.style.display = 'block';
+        els.drawerTabContentPricing.style.display = 'none';
+      } else if (tabName === 'pricing') {
+        els.tabBtnLogs.classList.remove('active');
+        els.tabBtnPricing.classList.add('active');
+        els.drawerTabContentLogs.style.display = 'none';
+        els.drawerTabContentPricing.style.display = 'block';
+      }
+    }
+
+    function openLogsDrawer() {
+      els.logsDrawer.classList.add("active");
+      els.drawerOverlay.classList.add("active");
+      showDrawerTab('logs');
+    }
+
+    function closeLogsDrawer() {
+      els.logsDrawer.classList.remove("active");
+      els.drawerOverlay.classList.remove("active");
+    }
+
+    function renderLogs() {
+      // Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved.
+      let logs = [];
+      try {
+        const stored = localStorage.getItem("falo_ocr_logs_v01");
+        if (stored) logs = JSON.parse(stored);
+      } catch (e) {
+        logs = [];
+      }
+      
+      if (!Array.isArray(logs)) logs = [];
+      
+      const costHeader = document.getElementById("costHeader");
+      if (costHeader) {
+        if (activeCurrencyMode === "dual") {
+          costHeader.textContent = "估計費用 (雙幣) 🔄";
+        } else if (activeCurrencyMode === "usd") {
+          costHeader.textContent = "估計費用 (USD) 🔄";
+        } else {
+          costHeader.textContent = "估計費用 (TWD) 🔄";
+        }
+      }
+      
+      const tbody = els.logTableBody;
+      if (!tbody) return;
+      tbody.replaceChildren();
+      
+      if (logs.length === 0) {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td colspan="7" style="text-align: center; color: var(--muted); padding: 15px;">暫無操作紀錄。</td>`;
+        tbody.append(tr);
+        return;
+      }
+      
+      logs.forEach((log) => {
+        const tr = document.createElement("tr");
+        tr.style.borderBottom = "1px solid var(--line)";
+        tr.addEventListener("click", () => showLogDetail(log.id));
+        
+        const isError = log.action.includes("失敗");
+        const isOcr = log.action.includes("Gemini");
+        
+        let statusBadge = "";
+        if (isError) {
+          statusBadge = `<span style="color: #be123c; background: #ffe4e6; padding: 2px 6px; border-radius: 4px; font-weight: 800;">Error</span>`;
+        } else if (isOcr) {
+          statusBadge = `<span style="color: #0f766e; background: #ccfbf1; padding: 2px 6px; border-radius: 4px; font-weight: 800;">${log.httpStatus || 200} OK</span>`;
+        } else {
+          statusBadge = `<span style="color: #1d4ed8; background: #dbeafe; padding: 2px 6px; border-radius: 4px; font-weight: 800;">SYSTEM</span>`;
+        }
+          
+        const usdCost = log.estCostUsd || 0;
+        const twdCost = usdCost * 30;
+        const tokenStr = `${log.promptTokens}/${log.candidatesTokens}`;
+        
+        let costDisplay = "";
+        if (activeCurrencyMode === "dual") {
+          costDisplay = `$${usdCost.toFixed(6)}<br><small style="color: var(--muted); font-weight: normal;">NT$${twdCost.toFixed(4)}</small>`;
+        } else if (activeCurrencyMode === "usd") {
+          costDisplay = `$${usdCost.toFixed(6)}`;
+        } else {
+          costDisplay = `NT$${twdCost.toFixed(4)}`;
+        }
+        
+        tr.innerHTML = `
+          <td style="padding: 8px 10px; font-family: monospace; font-weight: 600; color: var(--muted);">${log.id}</td>
+          <td style="padding: 8px 10px; color: var(--muted); white-space: nowrap;">${log.timestamp}</td>
+          <td style="padding: 8px 10px; font-weight: 800; color: var(--text);">${log.action}<br><small style="color: var(--muted);">${log.model || "N/A"}</small></td>
+          <td style="padding: 8px 10px; font-family: monospace;">${tokenStr}</td>
+          <td style="padding: 8px 10px; font-family: monospace; font-weight: 700; color: #115e59; line-height: 1.2;">
+            ${costDisplay}
+          </td>
+          <td style="padding: 8px 10px; font-family: monospace; color: var(--muted);">${log.latencyMs ? (log.latencyMs + " ms") : "N/A"}</td>
+          <td style="padding: 8px 10px; white-space: nowrap;">${statusBadge}</td>
+        `;
+        tbody.append(tr);
+      });
+    }
+
+    function showLogDetail(id) {
+      // Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved.
+      let logs = [];
+      try {
+        const stored = localStorage.getItem("falo_ocr_logs_v01");
+        if (stored) logs = JSON.parse(stored);
+      } catch (e) {}
+      
+      const log = logs.find((l) => l.id === id);
+      if (!log) return;
+      
+      document.getElementById("detailTxId").textContent = log.id || "";
+      document.getElementById("detailTime").textContent = log.timestamp || "";
+      document.getElementById("detailModel").textContent = log.model || "";
+      document.getElementById("detailApiKey").textContent = log.apiKeyMasked || "N/A";
+      document.getElementById("detailHttpStatus").textContent = log.httpStatus || "N/A";
+      document.getElementById("detailLatency").textContent = log.latencyMs || "0";
+      document.getElementById("detailFileName").textContent = log.originalFileName || "N/A";
+      document.getElementById("detailOrigSize").textContent = log.originalFileSize ? (log.originalFileSize + " bytes") : "N/A";
+      document.getElementById("detailOptSize").textContent = log.preparedFileSize ? (log.preparedFileSize + " bytes") : "N/A";
+      document.getElementById("detailDims").textContent = (log.imageWidth && log.imageHeight) ? `${log.imageWidth}x${log.imageHeight}` : "N/A";
+      document.getElementById("detailPromptTokens").textContent = log.promptTokens || "0";
+      document.getElementById("detailOutputTokens").textContent = log.candidatesTokens || "0";
+      document.getElementById("detailTotalTokens").textContent = log.totalTokens || "0";
+      const usdCost = log.estCostUsd || 0;
+      const twdCost = usdCost * 30;
+      document.getElementById("detailCost").textContent = usdCost.toFixed(8);
+      document.getElementById("detailCostTwd").textContent = twdCost.toFixed(6);
+      
+      document.getElementById("detailPromptText").textContent = log.promptSnippet || "N/A";
+      document.getElementById("detailOcrResult").textContent = log.ocrResultSnippet || "N/A";
+      document.getElementById("detailRawResponse").textContent = log.rawResponse ? JSON.stringify(JSON.parse(log.rawResponse), null, 2) : "N/A";
+      
+      document.getElementById("logDetailView").style.display = "block";
+    }
+
+    function exportLogsToCsv() {
+      // Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved.
+      let logs = [];
+      try {
+        const stored = localStorage.getItem("falo_ocr_logs_v01");
+        if (stored) logs = JSON.parse(stored);
+      } catch (e) {}
+      
+      if (!Array.isArray(logs) || logs.length === 0) {
+        showToast("提示：目前無任何操作紀錄可匯出。");
+        return;
+      }
+      
+      const columns = [
+        "id", "timestamp", "action", "model", "apiKeyMasked", 
+        "originalFileName", "originalFileSize", "preparedFileSize", 
+        "imageWidth", "imageHeight", "promptSnippet", "ocrResultSnippet", 
+        "latencyMs", "httpStatus", "promptTokens", "candidatesTokens", 
+        "totalTokens", "estCostUsd", "rawResponse", "rawRequest"
+      ];
+      
+      const headers = [
+        "交易編號(ID)", "時間戳記(Timestamp)", "動作(Action)", "模型(Model)", "金鑰遮罩(APIKeyMasked)", 
+        "原始檔名(OriginalFileName)", "原始大小(OriginalFileSize)", "送出大小(PreparedFileSize)", 
+        "影像寬度(ImageWidth)", "影像高度(ImageHeight)", "Prompt內容(PromptSnippet)", "辨識結果(OcrResultSnippet)", 
+        "耗時毫秒(LatencyMs)", "HTTP狀態碼(HttpStatus)", "輸入Tokens(PromptTokens)", "輸出Tokens(CandidatesTokens)", 
+        "總共Tokens(TotalTokens)", "估計費用USD(EstCostUsd)", "API回應Payload(RawResponse)", "API請求Payload(RawRequest)"
+      ];
+      
+      const lines = [
+        headers.join(","),
+        ...logs.map((log) => columns.map((col) => escapeCsv(log[col])).join(","))
+      ];
+      
+      downloadText(lines.join("\n"), "falo_ocr_reconciliation_audit_logs.csv", "text/csv");
+      showToast("審計對帳紀錄匯出成功！");
+      addLogEntry("匯出對帳日誌", { model: "CSV", rawResponse: `${logs.length} 筆紀錄` });
+    }
+
+    function importLogsFromCsv(file) {
+      // Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved.
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const text = String(reader.result || "");
+          const rows = parseCsv(text);
+          const headers = rows.shift()?.map((h) => h.trim()) || [];
+          
+          const idx = (names) => {
+            for (let name of names) {
+              const i = headers.indexOf(name);
+              if (i !== -1) return i;
+            }
+            return -1;
+          };
+          
+          const idI = idx(["交易編號(ID)", "id", "TransactionID"]);
+          const timeI = idx(["時間戳記(Timestamp)", "時間", "timestamp"]);
+          const actionI = idx(["動作(Action)", "動作", "action"]);
+          const modelI = idx(["模型(Model)", "模型", "model"]);
+          const keyI = idx(["金鑰遮罩(APIKeyMasked)", "apiKeyMasked"]);
+          const origNameI = idx(["原始檔名(OriginalFileName)", "originalFileName"]);
+          const origSizeI = idx(["原始大小(OriginalFileSize)", "originalFileSize"]);
+          const preparedSizeI = idx(["送出大小(PreparedFileSize)", "preparedFileSize"]);
+          const wI = idx(["影像寬度(ImageWidth)", "imageWidth"]);
+          const hI = idx(["影像高度(ImageHeight)", "imageHeight"]);
+          const promptI = idx(["Prompt內容(PromptSnippet)", "promptSnippet"]);
+          const ocrI = idx(["辨識結果(OcrResultSnippet)", "ocrResultSnippet"]);
+          const latI = idx(["耗時毫秒(LatencyMs)", "latencyMs"]);
+          const statusI = idx(["HTTP狀態碼(HttpStatus)", "httpStatus"]);
+          const pTokI = idx(["輸入Tokens(PromptTokens)", "promptTokens"]);
+          const cTokI = idx(["輸出Tokens(CandidatesTokens)", "candidatesTokens"]);
+          const tTokI = idx(["總共Tokens(TotalTokens)", "totalTokens"]);
+          const costI = idx(["估計費用USD(EstCostUsd)", "estCostUsd"]);
+          const rawRespI = idx(["API回應Payload(RawResponse)", "rawResponse"]);
+          const rawReqI = idx(["API請求Payload(RawRequest)", "rawRequest"]);
+          
+          if (timeI === -1 || actionI === -1) {
+            throw new Error("CSV 格式不符，必須包含時間與動作欄位。");
+          }
+          
+          const importedLogs = rows.map((row) => ({
+            id: idI !== -1 ? (row[idI] || "") : "TX-IMPORTED",
+            timestamp: row[timeI] || "",
+            action: row[actionI] || "",
+            model: modelI !== -1 ? (row[modelI] || "") : "",
+            apiKeyMasked: keyI !== -1 ? (row[keyI] || "") : "",
+            originalFileName: origNameI !== -1 ? (row[origNameI] || "") : "",
+            originalFileSize: origSizeI !== -1 ? Number(row[origSizeI] || 0) : 0,
+            preparedFileSize: preparedSizeI !== -1 ? Number(row[preparedSizeI] || 0) : 0,
+            imageWidth: wI !== -1 ? Number(row[wI] || 0) : 0,
+            imageHeight: hI !== -1 ? Number(row[hI] || 0) : 0,
+            promptSnippet: promptI !== -1 ? (row[promptI] || "") : "",
+            ocrResultSnippet: ocrI !== -1 ? (row[ocrI] || "") : "",
+            latencyMs: latI !== -1 ? Number(row[latI] || 0) : 0,
+            httpStatus: statusI !== -1 ? Number(row[statusI] || 200) : 200,
+            promptTokens: pTokI !== -1 ? Number(row[pTokI] || 0) : 0,
+            candidatesTokens: cTokI !== -1 ? Number(row[cTokI] || 0) : 0,
+            totalTokens: tTokI !== -1 ? Number(row[tTokI] || 0) : 0,
+            estCostUsd: costI !== -1 ? Number(row[costI] || 0) : 0,
+            rawResponse: rawRespI !== -1 ? (row[rawRespI] || "") : "",
+            rawRequest: rawReqI !== -1 ? (row[rawReqI] || "") : ""
+          })).filter((log) => log.timestamp && log.action);
+          
+          if (!importedLogs.length) {
+            throw new Error("沒有載入任何有效的操作紀錄。");
+          }
+          
+          localStorage.setItem("falo_ocr_logs_v01", JSON.stringify(importedLogs));
+          renderLogs();
+          showToast("對帳審計紀錄匯入成功（全覆蓋）。");
+          addLogEntry("匯入對帳日誌", { model: "CSV 匯入", rawResponse: `覆蓋載入 ${importedLogs.length} 筆` });
+        } catch (error) {
+          showToast(error.message || "匯入日誌失敗。");
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function clearLogs() {
+      // Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved.
+      const confirmed = window.confirm("確定要清空所有的操作紀錄嗎？此動作將清除本機所有日誌。");
+      if (!confirmed) return;
+      localStorage.removeItem("falo_ocr_logs_v01");
+      renderLogs();
+      if (document.getElementById("logDetailView")) {
+        document.getElementById("logDetailView").style.display = "none";
+      }
+      showToast("操作紀錄已清空。");
+    }
+
+    function renderTemplates() {
+      const selected = localStorage.getItem(STORAGE_KEYS.selectedTemplate) || templates[0]?.id || "";
+      els.templateSelect.replaceChildren();
+      templates.forEach((template) => {
+        const option = document.createElement("option");
+        option.value = template.id;
+        option.textContent = template.title;
+        els.templateSelect.append(option);
+      });
+      if (templates.some((template) => template.id === selected)) {
+        els.templateSelect.value = selected;
+      }
+      updateTemplateMeta();
+      // Ensure the prompt box matches the rendered selection
+      const activeTemplate = selectedTemplate();
+      if (activeTemplate && !els.promptTemplate.value) {
+        els.promptTemplate.value = activeTemplate.prompt || "";
+      }
+    }
+
+    function selectedTemplate() {
+      return templates.find((template) => template.id === els.templateSelect.value) || templates[0];
+    }
+
+    function updateTemplateMeta() {
+      const template = selectedTemplate();
+      if (!template) {
+        els.templateTitle.value = "";
+        els.templateDescInput.value = "";
+        els.templateStatus.value = "";
+        els.templateDescription.textContent = "尚未載入 OCR Prompt 模板。";
+        return;
+      }
+      els.templateTitle.value = template.title || "";
+      els.templateDescInput.value = template.description || "";
+      els.templateStatus.value = template.status || "stable";
+      els.templateDescription.textContent = `用途：${template.useCase || template.description || "未設定"} (格式: ${template.outputFormat || "plain_text"})`;
+      localStorage.setItem(STORAGE_KEYS.selectedTemplate, template.id);
+    }
+
+    function onTemplateSelectionChange() {
+      const template = selectedTemplate();
+      if (!template) return;
+      els.promptTemplate.value = template.prompt || "";
+      updateTemplateMeta();
+    }
+
+    function loadSelectedPreset() {
+      const template = selectedTemplate();
+      if (!template) return;
+      els.promptTemplate.value = template.prompt || "";
+      updateTemplateMeta();
+      showToast(`已帶入：${template.title}`);
+    }
+
+    function saveCurrentTemplate() {
+      // Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved.
+      const template = selectedTemplate();
+      if (!template) {
+        showToast("錯誤：無效的模板選取。");
+        return;
+      }
+      
+      const newTitle = els.templateTitle.value.trim();
+      const newDesc = els.templateDescInput.value.trim();
+      const newStatus = els.templateStatus.value.trim();
+      const newPrompt = els.promptTemplate.value.trim();
+      
+      if (!newTitle) {
+        showToast("錯誤：模板名稱不能為空。");
+        return;
+      }
+      if (!newPrompt) {
+        showToast("錯誤：Prompt 內容不能為空。");
+        return;
+      }
+      
+      template.title = newTitle;
+      template.description = newDesc;
+      template.status = newStatus;
+      template.prompt = newPrompt;
+      
+      saveTemplates();
+      renderTemplates();
+      showToast(`已成功儲存模板修改：${newTitle}`);
+      addLogEntry("儲存模板修改", { model: newTitle, rawResponse: `描述: ${newDesc}` });
+    }
+
+    function createNewTemplate() {
+      // Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved.
+      const newTitle = els.templateTitle.value.trim() || "新的自訂模板";
+      const newDesc = els.templateDescInput.value.trim() || "自訂的 Prompt 指令。";
+      const newStatus = els.templateStatus.value.trim() || "stable";
+      const newPrompt = els.promptTemplate.value.trim() || "";
+      
+      if (!newPrompt) {
+        showToast("錯誤：請先在 Prompt 框輸入內容再新增為模板。");
+        return;
+      }
+      
+      const newId = "custom-" + Date.now();
+      const newTemplate = {
+        id: newId,
+        title: newTitle,
+        description: newDesc,
+        prompt: newPrompt,
+        outputFormat: newPrompt.toLowerCase().includes("json") ? "json_like" : "plain_text",
+        useCase: "自訂組合與辨識",
+        status: newStatus
+      };
+      
+      templates.push(newTemplate);
+      localStorage.setItem(STORAGE_KEYS.selectedTemplate, newId);
+      saveTemplates();
+      renderTemplates();
+      showToast(`已成功新增新模板：${newTitle}`);
+      addLogEntry("新增自訂模板", { model: newTitle, rawResponse: `ID: ${newId}` });
+    }
+
+    function deleteCurrentTemplate() {
+      // Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved.
+      const template = selectedTemplate();
+      if (!template) {
+        showToast("錯誤：無效的模板選取。");
+        return;
+      }
+      
+      const confirmed = window.confirm(`確定要刪除模板「${template.title}」嗎？此動作無法復原。`);
+      if (!confirmed) return;
+      
+      templates = templates.filter((t) => t.id !== template.id);
+      
+      if (templates.length === 0) {
+        templates = clone(DEFAULT_TEMPLATES);
+        showToast("所有模板已刪除，自動還原預設模板。");
+        addLogEntry("刪除模板", { model: template.title, rawResponse: "重置還原為預設模板" });
+      } else {
+        showToast(`已刪除模板：${template.title}`);
+        addLogEntry("刪除模板", { model: template.title, rawResponse: `ID: ${template.id}` });
+      }
+      
+      localStorage.setItem(STORAGE_KEYS.selectedTemplate, templates[0].id);
+      saveTemplates();
+      renderTemplates();
+      onTemplateSelectionChange();
+    }
+
+    function insertPromptToResult() {
+      // Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved.
+      const promptText = els.promptTemplate.value.trim();
+      if (!promptText) {
+        showToast("提示：沒有可插入的 Prompt 文字。");
+        return;
+      }
+      
+      const textarea = els.ocrResult;
+      const startPos = textarea.selectionStart;
+      const endPos = textarea.selectionEnd;
+      
+      let insertStr = promptText;
+      if (textarea.value.length > 0) {
+        const before = textarea.value.substring(0, startPos);
+        const after = textarea.value.substring(endPos);
+        
+        const needsLeadingNewline = before.length > 0 && !before.endsWith('\n');
+        const needsTrailingNewline = after.length > 0 && !after.startsWith('\n');
+        
+        insertStr = (needsLeadingNewline ? '\n' : '') + promptText + (needsTrailingNewline ? '\n' : '');
+      }
+      
+      const beforeText = textarea.value.substring(0, startPos);
+      const afterText = textarea.value.substring(endPos);
+      textarea.value = beforeText + insertStr + afterText;
+      
+      const newCursorPos = startPos + insertStr.length;
+      textarea.selectionStart = textarea.selectionEnd = newCursorPos;
+      textarea.focus();
+      showToast("已插入 Prompt 到輸出區。");
+      addLogEntry("插入 Prompt", { model: "文字組合", rawResponse: `長度: ${promptText.length}` });
+    }
+
+    function escapeCsv(value) {
+      const text = String(value ?? "");
+      if (/[",\n\r]/.test(text)) return `"${text.replaceAll('"', '""')}"`;
+      return text;
+    }
+
+    // CSV/Templates logic
+    function exportTemplatesCsv() {
+      const columns = ["id", "title", "description", "prompt", "outputFormat", "useCase", "status"];
+      const lines = [
+        columns.join(","),
+        ...templates.map((template) => columns.map((column) => escapeCsv(template[column])).join(","))
+      ];
+      downloadText(lines.join("\n"), "falo_ocr_prompt_templates.csv", "text/csv");
+      showToast("已匯出 CSV 模板，可用 Excel / Google Sheets 編輯。");
+    }
+
+    function parseCsv(text) {
+      const rows = [];
+      let row = [];
+      let value = "";
+      let quoted = false;
+      for (let i = 0; i < text.length; i += 1) {
+        const char = text[i];
+        const next = text[i + 1];
+        if (quoted) {
+          if (char === '"' && next === '"') {
+            value += '"';
+            i += 1;
+          } else if (char === '"') {
+            quoted = false;
+          } else {
+            value += char;
+          }
+        } else if (char === '"') {
+          quoted = true;
+        } else if (char === ",") {
+          row.push(value);
+          value = "";
+        } else if (char === "\n") {
+          row.push(value);
+          rows.push(row);
+          row = [];
+          value = "";
+        } else if (char !== "\r") {
+          value += char;
+        }
+      }
+      row.push(value);
+      rows.push(row);
+      return rows.filter((item) => item.some((cell) => cell.trim()));
+    }
+
+    function templatesFromCsv(text) {
+      const rows = parseCsv(text);
+      const headers = rows.shift()?.map((header) => header.trim()) || [];
+      const required = ["id", "title", "prompt"];
+      const missing = required.filter((key) => !headers.includes(key));
+      if (missing.length) throw new Error(`CSV 缺少必要欄位：${missing.join(", ")}`);
+      return rows.map((row) => {
+        const item = {};
+        headers.forEach((header, index) => {
+          item[header] = row[index] || "";
+        });
+        return normalizeTemplate(item);
+      }).filter((template) => template.id && template.title && template.prompt);
+    }
+
+    function normalizeTemplate(template) {
+      return {
+        id: slugify(template.id || template.title, "ocr-template"),
+        title: String(template.title || "未命名 OCR 模板"),
+        description: String(template.description || ""),
+        prompt: String(template.prompt || ""),
+        outputFormat: String(template.outputFormat || "plain_text"),
+        useCase: String(template.useCase || ""),
+        status: String(template.status || "stable")
+      };
+    }
+
+    function slugify(value, fallback) {
+      const slug = String(value || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+      return slug || fallback;
+    }
+
+    function importTemplatesFile(file) {
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const text = String(reader.result || "");
+          const nextTemplates = file.name.endsWith(".json")
+            ? JSON.parse(text).map(normalizeTemplate)
+            : templatesFromCsv(text);
+          if (!Array.isArray(nextTemplates) || !nextTemplates.length) {
+            throw new Error("模板檔沒有有效資料。");
+          }
+          templates = nextTemplates;
+          saveTemplates();
+          els.promptTemplate.value = "";
+          renderTemplates();
+          showToast("已匯入模板並全覆蓋目前清單。");
+          addLogEntry("匯入模板覆蓋", { model: file.name, rawResponse: `載入 ${nextTemplates.length} 組` });
+        } catch (error) {
+          showToast(error.message || "模板匯入失敗。");
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function restoreDefaultTemplates() {
+      const confirmed = window.confirm("確定還原 5 組預設 OCR 模板？目前模板清單會被全覆蓋。");
+      if (!confirmed) return;
+      templates = clone(DEFAULT_TEMPLATES);
+      saveTemplates();
+      els.promptTemplate.value = "";
+      renderTemplates();
+      showToast("已還原 5 組預設 OCR 模板。");
+      addLogEntry("還原預設模板", { model: "系統初始化", rawResponse: "5 組預設" });
+    }
+
+    function downloadText(text, filename, type) {
+      const blob = new Blob([text], { type });
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = filename;
+      document.body.append(anchor);
+      anchor.click();
+      anchor.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    async function copyText(text, message) {
+      try {
+        await navigator.clipboard.writeText(text);
+        showToast(message);
+      } catch (error) {
+        showToast("瀏覽器不允許直接複製，請手動選取文字。");
+      }
+    }
+
+    function showToast(message) {
+      els.toast.textContent = message;
+      els.toast.classList.add("show");
+      window.clearTimeout(showToast.timer);
+      showToast.timer = window.setTimeout(() => {
+        els.toast.classList.remove("show");
+      }, 2300);
+    }
+
+    function setupImagePreview(file) {
+      if (!file) return;
+      if (!file.type.startsWith("image/")) {
+        releasePreviewImageUrl();
+        els.imagePreview.textContent = "目前只預覽圖片檔。";
+        return;
+      }
+      releasePreviewImageUrl();
+      previewImageUrl = URL.createObjectURL(file);
+      const image = document.createElement("img");
+      image.src = previewImageUrl;
+      image.alt = file.name;
+      previewImageName = file.name;
+      image.addEventListener("load", () => updateFloatingImageDefaults(image));
+      els.imagePreview.replaceChildren(image);
+    }
+
+    function releasePreviewImageUrl() {
+      if (!previewImageUrl) return;
+      URL.revokeObjectURL(previewImageUrl);
+      previewImageUrl = "";
+    }
+
+    function setFloatingZoom(nextZoom) {
+      floatingZoom = Math.max(0.10, Math.min(4, nextZoom));
+      const baseWidth = floatingNaturalWidth || els.floatingImg.naturalWidth || 900;
+      els.floatingImg.style.width = `${Math.max(80, Math.round(baseWidth * floatingZoom))}px`;
+      els.floatingImg.style.height = "auto";
+      els.floatingZoomResetBtn.textContent = `${Math.round(floatingZoom * 100)}%`;
+    }
+
+    function floatingZoomOut() {
+      const currentIndex = floatingZoomSteps.findIndex((step) => step >= floatingZoom - 0.001);
+      const nextIndex = Math.max(0, currentIndex - 1);
+      setFloatingZoom(floatingZoomSteps[nextIndex]);
+    }
+
+    function floatingZoomIn() {
+      const currentIndex = floatingZoomSteps.findIndex((step) => step >= floatingZoom - 0.001);
+      const nextIndex = Math.min(floatingZoomSteps.length - 1, currentIndex + 1);
+      setFloatingZoom(floatingZoomSteps[nextIndex]);
+    }
+
+    function updateFloatingImageDefaults(image) {
+      if (!image.naturalWidth || !image.naturalHeight) return;
+      floatingNaturalWidth = image.naturalWidth;
+      floatingNaturalHeight = image.naturalHeight;
+      floatingImageOrientation = floatingNaturalHeight > floatingNaturalWidth ? "portrait" : "landscape";
+      activeFloatingSize = "medium";
+      updateFloatingSizeButtons();
+    }
+
+    function getFloatingSizePreset(name) {
+      if (name === "wide") return floatingSizePresets.wide;
+      const group = floatingSizePresets[floatingImageOrientation] || floatingSizePresets.neutral;
+      return group[name] || floatingSizePresets.neutral.medium;
+    }
+
+    function setFloatingSizePreset(name) {
+      const preset = getFloatingSizePreset(name);
+      activeFloatingSize = name;
+      const width = preset.widthRatio ? Math.round(window.innerWidth * preset.widthRatio) : preset.width;
+      const height = preset.heightRatio ? Math.round(window.innerHeight * preset.heightRatio) : preset.height;
+      const safeWidth = Math.min(width, window.innerWidth - 24);
+      const safeHeight = Math.min(height, window.innerHeight - 24);
+      els.floatingWindow.style.width = `${Math.max(320, safeWidth)}px`;
+      els.floatingWindow.style.height = `${Math.max(240, safeHeight)}px`;
+      els.floatingWindow.style.left = `${Math.max(12, Math.round((window.innerWidth - safeWidth) / 2))}px`;
+      els.floatingWindow.style.top = `${Math.max(12, Math.round((window.innerHeight - safeHeight) / 2))}px`;
+      updateFloatingSizeButtons();
+    }
+
+    function updateFloatingSizeButtons() {
+      document.querySelectorAll("[data-floating-size]").forEach((button) => {
+        button.classList.toggle("active", button.dataset.floatingSize === activeFloatingSize);
+      });
+    }
+
+    function setFloatingOpacity(value) {
+      const opacity = Math.max(40, Math.min(100, Number(value)));
+      els.floatingWindow.style.opacity = String(opacity / 100);
+      els.floatingOpacityRange.value = String(opacity);
+      els.floatingOpacityValue.textContent = `${opacity}%`;
+    }
+
+    function openFloatingPreview() {
+      if (!previewImageUrl) return;
+      els.floatingTitle.textContent = previewImageName || "圖片預覽";
+      els.floatingImg.src = previewImageUrl;
+      els.floatingImg.onload = () => {
+        updateFloatingImageDefaults(els.floatingImg);
+        setFloatingSizePreset(activeFloatingSize);
+        setFloatingZoom(1);
+      };
+      els.floatingImageViewport.scrollTop = 0;
+      els.floatingImageViewport.scrollLeft = 0;
+      els.floatingWindow.style.display = "grid";
+      setFloatingOpacity(els.floatingOpacityRange.value);
+      setFloatingSizePreset(activeFloatingSize);
+      setFloatingZoom(1);
+    }
+
+    function closeFloatingPreview() {
+      els.floatingWindow.style.display = "none";
+    }
+
+    function canvasToPayloadBlob(canvas, type, quality) {
+      return new Promise((resolve, reject) => {
+        canvas.toBlob((blob) => blob ? resolve(blob) : reject(new Error("影像準備失敗")), type, quality);
+      });
+    }
+
+    async function readBlobAsBase64(blob) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(String(reader.result).split(",")[1] || "");
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      });
+    }
+
+    async function readOriginalImagePayload(file) {
+      const bitmap = await createImageBitmap(file);
+      const width = bitmap.width;
+      const height = bitmap.height;
+      if (typeof bitmap.close === "function") bitmap.close();
+      return {
+        base64: await readBlobAsBase64(file),
+        mimeType: file.type || "image/png",
+        width,
+        height,
+        size: file.size,
+        deliveryMode: "original"
+      };
+    }
+
+    async function prepareImagePayload(file, qualityMode) {
+      if (qualityMode === "original") {
+        return readOriginalImagePayload(file);
+      }
+
+      const maxLongSide = Number(qualityMode || 1280);
+      // Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved.
+      const bitmap = await createImageBitmap(file);
+      const longSide = Math.max(bitmap.width, bitmap.height);
+      const scale = longSide > maxLongSide ? maxLongSide / longSide : 1;
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.max(1, Math.round(bitmap.width * scale));
+      canvas.height = Math.max(1, Math.round(bitmap.height * scale));
+      const ctx = canvas.getContext("2d");
+      ctx.fillStyle = "#fff";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
+      ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+      if (typeof bitmap.close === "function") bitmap.close();
+
+      // Apply quality guidelines
+      let quality = 0.88;
+      if (maxLongSide <= 768) quality = 0.85;
+      else if (maxLongSide >= 1600) quality = 0.90;
+
+      const blob = await canvasToPayloadBlob(canvas, "image/webp", quality);
+      return {
+        base64: await readBlobAsBase64(blob),
+        mimeType: "image/webp",
+        width: canvas.width,
+        height: canvas.height,
+        size: blob.size,
+        deliveryMode: "prepared"
+      };
+    }
+
+    // Dual OCR Layout & Mode Toggle Logic
+    // Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved.
+    function toggleDualOcrMode(forceState) {
+      if (typeof forceState === "boolean") {
+        dualOcrMode = forceState;
+      } else {
+        dualOcrMode = !dualOcrMode;
+      }
+      
+      localStorage.setItem(STORAGE_KEYS.dualOcrMode, dualOcrMode ? "true" : "false");
+      
+      if (dualOcrMode) {
+        els.topbarDualOcrBtn.classList.add("primary");
+        els.modelSelectBContainer.style.display = "grid";
+        els.fieldResultB.style.display = "grid";
+        els.ocrResultsContainer.classList.add("dual-active");
+        els.labelResultA.textContent = "可編修結果 A";
+      } else {
+        els.topbarDualOcrBtn.classList.remove("primary");
+        els.modelSelectBContainer.style.display = "none";
+        els.fieldResultB.style.display = "none";
+        els.ocrResultsContainer.classList.remove("dual-active");
+        els.labelResultA.textContent = "可編修結果";
+      }
+      // Re-trigger Nano preset check because dual mode impacts which variables are active
+      if (els.nanoPromptSelect.value === "compare-ab" && !dualOcrMode) {
+        // Switch preset if dual mode is turned off and it was set to compare
+        els.nanoPromptSelect.value = "summary-a";
+        els.nanoPromptSelect.dispatchEvent(new Event("change"));
+      }
+    }
+
+    // Gemini REST API calling helper
+    // Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved.
+    async function callGeminiOcrApi(apiKey, model, imageInfo, prompt) {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`;
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-goog-api-key": apiKey
+        },
+        body: JSON.stringify({
+          contents: [{
+            parts: [
+              {
+                inline_data: {
+                  mime_type: imageInfo.mimeType,
+                  data: imageInfo.base64
+                }
+              },
+              { text: prompt }
+            ]
+          }],
+          generationConfig: {
+            responseMimeType: (selectedTemplate().outputFormat === "json_like" || prompt.toLowerCase().includes("json")) ? "application/json" : "text/plain",
+            temperature: 0
+          }
+        })
+      });
+
+      const text = await response.text();
+      const httpStatus = response.status;
+      if (!response.ok) {
+        throw new Error(`API 錯誤 (${response.status}): ${text}`);
+      }
+
+      const data = JSON.parse(text);
+      const extractedText = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+      return {
+        data,
+        extractedText,
+        httpStatus,
+        rawText: text
+      };
+    }
+
+    async function callGeminiTextApi(apiKey, model, prompt) {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`;
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-goog-api-key": apiKey
+        },
+        body: JSON.stringify({
+          contents: [{
+            parts: [{ text: prompt }]
+          }],
+          generationConfig: {
+            responseMimeType: "text/plain",
+            temperature: 0
+          }
+        })
+      });
+
+      const text = await response.text();
+      const httpStatus = response.status;
+      if (!response.ok) {
+        throw new Error(`API 錯誤 (${response.status}): ${text}`);
+      }
+
+      const data = JSON.parse(text);
+      const extractedText = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+      return {
+        data,
+        extractedText,
+        httpStatus,
+        rawText: text
+      };
+    }
+
+    // Gemini REST API calling logic
+    // Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved.
+    async function runGeminiOcr() {
+      const apiKey = els.geminiKey.value.trim();
+      const file = selectedImageFile;
+      const modelA = els.modelSelect.value;
+      const modelB = els.modelSelectB.value;
+      const prompt = els.promptTemplate.value.trim();
+      const imageQualityMode = els.longSideSelect.value || "1280";
+
+      if (!apiKey) {
+        showToast("錯誤：請先輸入 Gemini API 金鑰。");
+        return;
+      }
+      if (!file) {
+        showToast("錯誤：請選擇要進行 OCR 辨識的圖片。");
+        return;
+      }
+      if (!prompt) {
+        showToast("錯誤：請選擇或輸入 OCR 操作 Prompt。");
+        return;
+      }
+
+      els.runOcrButton.disabled = true;
+      els.runOcrButton.textContent = "⚡ 影像準備中...";
+
+      const apiKeyMasked = apiKey.length > 10 ? (apiKey.substring(0, 6) + "..." + apiKey.substring(apiKey.length - 4)) : "Invalid";
+
+      let imageInfo = null;
+      try {
+        imageInfo = await prepareImagePayload(file, imageQualityMode);
+      } catch (error) {
+        showToast(`影像準備失敗: ${error.message}`);
+        els.runOcrButton.disabled = false;
+        els.runOcrButton.textContent = "⚡ 開始 Gemini OCR 辨識";
+        return;
+      }
+
+      els.runOcrButton.textContent = dualOcrMode ? "⚡ 雙 OCR 辨識中..." : "⚡ Gemini 辨識中...";
+      showToast("圖片已準備，送出辨識中...");
+
+      if (!dualOcrMode) {
+        const startTime = Date.now();
+        try {
+          const res = await callGeminiOcrApi(apiKey, modelA, imageInfo, prompt);
+          const latencyMs = Date.now() - startTime;
+
+          if (res.extractedText) {
+            els.ocrResult.value = res.extractedText;
+            showToast("🎉 Gemini OCR 辨識成功！");
+
+            const promptTokens = res.data.usageMetadata?.promptTokenCount || 0;
+            const candidatesTokens = res.data.usageMetadata?.candidatesTokenCount || 0;
+            const totalTokens = res.data.usageMetadata?.totalTokenCount || 0;
+            const estCostUsd = calculateCost(modelA, promptTokens, candidatesTokens);
+
+            document.getElementById("currentModel").textContent = modelA;
+            document.getElementById("currentLatency").textContent = latencyMs;
+            document.getElementById("currentTokens").textContent = `${promptTokens}/${candidatesTokens} (${totalTokens})`;
+            document.getElementById("currentCostUsd").textContent = estCostUsd.toFixed(6);
+            document.getElementById("currentCostTwd").textContent = (estCostUsd * 30).toFixed(4);
+            document.getElementById("currentRunInfo").style.display = "block";
+
+            addLogEntry("Gemini OCR 成功", {
+              model: modelA,
+              apiKeyMasked,
+              originalFileName: file.name,
+              originalFileSize: file.size,
+              preparedFileSize: imageInfo.size,
+              imageWidth: imageInfo.width,
+              imageHeight: imageInfo.height,
+              promptSnippet: prompt,
+              ocrResultSnippet: res.extractedText,
+              latencyMs,
+              httpStatus: res.httpStatus,
+              promptTokens,
+              candidatesTokens,
+              totalTokens,
+              estCostUsd,
+              rawResponse: res.rawText,
+              rawRequest: JSON.stringify({ model: modelA, imageQualityMode, promptText: prompt })
+            });
+          } else {
+            throw new Error("未接收到有效文字，請檢查 Prompt 或圖片內容。");
+          }
+        } catch (error) {
+          console.error(error);
+          const latencyMs = Date.now() - startTime;
+          showToast(`辨識失敗: ${error.message || error}`);
+          els.ocrResult.value = `[辨識錯誤]\n${error.message || error}`;
+
+          document.getElementById("currentModel").textContent = modelA;
+          document.getElementById("currentLatency").textContent = latencyMs;
+          document.getElementById("currentTokens").textContent = "0/0 (0)";
+          document.getElementById("currentCostUsd").textContent = "0.000000";
+          document.getElementById("currentCostTwd").textContent = "0.0000";
+          document.getElementById("currentRunInfo").style.display = "block";
+
+          addLogEntry("Gemini OCR 失敗", {
+            model: modelA,
+            apiKeyMasked,
+            originalFileName: file.name,
+            originalFileSize: file.size,
+            preparedFileSize: imageInfo.size,
+            imageWidth: imageInfo.width,
+            imageHeight: imageInfo.height,
+            promptSnippet: prompt,
+            ocrResultSnippet: error.message || error,
+            latencyMs,
+            httpStatus: error.message && error.message.includes("API 錯誤") ? parseInt(error.message.match(/\d+/)) : 500,
+            promptTokens: 0,
+            candidatesTokens: 0,
+            totalTokens: 0,
+            estCostUsd: 0,
+            rawResponse: JSON.stringify({ error: error.message || error }),
+            rawRequest: JSON.stringify({ model: modelA, imageQualityMode, promptText: prompt })
+          });
+        } finally {
+          els.runOcrButton.disabled = false;
+          els.runOcrButton.textContent = "⚡ 開始 Gemini OCR 辨識";
+        }
+      } else {
+        // Parallel Dual Execution Mode
+        const startTimeA = Date.now();
+        const startTimeB = Date.now();
+
+        const promiseA = callGeminiOcrApi(apiKey, modelA, imageInfo, prompt)
+          .then(res => ({ status: "fulfilled", value: res, latency: Date.now() - startTimeA }))
+          .catch(err => ({ status: "rejected", reason: err, latency: Date.now() - startTimeA }));
+
+        const promiseB = callGeminiOcrApi(apiKey, modelB, imageInfo, prompt)
+          .then(res => ({ status: "fulfilled", value: res, latency: Date.now() - startTimeB }))
+          .catch(err => ({ status: "rejected", reason: err, latency: Date.now() - startTimeB }));
+
+        const [resA, resB] = await Promise.all([promiseA, promiseB]);
+
+        let modelAInfo = "";
+        let modelBInfo = "";
+        let latencyInfo = "";
+        let tokensInfo = "";
+        let costUsdInfo = "";
+        let costTwdInfo = "";
+
+        // Process Model A result
+        if (resA.status === "fulfilled") {
+          const res = resA.value;
+          els.ocrResult.value = res.extractedText;
+          const promptTokens = res.data.usageMetadata?.promptTokenCount || 0;
+          const candidatesTokens = res.data.usageMetadata?.candidatesTokenCount || 0;
+          const totalTokens = res.data.usageMetadata?.totalTokenCount || 0;
+          const estCostUsd = calculateCost(modelA, promptTokens, candidatesTokens);
+
+          modelAInfo = `A: ${modelA}`;
+          latencyInfo = `A: ${resA.latency} ms`;
+          tokensInfo = `A: ${promptTokens}/${candidatesTokens} (${totalTokens})`;
+          costUsdInfo = `A: $${estCostUsd.toFixed(6)}`;
+          costTwdInfo = `A: NT$${(estCostUsd * 30).toFixed(4)}`;
+
+          addLogEntry("Gemini OCR A 成功", {
+            model: modelA,
+            apiKeyMasked,
+            originalFileName: file.name,
+            originalFileSize: file.size,
+            preparedFileSize: imageInfo.size,
+            imageWidth: imageInfo.width,
+            imageHeight: imageInfo.height,
+            promptSnippet: prompt,
+            ocrResultSnippet: res.extractedText,
+            latencyMs: resA.latency,
+            httpStatus: res.httpStatus,
+            promptTokens,
+            candidatesTokens,
+            totalTokens,
+            estCostUsd,
+            rawResponse: res.rawText,
+            rawRequest: JSON.stringify({ model: modelA, imageQualityMode, promptText: prompt })
+          });
+        } else {
+          const err = resA.reason;
+          els.ocrResult.value = `[辨識錯誤]\n${err.message || err}`;
+          modelAInfo = `A: ${modelA} (失敗)`;
+          latencyInfo = `A: ${resA.latency} ms`;
+          tokensInfo = `A: 0/0 (0)`;
+          costUsdInfo = `A: $0.000000`;
+          costTwdInfo = `A: NT$0.0000`;
+
+          addLogEntry("Gemini OCR A 失敗", {
+            model: modelA,
+            apiKeyMasked,
+            originalFileName: file.name,
+            originalFileSize: file.size,
+            preparedFileSize: imageInfo.size,
+            imageWidth: imageInfo.width,
+            imageHeight: imageInfo.height,
+            promptSnippet: prompt,
+            ocrResultSnippet: err.message || err,
+            latencyMs: resA.latency,
+            httpStatus: err.message && err.message.includes("API 錯誤") ? parseInt(err.message.match(/\d+/)) : 500,
+            promptTokens: 0,
+            candidatesTokens: 0,
+            totalTokens: 0,
+            estCostUsd: 0,
+            rawResponse: JSON.stringify({ error: err.message || err }),
+            rawRequest: JSON.stringify({ model: modelA, imageQualityMode, promptText: prompt })
+          });
+        }
+
+        // Process Model B result
+        if (resB.status === "fulfilled") {
+          const res = resB.value;
+          els.ocrResultB.value = res.extractedText;
+          const promptTokens = res.data.usageMetadata?.promptTokenCount || 0;
+          const candidatesTokens = res.data.usageMetadata?.candidatesTokenCount || 0;
+          const totalTokens = res.data.usageMetadata?.totalTokenCount || 0;
+          const estCostUsd = calculateCost(modelB, promptTokens, candidatesTokens);
+
+          modelBInfo = `B: ${modelB}`;
+          latencyInfo += ` | B: ${resB.latency} ms`;
+          tokensInfo += ` | B: ${promptTokens}/${candidatesTokens} (${totalTokens})`;
+          costUsdInfo += ` | B: $${estCostUsd.toFixed(6)}`;
+          costTwdInfo += ` | B: NT$${(estCostUsd * 30).toFixed(4)}`;
+
+          addLogEntry("Gemini OCR B 成功", {
+            model: modelB,
+            apiKeyMasked,
+            originalFileName: file.name,
+            originalFileSize: file.size,
+            preparedFileSize: imageInfo.size,
+            imageWidth: imageInfo.width,
+            imageHeight: imageInfo.height,
+            promptSnippet: prompt,
+            ocrResultSnippet: res.extractedText,
+            latencyMs: resB.latency,
+            httpStatus: res.httpStatus,
+            promptTokens,
+            candidatesTokens,
+            totalTokens,
+            estCostUsd,
+            rawResponse: res.rawText,
+            rawRequest: JSON.stringify({ model: modelB, imageQualityMode, promptText: prompt })
+          });
+        } else {
+          const err = resB.reason;
+          els.ocrResultB.value = `[辨識錯誤]\n${err.message || err}`;
+          modelBInfo = `B: ${modelB} (失敗)`;
+          latencyInfo += ` | B: ${resB.latency} ms`;
+          tokensInfo += ` | B: 0/0 (0)`;
+          costUsdInfo += ` | B: $0.000000`;
+          costTwdInfo += ` | B: NT$0.0000`;
+
+          addLogEntry("Gemini OCR B 失敗", {
+            model: modelB,
+            apiKeyMasked,
+            originalFileName: file.name,
+            originalFileSize: file.size,
+            preparedFileSize: imageInfo.size,
+            imageWidth: imageInfo.width,
+            imageHeight: imageInfo.height,
+            promptSnippet: prompt,
+            ocrResultSnippet: err.message || err,
+            latencyMs: resB.latency,
+            httpStatus: err.message && err.message.includes("API 錯誤") ? parseInt(err.message.match(/\d+/)) : 500,
+            promptTokens: 0,
+            candidatesTokens: 0,
+            totalTokens: 0,
+            estCostUsd: 0,
+            rawResponse: JSON.stringify({ error: err.message || err }),
+            rawRequest: JSON.stringify({ model: modelB, imageQualityMode, promptText: prompt })
+          });
+        }
+
+        if (resA.status === "fulfilled" || resB.status === "fulfilled") {
+          showToast("🎉 雙 OCR 辨識完成！");
+        } else {
+          showToast("❌ 雙 OCR 辨識皆失敗。");
+        }
+
+        // Display combined stats
+        document.getElementById("currentModel").innerHTML = `${modelAInfo}<br>${modelBInfo}`;
+        document.getElementById("currentLatency").innerHTML = latencyInfo;
+        document.getElementById("currentTokens").innerHTML = tokensInfo;
+        document.getElementById("currentCostUsd").innerHTML = costUsdInfo;
+        document.getElementById("currentCostTwd").innerHTML = costTwdInfo;
+        document.getElementById("currentRunInfo").style.display = "block";
+
+        els.runOcrButton.disabled = false;
+        els.runOcrButton.textContent = "⚡ 開始 Gemini OCR 辨識";
+      }
+    }
+
+    // Chrome Gemini Nano Local AI controller
+    // Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved.
+    function updateNanoStatus(type, text) {
+      els.nanoStatusBadge.textContent = text;
+      els.nanoStatusBadge.className = `local-ai-badge ${type}`;
+    }
+
+    function getLanguageModelApi() {
+      if ("LanguageModel" in globalThis) {
+        return {
+          api: globalThis.LanguageModel,
+          kind: "LanguageModel"
+        };
+      }
+
+      if (window.ai?.languageModel) {
+        return {
+          api: window.ai.languageModel,
+          kind: "window.ai.languageModel"
+        };
+      }
+
+      return null;
+    }
+
+    function normalizeLanguageModelAvailability(value) {
+      const normalized = String(value || "").toLowerCase();
+      if (normalized === "available" || normalized === "readily") return "available";
+      if (normalized === "downloadable" || normalized === "after-download") return "downloadable";
+      if (normalized === "downloading") return "downloading";
+      return "unavailable";
+    }
+
+    async function getLanguageModelAvailability(languageModel) {
+      if (typeof languageModel.api.availability === "function") {
+        return normalizeLanguageModelAvailability(await languageModel.api.availability());
+      }
+
+      if (typeof languageModel.api.capabilities === "function") {
+        const capabilities = await languageModel.api.capabilities();
+        return normalizeLanguageModelAvailability(capabilities?.available);
+      }
+
+      return "unavailable";
+    }
+
+    function updateNanoDownloadProgress(event) {
+      const loaded = Number(event.loaded || 0);
+      const total = Number(event.total || 0);
+      const percent = total > 1
+        ? Math.round((loaded / total) * 100)
+        : Math.round(loaded * 100);
+
+      els.nanoProgressBarFill.style.width = `${Math.max(0, Math.min(100, percent || 0))}%`;
+
+      if (total > 1) {
+        els.nanoProgressText.textContent = `下載進度：${percent}% (${(loaded / 1024 / 1024).toFixed(1)} MB / ${(total / 1024 / 1024).toFixed(1)} MB)`;
+      } else if (percent >= 100) {
+        els.nanoProgressText.textContent = "下載完成，正在載入模型...";
+      } else {
+        els.nanoProgressText.textContent = `下載進度：${percent}%`;
+      }
+    }
+
+    async function detectGeminiNano() {
+      // Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved.
+      const languageModel = getLanguageModelApi();
+      if (!languageModel) {
+        updateNanoStatus("no", "不支援 (無 LanguageModel API)");
+        els.downloadNanoBtn.disabled = true;
+        els.runNanoButton.disabled = true;
+        return "no";
+      }
+
+      try {
+        const available = await getLanguageModelAvailability(languageModel);
+        if (available === "available") {
+          updateNanoStatus("ready", `可用 (${languageModel.kind})`);
+          els.downloadNanoBtn.disabled = true;
+          els.runNanoButton.disabled = false;
+        } else if (available === "downloadable" || available === "downloading") {
+          updateNanoStatus("downloading", `需下載 (${available})`);
+          els.downloadNanoBtn.disabled = false;
+          els.runNanoButton.disabled = true;
+        } else {
+          updateNanoStatus("no", "不支援 (unavailable)");
+          els.downloadNanoBtn.disabled = true;
+          els.runNanoButton.disabled = true;
+        }
+        return available;
+      } catch (err) {
+        updateNanoStatus("no", `檢測出錯: ${err.message}`);
+        els.downloadNanoBtn.disabled = true;
+        els.runNanoButton.disabled = true;
+        return "no";
+      }
+    }
+
+    async function downloadGeminiNano() {
+      // Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved.
+      const languageModel = getLanguageModelApi();
+      if (!languageModel) {
+        showToast("本瀏覽器不支援 Chrome Built-in AI。");
+        return;
+      }
+
+      try {
+        els.downloadNanoBtn.disabled = true;
+        els.nanoProgressContainer.style.display = "block";
+        els.nanoProgressText.style.display = "block";
+        els.nanoProgressText.textContent = "正在啟動下載與初始化模型...";
+        els.nanoProgressBarFill.style.width = "0%";
+
+        const session = await languageModel.api.create({
+          monitor(m) {
+            m.addEventListener("downloadprogress", updateNanoDownloadProgress);
+          }
+        });
+
+        nanoSession = session;
+        els.nanoProgressBarFill.style.width = "100%";
+        els.nanoProgressText.textContent = "下載與初始化完成！";
+        updateNanoStatus("ready", "可用 (Readily Available)");
+        els.runNanoButton.disabled = false;
+        showToast("Chrome Gemini Nano 本地模型初始化成功！");
+        addLogEntry("Chrome Nano 初始化成功", { model: "Gemini Nano", rawResponse: "Model Session Created" });
+      } catch (err) {
+        console.error(err);
+        els.nanoProgressText.textContent = `初始化失敗：${err.message}`;
+        els.downloadNanoBtn.disabled = false;
+        showToast(`模型下載失敗: ${err.message}`);
+        addLogEntry("Chrome Nano 初始化失敗", { model: "Gemini Nano", rawResponse: err.message });
+      }
+    }
+
+    function clearNanoSession() {
+      // Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved.
+      if (nanoSession) {
+        try {
+          nanoSession.destroy();
+        } catch (e) {}
+        nanoSession = null;
+      }
+      els.nanoResult.value = "";
+      els.nanoProgressContainer.style.display = "none";
+      els.nanoProgressText.style.display = "none";
+      els.nanoProgressBarFill.style.width = "0%";
+      showToast("本地對話已清除，Session 已釋放。");
+      addLogEntry("Chrome Nano 清除對話", { model: "Gemini Nano", rawResponse: "Session Destroyed" });
+    }
+
+    async function runNanoComparison() {
+      // Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved.
+      const finalPrompt = buildAnalysisPrompt();
+      if (!finalPrompt) {
+        showToast("錯誤：比對分析 Prompt 不能為空。");
+        return;
+      }
+
+      els.runNanoButton.disabled = true;
+      els.runNanoButton.textContent = "⚡ 比對分析中...";
+      els.nanoResult.value = "正在執行本地 AI 分析，請稍候...";
+
+      const startTime = Date.now();
+      try {
+        if (!nanoSession) {
+          const languageModel = getLanguageModelApi();
+          if (!languageModel) {
+            throw new Error("本瀏覽器沒有 LanguageModel API。");
+          }
+          nanoSession = await languageModel.api.create();
+        }
+
+        const response = await nanoSession.prompt(finalPrompt);
+        els.nanoResult.value = response;
+        const latencyMs = Date.now() - startTime;
+        showToast("🎉 本地 AI 分析完成！");
+
+        addLogEntry("Chrome Nano 分析成功", {
+          model: "Gemini Nano",
+          apiKeyMasked: "Local (Free)",
+          promptSnippet: finalPrompt.substring(0, 200),
+          ocrResultSnippet: response,
+          latencyMs,
+          httpStatus: 200,
+          rawResponse: JSON.stringify({ responseLength: response.length })
+        });
+      } catch (err) {
+        console.error(err);
+        els.nanoResult.value = `本地分析失敗: ${err.message}\n請試著重新「檢測狀態」或「下載模型」。`;
+        showToast(`分析失敗: ${err.message}`);
+        nanoSession = null;
+      } finally {
+        els.runNanoButton.disabled = false;
+        els.runNanoButton.textContent = "⚡ 啟動 Chrome Nano 比對分析";
+      }
+    }
+
+    function buildAnalysisPrompt() {
+      const promptTemplateText = els.nanoPromptInput.value.trim();
+      if (!promptTemplateText) return "";
+      const resA = els.ocrResult.value.trim();
+      const resB = els.ocrResultB.value.trim();
+      const modelA = els.modelSelect.value;
+      const modelB = els.modelSelectB.value;
+
+      return promptTemplateText
+        .replaceAll("{{RESULT_A}}", resA)
+        .replaceAll("{{RESULT_B}}", resB)
+        .replaceAll("{{MODEL_A}}", modelA)
+        .replaceAll("{{MODEL_B}}", modelB);
+    }
+
+    async function runModelACloudAnalysis() {
+      const apiKey = els.geminiKey.value.trim();
+      const modelA = els.modelSelect.value;
+      const finalPrompt = buildAnalysisPrompt();
+
+      if (!apiKey) {
+        showToast("錯誤：請先輸入 Gemini API 金鑰。");
+        return;
+      }
+      if (!finalPrompt) {
+        showToast("錯誤：分析 Prompt 不能為空。");
+        return;
+      }
+      if (!els.ocrResult.value.trim() && !els.ocrResultB.value.trim()) {
+        showToast("錯誤：請先產生或貼上 OCR 結果。");
+        return;
+      }
+
+      const apiKeyMasked = apiKey.length > 10 ? (apiKey.substring(0, 6) + "..." + apiKey.substring(apiKey.length - 4)) : "Invalid";
+      const originalText = els.runModelAAnalysisButton.textContent;
+      els.runModelAAnalysisButton.disabled = true;
+      els.runModelAAnalysisButton.textContent = "☁️ 模型 A 分析中...";
+      els.nanoResult.value = `正在使用 ${modelA} 分析 OCR 結果 A/B，請稍候...`;
+
+      const startTime = Date.now();
+      try {
+        const res = await callGeminiTextApi(apiKey, modelA, finalPrompt);
+        const latencyMs = Date.now() - startTime;
+        const promptTokens = res.data.usageMetadata?.promptTokenCount || 0;
+        const candidatesTokens = res.data.usageMetadata?.candidatesTokenCount || 0;
+        const totalTokens = res.data.usageMetadata?.totalTokenCount || 0;
+        const estCostUsd = calculateCost(modelA, promptTokens, candidatesTokens);
+
+        if (!res.extractedText) {
+          throw new Error("模型 A 未回傳有效分析文字。");
+        }
+
+        els.nanoResult.value = res.extractedText;
+        showToast("🎉 Gemini 模型 A 分析完成！");
+        addLogEntry("Gemini 模型 A 分析成功", {
+          model: modelA,
+          apiKeyMasked,
+          promptSnippet: finalPrompt,
+          ocrResultSnippet: res.extractedText,
+          latencyMs,
+          httpStatus: res.httpStatus,
+          promptTokens,
+          candidatesTokens,
+          totalTokens,
+          estCostUsd,
+          rawResponse: res.rawText,
+          rawRequest: JSON.stringify({ model: modelA, promptText: finalPrompt })
+        });
+      } catch (err) {
+        const latencyMs = Date.now() - startTime;
+        console.error(err);
+        els.nanoResult.value = `模型 A 分析失敗: ${err.message || err}`;
+        showToast(`模型 A 分析失敗: ${err.message || err}`);
+        addLogEntry("Gemini 模型 A 分析失敗", {
+          model: modelA,
+          apiKeyMasked,
+          promptSnippet: finalPrompt,
+          ocrResultSnippet: err.message || err,
+          latencyMs,
+          httpStatus: err.message && err.message.includes("API 錯誤") ? parseInt(err.message.match(/\d+/)) : 500,
+          rawResponse: JSON.stringify({ error: err.message || err }),
+          rawRequest: JSON.stringify({ model: modelA, promptText: finalPrompt })
+        });
+      } finally {
+        els.runModelAAnalysisButton.disabled = false;
+        els.runModelAAnalysisButton.textContent = originalText;
+      }
+    }
+
+
+
+    function setupPwa() {
+      window.addEventListener("beforeinstallprompt", (event) => {
+        event.preventDefault();
+        deferredInstallPrompt = event;
+        els.installButton.disabled = false;
+        els.pwaStatus.textContent = "PWA 可安裝。";
+      });
+
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("./service-worker.js")
+          .then(() => {
+            els.pwaStatus.textContent = "Service worker 已註冊，支援離線快取。";
+          })
+          .catch(() => {
+            els.pwaStatus.textContent = "Service worker 註冊失敗，請用 localhost 或 HTTPS 測試。";
+          });
+      } else {
+        els.pwaStatus.textContent = "此瀏覽器不支援 service worker。";
+      }
+    }
+
+    // Credentials & dropdown persistent state loading
+    function initGeminiCredentials() {
+      const savedKey = localStorage.getItem(STORAGE_KEYS.geminiKey);
+      if (savedKey) {
+        els.geminiKey.value = savedKey;
+      }
+
+      els.saveKeyBtn.addEventListener("click", () => {
+        const key = els.geminiKey.value.trim();
+        if (key) {
+          localStorage.setItem(STORAGE_KEYS.geminiKey, key);
+          showToast("Gemini API Key 已儲存於本機儲存體。");
+        } else {
+          showToast("請輸入 API Key 後再點擊儲存。");
+        }
+      });
+
+      els.clearKeyBtn.addEventListener("click", () => {
+        localStorage.removeItem(STORAGE_KEYS.geminiKey);
+        els.geminiKey.value = "";
+        showToast("本機 Gemini API Key 已清除。");
+      });
+
+      // Dropdown local state persistence
+      const savedModel = localStorage.getItem(STORAGE_KEYS.selectedModel);
+      if (savedModel) els.modelSelect.value = savedModel;
+      els.modelSelect.addEventListener("change", (e) => {
+        localStorage.setItem(STORAGE_KEYS.selectedModel, e.target.value);
+      });
+
+      const savedModelB = localStorage.getItem(STORAGE_KEYS.selectedModelB);
+      if (savedModelB) els.modelSelectB.value = savedModelB;
+      els.modelSelectB.addEventListener("change", (e) => {
+        localStorage.setItem(STORAGE_KEYS.selectedModelB, e.target.value);
+      });
+
+      const savedLongSide = localStorage.getItem(STORAGE_KEYS.selectedLongSide);
+      if (savedLongSide) els.longSideSelect.value = savedLongSide;
+      els.longSideSelect.addEventListener("change", (e) => {
+        localStorage.setItem(STORAGE_KEYS.selectedLongSide, e.target.value);
+      });
+
+      const savedDual = localStorage.getItem(STORAGE_KEYS.dualOcrMode);
+      if (savedDual === "true") {
+        toggleDualOcrMode(true);
+      }
+
+      els.runOcrButton.addEventListener("click", runGeminiOcr);
+
+      // Auto detect Gemini Nano on load
+      detectGeminiNano();
+    }
+
+    els.installButton.disabled = true;
+    els.installButton.addEventListener("click", async () => {
+      if (!deferredInstallPrompt) {
+        showToast("尚未收到安裝提示；請用 Chrome/Edge 並透過 localhost 或 HTTPS 開啟。");
+        return;
+      }
+      deferredInstallPrompt.prompt();
+      await deferredInstallPrompt.userChoice;
+      deferredInstallPrompt = null;
+    });
+
+
+    els.imageInput.addEventListener("change", (event) => {
+      const file = event.target.files[0];
+      selectedImageFile = file;
+      setupImagePreview(file);
+    });
+    els.templateSelect.addEventListener("change", onTemplateSelectionChange);
+    els.saveTemplateButton.addEventListener("click", saveCurrentTemplate);
+    els.createTemplateButton.addEventListener("click", createNewTemplate);
+    els.deleteTemplateButton.addEventListener("click", deleteCurrentTemplate);
+    els.insertPromptButton.addEventListener("click", insertPromptToResult);
+    els.loadPresetButton.addEventListener("click", loadSelectedPreset);
+    els.restoreDefaultsButton.addEventListener("click", restoreDefaultTemplates);
+    els.exportCsvButton.addEventListener("click", exportTemplatesCsv);
+    els.importTemplateButton.addEventListener("click", () => els.templateFileInput.click());
+    els.templateFileInput.addEventListener("change", (event) => {
+      importTemplatesFile(event.target.files[0]);
+      event.target.value = "";
+    });
+    els.copyResultButton.addEventListener("click", () => {
+      if (dualOcrMode) {
+        const combined = `【結果 A (${els.modelSelect.value})】\n${els.ocrResult.value}\n\n【結果 B (${els.modelSelectB.value})】\n${els.ocrResultB.value}`;
+        copyText(combined, "已複製雙 OCR 結果。");
+      } else {
+        copyText(els.ocrResult.value, "已複製 OCR 結果。");
+      }
+    });
+    els.copyPromptButton.addEventListener("click", () => copyText(els.promptTemplate.value, "已複製圖片用 OCR Prompt。"));
+    els.clearResultButton.addEventListener("click", () => {
+      els.ocrResult.value = "";
+      els.ocrResultB.value = "";
+      showToast("已清空結果文字區。");
+    });
+    
+    // Logs Action Listeners
+    els.exportLogsCsv.addEventListener("click", exportLogsToCsv);
+    els.importLogsCsv.addEventListener("click", () => els.logFileInput.click());
+    els.logFileInput.addEventListener("change", (event) => {
+      importLogsFromCsv(event.target.files[0]);
+      event.target.value = "";
+    });
+    els.clearLogsBtn.addEventListener("click", clearLogs);
+
+    // Logs Drawer Open/Close Listeners
+    els.topbarLogsBtn.addEventListener("click", openLogsDrawer);
+    els.openLogsDrawerBtn.addEventListener("click", openLogsDrawer);
+    els.drawerCloseBtn.addEventListener("click", closeLogsDrawer);
+    els.drawerOverlay.addEventListener("click", closeLogsDrawer);
+    els.tabBtnLogs.addEventListener("click", () => showDrawerTab('logs'));
+    els.tabBtnPricing.addEventListener("click", () => showDrawerTab('pricing'));
+
+    const costHeader = document.getElementById("costHeader");
+    if (costHeader) {
+      costHeader.addEventListener("click", () => {
+        if (activeCurrencyMode === "dual") {
+          activeCurrencyMode = "usd";
+        } else if (activeCurrencyMode === "usd") {
+          activeCurrencyMode = "twd";
+        } else {
+          activeCurrencyMode = "dual";
+        }
+        renderLogs();
+      });
+    }
+
+    // Floating image preview window triggers
+    els.imagePreview.addEventListener("click", openFloatingPreview);
+    els.floatingCloseBtn.addEventListener("click", closeFloatingPreview);
+    els.floatingZoomOutBtn.addEventListener("click", floatingZoomOut);
+    els.floatingZoomResetBtn.addEventListener("click", () => setFloatingZoom(1));
+    els.floatingZoomInBtn.addEventListener("click", floatingZoomIn);
+    els.floatingOpacityRange.addEventListener("input", (event) => setFloatingOpacity(event.target.value));
+    document.querySelectorAll("[data-floating-size]").forEach((button) => {
+      button.addEventListener("click", () => setFloatingSizePreset(button.dataset.floatingSize));
+    });
+    initDraggableWindow(els.floatingWindow);
+
+    els.topbarDualOcrBtn.addEventListener("click", () => toggleDualOcrMode());
+
+    // Gemini Nano and Gemini Model A analysis listeners
+    renderNanoTemplates();
+    els.nanoPromptSelect.addEventListener("change", loadSelectedNanoTemplate);
+    els.saveNanoTemplateButton.addEventListener("click", saveCurrentNanoTemplate);
+    els.createNanoTemplateButton.addEventListener("click", createNewNanoTemplate);
+    els.deleteNanoTemplateButton.addEventListener("click", deleteCurrentNanoTemplate);
+    els.restoreNanoTemplatesButton.addEventListener("click", restoreDefaultNanoTemplates);
+
+    els.detectNanoBtn.addEventListener("click", detectGeminiNano);
+    els.downloadNanoBtn.addEventListener("click", downloadGeminiNano);
+    els.resetNanoBtn.addEventListener("click", clearNanoSession);
+    els.runNanoButton.addEventListener("click", runNanoComparison);
+    els.runModelAAnalysisButton.addEventListener("click", runModelACloudAnalysis);
+    els.copyNanoPromptBtn.addEventListener("click", () => {
+      // Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved.
+      const finalPrompt = buildAnalysisPrompt();
+      if (!finalPrompt) {
+        showToast("錯誤：比對分析 Prompt 不能為空。");
+        return;
+      }
+
+      copyText(finalPrompt, "📋 組合字串複製成功！可直接貼給其他 AI 分析。");
+      addLogEntry("手動複製組合 Prompt", { model: "手動比對/分析", rawResponse: `長度: ${finalPrompt.length}` });
+    });
+
+    renderTemplates();
+    renderLogs();
+    setupPwa();
+    initGeminiCredentials();
+  </script>
+</body>
+</html>

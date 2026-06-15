@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Class02｜Antigravity + AIDE 招標書作業升級課程設計</title>
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --ink: #18202f;
+      --muted: #647084;
+      --line: #dfe4ee;
+      --card: #ffffff;
+      --navy: #1d3557;
+      --blue: #2563eb;
+      --cyan: #0e7490;
+      --green: #15803d;
+      --gold: #a16207;
+      --red: #b91c1c;
+      --soft-blue: #e8f1ff;
+      --soft-cyan: #e7f8fb;
+      --soft-green: #ecfdf3;
+      --soft-gold: #fff7df;
+      --soft-red: #fff0f0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--bg);
+      font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", Arial, sans-serif;
+      line-height: 1.7;
+    }
+
+    header {
+      color: #fff;
+      background:
+        linear-gradient(135deg, rgba(29, 53, 87, 0.96), rgba(37, 99, 235, 0.86)),
+        linear-gradient(90deg, #1d3557, #2563eb);
+      padding: 56px 24px 42px;
+    }
+
+    .wrap {
+      width: min(1120px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    .eyebrow {
+      margin: 0 0 12px;
+      color: rgba(255, 255, 255, 0.78);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 920px;
+      font-size: clamp(32px, 6vw, 58px);
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      max-width: 860px;
+      margin: 20px 0 0;
+      color: rgba(255, 255, 255, 0.9);
+      font-size: clamp(17px, 2.4vw, 22px);
+    }
+
+    main {
+      padding: 34px 0 64px;
+    }
+
+    section {
+      margin: 24px 0;
+    }
+
+    .band {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 26px;
+      box-shadow: 0 10px 30px rgba(31, 41, 55, 0.06);
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .grid-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @media (max-width: 820px) {
+      .grid-3,
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    h2 {
+      margin: 0 0 14px;
+      font-size: 28px;
+      line-height: 1.25;
+      color: var(--navy);
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 19px;
+      line-height: 1.35;
+      color: var(--ink);
+      letter-spacing: 0;
+    }
+
+    p {
+      margin: 0 0 12px;
+    }
+
+    ul {
+      margin: 10px 0 0;
+      padding-left: 21px;
+    }
+
+    li {
+      margin: 5px 0;
+    }
+
+    .lead {
+      color: #334155;
+      font-size: 18px;
+    }
+
+    .quote {
+      border-left: 5px solid var(--blue);
+      background: var(--soft-blue);
+      padding: 16px 18px;
+      border-radius: 6px;
+      color: #1e3a8a;
+      font-size: 19px;
+      font-weight: 800;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+    }
+
+    .card.blue {
+      background: var(--soft-blue);
+      border-color: #bfdbfe;
+    }
+
+    .card.cyan {
+      background: var(--soft-cyan);
+      border-color: #a5f3fc;
+    }
+
+    .card.green {
+      background: var(--soft-green);
+      border-color: #bbf7d0;
+    }
+
+    .card.gold {
+      background: var(--soft-gold);
+      border-color: #fde68a;
+    }
+
+    .card.red {
+      background: var(--soft-red);
+      border-color: #fecaca;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: #eef2ff;
+      color: #3730a3;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr auto 1fr;
+      gap: 10px;
+      align-items: center;
+      margin-top: 16px;
+    }
+
+    .flow .step {
+      min-height: 100px;
+      padding: 16px;
+      border-radius: 8px;
+      background: #fff;
+      border: 1px solid var(--line);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .arrow {
+      color: var(--muted);
+      font-weight: 900;
+      font-size: 22px;
+    }
+
+    @media (max-width: 820px) {
+      .flow {
+        grid-template-columns: 1fr;
+      }
+
+      .arrow {
+        text-align: center;
+        transform: rotate(90deg);
+      }
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      overflow: hidden;
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    th,
+    td {
+      border: 1px solid var(--line);
+      padding: 11px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #eef2f7;
+      color: #253044;
+      font-weight: 800;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 14px;
+    }
+
+    .slot {
+      display: grid;
+      grid-template-columns: 130px 1fr;
+      gap: 16px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .time {
+      color: var(--blue);
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 720px) {
+      .slot {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    code,
+    pre {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    }
+
+    pre {
+      margin: 12px 0 0;
+      padding: 14px;
+      overflow: auto;
+      border-radius: 8px;
+      background: #0f172a;
+      color: #e2e8f0;
+      line-height: 1.6;
+    }
+
+    .note {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    footer {
+      padding: 28px 0 46px;
+      color: var(--muted);
+      text-align: center;
+      border-top: 1px solid var(--line);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <p class="eyebrow">Horizon Class02｜Course Design v0.1</p>
+      <h1>Antigravity + AIDE 升級招標書作業</h1>
+      <p class="subtitle">從會用 Google AI 生成文章，升級到用 Antigravity 處理幾百頁招標書的長文件工程流程。</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="band">
+      <h2>北極星</h2>
+      <p class="lead">Class02 不是工具課。NotebookLM、Antigravity、FALO PM 都只是案例角色。</p>
+      <div class="quote">真正主題：從過去累積到未來價值。用 Antigravity + AIDE，升級星河既有招標書作業流程。</div>
+      <p style="margin-top: 16px;">星河已經會用 Google AI 生文章，也會基本使用 NotebookLM。真正缺口不是不會 AI，而是還沒有把 AI 放進核心工作流。</p>
+    </section>
+
+    <section class="grid grid-3">
+      <div class="card blue">
+        <span class="pill">Class02</span>
+        <h3>教學課程</h3>
+        <p>目的：改變認知。讓主管理解 AI 如何升級核心作業，不只是生成文章。</p>
+      </div>
+      <div class="card cyan">
+        <span class="pill">AIDE</span>
+        <h3>長文件工程方法論</h3>
+        <p>目的：說明怎麼做。把招標書拆成素材、元件、索引、產出與檢查流程。</p>
+      </div>
+      <div class="card green">
+        <span class="pill">FALO PM</span>
+        <h3>知識資產中控</h3>
+        <p>目的：說明如何管理。追蹤進度、缺件、風險、接手、QA 與文件狀態。</p>
+      </div>
+    </section>
+
+    <section class="band">
+      <h2>課程設計判斷</h2>
+      <div class="flow">
+        <div class="step">
+          <h3>現況</h3>
+          <p>會用 AI 產生文章</p>
+        </div>
+        <div class="arrow">→</div>
+        <div class="step">
+          <h3>缺口</h3>
+          <p>仍用傳統方式處理核心作業</p>
+        </div>
+        <div class="arrow">→</div>
+        <div class="step">
+          <h3>升級</h3>
+          <p>用 Antigravity 做招標書長文件工程</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="band">
+      <h2>3 小時比例</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>區塊</th>
+            <th>比例</th>
+            <th>說明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Antigravity 實作與示範</td>
+            <td>60%</td>
+            <td>主軸，讓Grace看到核心作業如何升級。</td>
+          </tr>
+          <tr>
+            <td>AI 導入 ROI / 成本產出感</td>
+            <td>20%</td>
+            <td>讓主管理解為何值得投入 Pro 以上帳號與系統化。</td>
+          </tr>
+          <tr>
+            <td>NotebookLM 串場示範</td>
+            <td>10%</td>
+            <td>只作為企業知識大腦示範，不教入門。</td>
+          </tr>
+          <tr>
+            <td>FALO PM 誘導理解</td>
+            <td>10%</td>
+            <td>說明為什麼最後需要知識資產中控。</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="band">
+      <h2>3 小時流程</h2>
+      <div class="timeline">
+        <article class="slot">
+          <div class="time">0:00 - 0:15</div>
+          <div>
+            <h3>從 AI 寫文章到 AI 做標案工程</h3>
+            <p>點破差異：一般用法是叫 AI 寫一段文章，進階用法是讓 AI 協助處理一整份長文件工作流。</p>
+            <p><strong>核心句：</strong>幾百頁招標書不是文章問題，而是工程問題。</p>
+          </div>
+        </article>
+
+        <article class="slot">
+          <div class="time">0:15 - 0:45</div>
+          <div>
+            <h3>傳統招標書流程為什麼會卡住</h3>
+            <p>展示招標需求散落、附件易漏、舊標案難重用、術語不一致、人工檢查很累等痛點。</p>
+          </div>
+        </article>
+
+        <article class="slot">
+          <div class="time">0:45 - 1:20</div>
+          <div>
+            <h3>AIDE 招標書長文件工程五步</h3>
+            <p>Knowledgeization、Assetization、Componentization、Reference Index、Long Document Runtime。</p>
+          </div>
+        </article>
+
+        <article class="slot">
+          <div class="time">1:20 - 1:30</div>
+          <div>
+            <h3>休息</h3>
+            <p>前半段建立框架，後半段切回實作。</p>
+          </div>
+        </article>
+
+        <article class="slot">
+          <div class="time">1:30 - 2:20</div>
+          <div>
+            <h3>Antigravity 實作主秀</h3>
+            <p>處理一份縮小版招標書資料包，建立需求對照、缺件風險、章節架構，並產出一章範例。</p>
+          </div>
+        </article>
+
+        <article class="slot">
+          <div class="time">2:20 - 2:45</div>
+          <div>
+            <h3>Grace親自指揮：管理者如何審 AI</h3>
+            <p>練習用管理者視角指揮 AI，不是成為技術操作員。</p>
+          </div>
+        </article>
+
+        <article class="slot">
+          <div class="time">2:45 - 3:00</div>
+          <div>
+            <h3>收束到 FALO PM</h3>
+            <p>說明單次 Antigravity 操作能升級作業，但長期管理會自然需要知識資產中控。</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="band">
+      <h2>AIDE 五步與招標書現場</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>AIDE 步驟</th>
+            <th>對應問題</th>
+            <th>課堂講法</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Knowledgeization</td>
+            <td>資料混亂</td>
+            <td>先讓 AI 看得懂資料。</td>
+          </tr>
+          <tr>
+            <td>Assetization</td>
+            <td>舊資料不敢用</td>
+            <td>判斷哪些可以重用。</td>
+          </tr>
+          <tr>
+            <td>Componentization</td>
+            <td>長文件太大</td>
+            <td>拆成可管理元件。</td>
+          </tr>
+          <tr>
+            <td>Reference Index</td>
+            <td>找不到依據</td>
+            <td>每段內容要能回到來源。</td>
+          </tr>
+          <tr>
+            <td>Long Document Runtime</td>
+            <td>人工組裝太累</td>
+            <td>交給 Antigravity 執行與檢查。</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="grid grid-2">
+      <div class="card gold">
+        <h2>Antigravity 示範任務</h2>
+        <ul>
+          <li>讀取招標資料夾</li>
+          <li>列出招標文件結構</li>
+          <li>抽出必要回應項目</li>
+          <li>建立 Compliance Matrix / 回應對照表</li>
+          <li>標出缺件、風險、待確認事項</li>
+          <li>建議標案書章節架構</li>
+          <li>產出其中一章範例</li>
+        </ul>
+      </div>
+
+      <div class="card red">
+        <h2>避免走偏</h2>
+        <ul>
+          <li>不要重新教 NotebookLM 入門</li>
+          <li>不要變成 Antigravity 功能導覽</li>
+          <li>不要把 FALO PM 包成 PM 軟體</li>
+          <li>不要太早建立完整產品或系統</li>
+          <li>不要把 AIDE 展開成一本方法論書</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="band">
+      <h2>總經理審 AI 指令卡</h2>
+      <p>這段教的不是 prompt 技巧，而是總經理如何審核 AI 工作流。</p>
+      <pre>請先不要寫正文，先列出你理解的招標需求與工作步驟。
+
+請把招標文件中所有需要回應的項目整理成表格。
+
+請標示哪些內容可以沿用公司既有資料，哪些需要人工補充。
+
+請列出目前最容易漏件或不合規的風險。
+
+請把這一章改成正式標案語氣，但保留可查證來源。
+
+請把目前成果整理成：已完成、缺件、風險、下一步。</pre>
+    </section>
+
+    <section class="band">
+      <h2>給 aaa / Antigravity 的開工任務</h2>
+      <p class="lead">aaa 不要先做完整教材。先準備 Antigravity 招標書作業升級示範包。</p>
+      <div class="grid grid-3">
+        <div class="card">
+          <h3>示範資料</h3>
+          <ul>
+            <li>招標書作業情境說明</li>
+            <li>範例資料夾結構</li>
+            <li>招標需求抽取表</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>工程輸出</h3>
+          <ul>
+            <li>Compliance Matrix</li>
+            <li>缺件與風險清單</li>
+            <li>可重用元件清單</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>教學輔助</h3>
+          <ul>
+            <li>Antigravity 任務指令模板</li>
+            <li>總經理審 AI 指令卡</li>
+            <li>FALO PM 收束頁</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="band">
+      <h2>成功標準</h2>
+      <p>Grace上完 Class02，不需要記住很多術語，只需要形成三個感覺：</p>
+      <div class="grid grid-3">
+        <div class="card blue">
+          <h3>1. AI 不是只能生文章</h3>
+          <p>AI 可以升級核心作業流程。</p>
+        </div>
+        <div class="card cyan">
+          <h3>2. 招標書是工程問題</h3>
+          <p>幾百頁招標書需要 Antigravity + AIDE。</p>
+        </div>
+        <div class="card green">
+          <h3>3. 長期需要中控</h3>
+          <p>長文件作業常態化後，自然需要 FALO PM。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="band">
+      <h2>最後一句話</h2>
+      <div class="quote">Class02 的目的，不是教會一個工具，而是讓星河看見：招標書這種核心工作，可以從傳統人工堆文件，升級成 Antigravity 驅動的長文件工程流程。</div>
+      <p class="note" style="margin-top: 14px;">對應 AI 母稿：class02_antigravity_aide_course_design.md</p>
+    </section>
+  </main>
+
+  <footer>
+    Horizon Class02｜Antigravity + AIDE Course Design｜v0.1
+  </footer>
+</body>
+</html>

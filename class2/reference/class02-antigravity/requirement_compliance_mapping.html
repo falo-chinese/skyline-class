@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📋 Requirement & Compliance Mapping — 需求與合規對映防線</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #06070b;
+            --card-bg: rgba(16, 18, 30, 0.75);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --text-primary: #f3f4f6;
+            --text-secondary: #9ca3af;
+            
+            /* Glow Colors */
+            --accent-rose: #f43f5e;
+            --accent-purple: #8b5cf6;
+            --accent-blue: #3b82f6;
+            --accent-cyan: #06b6d4;
+            --accent-emerald: #10b981;
+            --accent-gold: #eab308;
+            --neon-glow: radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            font-family: 'Outfit', 'Noto Sans TC', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.08) 0px, transparent 40%),
+                radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.06) 0px, transparent 40%);
+            background-attachment: fixed;
+            padding-bottom: 5rem;
+        }
+
+        header {
+            padding: 2.5rem 2rem 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title h1 {
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(to right, #a5b4fc, #818cf8, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .header-title p {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-top: 0.35rem;
+            letter-spacing: 0.05em;
+        }
+
+        .btn-back {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .btn-back:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: translateX(-2px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2.5rem auto;
+            padding: 0 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+        }
+
+        /* Glassmorphic Panel Card */
+        .glass-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(16px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+        }
+
+        .card-header-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            letter-spacing: 0.05em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* High-Impact Gold Concept Banner */
+        .neon-banner {
+            background: linear-gradient(135deg, rgba(30, 27, 75, 0.9) 0%, rgba(20, 18, 45, 0.9) 100%);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.15);
+            overflow: hidden;
+        }
+
+        .neon-banner::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .neon-banner h2 {
+            font-size: 0.9rem;
+            color: var(--accent-cyan);
+            letter-spacing: 0.15em;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+        }
+
+        .neon-banner .core-sentence {
+            font-size: 1.8rem;
+            font-weight: 900;
+            letter-spacing: 0.05em;
+            background: linear-gradient(to right, #ffe4e6, #fecdd3, #f472b6, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.4;
+            margin: 0.5rem 0;
+        }
+
+        .neon-banner p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0.75rem auto 0;
+            line-height: 1.6;
+        }
+
+        /* Interactive Process Flow Mapping Chart */
+        .flowchart-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            align-items: center;
+            margin-top: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .flowchart-grid {
+                grid-template-columns: 1.2fr 0.2fr 1.2fr 0.2fr 1.2fr 0.2fr 1.2fr 0.2fr 1.2fr 0.2fr 1.2fr;
+            }
+        }
+
+        .flow-node {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 12px;
+            padding: 1rem 0.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .flow-node:hover {
+            transform: scale(1.05);
+            border-color: rgba(255,255,255,0.15);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+        }
+
+        .flow-node h4 {
+            font-size: 0.85rem;
+            font-weight: 800;
+            margin-bottom: 0.25rem;
+            letter-spacing: 0.05em;
+        }
+
+        .flow-node span {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+        }
+
+        .flow-arrow {
+            text-align: center;
+            color: var(--text-secondary);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 767px) {
+            .flow-arrow {
+                transform: rotate(90deg);
+                margin: 0.25rem 0;
+            }
+        }
+
+        /* Color configurations for workflow nodes */
+        .fn-purple { border-color: rgba(139, 92, 246, 0.2); }
+        .fn-purple h4 { color: #c084fc; }
+        .fn-purple:hover { box-shadow: 0 0 15px rgba(139, 92, 246, 0.2); border-color: var(--accent-purple); }
+
+        .fn-blue { border-color: rgba(59, 130, 246, 0.2); }
+        .fn-blue h4 { color: #93c5fd; }
+        .fn-blue:hover { box-shadow: 0 0 15px rgba(59, 130, 246, 0.2); border-color: var(--accent-blue); }
+
+        .fn-cyan { border-color: rgba(6, 182, 212, 0.2); }
+        .fn-cyan h4 { color: #67e8f9; }
+        .fn-cyan:hover { box-shadow: 0 0 15px rgba(6, 182, 212, 0.2); border-color: var(--accent-cyan); }
+
+        .fn-emerald { border-color: rgba(16, 185, 129, 0.2); }
+        .fn-emerald h4 { color: #6ee7b7; }
+        .fn-emerald:hover { box-shadow: 0 0 15px rgba(16, 185, 129, 0.2); border-color: var(--accent-emerald); }
+
+        .fn-gold { border-color: rgba(234, 179, 8, 0.2); }
+        .fn-gold h4 { color: #fde047; }
+        .fn-gold:hover { box-shadow: 0 0 15px rgba(234, 179, 8, 0.2); border-color: var(--accent-gold); }
+
+        .fn-rose { border-color: rgba(244, 63, 94, 0.2); }
+        .fn-rose h4 { color: #fda4af; }
+        .fn-rose:hover { box-shadow: 0 0 15px rgba(244, 63, 94, 0.2); border-color: var(--accent-rose); }
+
+        /* Responsive Table styling */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            margin-top: 1rem;
+            border-radius: 14px;
+            border: 1px solid var(--border-color);
+        }
+
+        .mapping-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            text-align: left;
+        }
+
+        .mapping-table th, .mapping-table td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .mapping-table th {
+            background: rgba(255, 255, 255, 0.02);
+            color: var(--text-primary);
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .mapping-table td {
+            color: #d1d5db;
+            line-height: 1.5;
+            vertical-align: top;
+        }
+
+        .mapping-table tr:hover td {
+            background: rgba(255, 255, 255, 0.01);
+        }
+
+        /* Glow pills inside tables */
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.2rem 0.5rem;
+            border-radius: 5px;
+        }
+
+        .pill-red { background: rgba(244, 63, 94, 0.12); color: #fda4af; border: 1px solid rgba(244, 63, 94, 0.2); }
+        .pill-yellow { background: rgba(234, 179, 8, 0.12); color: #fde047; border: 1px solid rgba(234, 179, 8, 0.2); }
+        .pill-blue { background: rgba(59, 130, 246, 0.12); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.2); }
+        .pill-green { background: rgba(16, 185, 129, 0.12); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.2); }
+        .pill-grey { background: rgba(255, 255, 255, 0.03); color: var(--text-secondary); border: 1px solid rgba(255, 255, 255, 0.05); }
+
+        footer {
+            text-align: center;
+            margin-top: 5rem;
+            color: rgba(255, 255, 255, 0.15);
+            font-size: 0.75rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header area -->
+    <header>
+        <div class="header-title">
+            <h1>📋 Requirement & Compliance Mapping <span style="font-size:0.9rem; font-weight:400; color:var(--accent-purple);">[需求與合規對映]</span></h1>
+            <p>星河 Class 02 專屬補充教材：用內部知識資產回應外部規範之防線</p>
+        </div>
+        <a href="index.html" class="btn-back">⬅ 返回課程首頁</a>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        
+        <!-- Section 1: Concept banner -->
+        <div class="neon-banner">
+            <h2>💎 Class02 核心心法概念</h2>
+            <div class="core-sentence">招標書真正要做的，是用內部知識資產，正確回應外部招標規範。</div>
+            <p>
+                招標書的編製邏輯與一般的 SOP 或教材有本質上的不同。它不是靜態的內部知識整理，而是一場外部強制法規（RFP、評選標準、資格）與公司既有資產的精準映射配對。只有建立嚴密的需求與合規對映防線，才能杜絕廢標與漏件風險。
+            </p>
+        </div>
+
+        <!-- Section 2: Interactive Workflow -->
+        <div class="glass-card">
+            <div class="card-header-title">
+                <span>🔄</span> AIDE 需求與合規對映流程
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
+                在長文件工程中，外部考卷與內部筆記透過 AIDE 方法論的五大步驟，最終融合成高可靠的專案中控中心：
+            </p>
+
+            <div class="flowchart-grid">
+                
+                <div class="flow-node fn-purple">
+                    <h4>輸入來源</h4>
+                    <span>內部資產 + 外部 RFP</span>
+                </div>
+                
+                <div class="flow-arrow">→</div>
+                
+                <div class="flow-node fn-blue">
+                    <h4>需求對映</h4>
+                    <span>抽取條款 / 建立抽取表</span>
+                </div>
+                
+                <div class="flow-arrow">→</div>
+                
+                <div class="flow-node fn-cyan">
+                    <h4>回應矩陣</h4>
+                    <span>需求與章節元件映射</span>
+                </div>
+                
+                <div class="flow-arrow">→</div>
+                
+                <div class="flow-node fn-rose">
+                    <h4>缺件與風險</h4>
+                    <span>漏件偵測 / 合規防護</span>
+                </div>
+
+                <div class="flow-arrow">→</div>
+                
+                <div class="flow-node fn-emerald">
+                    <h4>標書產出</h4>
+                    <span>Antigravity 自動編譯</span>
+                </div>
+
+                <div class="flow-arrow">→</div>
+                
+                <div class="flow-node fn-gold">
+                    <h4>PM 中控</h4>
+                    <span>FALO PM 脈絡長期治理</span>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Section 3: Table 1 - RFP Requirements Extraction -->
+        <div class="glass-card">
+            <div class="card-header-title" style="color: var(--accent-cyan);">
+                <span>🔍</span> 1. 需求抽取表 (RFP Requirements Extraction Sheet)
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
+                進件 120 頁的招標規範書後，Agent 自主分析並結構化抽取出的「外部合規要求條款明細表」：
+            </p>
+
+            <div class="table-responsive">
+                <table class="mapping-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 15%;">RFP 條款</th>
+                            <th style="width: 45%;">要求內容</th>
+                            <th style="width: 12%;">類型</th>
+                            <th style="width: 10%;">重要性</th>
+                            <th style="width: 10%;">截止日</th>
+                            <th style="width: 8%;">負責人</th>
+                            <th style="width: 10%;">狀態</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="font-weight: 700; color: var(--text-primary);">第 8 條 (實績)</td>
+                            <td>投標廠商須於過去 3 年內具備至少 1 案金額達 300 萬元以上之文件數位化實績。</td>
+                            <td>資格審查門檻</td>
+                            <td><span class="pill pill-red">🔴 極高</span></td>
+                            <td style="font-family: monospace;">2026-06-01</td>
+                            <td style="font-weight: 600;">PM John</td>
+                            <td><span class="pill pill-green">🟢 已確認</span></td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: 700; color: var(--text-primary);">第 14 條 (方法論)</td>
+                            <td>建議書須詳述「文件數位化流程」與「知識資產化轉化路徑」。</td>
+                            <td>評選評分項目</td>
+                            <td><span class="pill pill-yellow">🟡 高</span></td>
+                            <td style="font-family: monospace;">2026-06-02</td>
+                            <td style="font-weight: 600;">顧問 ff</td>
+                            <td><span class="pill pill-yellow">🟡 編寫中</span></td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: 700; color: var(--text-primary);">第 22 條 (資安)</td>
+                            <td>投標廠商須證明符合基本資安規範，並檢附資安政策切結書。</td>
+                            <td>資格審查門檻</td>
+                            <td><span class="pill pill-red">🔴 極高</span></td>
+                            <td style="font-family: monospace;">2026-06-01</td>
+                            <td style="font-weight: 600;">PM John</td>
+                            <td><span class="pill pill-green">🟢 已確認</span></td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: 700; color: var(--accent-rose);">第 35 條 (財報)</td>
+                            <td style="color: var(--accent-rose);">須檢附過去 3 年經會計師簽證之財務報表，且負債比率不得高於 60%。</td>
+                            <td>資格審查門檻</td>
+                            <td><span class="pill pill-red">🔴 極高</span></td>
+                            <td style="font-family: monospace;">2026-06-02</td>
+                            <td style="font-weight: 600;">會計 Ivy</td>
+                            <td><span class="pill pill-red">🔴 缺件</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Section 4: Table 2 - Compliance Matrix -->
+        <div class="glass-card">
+            <div class="card-header-title" style="color: var(--accent-emerald);">
+                <span>📊</span> 2. 回應對照表 (Compliance Response Matrix)
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
+                將抽取的外部需求與我方章節、歷史資產來源進行映射索引，並主動稽核缺件與合規風險：
+            </p>
+
+            <div class="table-responsive">
+                <table class="mapping-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 20%;">RFP 要求</th>
+                            <th style="width: 25%;">我方回應章節</th>
+                            <th style="width: 25%;">可用歷史元件</th>
+                            <th style="width: 12%;">缺件</th>
+                            <th style="width: 10%;">風險</th>
+                            <th style="width: 8%;">是否完成</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="font-weight: 700; color: var(--text-primary);">REQ-01 (基本實績)</td>
+                            <td>第三章、第二節「公司歷史績效與實例」</td>
+                            <td>`/2025年鼎盛ERP專案實績.md`</td>
+                            <td>無</td>
+                            <td><span class="pill pill-green">🟢 無</span></td>
+                            <td style="font-weight: bold; color: var(--accent-emerald);">是</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: 700; color: var(--text-primary);">REQ-02 (方法論)</td>
+                            <td>第二章、第一節「專案執行方法論」</td>
+                            <td>`/falo_pm_methodology.md`</td>
+                            <td style="color: var(--accent-gold);">待產出草稿</td>
+                            <td><span class="pill pill-yellow">🟡 低風險</span></td>
+                            <td style="font-weight: bold; color: var(--text-secondary);">否</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: 700; color: var(--text-primary);">REQ-03 (資安證明)</td>
+                            <td>附件五「星河資安維護切結書」</td>
+                            <td>`/資訊安全維護政策規範.md`</td>
+                            <td>無</td>
+                            <td><span class="pill pill-green">🟢 無</span></td>
+                            <td style="font-weight: bold; color: var(--accent-emerald);">是</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: 700; color: var(--accent-rose);">REQ-04 (財務證明)</td>
+                            <td style="color: var(--accent-rose);">附件六「歷年財務查核簽證證明」</td>
+                            <td style="color: var(--accent-rose); font-weight: bold;">⚠️ 無對應歷史檔案</td>
+                            <td style="color: var(--accent-rose); font-weight: bold;">🔴 缺少 3 年財報影本</td>
+                            <td><span class="pill pill-red">🔴 極高</span></td>
+                            <td style="font-weight: bold; color: var(--text-secondary);">否</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        🌌 Horizon Class 02 &copy; 2026. Requirement & Compliance Mapping designed by Antigravity (aaa) for Force (ff) Advisor.
+    </footer>
+</body>
+</html>

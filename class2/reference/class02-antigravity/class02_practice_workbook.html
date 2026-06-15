@@ -1,0 +1,2301 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌌 星河 Class 02 — 企業知識資產化與 AI 應用實務現場實作手冊</title>
+    <!-- Google Fonts: Outfit & Noto Sans TC -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <!-- Embedded Mermaid.js -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                background: '#0d0e15',
+                primaryColor: '#1e1b4b',
+                primaryTextColor: '#fff',
+                lineColor: '#5850ec'
+            }
+        });
+    </script>
+    <style>
+        :root {
+            --bg-dark: #07080d;
+            --card-bg: rgba(17, 19, 32, 0.75);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --text-primary: #f3f4f6;
+            --text-secondary: #9ca3af;
+            
+            /* Harmonic Gradient Accents */
+            --accent-rose: #f43f5e;
+            --accent-purple: #8b5cf6;
+            --accent-blue: #3b82f6;
+            --accent-cyan: #06b6d4;
+            --accent-emerald: #10b981;
+            --accent-gold: #eab308;
+            --accent-infinite: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            font-family: 'Outfit', 'Noto Sans TC', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.08) 0px, transparent 50%),
+                radial-gradient(at 50% 50%, rgba(6, 182, 212, 0.06) 0px, transparent 50%);
+            background-attachment: fixed;
+            padding-bottom: 5rem;
+        }
+
+        header {
+            padding: 2.5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            header {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
+
+        .header-title h1 {
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #fff 40%, #c7d2fe 70%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.01em;
+            margin-bottom: 0.25rem;
+        }
+
+        .header-subtitle {
+            font-size: 0.95rem;
+            color: var(--accent-purple);
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-back {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.6rem 1.2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-back:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.18);
+            transform: translateX(-3px);
+        }
+
+        /* Core container layout */
+        .container {
+            max-width: 1200px;
+            margin: 2.5rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Golden Principles Callout */
+        .golden-principles {
+            background: linear-gradient(135deg, rgba(20, 22, 37, 0.9) 0%, rgba(13, 14, 25, 0.9) 100%);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            box-shadow: 0 12px 40px rgba(139, 92, 246, 0.05);
+            border-radius: 20px;
+            padding: 1.75rem;
+            margin-bottom: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(12px);
+        }
+
+        .golden-principles::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--accent-purple);
+        }
+
+        .golden-title {
+            font-size: 1.05rem;
+            font-weight: bold;
+            color: var(--accent-purple);
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.05em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .golden-text {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1.6;
+        }
+
+        /* Tabs System styling */
+        .tab-nav {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+            flex-wrap: wrap; /* Safe multi-line layout to prevent horizontal clipping */
+        }
+
+        .tab-nav::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            padding: 0.8rem 1.5rem;
+            font-size: 0.95rem;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tab-btn:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .tab-btn.active {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.06);
+            box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .tab-panel {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* PANEL 1: Overview and Practice Scenario */
+        .overview-panel {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 900px) {
+            .overview-panel {
+                grid-template-columns: 1.8fr 1fr;
+            }
+        }
+
+        .overview-main {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 2.5rem;
+            line-height: 1.8;
+            backdrop-filter: blur(16px);
+        }
+
+        .overview-main h2 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            padding-bottom: 0.75rem;
+        }
+
+        .overview-main p {
+            font-size: 0.95rem;
+            color: #d1d5db;
+            margin-bottom: 1.25rem;
+        }
+
+        .overview-main ul {
+            list-style: none;
+            margin: 1.5rem 0;
+        }
+
+        .overview-main li {
+            font-size: 0.95rem;
+            color: #d1d5db;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.6rem;
+        }
+
+        .overview-main li strong {
+            color: #fff;
+        }
+
+        .overview-main li::before {
+            content: '🚨';
+            font-size: 0.9rem;
+        }
+
+        .overview-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .sidebar-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 1.5rem;
+            backdrop-filter: blur(16px);
+        }
+
+        .sidebar-card h3 {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .step-flow-vertical {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .step-flow-vertical::before {
+            content: '';
+            position: absolute;
+            left: 0.4rem;
+            top: 0.5rem;
+            bottom: 0.5rem;
+            width: 1px;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .flow-node {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            position: relative;
+            line-height: 1.4;
+        }
+
+        .flow-node::before {
+            content: '•';
+            position: absolute;
+            left: -1.45rem;
+            top: -0.1rem;
+            font-size: 1.25rem;
+            color: var(--accent-purple);
+        }
+
+        .flow-node strong {
+            color: #fff;
+        }
+
+        /* PANEL 2: Mock RFP Summary styling */
+        .rfp-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .rfp-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .rfp-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(12px);
+            transition: all 0.3s ease;
+        }
+
+        .rfp-card:hover {
+            border-color: rgba(255,255,255,0.15);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            transform: translateY(-2px);
+        }
+
+        .rfp-card-tag {
+            font-size: 0.7rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent-cyan);
+            margin-bottom: 0.5rem;
+        }
+
+        .rfp-card h3 {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 1rem;
+        }
+
+        .rfp-card ul {
+            list-style: none;
+        }
+
+        .rfp-card li {
+            font-size: 0.85rem;
+            color: #d1d5db;
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .rfp-card li::before {
+            content: '✦';
+            color: var(--accent-cyan);
+            font-weight: bold;
+        }
+
+        /* PANEL 3: Knowledge Components styling */
+        .component-deck {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .component-deck {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1100px) {
+            .component-deck {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .comp-card {
+            background: linear-gradient(135deg, rgba(20, 22, 37, 0.8) 0%, rgba(13, 14, 25, 0.8) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 1.75rem;
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 220px;
+            transition: all 0.3s ease;
+        }
+
+        .comp-card:hover {
+            border-color: rgba(255,255,255,0.18);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            transform: translateY(-4px);
+        }
+
+        .comp-icon {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .comp-card h3 {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        .comp-filename {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.75rem;
+            color: var(--accent-cyan);
+            background: rgba(6, 182, 212, 0.05);
+            border: 1px solid rgba(6, 182, 212, 0.1);
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 0.75rem;
+        }
+
+        .comp-desc {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* PANEL 4: Interactive Workbook tables with Answer Toggle */
+        .workbook-section-header {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .workbook-section-header {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
+
+        .workbook-title h2 {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        /* Answer key switch styling */
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border-color);
+            padding: 0.5rem 1.25rem;
+            border-radius: 9999px;
+            backdrop-filter: blur(8px);
+        }
+
+        .toggle-label {
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+
+        .toggle-label.active {
+            color: var(--accent-purple);
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255,255,255,0.1);
+            transition: .4s;
+            border-radius: 24px;
+            border: 1px solid var(--border-color);
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 3px;
+            bottom: 3px;
+            background-color: var(--text-primary);
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--accent-purple);
+            border-color: var(--accent-purple);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
+        /* Interactive tables styling */
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            margin-bottom: 3rem;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        th {
+            background: rgba(255, 255, 255, 0.03);
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 0.05em;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        td {
+            color: #d1d5db;
+        }
+
+        /* Hide-reveal cells */
+        .ans-cell {
+            opacity: 0;
+            transform: translateY(4px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-size: 0.85rem;
+        }
+
+        .ans-cell.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .placeholder-cell {
+            color: rgba(255,255,255,0.15);
+            font-style: italic;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .placeholder-cell.hide {
+            display: none;
+        }
+
+        .status-pill {
+            font-size: 0.7rem;
+            font-weight: bold;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .status-green { background: rgba(16, 185, 129, 0.1); color: var(--accent-emerald); border: 1px solid rgba(16, 185, 129, 0.2); }
+        .status-amber { background: rgba(245, 158, 11, 0.1); color: var(--accent-gold); border: 1px solid rgba(245, 158, 11, 0.2); }
+        .status-red { background: rgba(244, 63, 94, 0.1); color: var(--accent-rose); border: 1px solid rgba(244, 63, 94, 0.2); }
+
+        .importance-badge {
+            font-size: 0.7rem;
+            font-weight: bold;
+            color: var(--accent-rose);
+            background: rgba(244, 63, 94, 0.08);
+            border: 1px solid rgba(244, 63, 94, 0.2);
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+        }
+
+        /* Risk analysis layout */
+        .risk-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        @media (min-width: 768px) {
+            .risk-layout {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .risk-question-card {
+            background: rgba(255,255,255,0.01);
+            border: 1px solid rgba(255,255,255,0.04);
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 250px;
+        }
+
+        .risk-question-card h4 {
+            font-size: 0.95rem;
+            color: #fff;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .risk-question-card p {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1.25rem;
+        }
+
+        /* PANEL 5: Prompts consoles styling */
+        .prompts-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .prompt-console-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(12px);
+        }
+
+        .prompt-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding-bottom: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .prompt-step-tag {
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: var(--accent-purple);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .prompt-header h3 {
+            font-size: 1.15rem;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .console-box {
+            background: #0d0e15;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1.25rem;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            color: #a5b4fc;
+            line-height: 1.5;
+            position: relative;
+            margin-bottom: 0.5rem;
+        }
+
+        .console-text {
+            word-break: break-all;
+            padding-right: 4rem;
+        }
+
+        .btn-copy-console {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: var(--text-primary);
+            font-size: 0.7rem;
+            padding: 0.35rem 0.75rem;
+            border-radius: 6px;
+            cursor: pointer;
+            position: absolute;
+            right: 0.75rem;
+            top: 0.75rem;
+            transition: all 0.2s ease;
+        }
+
+        .btn-copy-console:hover {
+            color: var(--accent-cyan);
+            border-color: rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.08);
+        }
+
+        .prompt-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* PANEL 6: Homework styling */
+        .hw-panel {
+            background: linear-gradient(135deg, rgba(20, 22, 37, 0.9) 0%, rgba(13, 14, 25, 0.9) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+            backdrop-filter: blur(16px);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hw-header {
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            padding-bottom: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .hw-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .hw-header h2 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .hw-body {
+            line-height: 1.8;
+        }
+
+        .hw-body p {
+            font-size: 0.95rem;
+            color: #d1d5db;
+            margin-bottom: 1.25rem;
+        }
+
+        .hw-step-box {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.04);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .hw-step-box h4 {
+            font-size: 1rem;
+            font-weight: bold;
+            color: var(--accent-cyan);
+            margin-bottom: 0.75rem;
+        }
+
+        .hw-step-box ol {
+            padding-left: 1.25rem;
+        }
+
+        .hw-step-box li {
+            font-size: 0.9rem;
+            color: #d1d5db;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Custom toast notification */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: linear-gradient(135deg, rgba(20, 22, 37, 0.95) 0%, rgba(13, 14, 25, 0.95) 100%);
+            border: 1px solid var(--accent-purple);
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.15);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            color: #fff;
+            font-size: 0.85rem;
+            font-weight: bold;
+            z-index: 9999;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 5rem;
+            color: rgba(255, 255, 255, 0.2);
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+
+        /* Premium Badges for Dual-Track Checklist */
+        .badge {
+            display: inline-block;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            margin-right: 0.25rem;
+            vertical-align: middle;
+        }
+        .badge-external {
+            background: rgba(6, 182, 212, 0.15);
+            color: #67e8f9;
+            border: 1px solid rgba(6, 182, 212, 0.3);
+        }
+        .badge-internal {
+            background: rgba(139, 92, 246, 0.15);
+            color: #c084fc;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+        .badge-warn {
+            background: rgba(249, 115, 22, 0.15);
+            color: #fb923c;
+            border: 1px solid rgba(249, 115, 22, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-left">
+            <div class="header-subtitle">Class 02 — 課堂實作材料包</div>
+            <h1 class="header-title">星河 Class 02 企業知識資產化實作手冊</h1>
+        </div>
+        <div class="header-actions">
+            <a href="../class02/index.html" class="btn-back">⬅ 返回課程首頁</a>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <!-- Golden Principles Callout -->
+        <div class="golden-principles">
+            <div class="golden-title">
+                <span>🔑</span> 學員現場實作心法 (Workbook Core Rule)
+            </div>
+            <div class="golden-text">
+                「投標書的本質不是寫作文，而是用內部知識積木回應外部招標條款的<strong>對帳與避險工程</strong>。」
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <nav class="tab-nav">
+            <button class="tab-btn active" onclick="switchTab(event, 'tab-overview')">🎯 1. 實作任務說明</button>
+            <button class="tab-btn" onclick="switchTab(event, 'tab-rfp')">📄 2. 模擬 RFP 摘要</button>
+            <button class="tab-btn" onclick="switchTab(event, 'tab-comps')">💎 3. 內部知識積木</button>
+            <button class="tab-btn" onclick="switchTab(event, 'tab-workbook')">📋 4. 現場練習工作表</button>
+            <button class="tab-btn" onclick="switchTab(event, 'tab-prompts')">🤖 5. Antigravity 指令集</button>
+            <button class="tab-btn" onclick="switchTab(event, 'tab-homework')">🏡 6. 課後實踐作業</button>
+            <button class="tab-btn" onclick="switchTab(event, 'tab-excel-case')">📊 PM 經驗庫特訓案例</button>
+        </nav>
+
+        <!-- PANEL 1: Overview -->
+        <section id="tab-overview" class="tab-panel active">
+            <div class="overview-panel">
+                
+                <div class="overview-main">
+                    <h2>模擬實作情境背景</h2>
+                    <p>你目前擔任 <strong>星河科技</strong> 的專案經理（PM）。公司剛剛收到一份政府釋出的 <strong>「智慧文件政務工程導入標案」</strong>。投標截止期限僅剩 <strong>3 天</strong>，外部招標規範書（RFP）內容繁複，主管要求你必須帶領團隊在時限內產出合規的服務建議書（投標文件）。</p>
+                    <p>為快速響應，你決定從星河科技現有的 <strong>「經典基本母版 (Classic Master Template)」</strong> 出發。這是一個包含公司標準配置（如預設 4 小時維護響應 SLA、預設指派資深 PM 志明、預設放入金額最高的鼎盛 ERP 案例）的基礎範本。</p>
+                    <p>然而，外部招標規範極其嚴酷，且與公司內部治理標準存在多重潛在衝突。本次實作中，我們將練習運用 <strong>AIDE（AI原生大型文件工程）</strong> 的雙軌查核防線：</p>
+                    
+                    <div>
+                        <h3 style="font-size: 1.1rem; color: var(--accent-gold); margin: 1.5rem 0 0.75rem;">學員要完成的任務：</h3>
+                        <p>在本次實作中，我們將模擬真實招標文件的完整雙軌對帳與避險防線。你需要：<br/>
+                        1. <strong>🌐 外部要求 (External Client Compliance)</strong>：對帳外部投標資格（篩選符合條件之專案）、人員持證（處理志明 PMP 到期問題）與 SLA 技術承諾（將標書響應合規改寫為 2h），確保 0 漏件、0 廢標。<br/>
+                        2. <strong>🛡️ 內部要求 (Internal Corporate Governance)</strong>：防禦誠信紅線（排除缺公文的案 A，嚴禁虛構公文）、控制 SLA 響應升級成本（<strong>對外承諾 2h 標書的同時，主動在內部 PM 中控台發出成本待命預警黃燈，調配本地備勤資源</strong>）與 Multi-LLM 備援，守護公司資源與安全底線。</p>
+                    </div>
+                </div>
+
+                <div class="overview-sidebar">
+                    <div class="sidebar-card">
+                        <h3>⚙️ 雙軌對帳實作流程</h3>
+                        <div class="step-flow-vertical">
+                            <div class="flow-node"><strong>1. 載入經典基本母版</strong><br/>定位公司預設標準配置</div>
+                            <div class="flow-node"><strong>2. 拆解外部 RFP 規範</strong><br/>提取外部合規死命令</div>
+                            <div class="flow-node"><strong>3. 區隔雙軌差距對帳</strong><br/>產出內外部 Gap Checklist</div>
+                            <div class="flow-node"><strong>4. 排除誠信與資格漏洞</strong><br/>案 C 替換/PM 備降 Sophia</div>
+                            <div class="flow-node"><strong>5. 衝突化解與小幅增強</strong><br/>SLA改寫2h & 內部亮燈調撥</div>
+                            <div class="flow-node"><strong>6. 同步中控台輸出 JSON</strong><br/>寫入管理參數與容災備援</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="tab-rfp" class="tab-panel">
+            <div style="margin-bottom: 2rem; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 16px; display: flex; flex-direction: column; gap: 0.75rem;">
+                <div style="font-size: 0.9rem; font-weight: 700; color: var(--accent-cyan);">🌐 外部招標規範書 (RFP) 硬性要求與高可讀性 HTML 檔直連</div>
+                <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                    <a href="mock_data_advanced/01_rfp/mock_rfp_full.html" target="_blank" class="learn-btn" style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.15) 0%, rgba(59, 130, 246, 0.15) 100%); border: 1px solid rgba(6, 182, 212, 0.3); color: #67e8f9; padding: 0.5rem 1.25rem; border-radius: 8px; font-size: 0.85rem; font-weight: 700; text-decoration: none;">
+                        📄 開啟完整模擬 RFP HTML ➔
+                    </a>
+                    <a href="mock_data_advanced/01_rfp/mock_rfp_summary.html" target="_blank" class="learn-btn" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); color: var(--text-primary); padding: 0.5rem 1.25rem; border-radius: 8px; font-size: 0.85rem; font-weight: 700; text-decoration: none;">
+                        📄 開啟 1頁精簡版 RFP HTML ➔
+                    </a>
+                    <a href="mock_data_advanced/01_rfp/mock_rfp_appendices.html" target="_blank" class="learn-btn" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); color: var(--accent-cyan); padding: 0.5rem 1.25rem; border-radius: 8px; font-size: 0.85rem; font-weight: 700; text-decoration: none;">
+                        📄 開啟投標證照檢附須知附錄 HTML ➔
+                    </a>
+                </div>
+            </div>
+
+            <div class="rfp-grid">
+                
+                <div class="rfp-card">
+                    <span class="rfp-card-tag" style="background: rgba(6, 182, 212, 0.15); color: #67e8f9;">🌐 RFP 基本指標</span>
+                    <h3>標案基本指標</h3>
+                    <ul>
+                        <li><strong>標案名稱</strong>：中華民國行政機關智慧文件管理與流程自動化導入政務工程。</li>
+                        <li><strong>招標機關</strong>：國家檔案數位發展委員會。</li>
+                        <li><strong>預算金額</strong>：新台幣 500 萬元整。</li>
+                        <li><strong>投標截止日</strong>：2026 年 6 月 2 日 17:00 整（逾時不受理）。</li>
+                    </ul>
+                </div>
+
+                <div class="rfp-card">
+                    <span class="rfp-card-tag" style="background: rgba(6, 182, 212, 0.15); color: #67e8f9;">🌐 投標廠商資格</span>
+                    <h3>RFP 條款 3.1.2</h3>
+                    <ul>
+                        <li>廠商必須檢附過去三年內（2023-2025年），單一契約金額大於 <strong>新台幣 300 萬元</strong> 之智慧文件或 ERP 系統導入實績。</li>
+                        <li><strong>必須檢附文件</strong>：客戶端簽章之「驗收合格證明公文影本」。</li>
+                        <li style="color: var(--accent-gold); font-size: 0.8rem; margin-top: 0.5rem; list-style-type: none; font-weight: bold;">
+                            ⚠️ 誠信核對限制：必須在 3 個案例中比對並剔除無合格公文之實績，嚴禁偽造。
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="rfp-card">
+                    <span class="rfp-card-tag" style="background: rgba(6, 182, 212, 0.15); color: #67e8f9;">🌐 專案人員資格</span>
+                    <h3>RFP 條款 4.1.5</h3>
+                    <ul>
+                        <li>指派專案經理 (PM) 必須具備有效期限內之 <strong>PMP 國際專案管理師證照</strong>，且送件時檢附影本。</li>
+                        <li style="color: var(--accent-rose); font-weight: bold; margin-top: 0.5rem; list-style-type: none;">
+                            ⚠️ 致命廢標死穴：母版預設 PM 志明之證照已於 2024 年底過期失效，必須啟動人員備降。
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="rfp-card">
+                    <span class="rfp-card-tag" style="background: rgba(6, 182, 212, 0.15); color: #67e8f9;">🌐 售後維護 SLA</span>
+                    <h3>RFP 條款 7.1.3</h3>
+                    <ul>
+                        <li>系統緊急故障事件，得標廠商必須承諾於 <strong>2 小時內</strong> 派員或遠端排除故障。</li>
+                        <li><strong>懲罰條款</strong>：每逾期 1 小時扣罰合約款萬分之五。</li>
+                        <li style="color: var(--accent-gold); font-size: 0.8rem; margin-top: 0.5rem; list-style-type: none; font-weight: bold;">
+                            ⚠️ 內外部衝突對帳：星河標準維護為 4h，標案要求 2h。標書改寫 2h 的同時，內部必須觸發成本預警。
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="rfp-card">
+                    <span class="rfp-card-tag" style="background: rgba(6, 182, 212, 0.15); color: #67e8f9;">🌐 資訊安全防線</span>
+                    <h3>RFP 條款 6.3.3</h3>
+                    <ul>
+                        <li>廠商必須提交用印之「資訊安全維護切結書」（自擬格式，須包含資料不落地與每季定期風險稽核條款）。</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="tab-comps" class="tab-panel">
+            <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 16px; margin-bottom: 2rem; display: flex; flex-direction: column; gap: 0.5rem;">
+                <div style="font-size: 0.9rem; font-weight: 700; color: var(--accent-emerald);">🛡️ 內部經典基本母版配置與備用知識積木 (可點擊開啟 HTML 元件)</div>
+                <div style="font-size: 0.8rem; color: var(--text-secondary);">星河科技投標『經典基本母版』預設為：第一章公司簡介、第二章 falo_pm_methodology (4h SLA)、第三章鼎盛 ERP 實績 (無公文)、第四章 PM 志明 (PMP已失效)。學員需調用備用知識積木進行 Delta 補丁：</div>
+            </div>
+            
+            <div class="component-deck">
+                
+                <div class="comp-card" style="border-left: 4px solid var(--accent-purple);">
+                    <div>
+                        <div class="comp-icon">🏢</div>
+                        <h3>[母版] 公司簡介元件</h3>
+                        <a href="mock_data_advanced/02_internal_knowledge_assets/company_profile_component.html" class="comp-filename" target="_blank">company_profile_component.html ➔</a>
+                        <p class="comp-desc">包含公司基本概況、資本額 3000w。符合基本投標資格，直接作為標案第一章。</p>
+                    </div>
+                </div>
+
+                <div class="comp-card" style="border-left: 4px solid var(--accent-gold);">
+                    <div>
+                        <div class="comp-icon">🏆</div>
+                        <h3 style="display: flex; justify-content: space-between; align-items: center;">
+                            [母版預設] 2025鼎盛ERP
+                            <span class="status-pill status-amber" style="font-size: 0.65rem; padding: 0.1rem 0.4rem; background: rgba(234, 179, 8, 0.15); color: #fde047;">🟡 缺公文</span>
+                        </h3>
+                        <a href="mock_data_advanced/02_internal_knowledge_assets/2025_apex_erp_project_case.html" class="comp-filename" target="_blank">2025_apex_erp_project_case.html ➔</a>
+                        <p class="comp-desc">合約金額新台幣 **450 萬元**。雖然金額符合 RFP 要求，但**結案公文丟失未歸檔**，為守護誠信底線，必須排除此案！</p>
+                    </div>
+                </div>
+
+                <div class="comp-card" style="border-left: 4px solid var(--accent-rose);">
+                    <div>
+                        <div class="comp-icon">👤</div>
+                        <h3 style="display: flex; justify-content: space-between; align-items: center;">
+                            [母版預設] PM 志明履歷
+                            <span class="status-pill status-rose" style="font-size: 0.65rem; padding: 0.1rem 0.4rem; background: rgba(244, 63, 94, 0.15); color: #fda4af;">🔴 PMP 已失效</span>
+                        </h3>
+                        <a href="mock_data_advanced/02_internal_knowledge_assets/pm_resume_chihming.html" class="comp-filename" target="_blank">pm_resume_chihming.html ➔</a>
+                        <p class="comp-desc">指派專案經理志明的 **PMP 國際證照已於 2024-12-31 過期**。若直接送件將直接廢標！必須啟用備用專家。</p>
+                    </div>
+                </div>
+
+                <div class="comp-card" style="border-left: 4px solid var(--accent-emerald);">
+                    <div>
+                        <div class="comp-icon">👤</div>
+                        <h3 style="display: flex; justify-content: space-between; align-items: center;">
+                            [備用] Sophia 林淑芬履歷
+                            <span class="status-pill status-green" style="font-size: 0.65rem; padding: 0.1rem 0.4rem;">🟢 備降 PM 首選</span>
+                        </h3>
+                        <a href="mock_data_advanced/02_internal_knowledge_assets/pm_resume_chihming.html" class="comp-filename" target="_blank">pm_resume_chihming.html ➔</a>
+                        <p class="comp-desc">資深顧問林淑芬 (Sophia)，其 PMP 國際證照有效期至 **2028-06-30**。作為合規 PM 備降方案的完美首選。</p>
+                    </div>
+                </div>
+
+                <div class="comp-card" style="border-left: 4px solid var(--accent-emerald);">
+                    <div>
+                        <div class="comp-icon">🏆</div>
+                        <h3 style="display: flex; justify-content: space-between; align-items: center;">
+                            [備用] 2023繁星文件案
+                            <span class="status-pill status-green" style="font-size: 0.65rem; padding: 0.1rem 0.4rem;">🟢 完美合規實績</span>
+                        </h3>
+                        <a href="mock_data_advanced/02_internal_knowledge_assets/2023_stellar_document_automation_case.html" class="comp-filename" target="_blank">2023_stellar_document_automation_case.html ➔</a>
+                        <p class="comp-desc">合約金額新台幣 **350 萬元**。**客戶驗收公文完全齊備**，100% 符合 RFP 廠商資格，是無風險首選實績！</p>
+                    </div>
+                </div>
+
+                <div class="comp-card" style="border-left: 4px solid var(--accent-rose);">
+                    <div>
+                        <div class="comp-icon">🏆</div>
+                        <h3 style="display: flex; justify-content: space-between; align-items: center;">
+                            [備用] 2024浩宇ERP案
+                            <span class="status-pill status-rose" style="font-size: 0.65rem; padding: 0.1rem 0.4rem; background: rgba(244, 63, 94, 0.15); color: #fda4af;">🔴 金額不足</span>
+                        </h3>
+                        <a href="mock_data_advanced/02_internal_knowledge_assets/2024_universe_crm_project_case.html" class="comp-filename" target="_blank">2024_universe_crm_project_case.html ➔</a>
+                        <p class="comp-desc">合約金額新台幣 **250 萬元**。雖然公文齊備，但金額小於 RFP 300 萬的硬性門檻，直接淘汰。</p>
+                    </div>
+                </div>
+
+                <div class="comp-card" style="border-left: 4px solid var(--accent-purple);">
+                    <div>
+                        <div class="comp-icon">🛡️</div>
+                        <h3>[備用] 資訊安全切結書</h3>
+                        <a href="mock_data_advanced/02_internal_knowledge_assets/information_security_policy.html" class="comp-filename" target="_blank">information_security_policy.html ➔</a>
+                        <p class="comp-desc">包含資料不落地與每季風險稽核切結條款，完全對齊 RFP 6.3.3 要求。</p>
+                    </div>
+                </div>
+
+                <div class="comp-card" style="border-left: 4px solid var(--accent-gold);">
+                    <div>
+                        <div class="comp-icon">⚙️</div>
+                        <h3 style="display: flex; justify-content: space-between; align-items: center;">
+                            [母版] PM 方法論元件
+                            <span class="status-pill status-amber" style="font-size: 0.65rem; padding: 0.1rem 0.4rem; background: rgba(249, 115, 22, 0.15); color: #fb923c;">內 4h SLA</span>
+                        </h3>
+                        <a href="mock_data_advanced/02_internal_knowledge_assets/falo_pm_methodology_component.html" class="comp-filename" target="_blank">falo_pm_methodology_component.html ➔</a>
+                        <p class="comp-desc">標準技術執行框架。載明維護響應為 **4 小時**。與 RFP 2h SLA 存在技術衝突，需 AI 增強並觸發內部警報。</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="tab-workbook" class="tab-panel">
+            <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 16px; margin-bottom: 2rem; display: flex; flex-direction: column; gap: 0.75rem;">
+                <div style="font-size: 0.9rem; font-weight: 700; color: var(--accent-cyan);">🚀 AIDE 雙軌合規查核沙盒表單與標準答案庫直連 (含中控管理 JSON)</div>
+                <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                    <a href="mock_data_advanced/04_student_templates/requirement_extraction_blank.html" target="_blank" class="learn-btn" style="font-size: 0.8rem; color: var(--text-secondary); text-decoration: none;">📝 雙軌查核表 (空白)➔</a>
+                    <span style="color: rgba(255,255,255,0.05);">|</span>
+                    <a href="mock_data_advanced/05_answer_keys/requirement_extraction_answer.html" target="_blank" class="learn-btn" style="font-size: 0.8rem; color: var(--accent-emerald); text-decoration: none;">🏆 雙軌查核表 (答案)➔</a>
+                    <span style="color: rgba(255,255,255,0.1);">||</span>
+                    <a href="mock_data_advanced/04_student_templates/compliance_matrix_blank.html" target="_blank" class="learn-btn" style="font-size: 0.8rem; color: var(--text-secondary); text-decoration: none;">📝 對照矩陣 (空白)➔</a>
+                    <span style="color: rgba(255,255,255,0.05);">|</span>
+                    <a href="mock_data_advanced/05_answer_keys/compliance_matrix_answer.html" target="_blank" class="learn-btn" style="font-size: 0.8rem; color: var(--accent-emerald); text-decoration: none;">🏆 對照矩陣 (答案)➔</a>
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+                <div style="background: rgba(17, 19, 32, 0.5); border: 1px solid rgba(6, 182, 212, 0.25); border-radius: 16px; padding: 1.25rem;">
+                    <h3 style="color: var(--accent-cyan); display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">🌐 外部招標合規要求 (External Client Compliance)</h3>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary);">客戶在標案中設定的硬性剛性廢標條款與評選指標，我方標書文字必須完全滿足。例如：投標實績大於 300 萬、PM 持有 PMP、承諾故障 2h 響應等。</p>
+                </div>
+                <div style="background: rgba(17, 19, 32, 0.5); border: 1px solid rgba(139, 92, 246, 0.25); border-radius: 16px; padding: 1.25rem;">
+                    <h3 style="color: var(--accent-purple); display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">🛡️ 內部治理安全防線 (Internal Corporate Governance)</h3>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary);">星河科技設定的誠信、成本、資源容災與技術規範底線。例如：<strong>當外部 SLA 2h 嚴於內部 4h 時，AI 必須在標書寫入 2h，同時於內部系統亮黃燈調撥預算以防虧損違約</strong>；嚴禁偽造客戶公文驗收章；自動啟用 PMP 證照備降 PM (Sophia)。</p>
+                </div>
+            </div>
+
+            <!-- Table 1 -->
+            <div class="workbook-section-header">
+                <div class="workbook-title">
+                    <h2>📋 練習一：提煉內外部雙軌差距查核表 (7 欄位對帳防線)</h2>
+                </div>
+                <div class="toggle-container">
+                    <span class="toggle-label" id="label-extraction">標準答案</span>
+                    <label class="switch">
+                        <input type="checkbox" id="toggle-extraction" onchange="toggleAnswers('extraction')">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="table-wrapper">
+                <table id="table-extraction">
+                    <thead>
+                        <tr>
+                            <th>條款 / 編號</th>
+                            <th>要求與規範內容 (母版預設 vs 特定標案)</th>
+                            <th>查核屬性</th>
+                            <th>重要性 / 風險</th>
+                            <th>截止 / 預警日</th>
+                            <th>負責人</th>
+                            <th>差距對帳狀態 (Gap Status)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>RFP 3.1.2</strong></td>
+                            <td>
+                                <span class="placeholder-cell">學員對仗廠商實績公文與金額...</span>
+                                <span class="ans-cell">過去三年大於 300 萬實績，檢附驗收合格公文。母版預設案 A 缺少公文；案 B 金額不足。</span>
+                            </td>
+                            <td>
+                                <span class="placeholder-cell">-</span>
+                                <span class="ans-cell"><span class="badge badge-external">[🌐 外部合規]</span></span>
+                            </td>
+                            <td>
+                                <span class="placeholder-cell">-</span>
+                                <span class="ans-cell"><span class="importance-badge">🚨 極高 (廢標關鍵)</span></span>
+                            </td>
+                            <td>
+                                <span class="placeholder-cell">-</span>
+                                <span class="ans-cell">2026-06-02</span>
+                            </td>
+                            <td>
+                                <span class="placeholder-cell">-</span>
+                                <span class="ans-cell">PM 志明</span>
+                            </td>
+                            <td>
+                                <span class="placeholder-cell">-</span>
+                                <span class="ans-cell"><span class="status-pill status-green" style="background: rgba(16, 185, 129, 0.15); color: #34d399; padding: 0.1rem 0.4rem; font-size: 0.75rem; border-radius: 4px;">🟢 對帳通過: 排除缺公文的案 A，改套用合格案 C (繁星350w)</span></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>RFP 4.1.5</strong></td>
+                            <td>
+                                <span class="placeholder-cell">學員核查人員證照效期...</span>
+                                <span class="ans-cell">指派專案經理 (PM) 必須持有有效期限內 PMP 證照。母版預設 PM 志明之證照已於 2024 底失效。</span>
+                            </td>
+                            <td>
+                                <span class="placeholder-cell">-</span>
+                                <span class="ans-cell"><span class="badge badge-external">[🌐 外部合規]</span></span>
+                            </td>
+                            <td>
+                                <span class="placeholder-cell">-</span>
+                                <span class="ans-cell"><span class="importance-badge" style="background: rgba(244, 63, 94, 0.1); color: var(--accent-rose);">🚨 致命死穴</span></span>
+                            </td>
+                            <td>
+                                <span class="placeholder-cell">-</span>
+                                <span class="ans-cell">2026-06-02</span>
+                            </td>
+                            <td>
+                                <span class="placeholder-cell">-</span>
+                                <span class="ans-cell">專案 PM</span>
+                            </td>
+                            <td>
+                                <span class="placeholder-cell">-</span>
+                                <span class="ans-cell"><span class="status-pill status-green" style="background: rgba(16, 185, 129, 0.15); color: #34d399; padding: 0.1rem 0.4rem; font-size: 0.75rem; border-radius: 4px;">🟢 對帳通過: PM 志明證照失效；已變更指派 Sophia 擔任 PM 避險</span></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>RFP 7.1.3</strong></td>
+                            <td>
+                                <span class="placeholder-cell">學員比對維護響應要求...</span>
+                                <span class="ans-cell">系統緊急故障必須承諾 2 小時內排除。公司母版方法論技術標準預設為 4 小時。</span>
+                            </td>
+                            <td>
+                                <span class="placeholder-cell">-</span>
+                                <span class="ans-cell"><span class="badge badge-external">[🌐 外部合規]</span></span>
+                            </td>
+                            <td>
+                                <span class="placeholder-cell">-</span>
+                                <span class="ans-cell"><span class="importance-badge">🚨 極高 (合規防線)</span></span>
+                            </td>
+                            <td>
+                                <span class="placeholder-cell">-</span>
+                                <span class="ans-cell">2026-06-02</span>
+                            </td>
+                            <td>
+                                <span class="placeholder-cell">-</span>
+                                <span class="ans-cell">技術特助</span>
+                            </td>
+                            <td>
+                                <span class="placeholder-cell">-</span>
+                                <span class="ans-cell"><span class="status-pill status-green" style="background: rgba(16, 185, 129, 0.15); color: #34d399; padding: 0.1rem 0.4rem; font-size: 0.75rem; border-radius: 4px;">🟢 對帳通過: 同意將標書改寫為合規的 2h 進行響應</span></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>內部治理 1</strong></td>
+                            <td>
+                                <span class="placeholder-cell">學員評估 SLA 升級之財務與資源衝擊...</span>
+                                <span class="ans-cell"><strong>SLA 成本與備勤預警</strong>：外部 2h SLA 嚴於內部 4h 標準，SLA 升級會增加本地工程師待命排班成本。</span>
+                            </td>
+                            <td>
+                                <span class="placeholder-cell">-</span>
+                                <span class="ans-cell"><span class="badge badge-internal">[🛡️ 內部治理]</span></span>
+                            </td>
+                            <td>
+                                <span class="placeholder-cell">-</span>
+                                <span class="ans-cell"><span class="importance-badge" style="background: rgba(249, 115, 22, 0.1); color: var(--accent-gold);">⚠️ 高風險 (毛利控制)</span></span>
+                            </td>
+                            <td>
+                                <span class="placeholder-cell">-</span>
+                                <span class="ans-cell">2026-06-01</span>
+                            </td>
+                            <td>
+                                <span class="placeholder-cell">-</span>
+                                <span class="ans-cell">技術經理</span>
+                            </td>
+                            <td>
+                                <span class="placeholder-cell">-</span>
+                                <span class="ans-cell"><span class="status-pill status-amber" style="background: rgba(249, 115, 22, 0.15); color: #fb923c;">🟡 警報亮黃燈: AI 同意標書改 2h，內部中控同步調配緊急人力預算</span></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>內部治理 2</strong></td>
+                            <td>
+                                <span class="placeholder-cell">學員評估公文偽造紅線...</span>
+                                <span class="ans-cell"><strong>誠信真實防線</strong>：嚴禁 AI 為了迎合資格而偽造公文或套印。無合格公文之實績不可投遞。</span>
+                            </td>
+                            <td>
+                                <span class="placeholder-cell">-</span>
+                                <span class="ans-cell"><span class="badge badge-internal">[🛡️ 內部治理]</span></span>
+                            </td>
+                            <td>
+                                <span class="placeholder-cell">-</span>
+                                <span class="ans-cell"><span class="importance-badge" style="background: rgba(244, 63, 94, 0.1); color: var(--accent-rose);">🚨 致命紅線 (誠信風控)</span></span>
+                            </td>
+                            <td>
+                                <span class="placeholder-cell">-</span>
+                                <span class="ans-cell">2026-06-01</span>
+                            </td>
+                            <td>
+                                <span class="placeholder-cell">-</span>
+                                <span class="ans-cell">合規專員</span>
+                            </td>
+                            <td>
+                                <span class="placeholder-cell">-</span>
+                                <span class="ans-cell"><span class="status-pill status-green">🟢 對帳通過: 堅決剔除缺公文之案 A，100% 採用真實且有案底之案 C (繁星)</span></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Table 2 -->
+            <div class="workbook-section-header" style="margin-top: 2rem;">
+                <div class="workbook-title">
+                    <h2>📋 練習二：對齊 Compliance Matrix 雙軌回應對照矩陣 (6 欄位合規防線)</h2>
+                </div>
+                <div class="toggle-container">
+                    <span class="toggle-label" id="label-compliance">標準答案</span>
+                    <label class="switch">
+                        <input type="checkbox" id="toggle-compliance" onchange="toggleAnswers('compliance')">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="table-wrapper">
+                <table id="table-compliance">
+                    <thead>
+                        <tr>
+                            <th>招標 / 內部治理條款</th>
+                            <th>我方投標書回應章節</th>
+                            <th>可用內部歷史元件</th>
+                            <th>外部合規差距 (External Gap)</th>
+                            <th>內部治理對帳 (Internal Reconciliation)</th>
+                            <th>是否完成</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>REQ-01 (廠商實績)</strong></td>
+                            <td>
+                                <span class="placeholder-cell">學員對應標書實績章節...</span>
+                                <span class="ans-cell">第三章、第二節「公司歷史績效」</span>
+                            </td>
+                            <td>
+                                <span class="placeholder-cell">學員對應無風險合格積木...</span>
+                                <span class="ans-cell">🟢 完美最優解: <code><a href="mock_data_advanced/02_internal_knowledge_assets/2023_stellar_document_automation_case.html" target="_blank" style="color: var(--accent-cyan); font-weight: bold;">2023_stellar_document_automation_case.html</a></code> (350萬, 綠燈)</span>
+                            </td>
+                            <td>
+                                <span class="placeholder-cell">-</span>
+                                <span class="ans-cell">無。案 C 金額與年份均合格且公文齊備。</span>
+                            </td>
+                            <td>
+                                <span class="placeholder-cell">-</span>
+                                <span class="ans-cell"><span class="status-pill status-green" style="background: rgba(16, 185, 129, 0.15); color: #34d399; padding: 0.1rem 0.4rem; font-size: 0.75rem; border-radius: 4px;">🟢 誠信核對通過：剔除不合規之案 A（缺公文）與案 B（金額不足）</span></span>
+                            </td>
+                            <td>
+                                <span class="placeholder-cell">-</span>
+                                <span class="ans-cell"><span class="status-pill status-green" style="background: rgba(16, 185, 129, 0.15); color: #34d399; padding: 0.1rem 0.4rem; font-size: 0.75rem; border-radius: 4px;">🟢 是</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>REQ-02 (人員證照)</strong></td>
+                                <td>
+                                    <span class="placeholder-cell">學員回應團隊人員章節...</span>
+                                    <span class="ans-cell">附件一「專案經理 PMP 證書影本」</span>
+                                </td>
+                                <td>
+                                    <span class="placeholder-cell">學員尋找備用專家簡歷...</span>
+                                    <span class="ans-cell"><code><a href="mock_data_advanced/02_internal_knowledge_assets/pm_resume_chihming.html" target="_blank" style="color: var(--accent-cyan); font-weight: bold;">pm_resume_chihming.html</a></code> (Sophia 證照有效期至 2028-06-30)</span>
+                                </td>
+                                <td>
+                                    <span class="placeholder-cell">-</span>
+                                    <span class="ans-cell">預設 PM 志明 PMP 證照過期失效。有廢標死穴！</span>
+                                </td>
+                                <td>
+                                    <span class="placeholder-cell">-</span>
+                                    <span class="ans-cell"><span class="status-pill status-green" style="background: rgba(16, 185, 129, 0.15); color: #34d399; padding: 0.1rem 0.4rem; font-size: 0.75rem; border-radius: 4px;">🟢 人員備降通過：變更指派資深顧問 Sophia 擔任 PM 避險</span></span>
+                                </td>
+                                <td>
+                                    <span class="placeholder-cell">-</span>
+                                    <span class="ans-cell"><span class="status-pill status-green" style="background: rgba(16, 185, 129, 0.15); color: #34d399; padding: 0.1rem 0.4rem; font-size: 0.75rem; border-radius: 4px;">🟢 是 (避險變更)</span></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>REQ-03 (維護 SLA)</strong></td>
+                                <td>
+                                    <span class="placeholder-cell">學員回應售後維護承諾...</span>
+                                    <span class="ans-cell">第五章、第三節「售後響應與維護支援」</span>
+                                </td>
+                                <td>
+                                    <span class="placeholder-cell">學員定位方法論技術標準...</span>
+                                    <span class="ans-cell"><code><a href="mock_data_advanced/02_internal_knowledge_assets/falo_pm_methodology_component.html" target="_blank" style="color: var(--accent-cyan); font-weight: bold;">falo_pm_methodology_component.html</a></code></span>
+                                </td>
+                                <td>
+                                    <span class="placeholder-cell">-</span>
+                                    <span class="ans-cell">外部 SLA 2h 嚴於內部預設 4h 響應。</span>
+                                </td>
+                                <td>
+                                    <span class="placeholder-cell">-</span>
+                                    <span class="ans-cell"><span class="status-pill status-amber" style="background: rgba(249, 115, 22, 0.15); color: #fb923c; padding: 0.1rem 0.4rem; font-size: 0.75rem; border-radius: 4px;">🟡 成本預警通過：同意標書小幅增強改寫為 2h；內部亮黃燈並調配人力預算</span></span>
+                                </td>
+                                <td>
+                                    <span class="placeholder-cell">-</span>
+                                    <span class="ans-cell"><span class="status-pill status-green" style="background: rgba(16, 185, 129, 0.15); color: #34d399; padding: 0.1rem 0.4rem; font-size: 0.75rem; border-radius: 4px;">🟢 是 (已增強)</span></span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+        </section>
+
+        <section id="tab-prompts" class="tab-panel">
+            <!-- Universal Prompt Hub Jumper -->
+            <div style="background: rgba(17, 19, 32, 0.7); border: 1px solid rgba(6, 182, 212, 0.3); border-radius: 16px; padding: 1.5rem; margin-bottom: 2rem; display: flex; flex-direction: column; gap: 1rem; backdrop-filter: blur(12px);">
+                <div style="font-size: 1rem; font-weight: 800; color: var(--accent-cyan); display: flex; align-items: center; gap: 0.5rem;">
+                    🌌 企業指令資產化治理：FALO Universal Prompt Hub
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; margin: 0;">
+                    星河科技將本課堂實作之 AIDE 操作 Prompts 標準化為「插卡式 Skill 資產」。
+                    推薦學員<strong>一鍵跳轉</strong>至專屬 PWA 工具，載入卡包後，代入變數（如 <code>[RFP_Path]</code>、<code>[SLA_Target]</code> 等）進行動態組裝並一鍵複製，體驗高效率、可重用的現代工作流管理。
+                </p>
+                <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                    <a href="../falo_prompt_hub/index.html" class="learn-btn" style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%); border: 1px solid rgba(6, 182, 212, 0.3); color: #67e8f9; padding: 0.5rem 1.25rem; border-radius: 8px; font-size: 0.85rem; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 0.3rem;">
+                        🌌 開啟 FALO Prompt Hub (PWA) ➔
+                    </a>
+                </div>
+            </div>
+
+            <div class="prompts-panel">
+                
+                <!-- Prompt 1 -->
+                <div class="prompt-console-card">
+                    <div class="prompt-header">
+                        <span class="prompt-step-tag">AIDE Phase 1</span>
+                        <h3>讀取外部 RFP 自動預判 Checklist</h3>
+                    </div>
+                    <div class="console-box">
+                        <span class="console-text" id="p-rfp">aaa，請深度閱讀 /星河_2026政府智慧文件標案/RFP_招標書規範.pdf，自主分析此招標案的合規死命令，並以「AI 預判 Checklist」的形式列出四大合規需求。</span>
+                        <button class="btn-copy-console" onclick="copyConsolePrompt('p-rfp')">複製指令</button>
+                    </div>
+                    <p class="prompt-desc">💡 用途：讓 Agent 自動理解 RFP 招標書要求，自動抽取關鍵字與門檻，產出第一版 AI 預判 Checklists。➔ <a href="mock_data_advanced/05_answer_keys/requirement_extraction_answer.html" target="_blank" style="color: var(--accent-emerald); font-weight: bold; text-decoration: underline;">查看 AI 預判 Checklist 答案 ➔</a></p>
+                </div>
+
+                <!-- Prompt 2 -->
+                <div class="prompt-console-card">
+                    <div class="prompt-header">
+                        <span class="prompt-step-tag">AIDE Phase 2</span>
+                        <h3>廠商實績核查與誠信真實排除</h3>
+                    </div>
+                    <div class="console-box">
+                        <span class="console-text" id="p-apex">aaa，請針對 RFP 3.1.2 廠商實績條款（三年大於300萬實績且必須檢附驗收合格公文），核查公司內部 3 個可用歷史元件（鼎盛 ERP、繁星文件案、浩宇 ERP）。請嚴格遵守誠信治理原則，凡是金額不足、或缺少公文的案例一律剔除！嚴禁偽造或印章套用！請給出最安全合格的實績元件選擇。</span>
+                        <button class="btn-copy-console" onclick="copyConsolePrompt('p-apex')">複製指令</button>
+                    </div>
+                    <p class="prompt-desc">💡 用途：核對歷史專案，強制剔除金額不足 300 萬的浩宇案，並堅守誠信紅線，剔除丟失公文的最高金額鼎盛案，僅保留合格的繁星專案。➔ <a href="mock_data_advanced/05_answer_keys/compliance_matrix_answer.html" target="_blank" style="color: var(--accent-emerald); font-weight: bold; text-decoration: underline;">查看實績核對答案 ➔</a></p>
+                </div>
+
+                <!-- Prompt 3 -->
+                <div class="prompt-console-card">
+                    <div class="prompt-header">
+                        <span class="prompt-step-tag">AIDE Phase 3</span>
+                        <h3>PM 證照失效預警與備降指派</h3>
+                    </div>
+                    <div class="console-box">
+                        <span class="console-text" id="p-pm">aaa，請核對 RFP 4.1.5 PM 證照資格。母版預設指派志明，請掃描其履歷中的 PMP 證件效期。若發現失效，請立即啟動人員風控備降（Sophia 履歷），並變更指派為合規人員，避免致命廢標！</span>
+                        <button class="btn-copy-console" onclick="copyConsolePrompt('p-pm')">複製指令</button>
+                    </div>
+                    <p class="prompt-desc">💡 用途：自動檢測志明證照過期死穴，強制觸發備降預警，自動改派證照合格的 Sophia 擔任標案 PM 以保安全。➔ <a href="mock_data_advanced/05_answer_keys/compliance_matrix_answer.html" target="_blank" style="color: var(--accent-emerald); font-weight: bold; text-decoration: underline;">查看 PM 備降變更答案 ➔</a></p>
+                </div>
+
+                <!-- Prompt 4 -->
+                <div class="prompt-console-card">
+                    <div class="prompt-header">
+                        <span class="prompt-step-tag">AIDE Phase 4</span>
+                        <h3>SLA 維護響應衝突對帳與內部亮燈</h3>
+                    </div>
+                    <div class="console-box">
+                        <span class="console-text" id="p-sla">aaa，請對比外部 RFP 要求的 2 小時緊急維護響應，與 falo_pm_methodology.md 中標配的 4 小時維護響應。針對此項內外部衝突，請執行雙向治理動作：1. 同意在投標書中將維護響應時間執行『小幅增強』，自動編譯改寫為合規的 2 小時。2. 主動在內部管理摘要中，發出『SLA 成本與本地工程師備勤預算調撥』黃燈警示，要求財務勾稽。</span>
+                        <button class="btn-copy-console" onclick="copyConsolePrompt('p-sla')">複製指令</button>
+                    </div>
+                    <p class="prompt-desc">💡 用途：解決 2h 與 4h 內外部響應時間的剛性與毛利衝突，標書改寫 2h 滿足客戶，內部發出預警調撥資源防範虧損。➔ <a href="mock_data_advanced/05_answer_keys/expected_management_summary.html" target="_blank" style="color: var(--accent-emerald); font-weight: bold; text-decoration: underline;">查看 SLA 雙向衝突解決答案 ➔</a></p>
+                </div>
+
+                <!-- Prompt 5 -->
+                <div class="prompt-console-card">
+                    <div class="prompt-header">
+                        <span class="prompt-step-tag">AIDE Phase 5</span>
+                        <h3>回應矩陣建立與一鍵 Delta 組裝</h3>
+                    </div>
+                    <div class="console-box">
+                        <span class="console-text" id="p-diff">aaa，請將上述篩選出的繁星專案實績、林淑芬(Sophia)履歷、資安切結與方法論積木，建立標準的 6 欄式『合規回應對照矩陣』，註明外部合規差距與內部治理對帳狀態。確認無誤後，請調用公司簡介與方法論積木，為我一鍵組裝第二章『專案執行方法論』與售後服務草稿。請注意：必須在編譯時自動將售後故障響應時間小幅增強為『2 小時』，並輸出版本比對 Diff 差分。</span>
+                        <button class="btn-copy-console" onclick="copyConsolePrompt('p-diff')">複製指令</button>
+                    </div>
+                    <p class="prompt-desc">💡 用途：自動將所有實例與避險成果填裝進合規回應矩陣，並一鍵編譯方法論技術草稿，自動執行 SLA 增強，產出前後對帳 Diff。➔ <a href="mock_data_advanced/07_expected_outputs/proposal_chapter_2_methodology_draft.html" target="_blank" style="color: var(--accent-emerald); font-weight: bold; text-decoration: underline;">查看 AIDE 自動增強技術章節草稿 ➔</a></p>
+                </div>
+
+                <!-- Prompt 6 -->
+                <div class="prompt-console-card">
+                    <div class="prompt-header">
+                        <span class="prompt-step-tag">AIDE Phase 6</span>
+                        <h3>備份優先、同步中控與 JSON 輸出</h3>
+                    </div>
+                    <div class="console-box">
+                        <span class="console-text" id="p-sync">aaa，投標草稿已產出且完成雙軌合規對帳。志明已協調 PMI 官網申報線上換證展延，Sophia 備降接管已就緒。請幫我執行備份優先（Backup-First）機制後，將最新對帳結果同步回星河中控台，同時輸出包含：外部合規率（100%）、內部治理指標（誠信排除通過、PM 備降啟用、SLA 成本調撥預警、Multi-LLM 備援就緒）的標準控制變數 JSON 參數。</span>
+                        <button class="btn-copy-console" onclick="copyConsolePrompt('p-sync')">複製指令</button>
+                    </div>
+                    <p class="prompt-desc">
+                        💡 用途：安全備份後同步更新至星河中控台，輸出結構化控制 JSON。➔ 
+                        <a href="mock_data_advanced/07_expected_outputs/executive_status_summary.html" target="_blank" style="color: var(--accent-cyan); font-weight: bold; text-decoration: underline;">查看總經理 4防線雙軌審批卡 ➔</a>
+                        <span style="color: rgba(255,255,255,0.25);">|</span>
+                        <a href="mock_data_advanced/07_expected_outputs/falo_pm_control_fields.html" target="_blank" style="color: var(--accent-cyan); font-weight: bold; text-decoration: underline;">查看雙軌中控 JSON ➔</a>
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="tab-homework" class="tab-panel">
+            <div class="hw-panel">
+                <div class="hw-header">
+                    <div class="hw-icon">🏡</div>
+                    <h2>Class 02 課後實踐作業 (SME KM Assignment)</h2>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.5rem;">「聽懂觀念是一回事，回去動手做是另外一回事。讓數位變革在你的公司真正落地。」</p>
+                </div>
+                <div class="hw-body">
+                    <p>各位主管與同仁，恭喜你們完成了今天 Class 02 的現場實作！為了確保你們能將這套 **「文件與知識工程」** 心法帶回公司，請嘗試完成以下作業：</p>
+                    
+                    <div class="hw-step-box">
+                        <h4>📋 實踐三步驟：</h4>
+                        <ol>
+                            <li><strong>找一份真實的 RFP 或公司舊標案（計畫書）</strong>：不限長度，可以是幾十頁的簡短版本。</li>
+                            <li><strong>花 15 分鐘清洗髒資料</strong>：挑選 10 份跟這個標案相關的舊合約或簡介，改名為標準格式（如：<code>[日期]_[客戶名稱]_[文件類型].pdf</code>）。</li>
+                            <li><strong>手動或借助 AI 建立對照表</strong>：
+                                <ul>
+                                    <li>整理出標準的 **7 欄式需求抽取表**。</li>
+                                    <li>比對公司既有檔案，建立 **6 欄式回應對照矩陣**，並用紅綠燈標明缺件與風險。</li>
+                                </ul>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <p style="font-weight: bold; color: #fff; text-align: center; margin-top: 2rem;">
+                        🎯 目標心法：不需要一上來就做最複雜的自動化。回去先跟同仁灌輸「存在 ≠ 可利用」，花兩小時把檔案改名、拖進大腦，就是最完美的數位升級起點！
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="tab-excel-case" class="tab-panel">
+            <div class="mapping-container" style="display: flex; flex-direction: column; gap: 2rem;">
+                
+                <!-- Philosophy Header -->
+                <div class="sop-block" style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%); border-color: var(--accent-cyan); position: relative;">
+                    <div style="font-size: 1.2rem; font-weight: 800; color: #fff; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <span>📊</span> 台西寵物嘉年華專案經驗庫 AI 特訓 (真實專案 Lessons Learned)
+                    </div>
+                    <div style="font-size: 0.95rem; line-height: 1.7; color: #e2e8f0; font-style: italic; border-left: 3px solid var(--accent-gold); padding-left: 1rem; margin-bottom: 1rem;">
+                        「這份 Excel 不是一張可有可無的行政表單。它是地平線專案生命的 Project Memory 種子。」<br/>
+                        「AI 真正的商業與教育價值，絕非幫 PM 多填一張表，而是讓組織過去每一次踩過的坑，自動轉化為下一次新專案啟動時的『主動防禦』與『天眼預警』能力。」
+                    </div>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0;">本案例完全 grounded 於地平線 PM Grace在「台西寵物嘉年華」真實踩坑留下的 36 筆組織記憶。我們將拆解為「單點大腦爆破」與「全景自動自癒生態」兩層結構進行示範教學。</p>
+                </div>
+
+                <!-- Part 1: Single Point Demo -->
+                <div class="workbook-section-header">
+                    <h2>🧠 一、單點爆破演練：NotebookLM 雲端大腦 + 4大微型 Prompt 避雷針</h2>
+                </div>
+
+                <!-- NEW: Excel to NotebookLM Tutorial -->
+                <div class="sop-block" style="background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.08); padding: 1.5rem; margin-bottom: 1.5rem;">
+                    <h3 style="color: var(--accent-cyan); font-size: 1.1rem; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <span>📥</span> 核心知識工程：一般 Excel 檔案 (.xlsx) 導入 NotebookLM 的雙軌重構法
+                    </h3>
+                    <p style="font-size: 0.9rem; color: #cbd5e1; line-height: 1.6; margin-bottom: 1rem;">
+                        <strong>⚠️ 核心限制與痛點：</strong> 
+                        在 NotebookLM 的「新增來源」中，<strong>原生並不支援標準的 Excel (.xlsx) 二進位檔案格式</strong>（支援的檔案類型如官方說明所示：<code>pdf, txt, md, docx, csv, pptx, epub...</code>）。
+                        若直接上傳 <code>.xlsx</code> 會產生格式不支援錯誤。為了將傳統扁平的 Excel 組織記憶灌入 AI 大腦，PM 必須掌握以下兩種各有優勢的導入重構路徑：
+                    </p>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem; margin-bottom: 1.5rem;">
+                        <!-- Path 1 -->
+                        <div style="background: rgba(20, 184, 166, 0.03); border: 1px solid rgba(20, 184, 166, 0.15); border-radius: 12px; padding: 1.25rem;">
+                            <h4 style="color: var(--accent-teal); font-size: 0.98rem; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                                <span>🟢</span> 路徑一：雲端試算表直連法 (Google Sheets Live Link)
+                            </h4>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">
+                                <strong>步驟：</strong> 將 <code>.xlsx</code> 檔案上傳至 Google Drive ➔ 以 Google 試算表開啟 ➔ 點選「檔案」➔「儲存為 Google 試算表」 ➔ 前往 NotebookLM 點選「Google 雲端硬碟」直接導入該 Google Sheet。<br/><br/>
+                                <strong>🔥 最大優勢 (PROS)：手動更新與動態自癒</strong><br/>
+                                這是最推薦的工業級做法。當前線 PM 在雲端試算表中隨時修改、更正或追加新的專案踩坑行數時，<strong>無須重新轉檔或二次上傳！</strong> 
+                                只需在 NotebookLM 的該檔案來源旁點擊 <code>🔄 重新整理來源 (Refresh Source)</code>，大腦便會秒級快照吸收最新內容，確保企業知識庫的「動態演進」。
+                            </p>
+                        </div>
+                        
+                        <!-- Path 2 -->
+                        <div style="background: rgba(168, 85, 247, 0.03); border: 1px solid rgba(168, 85, 247, 0.15); border-radius: 12px; padding: 1.25rem;">
+                            <h4 style="color: var(--accent-purple); font-size: 0.98rem; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                                <span>🟣</span> 路徑二：AI 轉換 .csv 直接上傳法 (AI CSV Conversion)
+                            </h4>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">
+                                <strong>步驟：</strong> 將原始 <code>.xlsx</code> 表格或截圖直接投餵給 AI 特助 ➔ 發送指令 <code>「請幫我將這份 Excel 專案經驗庫，格式化清洗並轉譯輸出為標準的 .csv 檔案，以供 NotebookLM 讀取。」</code> ➔ 下載 AI 產出的 <code>.csv</code> ➔ 在 NotebookLM 中點選「上傳檔案」直接上傳導入。<br/><br/>
+                                <strong>🔥 最大優勢 (PROS)：高隱私與免設定</strong><br/>
+                                由於 NotebookLM 原生支援 <code>.csv</code> 格式，此方法免去了雲端硬碟的權限授權，非常適合對外高度保密、敏感資料不落地、或只想進行單次靜態快照特訓的專案情境。轉換完全由 AI 自動處理，SME 行政同仁 0 學習成本。
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div style="background: rgba(251, 191, 36, 0.03); border: 1px solid rgba(251, 191, 36, 0.15); border-radius: 12px; padding: 1.25rem; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">
+                        🎯 <strong>學員心法筆記：</strong> 沒有最好的工具，只有最適合場景的解法。當需要團隊隨時協作、動態追加組織記憶時，選【路徑一】能體驗一鍵重整的「動態免疫」威力；當遇到內部敏感資料、只做單次快照分析時，選【路徑二】請 AI 自動轉成 .csv 是最安全無痛的選擇。
+                    </div>
+                </div>
+                
+                <div class="sop-block" style="background: rgba(255,255,255,0.01); border-color: rgba(255,255,255,0.08);">
+                    <h3 style="color: #fff; font-size: 1.05rem; margin-bottom: 0.5rem;">🔗 雲端大腦導入練習 (Student RAG Sandbox)</h3>
+                    <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem;">
+                        <strong>請在個人瀏覽器中完成以下操作：</strong><br/>
+                        1. 打開 Google 瀏覽器並登入你的 Google 帳戶。<br/>
+                        2. 點擊複製下方連結，在瀏覽器新視窗中打開地平線分享的 PM 經驗庫試算表：<br/>
+                        <code style="background: #000; padding: 0.2rem 0.5rem; border-radius: 4px; color: var(--accent-cyan); font-family: monospace; word-break: break-all;">https://docs.google.com/spreadsheets/d/1z5MlDimJl7sO0JuD5LKVPqJkRzldPUt51nqoSM3rt3Q/edit?usp=sharing</code><br/>
+                        3. 點擊「檔案」➔「建立複本」儲存至你個人的雲端硬碟。<br/>
+                        4. 前往 <a href="https://notebooklm.google.com" target="_blank" style="color: var(--accent-cyan); font-weight: bold; text-decoration: underline;">NotebookLM 官網</a>，建立一個新筆記本，並選擇從「Google 雲端硬碟」匯入剛才複製的試算表複本。<br/>
+                        5. 匯入完成後，你個人的專屬 SME PM 雲端智慧大腦就建置完成了！請貼上以下 4 大微型 Prompt 進行秒級避雷問答：
+                    </p>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-top: 1.5rem;">
+                        <!-- Prompt 1 -->
+                        <div class="console-box" style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 12px;">
+                            <div style="font-size: 0.75rem; color: var(--accent-cyan); font-weight: bold; margin-bottom: 0.5rem;">📡 微型 Prompt 1：關鍵字雷達 (Keyword Alert)</div>
+                            <div style="font-family: monospace; font-size: 0.85rem; color: #fff; margin-bottom: 0.5rem; background: rgba(0,0,0,0.4); padding: 0.75rem; border-radius: 6px;" id="s-ex-p1">請以專業活動 PM 視角，掃描這份專案經驗庫的所有痛點，找出最常在「舞台現場」與「走線安全」上重複發生的安全風險（如電線凸起、音響太大聲等），並列出其發生的 Row 編號與簡述。</div>
+                            <button class="btn-copy-console" onclick="copyConsolePrompt('s-ex-p1')">複製 Prompt 指令</button>
+                        </div>
+
+                        <!-- Prompt 2 -->
+                        <div class="console-box" style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 12px;">
+                            <div style="font-size: 0.75rem; color: var(--accent-cyan); font-weight: bold; margin-bottom: 0.5rem;">🔍 微型 Prompt 2：避雷針提煉 (Golden Finder)</div>
+                            <div style="font-family: monospace; font-size: 0.85rem; color: #fff; margin-bottom: 0.5rem; background: rgba(0,0,0,0.4); padding: 0.75rem; border-radius: 6px;" id="s-ex-p2">請從 Row 7（電線凸起絆倒記者會長官母女）與 Row 6（承辦休假審核 Delay 印刷趕工）中，分別提取其「痛點描述」、「當下應變」與「最核心的避雷防禦建議」，並用條列式整理。</div>
+                            <button class="btn-copy-console" onclick="copyConsolePrompt('s-ex-p2')">複製 Prompt 指令</button>
+                        </div>
+
+                        <!-- Prompt 3 -->
+                        <div class="console-box" style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 12px;">
+                            <div style="font-size: 0.75rem; color: var(--accent-cyan); font-weight: bold; margin-bottom: 0.5rem;">✉️ 微型 Prompt 3：廠商規範函 (Supplier Perspective)</div>
+                            <div style="font-family: monospace; font-size: 0.85rem; color: #fff; margin-bottom: 0.5rem; background: rgba(0,0,0,0.4); padding: 0.75rem; border-radius: 6px;" id="s-ex-p3">如果我們下一個專案是在文化公園辦活動。請根據 Row 7（電線絆倒民眾）與 Row 13（舞台音響太大聲嚇到狗狗）的教訓，幫我寫一封給「音響與硬體施工廠商」的行前規範通知信，嚴格要求電線固定與休息區噪音隔離，語氣必須專業且嚴格。</div>
+                            <button class="btn-copy-console" onclick="copyConsolePrompt('s-ex-p3')">複製 Prompt 指令</button>
+                        </div>
+
+                        <!-- Prompt 4 -->
+                        <div class="console-box" style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 12px;">
+                            <div style="font-size: 0.75rem; color: var(--accent-cyan); font-weight: bold; margin-bottom: 0.5rem;">🏷️ 微型 Prompt 4：一秒分類與標籤 (1-Second Labeling)</div>
+                            <div style="font-family: monospace; font-size: 0.85rem; color: #fff; margin-bottom: 0.5rem; background: rgba(0,0,0,0.4); padding: 0.75rem; border-radius: 6px;" id="s-ex-p4">請閱讀以下這筆新 PM 現場問題：「活動最後一天，寵物市集店家抱怨撤場動線狹窄、大貨車倒車差點撞到民眾狗狗，工讀生不知道該找誰指揮撤場。」請比對經驗庫的分類體系，為其自動分類並打上 3 個核心標籤（Tags）。</div>
+                            <button class="btn-copy-console" onclick="copyConsolePrompt('s-ex-p4')">複製 Prompt 指令</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Part 2: Dissection & Componentization -->
+                <div class="workbook-section-header">
+                    <h2>🧱 二、知識拆解與積木化：實作將 Excel Flat Rows 提煉成 SOP 知識元件</h2>
+                </div>
+                
+                <div style="background: rgba(255,255,255,0.01); border: 1px solid var(--border-color); border-radius: 16px; padding: 2rem;">
+                    <h3 style="color: #fff; font-size: 1.1rem; margin-bottom: 1rem;">📝 練習：請試著將 Row 7 (現場絆倒) 與 Row 6 (審核Delay) 填入下方 Markdown 元件空白模板中</h3>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+                        <div style="background: var(--card-bg); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 1.25rem; font-family: monospace; font-size: 0.85rem; color: var(--text-secondary);">
+                            <span style="color: var(--accent-gold);">[學員空白模板 1] comp-07_onsite_wire_safety.md</span><br/>
+                            # 現場電線鋪設與走線安全 SOP<br/>
+                            - **🏷️ Tags**: [ 請填寫適合的分類標籤 ]<br/>
+                            - **🔴 歷史痛點**: [ 請根據 Row 7 痛點簡述 ]<br/>
+                            - **🛡️ 標準防線 SOP**: [ 請提煉 3 點具體可執行的現場防護 SOP ]<br/>
+                            - **⚙️ 觸發規則**: [ 當招標書包含什麼內容時自動強制拼裝？ ]
+                        </div>
+                    </div>
+
+                    <div class="toggle-container" style="justify-content: flex-start; gap: 1rem; margin-bottom: 1rem;">
+                        <span class="toggle-label" id="label-excel-ans" style="color: var(--accent-emerald); font-weight: bold;">🏆 點擊展開標準拆分積木答案</span>
+                        <label class="switch">
+                            <input type="checkbox" id="toggle-excel-ans" onchange="toggleExcelAnswers()">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <!-- Toggleable Excel Answers Block -->
+                    <div id="excel-answers-block" style="display: none; grid-template-columns: 1fr 1fr; gap: 1.5rem; animation: fadeIn 0.4s ease; margin-top: 1rem;">
+                        <div style="background: rgba(16, 185, 129, 0.03); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 12px; padding: 1.25rem; border-left: 4px solid var(--accent-emerald);">
+                            <div style="font-size: 0.75rem; font-weight: bold; color: var(--accent-emerald); margin-bottom: 0.5rem;">[ANSWER 1] comp-07_onsite_wire_safety.md</div>
+                            <h4 style="color: #fff; font-size: 1rem; margin-bottom: 0.5rem;">現場電線鋪設與走線安全 SOP</h4>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; margin: 0;">
+                                <strong>🏷️ Tags:</strong> 民眾跌倒, 電線固定, 三角錐, 現場安全, 音響廠商<br/>
+                                <strong>🔴 歷史痛點:</strong> 舞台區連結到報到處走線不細心、電線凸起未固定，致民眾絆倒受傷。<br/>
+                                <strong>🛡️ 標準防線 SOP:</strong><br/>
+                                1. 走線區域必須規劃明顯防護標示，嚴禁裸露電線。<br/>
+                                2. 音響硬體廠商在活動前必須以黑黃大力膠完全黏貼固定地面電線，並在交叉路口配置高階護線板。<br/>
+                                3. PM 必須於活動開場前 1 小時逐一走線巡檢拍照存檔。<br/>
+                                <strong>⚙️ 觸發規則:</strong> 當 RFP 包含「舞台搭建」或「硬體施工」時，強行將此 SOP 拼裝入投標書中。
+                            </p>
+                        </div>
+
+                        <div style="background: rgba(16, 185, 129, 0.03); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 12px; padding: 1.25rem; border-left: 4px solid var(--accent-emerald);">
+                            <div style="font-size: 0.75rem; font-weight: bold; color: var(--accent-emerald); margin-bottom: 0.5rem;">[ANSWER 2] comp-06_gov_approval_timeline.md</div>
+                            <h4 style="color: #fff; font-size: 1rem; margin-bottom: 0.5rem;">政府機關設計審核與安全製程控管</h4>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; margin: 0;">
+                                <strong>🏷️ Tags:</strong> 審核Delay, 進度落後, 修改Logo, 印刷時間<br/>
+                                <strong>🔴 歷史痛點:</strong> 承辦休假審核延誤，活動前兩天還在修改攤名Logo，前一天印刷品才送達。<br/>
+                                <strong>🛡️ 標準防線 SOP:</strong><br/>
+                                1. PM 必須與業主科室約定明確的「設計審核通過時間」與「最後修改截止時間」。<br/>
+                                2. 印刷發包品必須在出發前預留至少 3 天的安全製程與物流運輸時間。<br/>
+                                3. 若承辦休假，開案時必須在會議記錄中指定指定的第二審核代理人。<br/>
+                                <strong>⚙️ 觸發規則:</strong> 當合約對象為「政府機關/業務單位」，且時程在「準備期/籌備期」時，自動啟用本防禦元件。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Part 3: Full Integration Ecosystem -->
+                <div class="workbook-section-header">
+                    <h2>🚀 三、雙層整合自癒防線：大腦抗體演進與自動目錄擴充</h2>
+                </div>
+                
+                <div class="sop-block" style="background: rgba(255,255,255,0.01); border-color: rgba(255,255,255,0.08); padding: 1.5rem;">
+                    <p style="font-size: 0.9rem; color: #cbd5e1; line-height: 1.7; margin-bottom: 1rem;">
+                        <strong>自主代理的未來藍圖：</strong><br/>
+                        學員可以在本地直接投餵 AIDE 平台 Agent aaa。大腦將示範兩種不同的自癒自適應路徑：
+                    </p>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem;">
+                        <div style="background: rgba(7, 9, 19, 0.4); border: 1px solid rgba(255,255,255,0.02); border-radius: 12px; padding: 1.25rem;">
+                            <h4 style="color: var(--accent-emerald); font-size: 0.95rem; margin-bottom: 0.5rem;">路徑 A：既有資產增強合併</h4>
+                            <p style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 0.75rem;">投餵 Antigravity 將 <code>comp-07_onsite_wire_safety.md</code> 自動追加寫入標準服務方法論 <code>falo_pm_methodology.md</code> 的現場控管章節中，使母版自然防禦進化。</p>
+                            <code style="background: #000; padding: 0.15rem 0.4rem; border-radius: 4px; color: var(--accent-cyan); font-family: monospace; font-size: 0.75rem; word-break: break-all;" id="s-ex-p5">aaa，請調用 /class02/reference 下的 comp-07_onsite_wire_safety.md，將其標準防線 SOP 安全合併追加寫入 falo_pm_methodology.md 的第四章現場安全控管中，使我們下一版經典基本母版自然具備此項抗體。</code>
+                            <button class="btn-copy-console" onclick="copyConsolePrompt('s-ex-p5')" style="margin-top: 0.5rem; font-size: 0.7rem; padding: 0.2rem 0.5rem;">複製 Path A 指令</button>
+                        </div>
+
+                        <div style="background: rgba(7, 9, 19, 0.4); border: 1px solid rgba(255,255,255,0.02); border-radius: 12px; padding: 1.25rem;">
+                            <h4 style="color: var(--accent-purple); font-size: 0.95rem; margin-bottom: 0.5rem;">路徑 B：新型風險創建全新分類</h4>
+                            <p style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 0.75rem;">針對新型的「攤商提早離開與撤場工讀生工時紊亂」風險（Row 34），要求 Antigravity 自主建立全新目錄與獨立查核政策。</p>
+                            <code style="background: #000; padding: 0.15rem 0.4rem; border-radius: 4px; color: var(--accent-cyan); font-family: monospace; font-size: 0.75rem; word-break: break-all;" id="s-ex-p6">aaa，針對寵物嘉年華經驗庫 Row 34 所暴露的新型「攤商管理與撤場工讀生工時超時紊亂」風險，這不屬於既有資產，請為我在 class02 目錄下自主創建新類別目錄 case4_stall_management/，並寫入獨立的 stall_exit_rules.md 查核防線規範。</code>
+                            <button class="btn-copy-console" onclick="copyConsolePrompt('s-ex-p6')" style="margin-top: 0.5rem; font-size: 0.7rem; padding: 0.2rem 0.5rem;">複製 Path B 指令</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        
+
+        <section id="tab-excel-case" class="tab-panel">
+            <div class="mapping-container" style="display: flex; flex-direction: column; gap: 2rem;">
+                
+                <!-- Philosophy Header -->
+                <div class="sop-block" style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%); border-color: var(--accent-cyan); position: relative;">
+                    <div style="font-size: 1.2rem; font-weight: 800; color: #fff; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <span>📊</span> 台西寵物嘉年華專案經驗庫 AI 特訓 (真實專案 Lessons Learned)
+                    </div>
+                    <div style="font-size: 0.95rem; line-height: 1.7; color: #e2e8f0; font-style: italic; border-left: 3px solid var(--accent-gold); padding-left: 1rem; margin-bottom: 1rem;">
+                        「這份 Excel 不是一張可有可無的行政表單。它是地平線專案生命的 Project Memory 種子。」<br/>
+                        「AI 真正的商業與教育價值，絕非幫 PM 多填一張表，而是讓組織過去每一次踩過的坑，自動轉化為下一次新專案啟動時的『主動防禦』與『天眼預警』能力。」
+                    </div>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0;">本案例完全 grounded 於地平線 PM Grace在「台西寵物嘉年華」真實踩坑留下的 36 筆組織記憶。我們將拆解為「單點大腦爆破」與「全景自動自癒生態」兩層結構進行示範教學。</p>
+                </div>
+
+                <!-- Part 1: Single Point Demo -->
+                <div class="workbook-section-header">
+                    <h2>🧠 一、單點爆破演練：NotebookLM 雲端大腦 + 4大微型 Prompt 避雷針</h2>
+                </div>
+
+                <!-- NEW: Excel to NotebookLM Tutorial -->
+                <div class="sop-block" style="background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.08); padding: 1.5rem; margin-bottom: 1.5rem;">
+                    <h3 style="color: var(--accent-cyan); font-size: 1.1rem; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <span>📥</span> 核心知識工程：一般 Excel 檔案 (.xlsx) 導入 NotebookLM 的雙軌重構法
+                    </h3>
+                    <p style="font-size: 0.9rem; color: #cbd5e1; line-height: 1.6; margin-bottom: 1rem;">
+                        <strong>⚠️ 核心限制與痛點：</strong> 
+                        在 NotebookLM 的「新增來源」中，<strong>原生並不支援標準的 Excel (.xlsx) 二進位檔案格式</strong>（支援的檔案類型如官方說明所示：<code>pdf, txt, md, docx, csv, pptx, epub...</code>）。
+                        若直接上傳 <code>.xlsx</code> 會產生格式不支援錯誤。為了將傳統扁平的 Excel 組織記憶灌入 AI 大腦，PM 必須掌握以下兩種各有優勢的導入重構路徑：
+                    </p>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem; margin-bottom: 1.5rem;">
+                        <!-- Path 1 -->
+                        <div style="background: rgba(20, 184, 166, 0.03); border: 1px solid rgba(20, 184, 166, 0.15); border-radius: 12px; padding: 1.25rem;">
+                            <h4 style="color: var(--accent-teal); font-size: 0.98rem; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                                <span>🟢</span> 路徑一：雲端試算表直連法 (Google Sheets Live Link)
+                            </h4>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">
+                                <strong>步驟：</strong> 將 <code>.xlsx</code> 檔案上傳至 Google Drive ➔ 以 Google 試算表開啟 ➔ 點選「檔案」➔「儲存為 Google 試算表」 ➔ 前往 NotebookLM 點選「Google 雲端硬碟」直接導入該 Google Sheet。<br/><br/>
+                                <strong>🔥 最大優勢 (PROS)：手動更新與動態自癒</strong><br/>
+                                這是最推薦的工業級做法。當前線 PM 在雲端試算表中隨時修改、更正或追加新的專案踩坑行數時，<strong>無須重新轉檔或二次上傳！</strong> 
+                                只需在 NotebookLM 的該檔案來源旁點擊 <code>🔄 重新整理來源 (Refresh Source)</code>，大腦便會秒級快照吸收最新內容，確保企業知識庫的「動態演進」。
+                            </p>
+                        </div>
+                        
+                        <!-- Path 2 -->
+                        <div style="background: rgba(168, 85, 247, 0.03); border: 1px solid rgba(168, 85, 247, 0.15); border-radius: 12px; padding: 1.25rem;">
+                            <h4 style="color: var(--accent-purple); font-size: 0.98rem; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                                <span>🟣</span> 路徑二：AI 轉換 .csv 直接上傳法 (AI CSV Conversion)
+                            </h4>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">
+                                <strong>步驟：</strong> 將原始 <code>.xlsx</code> 表格或截圖直接投餵給 AI 特助 ➔ 發送指令 <code>「請幫我將這份 Excel 專案經驗庫，格式化清洗並轉譯輸出為標準的 .csv 檔案，以供 NotebookLM 讀取。」</code> ➔ 下載 AI 產出的 <code>.csv</code> ➔ 在 NotebookLM 中點選「上傳檔案」直接上傳導入。<br/><br/>
+                                <strong>🔥 最大優勢 (PROS)：高隱私與免設定</strong><br/>
+                                由於 NotebookLM 原生支援 <code>.csv</code> 格式，此方法免去了雲端硬碟的權限授權，非常適合對外高度保密、敏感資料不落地、或只想進行單次靜態快照特訓的專案情境。轉換完全由 AI 自動處理，SME 行政同仁 0 學習成本。
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div style="background: rgba(251, 191, 36, 0.03); border: 1px solid rgba(251, 191, 36, 0.15); border-radius: 12px; padding: 1.25rem; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">
+                        🎯 <strong>學員心法筆記：</strong> 沒有最好的工具，只有最適合場景的解法。當需要團隊隨時協作、動態追加組織記憶時，選【路徑一】能體驗一鍵重整的「動態免疫」威力；當遇到內部敏感資料、只做單次快照分析時，選【路徑二】請 AI 自動轉成 .csv 是最安全無痛的選擇。
+                    </div>
+                </div>
+                
+                <div class="sop-block" style="background: rgba(255,255,255,0.01); border-color: rgba(255,255,255,0.08);">
+                    <h3 style="color: #fff; font-size: 1.05rem; margin-bottom: 0.5rem;">🔗 雲端大腦導入練習 (Student RAG Sandbox)</h3>
+                    <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem;">
+                        <strong>請在個人瀏覽器中完成以下操作：</strong><br/>
+                        1. 打開 Google 瀏覽器並登入你的 Google 帳戶。<br/>
+                        2. 點擊複製下方連結，在瀏覽器新視窗中打開地平線分享的 PM 經驗庫試算表：<br/>
+                        <code style="background: #000; padding: 0.2rem 0.5rem; border-radius: 4px; color: var(--accent-cyan); font-family: monospace; word-break: break-all;">https://docs.google.com/spreadsheets/d/1z5MlDimJl7sO0JuD5LKVPqJkRzldPUt51nqoSM3rt3Q/edit?usp=sharing</code><br/>
+                        3. 點擊「檔案」➔「建立複本」儲存至你個人的雲端硬碟。<br/>
+                        4. 前往 <a href="https://notebooklm.google.com" target="_blank" style="color: var(--accent-cyan); font-weight: bold; text-decoration: underline;">NotebookLM 官網</a>，建立一個新筆記本，並選擇從「Google 雲端硬碟」匯入剛才複製的試算表複本。<br/>
+                        5. 匯入完成後，你個人的專屬 SME PM 雲端智慧大腦就建置完成了！請貼上以下 4 大微型 Prompt 進行秒級避雷問答：
+                    </p>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-top: 1.5rem;">
+                        <!-- Prompt 1 -->
+                        <div class="console-box" style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 12px;">
+                            <div style="font-size: 0.75rem; color: var(--accent-cyan); font-weight: bold; margin-bottom: 0.5rem;">📡 微型 Prompt 1：關鍵字雷達 (Keyword Alert)</div>
+                            <div style="font-family: monospace; font-size: 0.85rem; color: #fff; margin-bottom: 0.5rem; background: rgba(0,0,0,0.4); padding: 0.75rem; border-radius: 6px;" id="s-ex-p1">請以專業活動 PM 視角，掃描這份專案經驗庫的所有痛點，找出最常在「舞台現場」與「走線安全」上重複發生的安全風險（如電線凸起、音響太大聲等），並列出其發生的 Row 編號與簡述。</div>
+                            <button class="btn-copy-console" onclick="copyConsolePrompt('s-ex-p1')">複製 Prompt 指令</button>
+                        </div>
+
+                        <!-- Prompt 2 -->
+                        <div class="console-box" style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 12px;">
+                            <div style="font-size: 0.75rem; color: var(--accent-cyan); font-weight: bold; margin-bottom: 0.5rem;">🔍 微型 Prompt 2：避雷針提煉 (Golden Finder)</div>
+                            <div style="font-family: monospace; font-size: 0.85rem; color: #fff; margin-bottom: 0.5rem; background: rgba(0,0,0,0.4); padding: 0.75rem; border-radius: 6px;" id="s-ex-p2">請從 Row 7（電線凸起絆倒記者會長官母女）與 Row 6（承辦休假審核 Delay 印刷趕工）中，分別提取其「痛點描述」、「當下應變」與「最核心的避雷防禦建議」，並用條列式整理。</div>
+                            <button class="btn-copy-console" onclick="copyConsolePrompt('s-ex-p2')">複製 Prompt 指令</button>
+                        </div>
+
+                        <!-- Prompt 3 -->
+                        <div class="console-box" style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 12px;">
+                            <div style="font-size: 0.75rem; color: var(--accent-cyan); font-weight: bold; margin-bottom: 0.5rem;">✉️ 微型 Prompt 3：廠商規範函 (Supplier Perspective)</div>
+                            <div style="font-family: monospace; font-size: 0.85rem; color: #fff; margin-bottom: 0.5rem; background: rgba(0,0,0,0.4); padding: 0.75rem; border-radius: 6px;" id="s-ex-p3">如果我們下一個專案是在文化公園辦活動。請根據 Row 7（電線絆倒民眾）與 Row 13（舞台音響太大聲嚇到狗狗）的教訓，幫我寫一封給「音響與硬體施工廠商」的行前規範通知信，嚴格要求電線固定與休息區噪音隔離，語氣必須專業且嚴格。</div>
+                            <button class="btn-copy-console" onclick="copyConsolePrompt('s-ex-p3')">複製 Prompt 指令</button>
+                        </div>
+
+                        <!-- Prompt 4 -->
+                        <div class="console-box" style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 12px;">
+                            <div style="font-size: 0.75rem; color: var(--accent-cyan); font-weight: bold; margin-bottom: 0.5rem;">🏷️ 微型 Prompt 4：一秒分類與標籤 (1-Second Labeling)</div>
+                            <div style="font-family: monospace; font-size: 0.85rem; color: #fff; margin-bottom: 0.5rem; background: rgba(0,0,0,0.4); padding: 0.75rem; border-radius: 6px;" id="s-ex-p4">請閱讀以下這筆新 PM 現場問題：「活動最後一天，寵物市集店家抱怨撤場動線狹窄、大貨車倒車差點撞到民眾狗狗，工讀生不知道該找誰指揮撤場。」請比對經驗庫的分類體系，為其自動分類並打上 3 個核心標籤（Tags）。</div>
+                            <button class="btn-copy-console" onclick="copyConsolePrompt('s-ex-p4')">複製 Prompt 指令</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Part 2: Dissection & Componentization -->
+                <div class="workbook-section-header">
+                    <h2>🧱 二、知識拆解與積木化：實作將 Excel Flat Rows 提煉成 SOP 知識元件</h2>
+                </div>
+                
+                <div style="background: rgba(255,255,255,0.01); border: 1px solid var(--border-color); border-radius: 16px; padding: 2rem;">
+                    <h3 style="color: #fff; font-size: 1.1rem; margin-bottom: 1rem;">📝 練習：請試著將 Row 7 (現場絆倒) 與 Row 6 (審核Delay) 填入下方 Markdown 元件空白模板中</h3>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+                        <div style="background: var(--card-bg); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 1.25rem; font-family: monospace; font-size: 0.85rem; color: var(--text-secondary);">
+                            <span style="color: var(--accent-gold);">[學員空白模板 1] comp-07_onsite_wire_safety.md</span><br/>
+                            # 現場電線鋪設與走線安全 SOP<br/>
+                            - **🏷️ Tags**: [ 請填寫適合的分類標籤 ]<br/>
+                            - **🔴 歷史痛點**: [ 請根據 Row 7 痛點簡述 ]<br/>
+                            - **🛡️ 標準防線 SOP**: [ 請提煉 3 點具體可執行的現場防護 SOP ]<br/>
+                            - **⚙️ 觸發規則**: [ 當招標書包含什麼內容時自動強制拼裝？ ]
+                        </div>
+                    </div>
+
+                    <div class="toggle-container" style="justify-content: flex-start; gap: 1rem; margin-bottom: 1rem;">
+                        <span class="toggle-label" id="label-excel-ans" style="color: var(--accent-emerald); font-weight: bold;">🏆 點擊展開標準拆分積木答案</span>
+                        <label class="switch">
+                            <input type="checkbox" id="toggle-excel-ans" onchange="toggleExcelAnswers()">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <!-- Toggleable Excel Answers Block -->
+                    <div id="excel-answers-block" style="display: none; grid-template-columns: 1fr 1fr; gap: 1.5rem; animation: fadeIn 0.4s ease; margin-top: 1rem;">
+                        <div style="background: rgba(16, 185, 129, 0.03); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 12px; padding: 1.25rem; border-left: 4px solid var(--accent-emerald);">
+                            <div style="font-size: 0.75rem; font-weight: bold; color: var(--accent-emerald); margin-bottom: 0.5rem;">[ANSWER 1] comp-07_onsite_wire_safety.md</div>
+                            <h4 style="color: #fff; font-size: 1rem; margin-bottom: 0.5rem;">現場電線鋪設與走線安全 SOP</h4>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; margin: 0;">
+                                <strong>🏷️ Tags:</strong> 民眾跌倒, 電線固定, 三角錐, 現場安全, 音響廠商<br/>
+                                <strong>🔴 歷史痛點:</strong> 舞台區連結到報到處走線不細心、電線凸起未固定，致民眾絆倒受傷。<br/>
+                                <strong>🛡️ 標準防線 SOP:</strong><br/>
+                                1. 走線區域必須規劃明顯防護標示，嚴禁裸露電線。<br/>
+                                2. 音響硬體廠商在活動前必須以黑黃大力膠完全黏貼固定地面電線，並在交叉路口配置高階護線板。<br/>
+                                3. PM 必須於活動開場前 1 小時逐一走線巡檢拍照存檔。<br/>
+                                <strong>⚙️ 觸發規則:</strong> 當 RFP 包含「舞台搭建」或「硬體施工」時，強行將此 SOP 拼裝入投標書中。
+                            </p>
+                        </div>
+
+                        <div style="background: rgba(16, 185, 129, 0.03); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 12px; padding: 1.25rem; border-left: 4px solid var(--accent-emerald);">
+                            <div style="font-size: 0.75rem; font-weight: bold; color: var(--accent-emerald); margin-bottom: 0.5rem;">[ANSWER 2] comp-06_gov_approval_timeline.md</div>
+                            <h4 style="color: #fff; font-size: 1rem; margin-bottom: 0.5rem;">政府機關設計審核與安全製程控管</h4>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; margin: 0;">
+                                <strong>🏷️ Tags:</strong> 審核Delay, 進度落後, 修改Logo, 印刷時間<br/>
+                                <strong>🔴 歷史痛點:</strong> 承辦休假審核延誤，活動前兩天還在修改攤名Logo，前一天印刷品才送達。<br/>
+                                <strong>🛡️ 標準防線 SOP:</strong><br/>
+                                1. PM 必須與業主科室約定明確的「設計審核通過時間」與「最後修改截止時間」。<br/>
+                                2. 印刷發包品必須在出發前預留至少 3 天的安全製程與物流運輸時間。<br/>
+                                3. 若承辦休假，開案時必須在會議記錄中指定指定的第二審核代理人。<br/>
+                                <strong>⚙️ 觸發規則:</strong> 當合約對象為「政府機關/業務單位」，且時程在「準備期/籌備期」時，自動啟用本防禦元件。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Part 3: Full Integration Ecosystem -->
+                <div class="workbook-section-header">
+                    <h2>🚀 三、雙層整合自癒防線：大腦抗體演進與自動目錄擴充</h2>
+                </div>
+                
+                <div class="sop-block" style="background: rgba(255,255,255,0.01); border-color: rgba(255,255,255,0.08); padding: 1.5rem;">
+                    <p style="font-size: 0.9rem; color: #cbd5e1; line-height: 1.7; margin-bottom: 1rem;">
+                        <strong>自主代理的未來藍圖：</strong><br/>
+                        學員可以在本地直接投餵 AIDE 平台 Agent aaa。大腦將示範兩種不同的自癒自適應路徑：
+                    </p>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem;">
+                        <div style="background: rgba(7, 9, 19, 0.4); border: 1px solid rgba(255,255,255,0.02); border-radius: 12px; padding: 1.25rem;">
+                            <h4 style="color: var(--accent-emerald); font-size: 0.95rem; margin-bottom: 0.5rem;">路徑 A：既有資產增強合併</h4>
+                            <p style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 0.75rem;">投餵 Antigravity 將 <code>comp-07_onsite_wire_safety.md</code> 自動追加寫入標準服務方法論 <code>falo_pm_methodology.md</code> 的現場控管章節中，使母版自然防禦進化。</p>
+                            <code style="background: #000; padding: 0.15rem 0.4rem; border-radius: 4px; color: var(--accent-cyan); font-family: monospace; font-size: 0.75rem; word-break: break-all;" id="s-ex-p5">aaa，請調用 /class02/reference 下的 comp-07_onsite_wire_safety.md，將其標準防線 SOP 安全合併追加寫入 falo_pm_methodology.md 的第四章現場安全控管中，使我們下一版經典基本母版自然具備此項抗體。</code>
+                            <button class="btn-copy-console" onclick="copyConsolePrompt('s-ex-p5')" style="margin-top: 0.5rem; font-size: 0.7rem; padding: 0.2rem 0.5rem;">複製 Path A 指令</button>
+                        </div>
+
+                        <div style="background: rgba(7, 9, 19, 0.4); border: 1px solid rgba(255,255,255,0.02); border-radius: 12px; padding: 1.25rem;">
+                            <h4 style="color: var(--accent-purple); font-size: 0.95rem; margin-bottom: 0.5rem;">路徑 B：新型風險創建全新分類</h4>
+                            <p style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 0.75rem;">針對新型的「攤商提早離開與撤場工讀生工時紊亂」風險（Row 34），要求 Antigravity 自主建立全新目錄與獨立查核政策。</p>
+                            <code style="background: #000; padding: 0.15rem 0.4rem; border-radius: 4px; color: var(--accent-cyan); font-family: monospace; font-size: 0.75rem; word-break: break-all;" id="s-ex-p6">aaa，針對寵物嘉年華經驗庫 Row 34 所暴露的新型「攤商管理與撤場工讀生工時超時紊亂」風險，這不屬於既有資產，請為我在 class02 目錄下自主創建新類別目錄 case4_stall_management/，並寫入獨立的 stall_exit_rules.md 查核防線規範。</code>
+                            <button class="btn-copy-console" onclick="copyConsolePrompt('s-ex-p6')" style="margin-top: 0.5rem; font-size: 0.7rem; padding: 0.2rem 0.5rem;">複製 Path B 指令</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        
+
+        <section id="tab-excel-case" class="tab-panel">
+            <div class="mapping-container" style="display: flex; flex-direction: column; gap: 2rem;">
+                
+                <!-- Philosophy Header -->
+                <div class="sop-block" style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%); border-color: var(--accent-cyan); position: relative;">
+                    <div style="font-size: 1.2rem; font-weight: 800; color: #fff; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <span>📊</span> 台西寵物嘉年華專案經驗庫 AI 特訓 (真實專案 Lessons Learned)
+                    </div>
+                    <div style="font-size: 0.95rem; line-height: 1.7; color: #e2e8f0; font-style: italic; border-left: 3px solid var(--accent-gold); padding-left: 1rem; margin-bottom: 1rem;">
+                        「這份 Excel 不是一張可有可無的行政表單。它是地平線專案生命的 Project Memory 種子。」<br/>
+                        「AI 真正的商業與教育價值，絕非幫 PM 多填一張表，而是讓組織過去每一次踩過的坑，自動轉化為下一次新專案啟動時的『主動防禦』與『天眼預警』能力。」
+                    </div>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0;">本案例完全 grounded 於地平線 PM Grace在「台西寵物嘉年華」真實踩坑留下的 36 筆組織記憶。我們將拆解為「單點大腦爆破」與「全景自動自癒生態」兩層結構進行示範教學。</p>
+                </div>
+
+                <!-- Part 1: Single Point Demo -->
+                <div class="workbook-section-header">
+                    <h2>🧠 一、單點爆破演練：NotebookLM 雲端大腦 + 4大微型 Prompt 避雷針</h2>
+                </div>
+
+                <!-- NEW: Excel to NotebookLM Tutorial -->
+                <div class="sop-block" style="background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.08); padding: 1.5rem; margin-bottom: 1.5rem;">
+                    <h3 style="color: var(--accent-cyan); font-size: 1.1rem; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <span>📥</span> 核心知識工程：一般 Excel 檔案 (.xlsx) 導入 NotebookLM 的雙軌重構法
+                    </h3>
+                    <p style="font-size: 0.9rem; color: #cbd5e1; line-height: 1.6; margin-bottom: 1rem;">
+                        <strong>⚠️ 核心限制與痛點：</strong> 
+                        在 NotebookLM 的「新增來源」中，<strong>原生並不支援標準的 Excel (.xlsx) 二進位檔案格式</strong>（支援的檔案類型如官方說明所示：<code>pdf, txt, md, docx, csv, pptx, epub...</code>）。
+                        若直接上傳 <code>.xlsx</code> 會產生格式不支援錯誤。為了將傳統扁平的 Excel 組織記憶灌入 AI 大腦，PM 必須掌握以下兩種各有優勢的導入重構路徑：
+                    </p>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem; margin-bottom: 1.5rem;">
+                        <!-- Path 1 -->
+                        <div style="background: rgba(20, 184, 166, 0.03); border: 1px solid rgba(20, 184, 166, 0.15); border-radius: 12px; padding: 1.25rem;">
+                            <h4 style="color: var(--accent-teal); font-size: 0.98rem; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                                <span>🟢</span> 路徑一：雲端試算表直連法 (Google Sheets Live Link)
+                            </h4>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">
+                                <strong>步驟：</strong> 將 <code>.xlsx</code> 檔案上傳至 Google Drive ➔ 以 Google 試算表開啟 ➔ 點選「檔案」➔「儲存為 Google 試算表」 ➔ 前往 NotebookLM 點選「Google 雲端硬碟」直接導入該 Google Sheet。<br/><br/>
+                                <strong>🔥 最大優勢 (PROS)：手動更新與動態自癒</strong><br/>
+                                這是最推薦的工業級做法。當前線 PM 在雲端試算表中隨時修改、更正或追加新的專案踩坑行數時，<strong>無須重新轉檔或二次上傳！</strong> 
+                                只需在 NotebookLM 的該檔案來源旁點擊 <code>🔄 重新整理來源 (Refresh Source)</code>，大腦便會秒級快照吸收最新內容，確保企業知識庫的「動態演進」。
+                            </p>
+                        </div>
+                        
+                        <!-- Path 2 -->
+                        <div style="background: rgba(168, 85, 247, 0.03); border: 1px solid rgba(168, 85, 247, 0.15); border-radius: 12px; padding: 1.25rem;">
+                            <h4 style="color: var(--accent-purple); font-size: 0.98rem; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                                <span>🟣</span> 路徑二：AI 轉換 .csv 直接上傳法 (AI CSV Conversion)
+                            </h4>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">
+                                <strong>步驟：</strong> 將原始 <code>.xlsx</code> 表格或截圖直接投餵給 AI 特助 ➔ 發送指令 <code>「請幫我將這份 Excel 專案經驗庫，格式化清洗並轉譯輸出為標準的 .csv 檔案，以供 NotebookLM 讀取。」</code> ➔ 下載 AI 產出的 <code>.csv</code> ➔ 在 NotebookLM 中點選「上傳檔案」直接上傳導入。<br/><br/>
+                                <strong>🔥 最大優勢 (PROS)：高隱私與免設定</strong><br/>
+                                由於 NotebookLM 原生支援 <code>.csv</code> 格式，此方法免去了雲端硬碟的權限授權，非常適合對外高度保密、敏感資料不落地、或只想進行單次靜態快照特訓的專案情境。轉換完全由 AI 自動處理，SME 行政同仁 0 學習成本。
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div style="background: rgba(251, 191, 36, 0.03); border: 1px solid rgba(251, 191, 36, 0.15); border-radius: 12px; padding: 1.25rem; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">
+                        🎯 <strong>學員心法筆記：</strong> 沒有最好的工具，只有最適合場景的解法。當需要團隊隨時協作、動態追加組織記憶時，選【路徑一】能體驗一鍵重整的「動態免疫」威力；當遇到內部敏感資料、只做單次快照分析時，選【路徑二】請 AI 自動轉成 .csv 是最安全無痛的選擇。
+                    </div>
+                </div>
+                
+                <div class="sop-block" style="background: rgba(255,255,255,0.01); border-color: rgba(255,255,255,0.08);">
+                    <h3 style="color: #fff; font-size: 1.05rem; margin-bottom: 0.5rem;">🔗 雲端大腦導入練習 (Student RAG Sandbox)</h3>
+                    <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem;">
+                        <strong>請在個人瀏覽器中完成以下操作：</strong><br/>
+                        1. 打開 Google 瀏覽器並登入你的 Google 帳戶。<br/>
+                        2. 點擊複製下方連結，在瀏覽器新視窗中打開地平線分享的 PM 經驗庫試算表：<br/>
+                        <code style="background: #000; padding: 0.2rem 0.5rem; border-radius: 4px; color: var(--accent-cyan); font-family: monospace; word-break: break-all;">https://docs.google.com/spreadsheets/d/1z5MlDimJl7sO0JuD5LKVPqJkRzldPUt51nqoSM3rt3Q/edit?usp=sharing</code><br/>
+                        3. 點擊「檔案」➔「建立複本」儲存至你個人的雲端硬碟。<br/>
+                        4. 前往 <a href="https://notebooklm.google.com" target="_blank" style="color: var(--accent-cyan); font-weight: bold; text-decoration: underline;">NotebookLM 官網</a>，建立一個新筆記本，並選擇從「Google 雲端硬碟」匯入剛才複製的試算表複本。<br/>
+                        5. 匯入完成後，你個人的專屬 SME PM 雲端智慧大腦就建置完成了！請貼上以下 4 大微型 Prompt 進行秒級避雷問答：
+                    </p>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-top: 1.5rem;">
+                        <!-- Prompt 1 -->
+                        <div class="console-box" style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 12px;">
+                            <div style="font-size: 0.75rem; color: var(--accent-cyan); font-weight: bold; margin-bottom: 0.5rem;">📡 微型 Prompt 1：關鍵字雷達 (Keyword Alert)</div>
+                            <div style="font-family: monospace; font-size: 0.85rem; color: #fff; margin-bottom: 0.5rem; background: rgba(0,0,0,0.4); padding: 0.75rem; border-radius: 6px;" id="s-ex-p1">請以專業活動 PM 視角，掃描這份專案經驗庫的所有痛點，找出最常在「舞台現場」與「走線安全」上重複發生的安全風險（如電線凸起、音響太大聲等），並列出其發生的 Row 編號與簡述。</div>
+                            <button class="btn-copy-console" onclick="copyConsolePrompt('s-ex-p1')">複製 Prompt 指令</button>
+                        </div>
+
+                        <!-- Prompt 2 -->
+                        <div class="console-box" style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 12px;">
+                            <div style="font-size: 0.75rem; color: var(--accent-cyan); font-weight: bold; margin-bottom: 0.5rem;">🔍 微型 Prompt 2：避雷針提煉 (Golden Finder)</div>
+                            <div style="font-family: monospace; font-size: 0.85rem; color: #fff; margin-bottom: 0.5rem; background: rgba(0,0,0,0.4); padding: 0.75rem; border-radius: 6px;" id="s-ex-p2">請從 Row 7（電線凸起絆倒記者會長官母女）與 Row 6（承辦休假審核 Delay 印刷趕工）中，分別提取其「痛點描述」、「當下應變」與「最核心的避雷防禦建議」，並用條列式整理。</div>
+                            <button class="btn-copy-console" onclick="copyConsolePrompt('s-ex-p2')">複製 Prompt 指令</button>
+                        </div>
+
+                        <!-- Prompt 3 -->
+                        <div class="console-box" style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 12px;">
+                            <div style="font-size: 0.75rem; color: var(--accent-cyan); font-weight: bold; margin-bottom: 0.5rem;">✉️ 微型 Prompt 3：廠商規範函 (Supplier Perspective)</div>
+                            <div style="font-family: monospace; font-size: 0.85rem; color: #fff; margin-bottom: 0.5rem; background: rgba(0,0,0,0.4); padding: 0.75rem; border-radius: 6px;" id="s-ex-p3">如果我們下一個專案是在文化公園辦活動。請根據 Row 7（電線絆倒民眾）與 Row 13（舞台音響太大聲嚇到狗狗）的教訓，幫我寫一封給「音響與硬體施工廠商」的行前規範通知信，嚴格要求電線固定與休息區噪音隔離，語氣必須專業且嚴格。</div>
+                            <button class="btn-copy-console" onclick="copyConsolePrompt('s-ex-p3')">複製 Prompt 指令</button>
+                        </div>
+
+                        <!-- Prompt 4 -->
+                        <div class="console-box" style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 12px;">
+                            <div style="font-size: 0.75rem; color: var(--accent-cyan); font-weight: bold; margin-bottom: 0.5rem;">🏷️ 微型 Prompt 4：一秒分類與標籤 (1-Second Labeling)</div>
+                            <div style="font-family: monospace; font-size: 0.85rem; color: #fff; margin-bottom: 0.5rem; background: rgba(0,0,0,0.4); padding: 0.75rem; border-radius: 6px;" id="s-ex-p4">請閱讀以下這筆新 PM 現場問題：「活動最後一天，寵物市集店家抱怨撤場動線狹窄、大貨車倒車差點撞到民眾狗狗，工讀生不知道該找誰指揮撤場。」請比對經驗庫的分類體系，為其自動分類並打上 3 個核心標籤（Tags）。</div>
+                            <button class="btn-copy-console" onclick="copyConsolePrompt('s-ex-p4')">複製 Prompt 指令</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Part 2: Dissection & Componentization -->
+                <div class="workbook-section-header">
+                    <h2>🧱 二、知識拆解與積木化：實作將 Excel Flat Rows 提煉成 SOP 知識元件</h2>
+                </div>
+                
+                <div style="background: rgba(255,255,255,0.01); border: 1px solid var(--border-color); border-radius: 16px; padding: 2rem;">
+                    <h3 style="color: #fff; font-size: 1.1rem; margin-bottom: 1rem;">📝 練習：請試著將 Row 7 (現場絆倒) 與 Row 6 (審核Delay) 填入下方 Markdown 元件空白模板中</h3>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+                        <div style="background: var(--card-bg); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 1.25rem; font-family: monospace; font-size: 0.85rem; color: var(--text-secondary);">
+                            <span style="color: var(--accent-gold);">[學員空白模板 1] comp-07_onsite_wire_safety.md</span><br/>
+                            # 現場電線鋪設與走線安全 SOP<br/>
+                            - **🏷️ Tags**: [ 請填寫適合的分類標籤 ]<br/>
+                            - **🔴 歷史痛點**: [ 請根據 Row 7 痛點簡述 ]<br/>
+                            - **🛡️ 標準防線 SOP**: [ 請提煉 3 點具體可執行的現場防護 SOP ]<br/>
+                            - **⚙️ 觸發規則**: [ 當招標書包含什麼內容時自動強制拼裝？ ]
+                        </div>
+                    </div>
+
+                    <div class="toggle-container" style="justify-content: flex-start; gap: 1rem; margin-bottom: 1rem;">
+                        <span class="toggle-label" id="label-excel-ans" style="color: var(--accent-emerald); font-weight: bold;">🏆 點擊展開標準拆分積木答案</span>
+                        <label class="switch">
+                            <input type="checkbox" id="toggle-excel-ans" onchange="toggleExcelAnswers()">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <!-- Toggleable Excel Answers Block -->
+                    <div id="excel-answers-block" style="display: none; grid-template-columns: 1fr 1fr; gap: 1.5rem; animation: fadeIn 0.4s ease; margin-top: 1rem;">
+                        <div style="background: rgba(16, 185, 129, 0.03); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 12px; padding: 1.25rem; border-left: 4px solid var(--accent-emerald);">
+                            <div style="font-size: 0.75rem; font-weight: bold; color: var(--accent-emerald); margin-bottom: 0.5rem;">[ANSWER 1] comp-07_onsite_wire_safety.md</div>
+                            <h4 style="color: #fff; font-size: 1rem; margin-bottom: 0.5rem;">現場電線鋪設與走線安全 SOP</h4>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; margin: 0;">
+                                <strong>🏷️ Tags:</strong> 民眾跌倒, 電線固定, 三角錐, 現場安全, 音響廠商<br/>
+                                <strong>🔴 歷史痛點:</strong> 舞台區連結到報到處走線不細心、電線凸起未固定，致民眾絆倒受傷。<br/>
+                                <strong>🛡️ 標準防線 SOP:</strong><br/>
+                                1. 走線區域必須規劃明顯防護標示，嚴禁裸露電線。<br/>
+                                2. 音響硬體廠商在活動前必須以黑黃大力膠完全黏貼固定地面電線，並在交叉路口配置高階護線板。<br/>
+                                3. PM 必須於活動開場前 1 小時逐一走線巡檢拍照存檔。<br/>
+                                <strong>⚙️ 觸發規則:</strong> 當 RFP 包含「舞台搭建」或「硬體施工」時，強行將此 SOP 拼裝入投標書中。
+                            </p>
+                        </div>
+
+                        <div style="background: rgba(16, 185, 129, 0.03); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 12px; padding: 1.25rem; border-left: 4px solid var(--accent-emerald);">
+                            <div style="font-size: 0.75rem; font-weight: bold; color: var(--accent-emerald); margin-bottom: 0.5rem;">[ANSWER 2] comp-06_gov_approval_timeline.md</div>
+                            <h4 style="color: #fff; font-size: 1rem; margin-bottom: 0.5rem;">政府機關設計審核與安全製程控管</h4>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; margin: 0;">
+                                <strong>🏷️ Tags:</strong> 審核Delay, 進度落後, 修改Logo, 印刷時間<br/>
+                                <strong>🔴 歷史痛點:</strong> 承辦休假審核延誤，活動前兩天還在修改攤名Logo，前一天印刷品才送達。<br/>
+                                <strong>🛡️ 標準防線 SOP:</strong><br/>
+                                1. PM 必須與業主科室約定明確的「設計審核通過時間」與「最後修改截止時間」。<br/>
+                                2. 印刷發包品必須在出發前預留至少 3 天的安全製程與物流運輸時間。<br/>
+                                3. 若承辦休假，開案時必須在會議記錄中指定指定的第二審核代理人。<br/>
+                                <strong>⚙️ 觸發規則:</strong> 當合約對象為「政府機關/業務單位」，且時程在「準備期/籌備期」時，自動啟用本防禦元件。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Part 3: Full Integration Ecosystem -->
+                <div class="workbook-section-header">
+                    <h2>🚀 三、雙層整合自癒防線：大腦抗體演進與自動目錄擴充</h2>
+                </div>
+                
+                <div class="sop-block" style="background: rgba(255,255,255,0.01); border-color: rgba(255,255,255,0.08); padding: 1.5rem;">
+                    <p style="font-size: 0.9rem; color: #cbd5e1; line-height: 1.7; margin-bottom: 1rem;">
+                        <strong>自主代理的未來藍圖：</strong><br/>
+                        學員可以在本地直接投餵 AIDE 平台 Agent aaa。大腦將示範兩種不同的自癒自適應路徑：
+                    </p>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem;">
+                        <div style="background: rgba(7, 9, 19, 0.4); border: 1px solid rgba(255,255,255,0.02); border-radius: 12px; padding: 1.25rem;">
+                            <h4 style="color: var(--accent-emerald); font-size: 0.95rem; margin-bottom: 0.5rem;">路徑 A：既有資產增強合併</h4>
+                            <p style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 0.75rem;">投餵 Antigravity 將 <code>comp-07_onsite_wire_safety.md</code> 自動追加寫入標準服務方法論 <code>falo_pm_methodology.md</code> 的現場控管章節中，使母版自然防禦進化。</p>
+                            <code style="background: #000; padding: 0.15rem 0.4rem; border-radius: 4px; color: var(--accent-cyan); font-family: monospace; font-size: 0.75rem; word-break: break-all;" id="s-ex-p5">aaa，請調用 /class02/reference 下的 comp-07_onsite_wire_safety.md，將其標準防線 SOP 安全合併追加寫入 falo_pm_methodology.md 的第四章現場安全控管中，使我們下一版經典基本母版自然具備此項抗體。</code>
+                            <button class="btn-copy-console" onclick="copyConsolePrompt('s-ex-p5')" style="margin-top: 0.5rem; font-size: 0.7rem; padding: 0.2rem 0.5rem;">複製 Path A 指令</button>
+                        </div>
+
+                        <div style="background: rgba(7, 9, 19, 0.4); border: 1px solid rgba(255,255,255,0.02); border-radius: 12px; padding: 1.25rem;">
+                            <h4 style="color: var(--accent-purple); font-size: 0.95rem; margin-bottom: 0.5rem;">路徑 B：新型風險創建全新分類</h4>
+                            <p style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 0.75rem;">針對新型的「攤商提早離開與撤場工讀生工時紊亂」風險（Row 34），要求 Antigravity 自主建立全新目錄與獨立查核政策。</p>
+                            <code style="background: #000; padding: 0.15rem 0.4rem; border-radius: 4px; color: var(--accent-cyan); font-family: monospace; font-size: 0.75rem; word-break: break-all;" id="s-ex-p6">aaa，針對寵物嘉年華經驗庫 Row 34 所暴露的新型「攤商管理與撤場工讀生工時超時紊亂」風險，這不屬於既有資產，請為我在 class02 目錄下自主創建新類別目錄 case4_stall_management/，並寫入獨立的 stall_exit_rules.md 查核防線規範。</code>
+                            <button class="btn-copy-console" onclick="copyConsolePrompt('s-ex-p6')" style="margin-top: 0.5rem; font-size: 0.7rem; padding: 0.2rem 0.5rem;">複製 Path B 指令</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        
+
+    </div>
+
+    
+
+        
+
+        
+
+        <!-- Hidden Toast Alert -->
+    <div class="toast" id="toast-alert">
+        <span>🚀</span> <span id="toast-text">指令複製成功！可在對話視窗中 Ctrl+V 貼上指揮 Agent！</span>
+    </div>
+
+    <footer>
+        🌌 Horizon Class 02 &copy; 2026. Designed by Antigravity (aaa) for Force (ff) Advisor.
+    </footer>
+
+    <!-- Interactive workbook reveal answers logic JS -->
+    <script>
+        function switchTab(evt, tabId) {
+            const panels = document.getElementsByClassName("tab-panel");
+            for (let i = 0; i < panels.length; i++) {
+                panels[i].classList.remove("active");
+            }
+
+            const buttons = document.getElementsByClassName("tab-btn");
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].classList.remove("active");
+            }
+
+            document.getElementById(tabId).classList.add("active");
+            evt.currentTarget.classList.add("active");
+
+            if (tabId === 'tab-homework') {
+                // Homework pulse action
+            }
+        }
+
+
+        function toggleExcelAnswers() {
+            const toggle = document.getElementById("toggle-excel-ans");
+            const label = document.getElementById("label-excel-ans");
+            const block = document.getElementById("excel-answers-block");
+            
+            if (toggle.checked) {
+                block.style.display = "grid";
+                label.innerText = "🏆 點擊隱藏標準拆分答案";
+            } else {
+                block.style.display = "none";
+                label.innerText = "🏆 點擊展開標準拆分積木答案";
+            }
+        }
+
+        // Toggle Standard Answers for worksheets
+        function toggleAnswers(type) {
+            const toggle = document.getElementById("toggle-" + type);
+            const label = document.getElementById("label-" + type);
+            const table = document.getElementById("table-" + type);
+            
+            // Get all placeholder cells and answer cells inside this table
+            const placeholders = table.getElementsByClassName("placeholder-cell");
+            const answers = table.getElementsByClassName("ans-cell");
+
+            if (toggle.checked) {
+                // Show standard answers
+                label.classList.add("active");
+                label.innerText = "隱藏答案";
+                
+                // Toggle display classes
+                for (let i = 0; i < placeholders.length; i++) {
+                    placeholders[i].classList.add("hide");
+                }
+                for (let i = 0; i < answers.length; i++) {
+                    answers[i].classList.add("show");
+                }
+                
+                showToast("💎 已經顯示 Class 02 課堂標準解答對照！");
+            } else {
+                // Hide standard answers (show templates)
+                label.classList.remove("active");
+                label.innerText = "顯示答案";
+                
+                for (let i = 0; i < placeholders.length; i++) {
+                    placeholders[i].classList.remove("hide");
+                }
+                for (let i = 0; i < answers.length; i++) {
+                    answers[i].classList.remove("show");
+                }
+                
+                showToast("🔮 已隱藏答案，切換為學員練習工作表範本！");
+            }
+        }
+
+        // Copy command consoles
+        function copyConsolePrompt(elementId) {
+            const text = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                showToast("🚀 AIDE 指令複製成功！可在對話視窗中 Ctrl+V 貼上投遞給 Agent！");
+            });
+        }
+
+        // Custom premium toast helper
+        function showToast(text) {
+            const toast = document.getElementById("toast-alert");
+            document.getElementById("toast-text").innerText = text;
+            toast.classList.add("show");
+            
+            setTimeout(() => {
+                toast.classList.remove("show");
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

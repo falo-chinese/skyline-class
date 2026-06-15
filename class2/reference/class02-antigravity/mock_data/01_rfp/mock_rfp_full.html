@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📄 模擬招標規範書 (RFP) 完整版說明</title>
+    <style>
+        
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.6;
+    color: #e2e8f0;
+    background-color: #0f172a;
+    max-width: 850px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+}
+h1, h2, h3, h4, h5, h6 {
+    color: #f8fafc;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    font-weight: 700;
+}
+h1 { font-size: 2.2rem; border-bottom: 1px solid #334155; padding-bottom: 0.5rem; }
+h2 { font-size: 1.6rem; border-bottom: 1px solid #1e293b; padding-bottom: 0.25rem; margin-top: 2rem; }
+h3 { font-size: 1.25rem; }
+a { color: #38bdf8; text-decoration: none; font-weight: 500; }
+a:hover { text-decoration: underline; }
+code {
+    background-color: #1e293b;
+    color: #f1f5f9;
+    padding: 0.15rem 0.3rem;
+    border-radius: 4px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 0.85em;
+}
+pre {
+    background-color: #1e293b;
+    padding: 1rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    border: 1px solid #334155;
+    margin: 1.5rem 0;
+}
+pre code {
+    background-color: transparent;
+    padding: 0;
+    border-radius: 0;
+    font-size: 0.85rem;
+    color: #f1f5f9;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.9rem;
+}
+th, td {
+    border: 1px solid #334155;
+    padding: 0.75rem;
+    text-align: left;
+}
+th {
+    background-color: #1e293b;
+    color: #f8fafc;
+    font-weight: bold;
+}
+tr:nth-child(even) {
+    background-color: rgba(30, 41, 59, 0.5);
+}
+blockquote {
+    border-left: 4px solid #38bdf8;
+    padding: 0.5rem 1rem;
+    background-color: rgba(30, 41, 59, 0.5);
+    margin: 1.5rem 0;
+    border-radius: 0 8px 8px 0;
+    color: #cbd5e1;
+}
+.alert {
+    padding: 1rem;
+    border-radius: 8px;
+    margin: 1.5rem 0;
+    border-left: 4px solid #3b82f6;
+}
+.alert-note {
+    background-color: rgba(59, 130, 246, 0.1);
+    border-left-color: #3b82f6;
+    color: #93c5fd;
+}
+.alert-tip {
+    background-color: rgba(16, 185, 129, 0.1);
+    border-left-color: #10b981;
+    color: #a7f3d0;
+}
+.alert-warning {
+    background-color: rgba(245, 158, 11, 0.1);
+    border-left-color: #f59e0b;
+    color: #fde047;
+}
+.alert-important {
+    background-color: rgba(139, 92, 246, 0.1);
+    border-left-color: #8b5cf6;
+    color: #ddd6fe;
+}
+.back-link {
+    display: inline-block;
+    font-size: 0.9rem;
+    color: #94a3b8;
+}
+.back-link:hover {
+    color: #f8fafc;
+}
+ul, ol {
+    padding-left: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+li {
+    margin-bottom: 0.5rem;
+}
+hr {
+    border: 0;
+    height: 1px;
+    background: #334155;
+    margin: 2rem 0;
+}
+
+    </style>
+</head>
+<body>
+    <div style="margin-bottom: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+        <a href="../../index.html" class="back-link">🌌 回 Class 02 課程入口首頁</a>
+        <span style="color: #475569;">|</span>
+        <a href="../README.html" class="back-link">📦 回 實作資料集導覽 (README)</a>
+    </div>
+    
+    <article>
+        <h1>📄 模擬招標規範書 (RFP) 完整版說明</h1>
+<br/>
+<p><strong>用途</strong>：給學員進行深度合規分析，練習從中提煉 7 欄式需求抽取表與 6 欄式回應對照矩陣。</p>
+<p><strong>教學重點</strong>：學會找出條款編號、死命令附件，以及將技術指標與資格指標區分。</p>
+<br/>
+<hr/>
+<br/>
+<h2>第一章：專案背景與需求說明</h2>
+<p>中華民國國家檔案數位發展委員會（以下簡稱本會）為因應數位政府變革，推動機關內部公文、歷史檔案及稽核文件之自動化管理，特辦理「國家智慧文件管理與流程自動化導入政務工程」（以下簡稱本專案）。</p>
+<p>本專案預算金額為新台幣 500 萬元整。投標廠商應於 2026 年 6 月 2 日 17:00 前完成投標，逾期視為資格不符。</p>
+<br/>
+<h2>第二章：投標廠商基本資格 (RFP 3.1.2)</h2>
+<p>為確保履約品質，投標廠商必須具備大型系統開發與整合經驗。</p>
+<ol>
+<li><strong>基本實績</strong>：投標廠商必須於過去三年內（2023年1月1日至2025年12月31日），具備單一契約金額大於新台幣 <strong>300 萬元</strong> 之智慧文件管理系統或企業 ERP 系統導入實績。</li>
+<li><strong>實績證明附件</strong>：廠商應於投標文件中檢附該實績專案之合約封面，以及「客戶端用印之驗收合格證明公文影本」。<strong>未檢附驗收公文影本者，第一階段資格審查直接判定不合格（廢標）。</strong></li>
+</ol>
+<br/>
+<h2>第三章：系統技術與交付需求 (RFP 5.2.1)</h2>
+<p>本專案之核心在於長文件工程之建立與知識庫之對接。</p>
+<ol>
+<li><strong>技術方法論</strong>：投標文件第二章必須詳細說明「專案執行方法論」。由於本會公文檔案龐大，廠商必須詳細闡述如何確保大容量長文件生成時，前後技術術語與標準名詞之一致性，且不得偏離本會之既有知識庫。</li>
+<li><strong>教育訓練規畫</strong>：為確保本會同仁能無痛上手，得標廠商必須於履約期間提供至少 3 場、每場不低於 4 小時之教育訓練。</li>
+<li><strong>知識交接機制</strong>：廠商必須於投標文件中提出「人員交接與知識無痛轉移方案」，確保若廠商履約人員或本會承辦同仁突然異動，下一個接手的人能在一秒內透過大腦進行問答檢索，實現無痛交接。</li>
+</ol>
+<br/>
+<h2>第四章：資訊安全與合規要求 (RFP 6.3.3)</h2>
+<p>本會檔案涉及國家機密，資安為零容忍防線。</p>
+<ol>
+<li><strong>資安合規</strong>：履約人員與系統環境應符合國家最新資安規範。</li>
+<li><strong>資安維護切結書</strong>：廠商必須於投標文件中檢附用印之「資訊安全維護切結書」，格式由廠商自擬，但內容<strong>必須承諾</strong>：</li>
+</ol>
+<ul>
+<li>所有政務公文資料傳輸與處理保證 <strong>「資料不落地」</strong>。</li>
+<li>得標後履約期間，每季必須配合本會進行一次 <strong>「定期資安風險稽核」</strong>。</li>
+<li><strong>切結書未包含上述兩條款或未用印者，技術評選直接扣除 20 分。</strong></li>
+</ul>
+<br/>
+<h2>第五章：技術評選評分重點指標</h2>
+<ol>
+<li><strong>歷史實績真實性與完整度 (30%)</strong></li>
+<li><strong>長文件執行方法論與一致性維護 (40%)</strong></li>
+<li><strong>教育訓練與中控無痛交接方案 (30%)</strong></li>
+</ol>
+<br/>
+    </article>
+</body>
+</html>

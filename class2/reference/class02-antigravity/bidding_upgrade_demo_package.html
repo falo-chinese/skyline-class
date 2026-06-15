@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏗️ Antigravity 招標書作業升級實戰示範包</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #08090e;
+            --card-bg: rgba(18, 20, 35, 0.75);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --text-primary: #f3f4f6;
+            --text-secondary: #9ca3af;
+            
+            /* Gradient tokens */
+            --accent-rose: #f43f5e;
+            --accent-purple: #8b5cf6;
+            --accent-blue: #3b82f6;
+            --accent-cyan: #06b6d4;
+            --accent-emerald: #10b981;
+            --accent-gold: #eab308;
+            --accent-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            font-family: 'Outfit', 'Noto Sans TC', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.1) 0px, transparent 40%),
+                radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.08) 0px, transparent 40%);
+            background-attachment: fixed;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            padding: 2rem 2rem 1rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo-area h1 {
+            font-size: 1.6rem;
+            font-weight: 900;
+            background: linear-gradient(to right, #a5b4fc, #c084fc, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-area p {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+            letter-spacing: 0.05em;
+        }
+
+        .badge {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.25);
+            color: #a5b4fc;
+            padding: 0.35rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Layout Grid */
+        .main-layout {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            flex: 1;
+        }
+
+        @media (min-width: 900px) {
+            .main-layout {
+                grid-template-columns: 280px 1fr;
+            }
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .tab-btn {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            color: var(--text-secondary);
+            text-align: left;
+            font-family: inherit;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .tab-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .tab-btn.active {
+            background: rgba(99, 102, 241, 0.08);
+            border-color: var(--accent-purple);
+            color: var(--text-primary);
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.15);
+        }
+
+        .tab-num {
+            font-size: 0.7rem;
+            opacity: 0.5;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        /* Content Container */
+        .content-container {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(16px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content-panel {
+            display: none;
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        .content-panel.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Typographic enhancements inside panels */
+        .panel-header {
+            margin-bottom: 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding-bottom: 1rem;
+        }
+
+        .panel-header h2 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .panel-header p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            line-height: 1.5;
+        }
+
+        .highlight-text {
+            color: var(--accent-cyan);
+            font-weight: bold;
+        }
+
+        /* Custom Scenario Lists & Cards */
+        .scenario-box {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .scenario-box h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .scenario-box p {
+            font-size: 0.9rem;
+            color: #d1d5db;
+            line-height: 1.6;
+        }
+
+        /* Folder tree visualization */
+        .folder-tree {
+            font-family: monospace;
+            background: #0d0e14;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1.5rem;
+            color: #a5b4fc;
+            line-height: 1.6;
+            font-size: 0.9rem;
+        }
+
+        .folder-comment {
+            color: var(--text-secondary);
+        }
+
+        /* Compliance Matrix Table Styling */
+        .matrix-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+        }
+
+        .matrix-table th, .matrix-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .matrix-table th {
+            background: rgba(255, 255, 255, 0.02);
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: 0.05em;
+        }
+
+        .matrix-table td {
+            color: #d1d5db;
+            line-height: 1.5;
+        }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.75rem;
+            font-weight: bold;
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+        }
+
+        .pill-green { background: rgba(16, 185, 129, 0.12); color: var(--accent-emerald); border: 1px solid rgba(16, 185, 129, 0.2); }
+        .pill-yellow { background: rgba(234, 179, 8, 0.12); color: var(--accent-gold); border: 1px solid rgba(234, 179, 8, 0.2); }
+        .pill-red { background: rgba(244, 63, 94, 0.12); color: var(--accent-rose); border: 1px solid rgba(244, 63, 94, 0.2); }
+
+        /* Risk alert panel */
+        .risk-alert-card {
+            background: rgba(244, 63, 94, 0.03);
+            border: 1px solid rgba(244, 63, 94, 0.15);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .risk-alert-card.warning {
+            background: rgba(234, 179, 8, 0.03);
+            border: 1px solid rgba(234, 179, 8, 0.15);
+        }
+
+        .risk-badge {
+            font-size: 0.7rem;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .bg-red { background: rgba(244, 63, 94, 0.2); color: #fda4af; }
+        .bg-yellow { background: rgba(234, 179, 8, 0.2); color: #fef08a; }
+
+        /* General Manager Command Card Grid */
+        .cmd-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .cmd-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .cmd-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.2s ease;
+        }
+
+        .cmd-card:hover {
+            border-color: rgba(255,255,255,0.1);
+            transform: scale(1.01);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .cmd-meta h3 {
+            font-size: 0.95rem;
+            font-weight: bold;
+            color: var(--accent-cyan);
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.05em;
+        }
+
+        .cmd-body {
+            font-size: 0.85rem;
+            color: #e5e7eb;
+            background: #0d0e14;
+            padding: 1rem;
+            border-radius: 10px;
+            line-height: 1.5;
+            margin-bottom: 1.25rem;
+            border: 1px solid rgba(255,255,255,0.02);
+            position: relative;
+        }
+
+        .copy-btn {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.25);
+            color: #a5b4fc;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.4rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .copy-btn:hover {
+            background: var(--accent-purple);
+            color: #white;
+            border-color: var(--accent-purple);
+            transform: translateY(-1px);
+        }
+
+        /* Method convergence cards */
+        .converge-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .converge-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 16px;
+            padding: 1.25rem;
+        }
+
+        .converge-item h4 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .converge-item p {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        /* Toast Popup simulation */
+        #toast {
+            visibility: hidden;
+            min-width: 280px;
+            background-color: #11101b;
+            color: #fff;
+            text-align: center;
+            border-radius: 10px;
+            padding: 1.25rem;
+            position: fixed;
+            z-index: 10;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            border: 1px solid var(--accent-purple);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        #toast.show {
+            visibility: visible;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+
+        @keyframes fadein {
+            from { bottom: 0; opacity: 0; }
+            to { bottom: 30px; opacity: 1; }
+        }
+
+        @keyframes fadeout {
+            from { bottom: 30px; opacity: 1; }
+            to { bottom: 0; opacity: 0; }
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem;
+            color: rgba(255, 255, 255, 0.15);
+            font-size: 0.75rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header area -->
+    <header>
+        <div class="logo-area">
+            <h1>🏗️ Antigravity 招標作業示範包</h1>
+            <p>星河 Class 02 「長文件工程與招標書升級」專用教具</p>
+        </div>
+        <span class="badge">AIDE Method Framework</span>
+    </header>
+
+    <!-- Main Layout Container -->
+    <div class="main-layout">
+        
+        <!-- Left Side: Navigation Tabs -->
+        <div class="sidebar">
+            <button class="tab-btn active" onclick="switchTab(this, 1)">
+                <span>情境說明</span>
+                <span class="tab-num">01</span>
+            </button>
+            <button class="tab-btn" onclick="switchTab(this, 2)">
+                <span>資料夾結構</span>
+                <span class="tab-num">02</span>
+            </button>
+            <button class="tab-btn" onclick="switchTab(this, 3)">
+                <span>需求抽取表</span>
+                <span class="tab-num">03</span>
+            </button>
+            <button class="tab-btn" onclick="switchTab(this, 4)">
+                <span>回應對照表</span>
+                <span class="tab-num">04</span>
+            </button>
+            <button class="tab-btn" onclick="switchTab(this, 5)">
+                <span>缺件與風險</span>
+                <span class="tab-num">05</span>
+            </button>
+            <button class="tab-btn" onclick="switchTab(this, 6)">
+                <span>可重用元件</span>
+                <span class="tab-num">06</span>
+            </button>
+            <button class="tab-btn" onclick="switchTab(this, 7)">
+                <span>Agent 任務模板</span>
+                <span class="tab-num">07</span>
+            </button>
+            <button class="tab-btn" onclick="switchTab(this, 8)">
+                <span>總經理指令卡</span>
+                <span class="tab-num">08</span>
+            </button>
+            <button class="tab-btn" onclick="switchTab(this, 9)">
+                <span>知識中控收束</span>
+                <span class="tab-num">09</span>
+            </button>
+        </div>
+
+        <!-- Right Side: Content Panels -->
+        <div class="content-container">
+            
+            <!-- Tab 1: 情境說明 -->
+            <div class="content-panel active" id="panel-1">
+                <div class="panel-header">
+                    <h2>🏢 01. 招標書作業情境說明</h2>
+                    <p>將真實生存的痛點，定義為明確的 <span class="highlight-text">「長文件工程問題」</span></p>
+                </div>
+                
+                <div class="scenario-box">
+                    <h3>🎯 招標標案情境：政府智慧政務數位化專案</h3>
+                    <p>星河準備爭取一項新台幣 500 萬元的智慧文件政務工程標案，但投標截止期限僅剩 **3 天**。面對 **120 頁** 厚重的招標規範書 (RFP)，傳統的人工處理流程正處於崩潰邊緣。</p>
+                </div>
+
+                <div class="scenario-box" style="border-left: 3px solid var(--accent-rose); background: rgba(244, 63, 94, 0.02);">
+                    <h3>❌ 傳統人工作業崩潰點 (SME 真實痛點)</h3>
+                    <p style="margin-bottom: 0.5rem;">• **漏件風險**：PM 需要手讀 120 頁的細碎規範，非常容易漏掉藏在附件角落的合規要求（例如財務簽證、資安證明）。</p>
+                    <p style="margin-bottom: 0.5rem;">• **語意衝突**：不同員工手動複製貼上鼎盛專案、舊教材的方法論，造成長文件寫作風格與口吻前後矛盾。</p>
+                    <p>• **黑箱管理**：總經理（Grace）完全不知道目前完成了哪些、缺什麼附件、有何出標風險，只能盲目等待最後蓋章。</p>
+                </div>
+            </div>
+
+            <!-- Tab 2: 資料夾結構 -->
+            <div class="content-panel" id="panel-2">
+                <div class="panel-header">
+                    <h2>📂 02. AIDE 規範資料夾結構</h2>
+                    <p>長文件工程的第一步：將資料整理為 AI 與主管都看得懂的結構化脈絡 <span class="highlight-text">[Knowledgeization]</span></p>
+                </div>
+                
+                <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
+                    在 Antigravity 介入前，將專案目錄建立嚴格的分流隔離。這代表了從「雜亂硬碟垃圾」升級為「可控資產結構」的具體流程：
+                </p>
+
+                <pre class="folder-tree">
+星河_2026政府智慧文件標案/
+├── 01_招標進件 [Input_RFP]/
+│   ├── 智慧政務專案招標規範書_v1.0.pdf      <span class="folder-comment">// 120頁原始招標需求書</span>
+│   └── 招標需求抽取表.md                     <span class="folder-comment">// 由 Agent 自動剖析抽取出的規格要求</span>
+├── 02_歷史資產 [Reference_KM]/
+│   ├── 星河公司簡介元件.md                 <span class="folder-comment">// 可重用歷史元件積木</span>
+│   ├── 2025年鼎盛ERP專案實績.md               <span class="folder-comment">// 用於滿足資格的實績</span>
+│   └── 資訊安全維護政策規範.md               <span class="folder-comment">// 歷史合規資產</span>
+├── 03_組裝章節 [Output_Chapters]/
+│   ├── 01_建議書首頁.md
+│   ├── 02_專案執行方法論_草稿.md            <span class="folder-comment">// 本次實作產出示範章節</span>
+│   └── 03_歷史績效與資安證明.md
+└── 04_中控管理 [FALO_PM]/
+    ├── 標案合規對照表_Compliance_Matrix.md  <span class="folder-comment">// 建立招標條款與資產的映射索引</span>
+    └── 專案中控儀表板.html                   <span class="folder-comment">// 提供給Grace的管理天眼</span></pre>
+            </div>
+
+            <!-- Tab 3: 需求抽取表 -->
+            <div class="content-panel" id="panel-3">
+                <div class="panel-header">
+                    <h2>📋 03. 招標需求抽取表 (RFP Analysis)</h2>
+                    <p>大腦自主讀完 120 頁 RFP 後，為星河精準提煉出的 <span class="highlight-text">「四大合規核心需求」</span></p>
+                </div>
+
+                <table class="matrix-table">
+                    <thead>
+                        <tr>
+                            <th>規範編號</th>
+                            <th>招標要求項目</th>
+                            <th>規範細節</th>
+                            <th>權重 / 扣分懲罰</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="font-weight: bold; color: var(--accent-purple);">REQ-01</td>
+                            <td>公司基本實績證明</td>
+                            <td>投標廠商須於過去 3 年內具備至少 1 案金額達 300 萬元以上之文件數位化或知識工程實績。</td>
+                            <td>資格審查門檻（資格不符即退件）</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold; color: var(--accent-purple);">REQ-02</td>
+                            <td>專案執行方法論</td>
+                            <td>建議書須詳述「文件數位化流程」與「知識資產化轉化路徑」，並說明品質把關機制。</td>
+                            <td>評選評分核心項目（佔比 30%）</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold; color: var(--accent-purple);">REQ-03</td>
+                            <td>資訊安全防護防線</td>
+                            <td>投標廠商須證明符合基本資安防護規範，並檢附資安政策切結書。</td>
+                            <td>資格審查門檻（資格不符即退件）</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold; color: var(--accent-purple);">REQ-04</td>
+                            <td>財務狀況合規證明</td>
+                            <td>須檢附過去 3 年經會計師簽證之財務報表，且負債比率不得高於 60%。</td>
+                            <td>資格審查門檻（資格不符即退件）</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Tab 4: 回應對照表 -->
+            <div class="content-panel" id="panel-4">
+                <div class="panel-header">
+                    <h2>📊 04. 標案合規對照矩陣 (Compliance Matrix)</h2>
+                    <p>建立需求與既有資產的 <span class="highlight-text">「映射索引 (Reference Index)」</span>，確保出標無懈可擊</p>
+                </div>
+
+                <table class="matrix-table">
+                    <thead>
+                        <tr>
+                            <th>🎯 招標需求</th>
+                            <th>🚦 合規狀態</th>
+                            <th>🔑 既有知識資產來源</th>
+                            <th>🏗️ Antigravity 執行動作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="font-weight: bold;">REQ-01 (基本實績)</td>
+                            <td><span class="status-pill pill-green">● 100% 合規</span></td>
+                            <td>歷史資產 `/2025年鼎盛ERP專案實績.md`</td>
+                            <td>自動提取鼎盛專案 450 萬結案數據，組裝至標書第三章。</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold;">REQ-02 (方法論)</td>
+                            <td><span class="status-pill pill-yellow">● 待組裝</span></td>
+                            <td>方法論規章 `/falo_pm_methodology.md`</td>
+                            <td>以「流程映射與中控」為核心，自動編譯「執行方法論」草稿。</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold;">REQ-03 (資安證明)</td>
+                            <td><span class="status-pill pill-green">● 100% 合規</span></td>
+                            <td>歷史資產 `/資訊安全維護政策規範.md`</td>
+                            <td>提取資安條款，組裝產生「資安切結書」草稿並放置於附件夾。</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold; color: var(--accent-rose);">REQ-04 (財務證明)</td>
+                            <td><span class="status-pill pill-red">● 高風險缺件</span></td>
+                            <td style="color: var(--accent-rose); font-weight: bold;">⚠️ 無對應歷史檔案</td>
+                            <td style="color: var(--accent-rose);">**暫停動作**，於中控儀表板觸發紅燈警報。</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Tab 5: 缺件與風險 -->
+            <div class="content-panel" id="panel-5">
+                <div class="panel-header">
+                    <h2>⚠️ 05. 缺件與風險防線報告</h2>
+                    <p>Agent 背景自動進行合規差分檢索，為 <span class="highlight-text">Grace</span> 呈交的主動避險報告</p>
+                </div>
+
+                <div class="risk-board">
+                    
+                    <div class="risk-alert-card">
+                        <div style="font-size: 1.5rem;">🚨</div>
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--accent-rose);">【高風險紅燈】財務合規證明缺件 (REQ-04)</h4>
+                                <span class="risk-badge bg-red">嚴重威脅</span>
+                            </div>
+                            <p style="font-size: 0.8rem; color: #d1d5db; margin-top: 0.5rem; line-height: 1.4;">
+                                **風險分析**：招標書第 18 頁規定「廠商須檢附經會計師簽證財務報表」。目前專案目錄中無任何財報 PDF 檔，若直接送件將面臨**「資格審查直接出局」**之懲罰。
+                            </p>
+                            <p style="font-size: 0.8rem; color: var(--accent-cyan); margin-top: 0.25rem;">
+                                💡 **避險建議**：中控台已鎖定警告。請Grace指派會計在 12 小時內將「2023-2025財務簽證.pdf」掃描並拖入大腦庫。
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="risk-alert-card warning">
+                        <div style="font-size: 1.5rem;">⚠️</div>
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--accent-gold);">【中風險黃燈】鼎盛專案結案公文未歸檔 (REQ-01)</h4>
+                                <span class="risk-badge bg-yellow">合規瑕疵</span>
+                            </div>
+                            <p style="font-size: 0.8rem; color: #d1d5db; margin-top: 0.5rem; line-height: 1.4;">
+                                **風險分析**：雖有結案報告 Markdown 母稿，但招標規範要求檢附「發包機關結案公文影本影印本」。目前僅有文字敘述，缺乏公文圖檔佐證。
+                            </p>
+                            <p style="font-size: 0.8rem; color: var(--accent-cyan); margin-top: 0.25rem;">
+                                💡 **避險建議**：請 PM 在 24 小時內找出公文原件，上傳至 `/02_歷史資產` 目錄進行知識資產化。
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Tab 6: 可重用元件 -->
+            <div class="content-panel" id="panel-6">
+                <div class="panel-header">
+                    <h2>💎 06. 知識元件化清單 (Reusable Components)</h2>
+                    <p>寫標案不再從零抄寫，而是如積木般 <span class="highlight-text">「元件化組裝 (Componentization)」</span></p>
+                </div>
+                
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
+                    星河過去十年的成果，已被打碎並儲存為可隨時被 Agent 調用的「知識元件」。這些是公司最具價值的無形資產：
+                </p>
+
+                <div class="converge-grid">
+                    <div class="converge-item">
+                        <h4 style="color: var(--accent-blue);">🧩 元件 A：公司背景積木</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.75rem; margin-top: 0.25rem;">檔名：`星河公司簡介元件.md`</p>
+                        <p style="margin-top: 0.5rem;">包含資本額、公司統一編號、組織架構、核心榮譽。由 Agent 在所有標書首章自動調用，格式保證 100% 一致。</p>
+                    </div>
+                    <div class="converge-item">
+                        <h4 style="color: var(--accent-purple);">🧩 元件 B：方法論核心積木</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.75rem; margin-top: 0.25rem;">檔名：`falo_pm_methodology.md`</p>
+                        <p style="margin-top: 0.5rem;">包含星河專屬的「流程映射與小幅增強」執行框架。直接做為標案第二章「專案執行方法論」之核心底稿。</p>
+                    </div>
+                    <div class="converge-item">
+                        <h4 style="color: var(--accent-emerald);">🧩 元件 C：資安合規積木</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.75rem; margin-top: 0.25rem;">檔名：`資訊安全維護政策規範.md`</p>
+                        <p style="margin-top: 0.5rem;">包含公司標準資安切結條款與審計流程。直接套用為資格審查附件，無需人工重複撰寫與排版。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 7: Agent 任務模板 -->
+            <div class="content-panel" id="panel-7">
+                <div class="panel-header">
+                    <h2>🏗️ 07. Antigravity 任務指令模板</h2>
+                    <p>展示 Agent 作為 <span class="highlight-text">「長文件執行器 (Long Document Runtime)」</span> 時的工作邏輯</p>
+                </div>
+                
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
+                    以下為 Antigravity 在進行長文件自動組裝時，所讀取的工程化指令母稿。這證明了 Agent 是在嚴密規則下進行操作，而非盲目寫作：
+                </p>
+
+                <pre class="folder-tree" style="color: #6ee7b7; background: #07080b;">
+# 任務：長文件元件化組裝與回應索引建立
+[角色]：你現在是 AIDE 長文件工程執行器。
+[輸入]：讀取 `/01_招標進件` 的 RFP 與 `/02_歷史資產` 下的所有知識元件。
+[執行步驟]：
+1. 比對 RFP 中的 REQ-02 (專案方法論) 要求。
+2. 調用 `falo_pm_methodology.md` 作為核心方法論底稿。
+3. 自動比對並組裝出一份 2000 字的「專案執行方法論_草稿.md」。
+4. 在撰寫過程中，必須引用「流程映射」與「小幅增強」的白話案例，確保名詞前後一致。
+5. 嚴禁編造不存在的實績，若有缺件，請在檔案頂部輸出 [RISK_ALERT]。
+6. 自動套用標準 Markdown 目錄與政府建議書格式排版。</pre>
+            </div>
+
+            <!-- Tab 8: 總經理指令卡 -->
+            <div class="content-panel" id="panel-8">
+                <div class="panel-header">
+                    <h2>👑 08. 總經理 (Grace) 專屬指令指揮卡</h2>
+                    <p>高階主管 <span class="highlight-text">「不需要記程式碼」</span>，只需在關鍵節點複製指令，即可行使絕對指揮權</p>
+                </div>
+
+                <div class="cmd-grid">
+                    
+                    <div class="cmd-card">
+                        <div class="cmd-meta">
+                            <h3>🏁 階段一：動手前的計畫審查 (Plan Check)</h3>
+                            <p style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.5rem;">在 Agent 開始做事之前，先對齊理解與步驟</p>
+                        </div>
+                        <div class="cmd-body" id="cmd-text-1">請先不要急著寫建議書正文。請先列出你理解的招標核心需求，以及你預計要調用哪些歷史資產積木，列出工作步驟等我核准。</div>
+                        <button class="copy-btn" onclick="copyCommand(1)">🚀 複製總經理指令</button>
+                    </div>
+
+                    <div class="cmd-card">
+                        <div class="cmd-meta">
+                            <h3>🔍 階段二：合規與風險稽核 (Compliance Audit)</h3>
+                            <p style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.5rem;">在起草過程中，命令 Agent 進行自我稽核比對</p>
+                        </div>
+                        <div class="cmd-body" id="cmd-text-2">請幫我比對 120 頁的招標規範書，列出一份回應對照表。並用最醒目的方式標示出目前有哪些高風險缺件，或是不合規的地方。</div>
+                        <button class="copy-btn" onclick="copyCommand(2)">🚀 複製總經理指令</button>
+                    </div>
+
+                    <div class="cmd-card">
+                        <div class="cmd-meta">
+                            <h3>✍️ 階段三：語氣與術語微調 (Tone Refinement)</h3>
+                            <p style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.5rem;">要求長文件的前後名詞與口吻高度一致</p>
+                        </div>
+                        <div class="cmd-body" id="cmd-text-3">請把這章方法論草稿修改為正式、嚴謹的政府標案語氣。注意名詞必須與我們公司的『FALO PM』與『流程映射』術語高度一致，並保留事實的參考出處。</div>
+                        <button class="copy-btn" onclick="copyCommand(3)">🚀 複製總經理指令</button>
+                    </div>
+
+                    <div class="cmd-card">
+                        <div class="cmd-meta">
+                            <h3>📊 階段四：專案收攏與責任指派 (Wrap-Up)</h3>
+                            <p style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.5rem;">準備提交前，進行成果收攏與下一步指派</p>
+                        </div>
+                        <div class="cmd-body" id="cmd-text-4">請把目前的執行成果、已完成章節、剩餘缺件與風險，整理成一份給我的中控摘要，並指出下一個動作是誰的責任。</div>
+                        <button class="copy-btn" onclick="copyCommand(4)">🚀 複製總經理指令</button>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Tab 9: 知識中控收束 -->
+            <div class="content-panel" id="panel-9">
+                <div class="panel-header">
+                    <h2>🕹️ 09. 為什麼最後需要 FALO PM 知識中控？</h2>
+                    <p>單次標案可以用 Antigravity 升級，但長遠的經營需要 <span class="highlight-text">「知識資產中控中心」</span></p>
+                </div>
+                
+                <div class="scenario-box" style="border-left: 3px solid var(--accent-purple); background: rgba(139, 92, 246, 0.02); margin-bottom: 2rem;">
+                    <h3>💡 工具是手段，管理才是目的</h3>
+                    <p>當我們學會用 Antigravity 解決招標書「怎麼做」之後，星河面臨的更長遠的營運課題是：如果每週、每月都有數個專案與標案在同時運作，主管如何監控全局？人員突然異動該如何交接？</p>
+                </div>
+
+                <p style="font-size: 0.85rem; font-weight: 700; letter-spacing: 0.05em; color: var(--text-primary); margin-bottom: 1rem;">
+                    FALO PM 在長效治理中扮演的四大核心防線價值：
+                </p>
+
+                <div class="converge-grid" style="margin-top: 0;">
+                    <div class="converge-item">
+                        <h4 style="color: var(--accent-rose);">🚦 主動避險與紅綠燈</h4>
+                        <p>專案重要文件是否缺件？人員異動是否會造成大腦資料庫斷層？看板以最直觀的紅綠燈主動警告主管，將被動等待改為主動防守。</p>
+                    </div>
+                    <div class="converge-item">
+                        <h4 style="color: var(--accent-cyan);">🧠 新人無痛自主接手</h4>
+                        <p>歷史案卷的所有 QA 庫隨時可查，新人進來直接詢問中控中心大腦，獲得帶有文獻引證的答覆，老鳥完全不用手動帶新人。</p>
+                    </div>
+                    <div class="converge-item">
+                        <h4 style="color: var(--accent-emerald);">🔄 資產持續滾動累積</h4>
+                        <p>每次標案產出的新元件、克服的新風險，都會自動知識資產化回收進大腦，作為下一個專案的積木，讓星河越做越輕鬆。</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Toast container -->
+    <div id="toast"></div>
+
+    <footer>
+        🌌 Horizon Class 02 &copy; 2026. Bidding Document Upgrade Demo Package designed by Antigravity (aaa) for Force (ff) Advisor.
+    </footer>
+
+    <!-- Interactive script -->
+    <script>
+        // Switch content tab smoothly
+        function switchTab(button, tabId) {
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            // Add active class to clicked button
+            button.classList.add('active');
+
+            // Hide all panels
+            const panels = document.querySelectorAll('.content-panel');
+            panels.forEach(panel => panel.classList.remove('active'));
+
+            // Show selected panel
+            document.getElementById(`panel-${tabId}`).classList.add('active');
+        }
+
+        // Click to copy command logic with customized toast notification
+        function copyCommand(id) {
+            const commandText = document.getElementById(`cmd-text-${id}`).innerText;
+            
+            // Web Clipboard API
+            navigator.clipboard.writeText(commandText).then(function() {
+                // Show customized toast
+                const toast = document.getElementById("toast");
+                toast.innerHTML = `🚀 <strong>總經理（Grace）指令複製成功！</strong><br/><span style="font-size:0.75rem; color:#a5b4fc;">可在聊天視窗中直接 Ctrl+V 貼上指揮 Agent！</span>`;
+                toast.className = "show";
+                
+                setTimeout(function(){ 
+                    toast.className = toast.className.replace("show", ""); 
+                }, 3000);
+            }).catch(function(err) {
+                console.error("無法複製文字: ", err);
+            });
+        }
+    </script>
+</body>
+</html>

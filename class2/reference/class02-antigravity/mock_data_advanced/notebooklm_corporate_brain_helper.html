@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌌 NotebookLM 企業大腦導引與雙軌治理規章 — 星河科技 AIDE 文件工程</title>
+    <!-- Google Fonts: Outfit & Noto Sans TC -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #07080d;
+            --card-bg: rgba(17, 19, 32, 0.75);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --text-primary: #f3f4f6;
+            --text-secondary: #9ca3af;
+            
+            --accent-rose: #f43f5e;
+            --accent-purple: #8b5cf6;
+            --accent-blue: #3b82f6;
+            --accent-cyan: #06b6d4;
+            --accent-emerald: #10b981;
+            --accent-gold: #eab308;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            font-family: 'Outfit', 'Noto Sans TC', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(139, 92, 246, 0.12) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.08) 0px, transparent 50%),
+                radial-gradient(at 50% 50%, rgba(244, 63, 94, 0.04) 0px, transparent 50%);
+            background-attachment: fixed;
+            padding-bottom: 5rem;
+        }
+
+        header {
+            padding: 2.5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            header {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
+
+        .header-title h1 {
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #fff 40%, #c7d2fe 70%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.01em;
+            margin-bottom: 0.25rem;
+        }
+
+        .header-subtitle {
+            font-size: 0.9rem;
+            color: var(--accent-purple);
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .btn-back {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--text-primary);
+            padding: 0.6rem 1.25rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-back:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.05);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 992px) {
+            .container {
+                grid-template-columns: 2fr 1fr;
+            }
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        /* Glassmorphism Cards */
+        .glass-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: transparent;
+        }
+
+        .card-cyan::before { background: linear-gradient(90deg, var(--accent-cyan), var(--accent-blue)); }
+        .card-purple::before { background: linear-gradient(90deg, var(--accent-purple), var(--accent-rose)); }
+        .card-gold::before { background: linear-gradient(90deg, var(--accent-gold), var(--accent-purple)); }
+        .card-emerald::before { background: linear-gradient(90deg, var(--accent-emerald), var(--accent-cyan)); }
+
+        h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: #fff;
+        }
+
+        p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        /* Badges & Tables */
+        .badge {
+            display: inline-block;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            margin-right: 0.25rem;
+            vertical-align: middle;
+        }
+
+        .badge-external {
+            background: rgba(6, 182, 212, 0.15);
+            color: #67e8f9;
+            border: 1px solid rgba(6, 182, 212, 0.3);
+        }
+
+        .badge-internal {
+            background: rgba(139, 92, 246, 0.15);
+            color: #c084fc;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .badge-warn {
+            background: rgba(249, 115, 22, 0.15);
+            color: #fb923c;
+            border: 1px solid rgba(249, 115, 22, 0.3);
+        }
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            margin-top: 1rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            text-align: left;
+        }
+
+        th {
+            background: rgba(255, 255, 255, 0.03);
+            font-weight: 700;
+            color: #fff;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .filename-link {
+            color: var(--accent-cyan);
+            text-decoration: none;
+            font-family: monospace;
+            font-weight: 600;
+        }
+
+        .filename-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Conflict SOP Display styling */
+        .sop-block {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .sop-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .sop-flow {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+        }
+
+        @media (min-width: 576px) {
+            .sop-flow {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .flow-card {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+            padding: 0.75rem;
+            border-left: 3px solid transparent;
+        }
+
+        .flow-external { border-left-color: var(--accent-cyan); }
+        .flow-internal { border-left-color: var(--accent-purple); }
+
+        .flow-card h4 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        /* Q&A Prompt consoles */
+        .prompt-card {
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .prompt-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+        }
+
+        .console-box {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 0.75rem;
+            font-family: monospace;
+            font-size: 0.8rem;
+            line-height: 1.4;
+            color: #d1d5db;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .btn-copy {
+            align-self: flex-end;
+            background: rgba(6, 182, 212, 0.15);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            color: #67e8f9;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-copy:hover {
+            background: rgba(6, 182, 212, 0.3);
+            box-shadow: 0 0 10px rgba(6, 182, 212, 0.2);
+        }
+
+        /* Metadata Floating Widget styling */
+        .widget {
+            background: rgba(17, 19, 32, 0.9);
+            border: 1px solid var(--accent-purple);
+            border-radius: 16px;
+            padding: 1.25rem;
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.15);
+        }
+
+        .widget h3 {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .meta-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            margin-bottom: 0.4rem;
+            color: var(--text-secondary);
+        }
+
+        .meta-row span:last-child {
+            color: #fff;
+            font-weight: 600;
+        }
+
+        /* Toast styling */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(17, 19, 32, 0.95);
+            border: 1px solid var(--accent-cyan);
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            box-shadow: 0 10px 30px rgba(6, 182, 212, 0.25);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #fff;
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 5rem;
+            color: rgba(255, 255, 255, 0.2);
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-left">
+            <div class="header-subtitle">Class 02 — RAG 企業大腦引導與輔助規章</div>
+            <h1 class="header-title">星河科技 NotebookLM 大腦導引說明</h1>
+        </div>
+        <div class="header-actions">
+            <a href="../class02_practice_workbook.html" class="btn-back">⬅ 返回實作手冊網頁</a>
+        </div>
+    </header>
+
+    <div class="container">
+        
+        <!-- Main Content Area -->
+        <div class="main-content">
+            
+            <!-- Card 1: Introduction -->
+            <div class="glass-card card-cyan">
+                <h2><span>🌌</span> 企業大腦之元知識導航</h2>
+                <p>當您將本目錄下的所有歷史合約、技術方法論及履歷元件上傳至 <strong>NotebookLM</strong> 建立知識庫後，<strong>請務必同時勾選加載本檔案</strong>。</p>
+                <p>本文件作為 RAG 企業大腦運作時的最高 <strong>SOP 與治理規則指南</strong>，能將原本碎片化、無序的檢索結果，引導升級為具備「誠信風控、利潤預警與人員備降接管」邏輯的高級決策智腦。這不僅能大幅消除 AI 自行編譯時的幻覺，更能確保輸出 100% 符合星河科技的業務安全防線。</p>
+            </div>
+
+            <!-- Card 2: Brain Index Table -->
+            <div class="glass-card card-emerald">
+                <h2><span>📁</span> 第一部分：大腦元件檔案地圖 (Brain Index Map)</h2>
+                <p>NotebookLM 大腦可透過下表之標準代碼與用途定義，精確定位與勾稽內部可用的知識積木：</p>
+                
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>內部編號 / 積木名稱</th>
+                                <th>對應檔案</th>
+                                <th>用途分類</th>
+                                <th>大腦對帳與歸檔狀態</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>🏢 公司簡介元件</strong></td>
+                                <td><a href="company_profile_component.html" class="filename-link" target="_blank">company_profile_component.html</a></td>
+                                <td>標案第一章公司概況</td>
+                                <td><span class="status-pill status-green" style="background: rgba(16, 185, 129, 0.15); color: #34d399; padding: 0.1rem 0.4rem; font-size: 0.75rem; border-radius: 4px;">🟢 完好</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>🏆 繁星專案 (專案 C)</strong></td>
+                                <td><a href="2023_stellar_document_automation_case.html" class="filename-link" target="_blank">2023_stellar_document_automation_case.html</a></td>
+                                <td>資格審查：大於 300 萬實績</td>
+                                <td><span class="status-pill status-green" style="background: rgba(16, 185, 129, 0.15); color: #34d399; padding: 0.1rem 0.4rem; font-size: 0.75rem; border-radius: 4px;">🟢 350w 且驗收公文完全齊備</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>🏆 鼎盛專案 (專案 A)</strong></td>
+                                <td><a href="2025_apex_erp_project_case.html" class="filename-link" target="_blank">2025_apex_erp_project_case.html</a></td>
+                                <td>資格審查：大於 300 萬實績</td>
+                                <td><span class="status-pill status-amber" style="background: rgba(249, 115, 22, 0.15); color: #fb923c; padding: 0.1rem 0.4rem; font-size: 0.75rem; border-radius: 4px;">🟡 450w 但缺少客戶簽章驗收公文</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>🏆 浩宇專案 (專案 B)</strong></td>
+                                <td><a href="2024_universe_crm_project_case.html" class="filename-link" target="_blank">2024_universe_crm_project_case.html</a></td>
+                                <td>資格審查：大於 300 萬實績</td>
+                                <td><span class="status-pill status-rose" style="background: rgba(244, 63, 94, 0.15); color: #fda4af; padding: 0.1rem 0.4rem; font-size: 0.75rem; border-radius: 4px;">🔴 250w 金額不足硬性淘汰</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>👤 PM 志明履歷</strong></td>
+                                <td><a href="pm_resume_chihming.html" class="filename-link" target="_blank">pm_resume_chihming.html</a></td>
+                                <td>專案經理 (PM) 資格對帳</td>
+                                <td><span class="status-pill status-rose" style="background: rgba(244, 63, 94, 0.15); color: #fda4af; padding: 0.1rem 0.4rem; font-size: 0.75rem; border-radius: 4px;">🔴 PMP 證照於 2024-12-31 失效</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>👤 Sophia 履歷 (備用)</strong></td>
+                                <td><a href="pm_resume_chihming.html" class="filename-link" target="_blank">pm_resume_chihming.html</a></td>
+                                <td>人員備降方案首選 PM</td>
+                                <td><span class="status-pill status-green" style="background: rgba(16, 185, 129, 0.15); color: #34d399; padding: 0.1rem 0.4rem; font-size: 0.75rem; border-radius: 4px;">🟢 PMP 有效期至 2028-06-30</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>⚙️ PM 方法論元件</strong></td>
+                                <td><a href="falo_pm_methodology_component.html" class="filename-link" target="_blank">falo_pm_methodology_component.html</a></td>
+                                <td>標案第二章技術方法論</td>
+                                <td><span class="status-pill status-amber" style="background: rgba(249, 115, 22, 0.15); color: #fb923c; padding: 0.1rem 0.4rem; font-size: 0.75rem; border-radius: 4px;">🟡 標準 4 小時維護響應 SLA</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Card 3: Dual-Track Governance SOP -->
+            <div class="glass-card card-purple">
+                <h2><span>🛡️</span> 第二部分：內外部雙軌治理規章 (Governance SOP)</h2>
+                <p>大腦在讀取、比對與生成投標文件時，如遇到以下業務衝突，必須強制依循此剛性對帳機制：</p>
+                
+                <!-- SOP 1 -->
+                <div class="sop-block">
+                    <div class="sop-title">
+                        <span>1. 🌐 外部 SLA 2h 與 🛡️ 內部 SLA 4h 衝突治理</span>
+                        <span class="badge badge-warn">[內外部衝突]</span>
+                    </div>
+                    <p style="font-size: 0.85rem; margin-bottom: 0.5rem;">當外部招標書要求緊急故障在 2 小時內修復，而星河基本母版技術預設為 4 小時時，AI 大腦須同時啟動雙向動作：</p>
+                    <div class="sop-flow">
+                        <div class="flow-card flow-cyan">
+                            <h4 style="color: var(--accent-cyan);">對外：標書合規改寫 (SLA 小幅增強)</h4>
+                            <p style="font-size: 0.8rem; margin: 0; color: var(--text-secondary);">在編譯投標書第二章及售後承諾時，自動將 4 小時改寫增強為合規的 <strong>「2 小時」</strong>，正面回應招標，防範資格出局。</p>
+                        </div>
+                        <div class="flow-card flow-purple">
+                            <h4 style="color: var(--accent-purple);">對內：成本資源預警亮黃燈</h4>
+                            <p style="font-size: 0.8rem; margin: 0; color: var(--text-secondary);">在內部管理中控摘要發出 <strong>SLA 黃燈警告 (YELLOW_ALERT)</strong>，提示運維部門增撥待命人力成本，防範後期虧損違約。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SOP 2 -->
+                <div class="sop-block">
+                    <div class="sop-title">
+                        <span>2. 🌐 外部實績限制與 🛡️ 內部誠信真實性防線</span>
+                        <span class="badge badge-internal">[誠信紅線]</span>
+                    </div>
+                    <p style="font-size: 0.85rem; margin-bottom: 0.5rem;">母版預設案 A 金額高達 450w 但缺少結案公文，案 C 金額 350w 且公文完備，誠信治理機制如下：</p>
+                    <div class="sop-flow">
+                        <div class="flow-card flow-purple">
+                            <h4 style="color: var(--accent-purple);">大腦核心底線：嚴禁偽造或編造印章</h4>
+                            <p style="font-size: 0.8rem; margin: 0; color: var(--text-secondary);">星河誠信紅線嚴禁 AI 為了投標而虛構或編造驗收章！大腦嚴禁建議投遞缺件的案 A，防範刑事風險。</p>
+                        </div>
+                        <div class="flow-card flow-cyan">
+                            <h4 style="color: var(--accent-cyan);">智慧防禦選用：改套用合格案 C</h4>
+                            <p style="font-size: 0.8rem; margin: 0; color: var(--text-secondary);">強制推薦金額達標且公文 100% 齊備的 <strong>案 C (繁星 350w 專案)</strong> 作為首選實績，並提示催辦案 A 公文歸檔。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SOP 3 -->
+                <div class="sop-block">
+                    <div class="sop-title">
+                        <span>3. 🌐 外部人員持證與 🛡️ 內部專家備降防線</span>
+                        <span class="badge badge-internal">[人員備降]</span>
+                    </div>
+                    <p style="font-size: 0.85rem; margin-bottom: 0.5rem;">預設 PM 志明 PMP 國際證照已過期失效，大腦人員風控與避險機制如下：</p>
+                    <div class="sop-flow">
+                        <div class="flow-card flow-purple">
+                            <h4 style="color: var(--accent-purple);">風險阻斷：證照失效致命紅燈</h4>
+                            <p style="font-size: 0.8rem; margin: 0; color: var(--text-secondary);">大腦檢索時即時發出 <strong>PM 廢標紅燈警報 (RED_ALERT)</strong>，提示原定指派證照已失效，將面臨第一關資格硬性淘汰。</p>
+                        </div>
+                        <div class="flow-card flow-cyan">
+                            <h4 style="color: var(--accent-cyan);">人員備降：啟動 Sophia 備用 PM</h4>
+                            <p style="font-size: 0.8rem; margin: 0; color: var(--text-secondary);">自動啟動備用人員程序，改指派具備有效 PMP 的 <strong>Sophia (林淑芬)</strong> 擔任標書 PM，成功消除廢標死穴。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4: Recommended Q&A -->
+            <div class="glass-card card-gold">
+                <h2><span>💬</span> 第三部分：大腦複核提問快捷控制台 (User Prompts)</h2>
+                <p>當您在 NotebookLM 中<strong>單獨勾選此導引規章</strong>時，直接複製以下問題投餵大腦，即可瞬間獲得 100% 精確的企業級高階治理對帳答案：</p>
+                
+                <!-- Q1 -->
+                <div class="prompt-card">
+                    <div class="prompt-header">
+                        <span>❓ 管理問題一：如何對抗內外部 SLA 衝突？</span>
+                        <button class="btn-copy" onclick="copyPromptText('q-text-1')">複製提問</button>
+                    </div>
+                    <div class="console-box">
+                        <span id="q-text-1">請問星河科技對於外部招標書要求『2 小時 SLA 響應』，而內部標準是『4 小時』的內外部衝突，所採取的雙軌治理與成本預警 SOP 是什麼？</span>
+                    </div>
+                </div>
+
+                <!-- Q2 -->
+                <div class="prompt-card">
+                    <div class="prompt-header">
+                        <span>❓ 管理問題二：誠信底線與廠商實績推薦決策？</span>
+                        <button class="btn-copy" onclick="copyPromptText('q-text-2')">複製提問</button>
+                    </div>
+                    <div class="console-box">
+                        <span id="q-text-2">目前公司有鼎盛專案 (450w)、浩宇專案 (250w)、繁星專案 (350w)。請依據公司的誠信治理規章，告訴我我們應該推薦哪一個專案作為標案實績？原因是什麼？為什麼金額最高的鼎盛專案不能直接使用？</span>
+                    </div>
+                </div>
+
+                <!-- Q3 -->
+                <div class="prompt-card">
+                    <div class="prompt-header">
+                        <span>❓ 管理問題三：PM 證照失效紅燈與備降接管？</span>
+                        <button class="btn-copy" onclick="copyPromptText('q-text-3')">複製提問</button>
+                    </div>
+                    <div class="console-box">
+                        <span id="q-text-3">如果原定 PM 志明的 PMP 證照過期了，這在招標合規上會有什麼後果？公司的『人員備降接管 SOP』是如何處理這個危機的？</span>
+                    </div>
+                </div>
+
+                <!-- Q4 -->
+                <div class="prompt-card">
+                    <div class="prompt-header">
+                        <span>❓ 管理問題四：系統容災與技術備援標準？</span>
+                        <button class="btn-copy" onclick="copyPromptText('q-text-4')">複製提問</button>
+                    </div>
+                    <div class="console-box">
+                        <span id="q-text-4">請為我說明這套企業大腦的技術備援與架構防線標準，特別是為什麼需要配置雙模型 (Multi-LLM)？備份主機與容災策略是什麼？</span>
+                    </div>
+                </div>
+
+                <!-- Q5 -->
+                <div class="prompt-card">
+                    <div class="prompt-header">
+                        <span>❓ 管理問題五：輸出標準中控 JSON 參數？</span>
+                        <button class="btn-copy" onclick="copyPromptText('q-text-5')">複製提問</button>
+                    </div>
+                    <div class="console-box">
+                        <span id="q-text-5">請幫我模擬對帳完成後的最新狀態，輸出包含外部合規率、誠信公文審查、人員備降 Sophia、以及 SLA 成本預警的標準中控 JSON 變數結構。</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Sidebar Widgets -->
+        <div class="sidebar">
+            
+            <div class="widget">
+                <h3><span>🧠</span> 大腦中控狀態數據</h3>
+                
+                <div class="meta-row">
+                    <span>元文件名稱</span>
+                    <span>notebooklm_corporate_brain_helper</span>
+                </div>
+                <div class="meta-row">
+                    <span>歸檔分類</span>
+                    <span>Meta-Knowledge (元知識地圖)</span>
+                </div>
+                <div class="meta-row">
+                    <span>外部合規要求覆蓋</span>
+                    <span style="color: var(--accent-cyan);">100% (4/4 項目已對帳)</span>
+                </div>
+                <div class="meta-row">
+                    <span>內部治理查核</span>
+                    <span style="color: var(--accent-emerald);">已勾稽通過</span>
+                </div>
+                <div class="meta-row">
+                    <span>SLA 成本黃燈警示</span>
+                    <span style="color: var(--accent-gold);">YELLOW_ALERT (已分派成本)</span>
+                </div>
+                <div class="meta-row">
+                    <span>PM 證照備用方案</span>
+                    <span style="color: var(--accent-emerald);">Sophia 接管 (PMP合規)</span>
+                </div>
+                <div class="meta-row">
+                    <span>真實公文比對</span>
+                    <span style="color: var(--accent-emerald);">堅守誠信 (案A排除,案C啟用)</span>
+                </div>
+                <div class="meta-row">
+                    <span>LLM 技術容災</span>
+                    <span style="color: var(--accent-purple);">Multi-LLM (Codex 備份啟用)</span>
+                </div>
+            </div>
+
+            <div class="widget" style="border-color: var(--accent-cyan); background: rgba(6, 182, 212, 0.02);">
+                <h3><span>💡</span> 教學與主管覆核要領</h3>
+                <p style="font-size: 0.8rem; line-height: 1.5; color: var(--text-secondary); margin-bottom: 0.5rem;">
+                    * <strong>講師 ff</strong> 可以在 NotebookLM 介面上，直接向學員或Grace演示「只勾選本文件」的問答。
+                </p>
+                <p style="font-size: 0.8rem; line-height: 1.5; color: var(--text-secondary); margin-bottom: 0.5rem;">
+                    * 透過這種方式，能讓主管瞬間看懂，在不被數百頁合約底層細節干擾的情況下，AI 大腦是如何精確抓取「高階管理與誠信底線 rules」的！
+                </p>
+                <p style="font-size: 0.8rem; line-height: 1.5; color: var(--text-secondary); margin: 0;">
+                    * 這展示了 <strong>Horizon AIDE 雙軌治理架構</strong> 的終極威力。
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Hidden Toast Alert -->
+    <div class="toast" id="toast-alert">
+        <span>🚀</span> <span id="toast-text">指令複製成功！可在 NotebookLM 視窗中直接貼上提問大腦！</span>
+    </div>
+
+    <footer>
+        🌌 Horizon Class 02 &copy; 2026. Designed by Antigravity (aaa) for Force (ff) Advisor.
+    </footer>
+
+    <script>
+        // Copy command helper
+        function copyPromptText(elementId) {
+            const text = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                showToast("大腦複核提問複製成功！可在 NotebookLM 視窗中直接貼上！");
+            });
+        }
+
+        // Premium toast helper
+        function showToast(text) {
+            const toast = document.getElementById("toast-alert");
+            document.getElementById("toast-text").innerText = text;
+            toast.classList.add("show");
+            
+            setTimeout(() => {
+                toast.classList.remove("show");
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

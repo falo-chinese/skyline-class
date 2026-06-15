@@ -1,0 +1,19 @@
+{
+  "name": "FALO OCR Workbench",
+  "short_name": "FALO OCR",
+  "description": "Standalone PWA component for image plus OCR operation prompt to editable text workflows.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f8fb",
+  "theme_color": "#0f766e",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

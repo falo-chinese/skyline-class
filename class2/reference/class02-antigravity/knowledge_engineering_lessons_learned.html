@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Class02 Knowledge Engineering Lessons Learned</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --ink: #1a2433;
+      --muted: #607086;
+      --line: #dce3ee;
+      --card: #ffffff;
+      --navy: #17324d;
+      --blue: #2563eb;
+      --cyan: #0e7490;
+      --green: #15803d;
+      --gold: #a16207;
+      --red: #b91c1c;
+      --soft-blue: #eaf2ff;
+      --soft-cyan: #e8fbff;
+      --soft-green: #edfdf3;
+      --soft-gold: #fff8e1;
+      --soft-red: #fff1f1;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", Arial, sans-serif;
+      line-height: 1.72;
+    }
+
+    header {
+      color: #fff;
+      padding: 56px 24px 44px;
+      background:
+        linear-gradient(135deg, rgba(23, 50, 77, 0.96), rgba(37, 99, 235, 0.88)),
+        #17324d;
+    }
+
+    .wrap {
+      width: min(1120px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    .eyebrow {
+      margin: 0 0 12px;
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 920px;
+      font-size: clamp(32px, 5.4vw, 56px);
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      max-width: 840px;
+      margin: 18px 0 0;
+      color: rgba(255, 255, 255, 0.9);
+      font-size: clamp(17px, 2.2vw, 22px);
+    }
+
+    main {
+      padding: 34px 0 68px;
+    }
+
+    section {
+      margin: 22px 0;
+    }
+
+    .band,
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 10px 30px rgba(31, 41, 55, 0.06);
+    }
+
+    .band {
+      padding: 26px;
+    }
+
+    .card {
+      padding: 18px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .grid-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    @media (max-width: 860px) {
+      .grid-2,
+      .grid-3 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    h2 {
+      margin: 0 0 14px;
+      color: var(--navy);
+      font-size: 28px;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      color: var(--ink);
+      font-size: 19px;
+      line-height: 1.35;
+      letter-spacing: 0;
+    }
+
+    p {
+      margin: 0 0 12px;
+    }
+
+    ul {
+      margin: 10px 0 0;
+      padding-left: 22px;
+    }
+
+    li {
+      margin: 5px 0;
+    }
+
+    .quote {
+      border-left: 5px solid var(--blue);
+      background: var(--soft-blue);
+      padding: 16px 18px;
+      border-radius: 6px;
+      color: #1e3a8a;
+      font-size: 19px;
+      font-weight: 850;
+    }
+
+    .soft-blue { background: var(--soft-blue); border-color: #bfdbfe; }
+    .soft-cyan { background: var(--soft-cyan); border-color: #a5f3fc; }
+    .soft-green { background: var(--soft-green); border-color: #bbf7d0; }
+    .soft-gold { background: var(--soft-gold); border-color: #fde68a; }
+    .soft-red { background: var(--soft-red); border-color: #fecaca; }
+
+    .pill {
+      display: inline-block;
+      margin-bottom: 10px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: #eef2ff;
+      color: #3730a3;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+      gap: 10px;
+      align-items: center;
+      margin-top: 16px;
+    }
+
+    .flow .step {
+      min-height: 92px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-weight: 800;
+    }
+
+    .arrow {
+      color: var(--muted);
+      font-weight: 900;
+      font-size: 22px;
+    }
+
+    @media (max-width: 860px) {
+      .flow {
+        grid-template-columns: 1fr;
+      }
+      .arrow {
+        transform: rotate(90deg);
+        text-align: center;
+      }
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    th,
+    td {
+      border: 1px solid var(--line);
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #eef2f7;
+      color: #263244;
+      font-weight: 850;
+    }
+
+    code {
+      background: #eef2f7;
+      border: 1px solid #dbe4f0;
+      border-radius: 4px;
+      padding: 1px 5px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    pre {
+      margin: 12px 0 0;
+      padding: 14px;
+      overflow: auto;
+      border-radius: 8px;
+      background: #0f172a;
+      color: #e2e8f0;
+      line-height: 1.6;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    footer {
+      padding: 28px 0 44px;
+      color: var(--muted);
+      text-align: center;
+      border-top: 1px solid var(--line);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <p class="eyebrow">Class02 / AIDE / Antigravity</p>
+      <h1>Knowledge Engineering Lessons Learned</h1>
+      <p class="subtitle">從 27 份 mock dataset 文件，反推出更高價值的知識工程工作模式。</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="band">
+      <h2>核心發現</h2>
+      <p>這次原本只是要產生一包學員實作資料，但驗收後發現，更有價值的資產可能不是 27 份文件本身，而是生成它們的規則、資料模型、模板、生成器與驗證方式。</p>
+      <div class="quote">不要把長文件當作文章來寫，而要把文件當作代碼來編譯與治理。</div>
+    </section>
+
+    <section class="grid grid-2">
+      <div class="card soft-red">
+        <span class="pill">Traditional</span>
+        <h3>文件當文章</h3>
+        <pre>人
+↓
+Word
+↓
+文件</pre>
+      </div>
+      <div class="card soft-green">
+        <span class="pill">AIDE</span>
+        <h3>文件當工程</h3>
+        <pre>知識
+↓
+規則
+↓
+模板
+↓
+生成器
+↓
+文件</pre>
+      </div>
+    </section>
+
+    <section class="band">
+      <h2>四個發現</h2>
+      <div class="grid grid-2">
+        <div class="card soft-blue">
+          <h3>1. 長文件不是文章</h3>
+          <p>招標書、教材包、標準答案、Prompt 指令、FALO PM 欄位，是互相引用與對帳的文件網。</p>
+        </div>
+        <div class="card soft-cyan">
+          <h3>2. 生成方法是高階資產</h3>
+          <p>27 份教材是資產，但如何穩定生成 27 份教材，可能是更有價值的資產。</p>
+        </div>
+        <div class="card soft-green">
+          <h3>3. 與 Class02 主題一致</h3>
+          <p>Class02 講知識資產化，而 aaa 的做法把文件需求轉成規則、模板、生成器與資料集。</p>
+        </div>
+        <div class="card soft-gold">
+          <h3>4. Knowledge / Document as Code</h3>
+          <p>知識可以被轉成結構、規則、元件與資料模型；文件可以被模板與生成器編譯。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="band">
+      <h2>對 AIDE 的意義</h2>
+      <p>AIDE 不只是 AI 協助寫文件，而是把長文件工作轉成可規劃、可生成、可檢查、可治理的流程。</p>
+      <div class="flow">
+        <div class="step">Source data</div>
+        <div class="arrow">→</div>
+        <div class="step">Rule model</div>
+        <div class="arrow">→</div>
+        <div class="step">Template / Generator</div>
+        <div class="arrow">→</div>
+        <div class="step">Validated outputs</div>
+      </div>
+    </section>
+
+    <section class="band">
+      <h2>知識資產分層</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>層級</th>
+            <th>資產類型</th>
+            <th>範例</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>L1</td><td>文件資產</td><td>RFP、SOP、標案、教材、QA</td></tr>
+          <tr><td>L2</td><td>元件資產</td><td>公司簡介、實績、資安條款、教育訓練段落</td></tr>
+          <tr><td>L3</td><td>規則資產</td><td>RFP 對映規則、風險分級、標準答案邏輯</td></tr>
+          <tr><td>L4</td><td>模板資產</td><td>需求抽取表、Compliance Matrix、管理摘要</td></tr>
+          <tr><td>L5</td><td>生成器資產</td><td><code>create_mock_data.py</code>、未來的 AIDE generator</td></tr>
+          <tr><td>L6</td><td>驗證資產</td><td>Manifest、端到端抽樣驗收、風險一致性檢查</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="grid grid-3">
+      <div class="card soft-blue">
+        <h3>Script First</h3>
+        <p>多份高度關聯文件，不要先逐份手寫。先判斷是否需要腳本化生成。</p>
+      </div>
+      <div class="card soft-cyan">
+        <h3>Rule First</h3>
+        <p>生成文件前，先定義 RFP 門檻、實績金額、缺件、風險等級與驗收規則。</p>
+      </div>
+      <div class="card soft-green">
+        <h3>Generator First</h3>
+        <p>如果文件未來會改版、重跑或複製到其他案例，生成器本身就是正式資產。</p>
+      </div>
+    </section>
+
+    <section class="band">
+      <h2>雙文件編譯鏈</h2>
+      <p>在 <code>mock_data/</code> 生成完成後，aaa 又建立 <code>convert_md_to_html.py</code>，將 27 份 Markdown 同步編譯成 27 份 HTML。這讓雙文件治理從手動習慣，升級成明確的教材工程 pipeline。</p>
+      <pre>教學需求
+↓
+create_mock_data.py
+↓
+27 份 Markdown mock dataset
+↓
+convert_md_to_html.py
+↓
+27 份 HTML human-readable pages
+↓
+index.html 課程入口</pre>
+      <table>
+        <thead>
+          <tr>
+            <th>生成器</th>
+            <th>角色</th>
+            <th>產出</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><code>create_mock_data.py</code></td><td>資料集生成器</td><td>Markdown mock dataset</td></tr>
+          <tr><td><code>convert_md_to_html.py</code></td><td>展示版編譯器</td><td>HTML readable pages</td></tr>
+        </tbody>
+      </table>
+      <p>這補強了 Document as Code：文件不是只被寫出來，而是可以從 Markdown source 被編譯成不同閱讀與交付型態。</p>
+    </section>
+
+    <section class="band">
+      <h2>Opus 4.8 對照觀察</h2>
+      <p>補查 Opus 4.8 與 Claude Code 後，可以更確定：aaa 這次先寫生成器、再編譯雙文件的做法，不是單純炫技，而是接近新一代 agentic work 的共同方向。</p>
+      <div class="quote">AI 不只是幫人完成一份成果，而是幫人建立能穩定產生成果的工作系統。</div>
+      <table>
+        <thead>
+          <tr>
+            <th>外部訊號</th>
+            <th>本案對照</th>
+            <th>共同精神</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Dynamic workflows 可由 Claude 寫出 script，runtime 執行並可重跑。</td>
+            <td><code>create_mock_data.py</code> 產生 27 份 Markdown。</td>
+            <td>把流程移入程式碼，而不是逐份手工產出。</td>
+          </tr>
+          <tr>
+            <td>Claude Code 採 Unix-style，可 pipe、script、進 CI/CD。</td>
+            <td><code>convert_md_to_html.py</code> 將 source 編譯成人讀版。</td>
+            <td>AI 成為工程流程中的可組合節點。</td>
+          </tr>
+          <tr>
+            <td>Subagents 用獨立 context 承接大量探索與專門任務。</td>
+            <td>md、html、manifest、answer key、expected output 分層。</td>
+            <td>不同角色與交付層要分開治理。</td>
+          </tr>
+          <tr>
+            <td>Workflow 完成後需要驗證與回報。</td>
+            <td>對帳 Manifest、答案表、HTML parse check。</td>
+            <td>成果必須可檢查，不只是看起來完成。</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>因此，Class02 不應把 Antigravity 教成比較強的 AI Writer。更準確的定位是：讓企業把高價值長文件工作，從人工拼裝升級為可重跑、可檢查、可交接的文件工程流程。</p>
+      <pre>企業工作規則
+↓
+AI 建立可重跑流程
+↓
+流程產出文件 / 表格 / 網頁 / QA / 管理欄位
+↓
+人負責審查、決策與改善</pre>
+      <p>這也補強 AIDE 的下一層：<strong>Workflow Codification</strong>。也就是把重複性文件任務寫成 script，讓資料規則、模板、答案、展示版與驗收流程都能被治理。</p>
+      <p>參考來源：<a href="https://www.anthropic.com/news/claude-opus-4-8?cmid=03693516-1d21-4130-ac10-3f9892c0929b">Claude Opus 4.8 官方發布</a>、<a href="https://code.claude.com/docs/en/workflows">Claude Code Dynamic Workflows</a>、<a href="https://code.claude.com/docs/en/overview">Claude Code Overview</a>、<a href="https://code.claude.com/docs/en/headless">Claude Code Programmatic Usage</a>、<a href="https://code.claude.com/docs/en/sub-agents">Claude Code Subagents</a>、<a href="https://code.claude.com/docs/en/agent-sdk/overview">Claude Agent SDK</a>。</p>
+    </section>
+
+    <section class="band">
+      <h2>延伸到工具鏈</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>模組</th>
+            <th>可承接的角色</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>NotebookLM</td><td>知識查詢與引用層，用於 RFP 條款、元件來源、答案依據查詢。</td></tr>
+          <tr><td>Antigravity</td><td>長文件工程執行器，可建立腳本、批量生成資料集、維護檔案結構。</td></tr>
+          <tr><td>FALO PM</td><td>管理回推層，承接進度、缺件、風險、負責人與合規覆蓋率。</td></tr>
+          <tr><td>QA Library</td><td>交接與問答層，可從資料集自動生成 RFP、風險、元件用途問答。</td></tr>
+          <tr><td>長文件工程</td><td>從寫單份文件，升級為 source data 到 validated outputs 的編譯流程。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="band">
+      <h2>給 aaa 的後續提醒</h2>
+      <p>這次做法值得保留，不要只存在於 <code>mock_data/</code> 案例。後續應整理成專案層級文件，例如：</p>
+      <ul>
+        <li><code>antigravity_working_principles.md</code></li>
+        <li><code>antigravity_best_practices.md</code></li>
+        <li><code>aide_document_engineering_principles.md</code></li>
+      </ul>
+      <p>應正式沉澱：Script First、Rule First、Generator First、Markdown source + HTML compiled output、Dataset generator + display compiler、Manifest 索引、Blank template 與 answer key 同源、端到端抽樣驗收、內部版/公開版分流。</p>
+      <p>若 <code>create_mock_data.py</code> 與 <code>convert_md_to_html.py</code> 會重複使用，應整理到專案內正式工具區，例如 <code>tools/</code>，而不是只留在 scratch。</p>
+    </section>
+
+    <section class="band">
+      <h2>驗收建議</h2>
+      <ul>
+        <li>核心數據是否前後一致。</li>
+        <li>空白範本是否真的可練習。</li>
+        <li>標準答案是否能回扣 RFP 或內部元件。</li>
+        <li>風險等級是否符合常識。</li>
+        <li>Prompt 是否能照資料夾結構直接使用。</li>
+        <li>Expected outputs 是否能回推管理欄位。</li>
+        <li>生成器是否值得保留為正式資產。</li>
+        <li>HTML 編譯結果是否能閱讀與導航，例如返回首頁、返回 README、.md 轉 .html 連結是否合理。</li>
+      </ul>
+    </section>
+
+    <section class="band">
+      <h2>總結</h2>
+      <p>這次 Class02 mock dataset 驗收的最大收穫是：我們原本以為要的是 27 份 Markdown，但真正值得保留的，可能是能穩定生成 27 份 Markdown 的知識工程方法。</p>
+      <div class="quote">文件需求 → 知識規則 → 資料模型 → 生成器 → 教材資料集 → 驗收與中控</div>
+    </section>
+  </main>
+
+  <footer>
+    Class02 Knowledge Engineering Lessons Learned / AIDE Method Notes
+  </footer>
+</body>
+</html>

@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌌 滾動記憶與視線聚焦導覽 (Scroll Memory & Eye-Focus UX POC)</title>
+    <!-- Google Fonts: Outfit & Noto Sans TC -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #07080d;
+            --card-bg: rgba(17, 19, 32, 0.7);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --text-primary: #f3f4f6;
+            --text-secondary: #9ca3af;
+            
+            /* Gradient Accents */
+            --accent-cyan: #06b6d4;
+            --accent-purple: #8b5cf6;
+            --accent-gold: #eab308;
+            --accent-rose: #f43f5e;
+            --accent-emerald: #10b981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            font-family: 'Outfit', 'Noto Sans TC', sans-serif;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.08) 0px, transparent 50%);
+            background-attachment: fixed;
+            padding: 3rem 1.5rem;
+            line-height: 1.6;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1000px;
+            margin: 0 auto 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #fff 40%, #c7d2fe 70%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.75rem;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .main-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        /* Tabs Navigation */
+        .tab-nav {
+            display: flex;
+            gap: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tab-btn {
+            background: none;
+            border: 1px solid transparent;
+            color: var(--text-secondary);
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .tab-btn.active {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.06);
+            border-color: var(--border-color);
+        }
+
+        .tab-panel {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* TIMELINE LAYOUT (Panel 1) */
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .timeline-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .timeline-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(6, 182, 212, 0.3);
+            box-shadow: 0 10px 30px rgba(6, 182, 212, 0.1);
+        }
+
+        /* Pulse and Glow Keyframes for returning */
+        @keyframes row-glow {
+            0% {
+                border-color: var(--accent-gold);
+                box-shadow: 0 0 30px rgba(234, 179, 8, 0.4);
+                transform: scale(1.01);
+            }
+            50% {
+                border-color: var(--accent-gold);
+                box-shadow: 0 0 45px rgba(234, 179, 8, 0.6);
+                transform: scale(1.02);
+            }
+            100% {
+                border-color: var(--border-color);
+                box-shadow: none;
+                transform: scale(1);
+            }
+        }
+
+        .timeline-card.glow-active {
+            animation: row-glow 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        .timeline-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            border-radius: 4px 0 0 4px;
+        }
+
+        .card-cyan::before { background: var(--accent-cyan); }
+        .card-purple::before { background: var(--accent-purple); }
+        .card-rose::before { background: var(--accent-rose); }
+        .card-emerald::before { background: var(--accent-emerald); }
+
+        .timeline-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .timeline-index {
+            font-size: 0.75rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        .card-cyan .timeline-index { color: var(--accent-cyan); }
+        .card-purple .timeline-index { color: var(--accent-purple); }
+        .card-rose .timeline-index { color: var(--accent-rose); }
+        .card-emerald .timeline-index { color: var(--accent-emerald); }
+
+        .timeline-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .timeline-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            max-width: 600px;
+        }
+
+        .btn-jump {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            transition: all 0.2s ease;
+        }
+
+        .timeline-card:hover .btn-jump {
+            background: var(--accent-cyan);
+            color: #000;
+            border-color: var(--accent-cyan);
+        }
+
+        /* DETAIL LAYOUT (Panel 2) */
+        .detail-container {
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+            padding-bottom: 5rem;
+        }
+
+        .detail-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(12px);
+            transition: all 0.3s ease;
+        }
+
+        .detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding-bottom: 1rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .detail-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .detail-body {
+            font-size: 0.95rem;
+            color: #d1d5db;
+            line-height: 1.8;
+        }
+
+        .btn-back-syllabus {
+            background: rgba(234, 179, 8, 0.08);
+            border: 1px solid rgba(234, 179, 8, 0.25);
+            color: var(--accent-gold);
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            white-space: nowrap;
+        }
+
+        .btn-back-syllabus:hover {
+            background: var(--accent-gold);
+            color: #000;
+            border-color: var(--accent-gold);
+            box-shadow: 0 4px 15px rgba(234, 179, 8, 0.3);
+            transform: translateY(-1px);
+        }
+
+        /* REAL-TIME DEBUGER FLOATING WIDGET */
+        .debug-widget {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            background: rgba(7, 8, 13, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            padding: 1rem;
+            width: 250px;
+            font-family: monospace;
+            font-size: 0.75rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            z-index: 10000;
+            backdrop-filter: blur(10px);
+        }
+
+        .debug-title {
+            font-weight: bold;
+            color: var(--accent-cyan);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 0.3rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .debug-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.3rem;
+        }
+
+        .debug-label {
+            color: var(--text-secondary);
+        }
+
+        .debug-val {
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .debug-val.changed {
+            color: var(--accent-gold);
+            animation: highlight-val 0.4s ease;
+        }
+
+        @keyframes highlight-val {
+            0% { transform: scale(1.1); color: var(--accent-gold); }
+            100% { transform: scale(1); }
+        }
+
+        /* CODE EXPLAINER ACCORDION */
+        .explainer-container {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-top: 4rem;
+        }
+
+        .explainer-container h2 {
+            font-size: 1.5rem;
+            color: #fff;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding-bottom: 0.5rem;
+        }
+
+        .explainer-step {
+            margin-bottom: 1.5rem;
+        }
+
+        .explainer-step h3 {
+            font-size: 1.1rem;
+            color: var(--accent-cyan);
+            margin-bottom: 0.4rem;
+        }
+
+        .explainer-step p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        pre {
+            background: #0d0e15;
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 1.25rem;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin-top: 0.75rem;
+        }
+
+        code {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.8rem;
+            color: #a5b4fc;
+        }
+        
+        .code-comment {
+            color: #6b7280;
+        }
+
+        .code-keyword {
+            color: #f472b6;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <h1>🌌 滾動記憶與視線聚焦導覽 POC / MVP</h1>
+        <p>本教學範例展示了在多頁籤（Tabs）或長網頁中，如何「先記錄 Y 軸位置 ➔ 點擊跳轉 ➔ 返回起點位置 ➔ 呼吸燈聚焦」的高級 UX 設計模式。</p>
+    </header>
+
+    <div class="main-container">
+        
+        <!-- Tabs Buttons Nav -->
+        <nav class="tab-nav">
+            <button class="tab-btn active" id="tab-syllabus-btn" onclick="switchTab('tab-syllabus')">📅 3小時課程流向表 (起點頁)</button>
+            <button class="tab-btn" id="tab-detail-btn" onclick="switchTab('tab-detail')">🎙️ 講師逐段授課講稿 (細項頁)</button>
+        </nav>
+
+        <!-- PANEL 1: TIMELINE LIST -->
+        <div id="tab-syllabus" class="tab-panel active">
+            <p style="font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 1.5rem;">💡 <b>請往下滾動</b>，並點擊任何一個時間區段卡片，觀察它是如何流暢地把您傳送到講稿頁，並自動記錄此時的滾動高度：</p>
+            <div class="timeline">
+                
+                <!-- Card 1 -->
+                <div class="timeline-card card-cyan" id="card-index-0" onclick="syllabusJump(0)">
+                    <div class="timeline-meta">
+                        <span class="timeline-index">時段一 (0:00 - 0:15)</span>
+                        <h3 class="timeline-title">破冰與成果展示 (WOW Factor)</h3>
+                        <p class="timeline-desc">目的：第一秒展示中控塔，打破「AI只能聊天」的偏見。向Grace與主管展現里程碑狀態、避險警告以及 QA Library。</p>
+                    </div>
+                    <button class="btn-jump">點擊跳轉 ➔</button>
+                </div>
+
+                <!-- Spacer to allow real scrolling experience -->
+                <div style="height: 12rem; display: flex; align-items: center; justify-content: center; border-left: 2px dashed rgba(255,255,255,0.05); margin-left: 20px;">
+                    <span style="color: rgba(255,255,255,0.1); font-size: 0.8rem; font-family: monospace;">[ 滾動間距模擬 - 讓頁面產生實體高度 ]</span>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="timeline-card card-purple" id="card-index-1" onclick="syllabusJump(1)">
+                    <div class="timeline-meta">
+                        <span class="timeline-index">時段二 (0:15 - 0:45)</span>
+                        <h3 class="timeline-title">SME 真實痛點與觀念對齊</h3>
+                        <p class="timeline-desc">目的：點燃行政與財會「做重複虛工」之強烈共鳴。引出核心心法「存在 ≠ 可利用」，強調硬碟檔案沒有被大腦索引就只是數位垃圾。</p>
+                    </div>
+                    <button class="btn-jump">點擊跳轉 ➔</button>
+                </div>
+
+                <!-- Spacer -->
+                <div style="height: 12rem; display: flex; align-items: center; justify-content: center; border-left: 2px dashed rgba(255,255,255,0.05); margin-left: 20px;">
+                    <span style="color: rgba(255,255,255,0.1); font-size: 0.8rem; font-family: monospace;">[ 滾動間距模擬 - 讓頁面產生實體高度 ]</span>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="timeline-card card-rose" id="card-index-2" onclick="syllabusJump(2)">
+                    <div class="timeline-meta">
+                        <span class="timeline-index">時段三 (0:45 - 1:20)</span>
+                        <h3 class="timeline-title">知識資產化轉化路徑 (KM)</h3>
+                        <p class="timeline-desc">目的：提供系統化升級方法論。透過「清理去重 (ETL) ➔ 脈絡化深度索引 ➔ 章節元件化」三步驟，將歷史檔案拆成樂高積木。</p>
+                    </div>
+                    <button class="btn-jump">點擊跳轉 ➔</button>
+                </div>
+
+                <!-- Spacer -->
+                <div style="height: 12rem; display: flex; align-items: center; justify-content: center; border-left: 2px dashed rgba(255,255,255,0.05); margin-left: 20px;">
+                    <span style="color: rgba(255,255,255,0.1); font-size: 0.8rem; font-family: monospace;">[ 滾動間距模擬 - 讓頁面產生實體高度 ]</span>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="timeline-card card-emerald" id="card-index-3" onclick="syllabusJump(3)">
+                    <div class="timeline-meta">
+                        <span class="timeline-index">時段四 (1:30 - 2:20)</span>
+                        <h3 class="timeline-title">Level 1 & L2 雙軌實戰示範</h3>
+                        <p class="timeline-desc">目的：現場示範。使用 AIDE 文件工程，自主讀取 120 頁 RFP，自動抽取需求、比對歷史元件，一鍵自動產出合規標書草稿與 Diff 比對。</p>
+                    </div>
+                    <button class="btn-jump">點擊跳轉 ➔</button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- PANEL 2: DETAIL SCRIPT PANELS -->
+        <div id="tab-detail" class="tab-panel">
+            <p style="font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 2rem;">💡 這是細項內容頁面。在您讀完細項後，點選卡片右上角的金色 <b>「⬅ 返回課程流向表」</b>，它會立刻帶您完美傳送回剛剛點擊的高度，並高亮閃爍原卡片！</p>
+            <div class="detail-container">
+                
+                <!-- Detail 0 -->
+                <div class="detail-section" id="detail-part-0">
+                    <div class="detail-header">
+                        <div style="display: flex; flex-direction: column;">
+                            <span style="color: var(--accent-cyan); font-size: 0.75rem; font-weight: bold; letter-spacing: 0.05em;">PART 1 DETAILS</span>
+                            <h3 class="detail-title">破冰與成果展示 (WOW Factor) - 講稿細項</h3>
+                        </div>
+                        <button class="btn-back-syllabus" onclick="returnJump('card-index-0')">⬅ 返回課程流向表</button>
+                    </div>
+                    <div class="detail-body">
+                        <p>「Grace、各位主管，大家早。感謝大家今天準時出席。」</p>
+                        <p>「在我們正式上課之前，我想請大家看著投影幕。畫面上這個極具科技感、甚至有點像太空船控制塔的介面，叫作 <strong>『星河專案知識中控指揮中心』</strong>。」</p>
+                        <p>「今天這堂課會徹底顛覆您的認知。大家請看螢幕：這裡有一個專案進度里程碑，它能一眼看出哪些歷史資料已經變成資產、大腦建好了沒有；右邊是『主動避險防線』，它直接發出紅燈警告；更神奇的是左下角這個『企業智慧大腦 (QA Library)』，一秒鐘之內，大腦就會吐出掛著引證來源的事實。」</p>
+                    </div>
+                </div>
+
+                <!-- Detail 1 -->
+                <div class="detail-section" id="detail-part-1">
+                    <div class="detail-header">
+                        <div style="display: flex; flex-direction: column;">
+                            <span style="color: var(--accent-purple); font-size: 0.75rem; font-weight: bold; letter-spacing: 0.05em;">PART 2 DETAILS</span>
+                            <h3 class="detail-title">SME 真實痛點與觀念對齊 - 講稿細項</h3>
+                        </div>
+                        <button class="btn-back-syllabus" onclick="returnJump('card-index-1')">⬅ 返回課程流向表</button>
+                    </div>
+                    <div class="detail-body">
+                        <p>「很多企業主常自豪地說：『我們有做知識管理 (KM) 啊！我們買了超大 NAS，裡面存了過去十年的所有檔案！』這是一個致命的誤區。」</p>
+                        <p>「檔案靜靜地躺在硬碟深處，人走茶涼、找不到也用不了，那不叫資產，那叫數位垃圾。我們今天最核心的心法，請大家跟我一起默念：<strong>存在 ≠ 可利用</strong>」</p>
+                    </div>
+                </div>
+
+                <!-- Detail 2 -->
+                <div class="detail-section" id="detail-part-2">
+                    <div class="detail-header">
+                        <div style="display: flex; flex-direction: column;">
+                            <span style="color: var(--accent-rose); font-size: 0.75rem; font-weight: bold; letter-spacing: 0.05em;">PART 3 DETAILS</span>
+                            <h3 class="detail-title">知識資產化轉化路徑 (KM) - 講稿細項</h3>
+                        </div>
+                        <button class="btn-back-syllabus" onclick="returnJump('card-index-2')">⬅ 返回課程流向表</button>
+                    </div>
+                    <div class="detail-body">
+                        <p>「我們要如何將『過去的累積』轉化為『未來的價值』？」</p>
+                        <p>「第一步是 <strong>『清洗 (ETL)』</strong>：把那些命名混亂、格式不一的舊 Word、舊 Excel 進行去重與規範命名。」</p>
+                        <p>「第二步是 <strong>『脈絡化深度索引』</strong>：將乾淨的文件拖入我們的專屬大腦。」</p>
+                        <p>「第三步是 <strong>『章節元件化』</strong>：把厚重文件打碎成一塊一塊的樂高積木。有新標案進來時，交給 Agent 去大腦裡自主檢索對應的積木，自動組裝出新文件的草稿。」</p>
+                    </div>
+                </div>
+
+                <!-- Detail 3 -->
+                <div class="detail-section" id="detail-part-3">
+                    <div class="detail-header">
+                        <div style="display: flex; flex-direction: column;">
+                            <span style="color: var(--accent-emerald); font-size: 0.75rem; font-weight: bold; letter-spacing: 0.05em;">PART 4 DETAILS</span>
+                            <h3 class="detail-title">Level 1 & L2 雙軌實戰示範 - 講稿細項</h3>
+                        </div>
+                        <button class="btn-back-syllabus" onclick="returnJump('card-index-3')">⬅ 返回課程流向表</button>
+                    </div>
+                    <div class="detail-body">
+                        <p>「我將親自演示這套『長文件工程』是如何運作的。」</p>
+                        <p>「幾百頁的招標書，從來就不是一個『文章寫作』問題，而是一個嚴謹的『文件合規與元件拆解』的<strong>長文件工程問題</strong>。」</p>
+                        <p>「我們啟動 AI 文件工程特助 <strong>aaa</strong>，自動建立『需求抽取表』、比對內部的『歷史實績元件』，亮起缺件黃色警告避險，最終一鍵組裝，不到一分鐘就編譯產出了合規投標書第二章草案！」</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- REAL-TIME DEBUGGER WIDGET -->
+        <div class="debug-widget">
+            <div class="debug-title">
+                <span>⚡ 變數監控儀器 (Real-time DBG)</span>
+            </div>
+            <div class="debug-row">
+                <span class="debug-label">當前分頁 (activeTab):</span>
+                <span class="debug-val" id="dbg-tab">tab-syllabus</span>
+            </div>
+            <div class="debug-row">
+                <span class="debug-label">記錄的Y軸 (lastScrollY):</span>
+                <span class="debug-val" id="dbg-scroll">0 px</span>
+            </div>
+            <div class="debug-row">
+                <span class="debug-label">最後點擊 (clickedCard):</span>
+                <span class="debug-val" id="dbg-card">無</span>
+            </div>
+            <div class="debug-row" style="margin-top: 0.5rem; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 0.5rem; display: flex; flex-direction: column;">
+                <span style="color: var(--accent-gold); font-weight: bold; font-size: 0.7rem; line-height: 1.3;">說明：請在滾動頁面時點擊跳轉，觀察 Y 軸像素值如何被精確寫入並在返回時被精準調用！</span>
+            </div>
+        </div>
+
+        <!-- UNDER THE HOOD CODE EXPLAINER -->
+        <div class="explainer-container">
+            <h2>⚙️ 下一代 UX 心法解析：滾動回溯與視線聚焦技術</h2>
+            
+            <div class="explainer-step">
+                <h3>1. 痛點分析：傳統跳轉的「滾動地獄 (Scroll Trap)」</h3>
+                <p>在單頁應用（SPA）或大型標籤頁面中，使用者在 Tab A 點擊跳轉到 Tab B 閱讀細節。然而，在 Tab B 閱讀完畢點擊「返回」後，系統通常只會做單純的標籤切換，滾動條會停留在最頂部，迫使使用者必須「重新用肉眼往下滾動尋找」剛才的閱讀位置。這種體驗被稱為「滾動重力地獄」，會極大程度干擾教學或展示的流暢度。</p>
+            </div>
+
+            <div class="explainer-step">
+                <h3>2. 核心觀念：滾動記憶法 (Scroll Memory Strategy)</h3>
+                <p>我們的解決方案只用簡單的純 JavaScript 便能實現，完全不依賴任何外部前端框架（如 React/Vue）。</p>
+                <p><b>概念公式：</b> <code>記住起點 ➔ 切換分頁 ➔ 平滑滾回起點 ➔ 呼吸高亮引導</code></p>
+            </div>
+
+            <div class="explainer-step">
+                <h3>3. 核心 JavaScript 代碼（一目了然）</h3>
+                <p>您可以將此處代碼直接複製到您自己的專案中使用：</p>
+                <pre><code><span class="code-comment">// 1. 定義全局變數，用來記憶 Y 軸高度</span>
+<span class="code-keyword">let</span> lastSyllabusScrollY = 0;
+
+<span class="code-comment">// 2. 跳轉函數：記錄位置 ➔ 切換 Tab ➔ 滾動到細項</span>
+<span class="code-keyword">function</span> syllabusJump(index) {
+    <span class="code-comment">// 💡 核心：將當前視窗滾動條的高度，記在變數裡</span>
+    lastSyllabusScrollY = window.scrollY; 
+
+    <span class="code-comment">// 模擬切換標籤頁 (切換到細項頁)</span>
+    switchTab('tab-detail');
+
+    <span class="code-comment">// 滾動到特定細項卡片</span>
+    setTimeout(() => {
+        const detailElement = document.getElementById('detail-part-' + index);
+        if (detailElement) {
+            detailElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    }, 200);
+}
+
+<span class="code-comment">// 3. 返回函數：切回大綱 Tab ➔ 平滑滾回原位置 ➔ 呼吸燈聚焦</span>
+<span class="code-keyword">function</span> returnJump(cardId) {
+    <span class="code-comment">// 切換回大綱頁</span>
+    switchTab('tab-syllabus');
+
+    setTimeout(() => {
+        <span class="code-comment">// 💡 核心：自動平滑滾動回剛才記憶的 Y 軸高度</span>
+        window.scrollTo({
+            top: lastSyllabusScrollY,
+            behavior: 'smooth'
+        });
+
+        <span class="code-comment">// 視線聚焦：為剛剛點選的卡片加上 glow 呼吸動畫</span>
+        const card = document.getElementById(cardId);
+        if (card) {
+            card.classList.add('glow-active');
+            <span class="code-comment">// 動畫結束後移除 class，以利下次點擊</span>
+            setTimeout(() => {
+                card.classList.remove('glow-active');
+            }, 2000);
+        }
+    }, 150);
+}</code></pre>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- JavaScript Interactions Logic -->
+    <script>
+        // Real memory scroll position Y
+        let lastSyllabusScrollY = 0;
+
+        // Basic Tab switching
+        function switchTab(tabId) {
+            const panels = document.getElementsByClassName("tab-panel");
+            for (let i = 0; i < panels.length; i++) {
+                panels[i].classList.remove("active");
+            }
+
+            const buttons = document.getElementsByClassName("tab-btn");
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].classList.remove("active");
+            }
+
+            document.getElementById(tabId).classList.add("active");
+            
+            const targetBtnId = tabId === 'tab-syllabus' ? 'tab-syllabus-btn' : 'tab-detail-btn';
+            document.getElementById(targetBtnId).classList.add("active");
+
+            // Update debugger UI
+            updateDebugger('dbg-tab', tabId);
+        }
+
+        // Syllabus Item Jump click handler
+        function syllabusJump(index) {
+            // Memory current scroll position Y!
+            lastSyllabusScrollY = window.scrollY;
+
+            const cardId = 'card-index-' + index;
+
+            // Update debugger UI
+            updateDebugger('dbg-scroll', lastSyllabusScrollY + ' px');
+            updateDebugger('dbg-card', cardId);
+
+            // Switch Tab
+            switchTab('tab-detail');
+
+            // Scroll smoothly to detail element
+            setTimeout(() => {
+                const element = document.getElementById('detail-part-' + index);
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    // Visual highlight detail section
+                    element.style.borderColor = 'var(--accent-cyan)';
+                    element.style.boxShadow = '0 0 20px rgba(6, 182, 212, 0.2)';
+                    setTimeout(() => {
+                        element.style.borderColor = 'var(--border-color)';
+                        element.style.boxShadow = 'none';
+                    }, 1500);
+                }
+            }, 250);
+        }
+
+        // Return to Timeline Syllabus click handler
+        function returnJump(cardId) {
+            // Switch Tab back to syllabus timeline
+            switchTab('tab-syllabus');
+
+            setTimeout(() => {
+                // Scroll Y back to memory position!
+                window.scrollTo({
+                    top: lastSyllabusScrollY,
+                    behavior: 'smooth'
+                });
+
+                // Eye Focus Glow pulse animation
+                const card = document.getElementById(cardId);
+                if (card) {
+                    card.classList.add('glow-active');
+                    setTimeout(() => {
+                        card.classList.remove('glow-active');
+                    }, 2000);
+                }
+            }, 200);
+        }
+
+        // Debugger state update helper with highlight effect
+        function updateDebugger(elementId, text) {
+            const el = document.getElementById(elementId);
+            if (el) {
+                el.innerText = text;
+                el.classList.add('changed');
+                setTimeout(() => {
+                    el.classList.remove('changed');
+                }, 400);
+            }
+        }
+    </script>
+</body>
+</html>

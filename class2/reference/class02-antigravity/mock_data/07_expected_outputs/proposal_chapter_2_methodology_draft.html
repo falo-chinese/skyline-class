@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 第二章：專案執行方法論 (標書合規產出草稿)</title>
+    <style>
+        
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.6;
+    color: #e2e8f0;
+    background-color: #0f172a;
+    max-width: 850px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+}
+h1, h2, h3, h4, h5, h6 {
+    color: #f8fafc;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    font-weight: 700;
+}
+h1 { font-size: 2.2rem; border-bottom: 1px solid #334155; padding-bottom: 0.5rem; }
+h2 { font-size: 1.6rem; border-bottom: 1px solid #1e293b; padding-bottom: 0.25rem; margin-top: 2rem; }
+h3 { font-size: 1.25rem; }
+a { color: #38bdf8; text-decoration: none; font-weight: 500; }
+a:hover { text-decoration: underline; }
+code {
+    background-color: #1e293b;
+    color: #f1f5f9;
+    padding: 0.15rem 0.3rem;
+    border-radius: 4px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 0.85em;
+}
+pre {
+    background-color: #1e293b;
+    padding: 1rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    border: 1px solid #334155;
+    margin: 1.5rem 0;
+}
+pre code {
+    background-color: transparent;
+    padding: 0;
+    border-radius: 0;
+    font-size: 0.85rem;
+    color: #f1f5f9;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.9rem;
+}
+th, td {
+    border: 1px solid #334155;
+    padding: 0.75rem;
+    text-align: left;
+}
+th {
+    background-color: #1e293b;
+    color: #f8fafc;
+    font-weight: bold;
+}
+tr:nth-child(even) {
+    background-color: rgba(30, 41, 59, 0.5);
+}
+blockquote {
+    border-left: 4px solid #38bdf8;
+    padding: 0.5rem 1rem;
+    background-color: rgba(30, 41, 59, 0.5);
+    margin: 1.5rem 0;
+    border-radius: 0 8px 8px 0;
+    color: #cbd5e1;
+}
+.alert {
+    padding: 1rem;
+    border-radius: 8px;
+    margin: 1.5rem 0;
+    border-left: 4px solid #3b82f6;
+}
+.alert-note {
+    background-color: rgba(59, 130, 246, 0.1);
+    border-left-color: #3b82f6;
+    color: #93c5fd;
+}
+.alert-tip {
+    background-color: rgba(16, 185, 129, 0.1);
+    border-left-color: #10b981;
+    color: #a7f3d0;
+}
+.alert-warning {
+    background-color: rgba(245, 158, 11, 0.1);
+    border-left-color: #f59e0b;
+    color: #fde047;
+}
+.alert-important {
+    background-color: rgba(139, 92, 246, 0.1);
+    border-left-color: #8b5cf6;
+    color: #ddd6fe;
+}
+.back-link {
+    display: inline-block;
+    font-size: 0.9rem;
+    color: #94a3b8;
+}
+.back-link:hover {
+    color: #f8fafc;
+}
+ul, ol {
+    padding-left: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+li {
+    margin-bottom: 0.5rem;
+}
+hr {
+    border: 0;
+    height: 1px;
+    background: #334155;
+    margin: 2rem 0;
+}
+
+    </style>
+</head>
+<body>
+    <div style="margin-bottom: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+        <a href="../../index.html" class="back-link">🌌 回 Class 02 課程入口首頁</a>
+        <span style="color: #475569;">|</span>
+        <a href="../README.html" class="back-link">📦 回 實作資料集導覽 (README)</a>
+    </div>
+    
+    <article>
+        <h1>🚀 第二章：專案執行方法論 (標書合規產出草稿)</h1>
+<br/>
+<p><strong>用途</strong>：展示 Agent 一鍵組裝產出的 100% 合規專案方法論草稿。</p>
+<p><strong>對應課程</strong>：第五章：知識元件化與模組化積木 (Component)。</p>
+<br/>
+<hr/>
+<br/>
+<h2>第一節：星河 AIDE 文件工程方法論與一致性防線</h2>
+<br/>
+<p>星河科技股份有限公司（以下簡稱本公司）針對「國家智慧文件管理與流程自動化導入政務工程」，將採用本公司標準之 AIDE 文件工程方法論進行系統建置與文件維護。</p>
+<br/>
+<p>為解決招標機關（國家檔案數位發展委員會）龐雜公文之前後術語一致性痛點，本公司建立以下文件工程三道防線：</p>
+<br/>
+<h3>1️⃣ 大腦事實對齊 (Smart Indexing)</h3>
+<p>本公司將把招標機關歷年公文手冊、導入計畫拖入 <strong>星河大腦</strong>，所有新生成的系統規範與手冊，均自動與大腦事實連結比對，確保術語（如：文件結構化 OCR、批次處理）前後一致。</p>
+<br/>
+<h3>2️⃣ 模組積木元件化 (Componentization)</h3>
+<p>我們將系統需求打碎為代碼化知識元件（如資安維護政策規範、SLA 響應標準），採用 AIDE 長文件工程一鍵編譯組裝，免去傳統人工手動複製 Word 之重複工與版本衝突。</p>
+<br/>
+<h3>3️⃣ 版本 Diff 差分稽核防線</h3>
+<p>標書的每一次修改更新，均由 AIDE 系統自動生成實體 Diff 差分（以 + 代表新增，- 代表刪除），方便主管 ff 進行高階避險與合規稽核。</p>
+<br/>
+<h2>第二節：教育訓練與無痛交接方案</h2>
+<p>本公司承諾於履約期間提供 <strong>3 場教育訓練課程，每場時數 4 小時</strong>，總計 12 小時。課程涵蓋資料清理實務與中控交接操作。</p>
+<br/>
+<p>本專案將無縫對接 FALO PM 平台。當人員異動時，所有交接資訊、過往標案 QA、歷史避險看板均安全留存在中控指揮塔。新人接手無須老鳥口頭教導，只要點開大腦 QA，5分鐘內即可自主問答掌握 80% 工作前因後果，實現智慧政務無痛交接。</p>
+<br/>
+    </article>
+</body>
+</html>

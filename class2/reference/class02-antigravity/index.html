@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌌 Class 02 — 企業知識資產化與 AI 應用實務</title>
+    <!-- Google Fonts: Outfit & Noto Sans TC -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #07080d;
+            --card-bg: rgba(17, 19, 32, 0.7);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --text-primary: #f3f4f6;
+            --text-secondary: #9ca3af;
+            
+            /* Harmonic Gradient Accents */
+            --accent-rose: #f43f5e;
+            --accent-purple: #8b5cf6;
+            --accent-blue: #3b82f6;
+            --accent-cyan: #06b6d4;
+            --accent-emerald: #10b981;
+            --accent-gold: #eab308;
+            --accent-infinite: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            font-family: 'Outfit', 'Noto Sans TC', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.08) 0px, transparent 50%),
+                radial-gradient(at 50% 50%, rgba(6, 182, 212, 0.06) 0px, transparent 50%);
+            background-attachment: fixed;
+            padding-bottom: 5rem;
+        }
+
+        /* Hero Container */
+        .hero {
+            text-align: center;
+            padding: 4.5rem 2rem 2.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 250px;
+            height: 250px;
+            background: rgba(139, 92, 246, 0.15);
+            filter: blur(100px);
+            z-index: -1;
+            border-radius: 50%;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #fff 40%, #c7d2fe 70%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.75rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: var(--accent-cyan);
+            letter-spacing: 0.1em;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+        }
+
+        .hero-tagline {
+            max-width: 750px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 1.25rem 2.5rem;
+            border-radius: 9999px;
+            font-size: 1.05rem;
+            color: #d1d5db;
+            line-height: 1.6;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(12px);
+        }
+
+        .hero-tagline strong {
+            background: linear-gradient(to right, #fda4af, #f472b6, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+        }
+
+        /* Section Title Container */
+        .section-header {
+            text-align: center;
+            margin: 3.5rem auto 2.5rem;
+            max-width: 800px;
+        }
+
+        .section-header h2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            display: inline-block;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .section-header h2::after {
+            content: '';
+            position: absolute;
+            left: 20%;
+            right: 20%;
+            bottom: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-blue), var(--accent-purple), transparent);
+        }
+
+        .section-header p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 0.75rem;
+        }
+
+        /* Interactive Roadmap Main Thread */
+        .roadmap-container {
+            max-width: 1250px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+        }
+
+        .roadmap-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Connecting timeline line in background */
+        .roadmap-line {
+            display: none;
+            position: absolute;
+            top: 2.25rem;
+            left: 5%;
+            right: 5%;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                var(--accent-rose), 
+                var(--accent-purple), 
+                var(--accent-blue), 
+                var(--accent-cyan), 
+                var(--accent-emerald),
+                var(--accent-gold),
+                #ec4899
+            );
+            opacity: 0.3;
+            z-index: 1;
+        }
+
+        @media (min-width: 900px) {
+            .roadmap-line {
+                display: block;
+            }
+        }
+
+        /* Individual Roadmap Node */
+        .roadmap-node {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.25rem 0.75rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            backdrop-filter: blur(8px);
+        }
+
+        .roadmap-node::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 16px;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        .roadmap-node:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255,255,255,0.18);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .node-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.75rem;
+            font-size: 1.15rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .node-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 0.35rem;
+            letter-spacing: 0.05em;
+        }
+
+        .node-desc {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            line-height: 1.3;
+        }
+
+        /* Color classes for nodes */
+        .node-rose { border-color: rgba(244, 63, 94, 0.2); }
+        .node-rose .node-icon { background: rgba(244, 63, 94, 0.1); color: var(--accent-rose); border: 1px solid rgba(244, 63, 94, 0.3); }
+        .node-rose:hover { box-shadow: 0 0 15px rgba(244, 63, 94, 0.15); border-color: var(--accent-rose); }
+        
+        .node-purple { border-color: rgba(139, 92, 246, 0.2); }
+        .node-purple .node-icon { background: rgba(139, 92, 246, 0.1); color: var(--accent-purple); border: 1px solid rgba(139, 92, 246, 0.3); }
+        .node-purple:hover { box-shadow: 0 0 15px rgba(139, 92, 246, 0.15); border-color: var(--accent-purple); }
+
+        .node-blue { border-color: rgba(59, 130, 246, 0.2); }
+        .node-blue .node-icon { background: rgba(59, 130, 246, 0.1); color: var(--accent-blue); border: 1px solid rgba(59, 130, 246, 0.3); }
+        .node-blue:hover { box-shadow: 0 0 15px rgba(59, 130, 246, 0.15); border-color: var(--accent-blue); }
+
+        .node-cyan { border-color: rgba(6, 182, 212, 0.2); }
+        .node-cyan .node-icon { background: rgba(6, 182, 212, 0.1); color: var(--accent-cyan); border: 1px solid rgba(6, 182, 212, 0.3); }
+        .node-cyan:hover { box-shadow: 0 0 15px rgba(6, 182, 212, 0.15); border-color: var(--accent-cyan); }
+
+        .node-emerald { border-color: rgba(16, 185, 129, 0.2); }
+        .node-emerald .node-icon { background: rgba(16, 185, 129, 0.1); color: var(--accent-emerald); border: 1px solid rgba(16, 185, 129, 0.3); }
+        .node-emerald:hover { box-shadow: 0 0 15px rgba(16, 185, 129, 0.15); border-color: var(--accent-emerald); }
+
+        .node-gold { border-color: rgba(234, 179, 8, 0.2); }
+        .node-gold .node-icon { background: rgba(234, 179, 8, 0.1); color: var(--accent-gold); border: 1px solid rgba(234, 179, 8, 0.3); }
+        .node-gold:hover { box-shadow: 0 0 15px rgba(234, 179, 8, 0.15); border-color: var(--accent-gold); }
+
+        .node-inf { border-color: rgba(236, 72, 153, 0.2); }
+        .node-inf .node-icon { background: var(--accent-infinite); color: #fff; }
+        .node-inf:hover { box-shadow: 0 0 15px rgba(236, 72, 153, 0.25); border-color: #ec4899; }
+
+        /* Dynamic Detail Presentation Card */
+        .roadmap-detail-card {
+            background: linear-gradient(135deg, rgba(20, 22, 39, 0.9) 0%, rgba(13, 14, 25, 0.9) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem auto 0;
+            max-width: 900px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(16px);
+            min-height: 180px;
+            transition: all 0.3s ease;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .detail-grid {
+                grid-template-columns: 1.2fr 2fr;
+            }
+        }
+
+        .detail-meta-box {
+            border-right: none;
+            padding-right: 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .detail-meta-box {
+                border-right: 1px solid rgba(255, 255, 255, 0.05);
+                padding-right: 1.5rem;
+                border-bottom: none;
+                padding-bottom: 0;
+            }
+        }
+
+        .detail-step-num {
+            font-size: 0.75rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 0.25rem;
+        }
+
+        .detail-title {
+            font-size: 1.3rem;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .detail-summary-badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+            display: inline-block;
+            font-weight: 600;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .detail-content-area {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .detail-block h4 {
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: var(--text-secondary);
+            margin-bottom: 0.35rem;
+            letter-spacing: 0.05em;
+        }
+
+        .detail-block p {
+            font-size: 0.9rem;
+            color: #d1d5db;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .detail-meta-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .detail-meta-col h5 {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+        }
+
+        .detail-meta-col span {
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* 7 Chapters Course Syllabus Grid Layout */
+        .syllabus-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .syllabus-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1100px) {
+            .syllabus-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Syllabus Card */
+        .syllabus-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 1.75rem;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .syllabus-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .chapter-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 0.4rem 1rem;
+            font-size: 0.7rem;
+            font-weight: 900;
+            border-bottom-left-radius: 12px;
+            letter-spacing: 0.1em;
+        }
+
+        .chapter-badge-1 { background: rgba(244, 63, 94, 0.15); color: #fda4af; }
+        .chapter-badge-2 { background: rgba(139, 92, 246, 0.15); color: #c084fc; }
+        .chapter-badge-3 { background: rgba(6, 182, 212, 0.15); color: #67e8f9; }
+        .chapter-badge-4 { background: rgba(59, 130, 246, 0.15); color: #93c5fd; }
+        .chapter-badge-5 { background: rgba(16, 185, 129, 0.15); color: #6ee7b7; }
+        .chapter-badge-6 { background: rgba(234, 179, 8, 0.15); color: #fde047; }
+        .chapter-badge-7 { background: linear-gradient(135deg, rgba(168, 85, 247, 0.2) 0%, rgba(236, 72, 153, 0.2) 100%); color: #f472b6; }
+
+        .syllabus-info h3 {
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin-bottom: 0.75rem;
+            padding-right: 3rem;
+            line-height: 1.4;
+        }
+
+        .syllabus-points {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .syllabus-points li {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .syllabus-points li::before {
+            content: '•';
+            color: var(--accent-cyan);
+            font-weight: bold;
+        }
+
+        .syllabus-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 0.75rem;
+            margin-top: auto;
+        }
+
+        .syllabus-core-term {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .learn-btn {
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: var(--accent-cyan);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            transition: all 0.2s ease;
+        }
+
+        .learn-btn:hover {
+            color: var(--text-primary);
+            transform: translateX(2px);
+        }
+
+        /* Footer Copyright area */
+        footer {
+            text-align: center;
+            margin-top: 5rem;
+            color: rgba(255, 255, 255, 0.2);
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero Header Section -->
+    <div class="hero">
+        <div class="hero-subtitle">Class 02 — 企業內訓核心專區</div>
+        <h1 class="hero-title">從過去累積到未來價值</h1>
+        <div class="hero-subtitle" style="font-size: 1.1rem; color: var(--text-secondary); font-weight: 300; margin-top:-0.5rem; margin-bottom: 2rem;">
+            企業知識資產化與 AI 應用實務
+        </div>
+        <div class="hero-tagline">
+            🎯 課程最高指導原則：<strong>「如何把企業過去十年的經驗，轉換成未來十年持續創造價值的知識資產。」</strong>
+        </div>
+        <div style="margin-top: 1.5rem; display: flex; flex-direction: column; gap: 1rem; align-items: center;">
+            <!-- Group 1: Teaching Pack -->
+            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center;">
+                <a href="class02_teaching_delivery_pack.html" class="learn-btn" style="background: linear-gradient(135deg, rgba(236, 72, 153, 0.15) 0%, rgba(168, 85, 247, 0.15) 100%); border: 1px solid rgba(236, 72, 153, 0.3); color: #fda4af; padding: 0.6rem 1.5rem; border-radius: 9999px; font-size: 0.9rem; font-weight: 700; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(236, 72, 153, 0.15); display: flex; align-items: center; gap: 0.4rem; cursor: pointer; text-decoration: none;">
+                    🌌 講師專屬教學包 (HTML) ➔
+                </a>
+                <a href="class02_teaching_delivery_pack.md" class="learn-btn" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); color: var(--text-primary); padding: 0.6rem 1.5rem; border-radius: 9999px; font-size: 0.9rem; font-weight: 700; transition: all 0.3s ease; display: flex; align-items: center; gap: 0.4rem; cursor: pointer; text-decoration: none;">
+                    📄 講師工作母稿 (MD)
+                </a>
+            </div>
+            <!-- Group 2: Practice Workbook -->
+            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center;">
+                <a href="class02_practice_workbook.html" class="learn-btn" style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(99, 102, 241, 0.15) 100%); border: 1px solid rgba(139, 92, 246, 0.3); color: #c084fc; padding: 0.6rem 1.5rem; border-radius: 9999px; font-size: 0.9rem; font-weight: 700; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.15); display: flex; align-items: center; gap: 0.4rem; cursor: pointer; text-decoration: none;">
+                    🎨 學員實作手冊 (HTML) ➔
+                </a>
+                <a href="class02_practice_workbook.md" class="learn-btn" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); color: var(--text-primary); padding: 0.6rem 1.5rem; border-radius: 9999px; font-size: 0.9rem; font-weight: 700; transition: all 0.3s ease; display: flex; align-items: center; gap: 0.4rem; cursor: pointer; text-decoration: none;">
+                    📄 實作工作母稿 (MD)
+                </a>
+            </div>
+            <!-- Group 3: Basic Mock Dataset sandbox -->
+            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center;">
+                <a href="mock_data/README.html" class="learn-btn" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(6, 182, 212, 0.15) 100%); border: 1px solid rgba(16, 185, 129, 0.3); color: #6ee7b7; padding: 0.6rem 1.5rem; border-radius: 9999px; font-size: 0.9rem; font-weight: 700; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.15); display: flex; align-items: center; gap: 0.4rem; cursor: pointer; text-decoration: none;">
+                    📦 基礎模擬資料集 (HTML) ➔
+                </a>
+                <a href="mock_data/README.md" class="learn-btn" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); color: var(--text-primary); padding: 0.6rem 1.5rem; border-radius: 9999px; font-size: 0.9rem; font-weight: 700; transition: all 0.3s ease; display: flex; align-items: center; gap: 0.4rem; cursor: pointer; text-decoration: none;">
+                    📄 基礎資料集 (MD)
+                </a>
+                <a href="mock_data/DATASET_MANIFEST.html" class="learn-btn" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); color: var(--accent-cyan); padding: 0.6rem 1.5rem; border-radius: 9999px; font-size: 0.9rem; font-weight: 700; transition: all 0.3s ease; display: flex; align-items: center; gap: 0.4rem; cursor: pointer; text-decoration: none;">
+                    📋 基礎 Manifest 對帳 (HTML)
+                </a>
+            </div>
+            <!-- Group 4: Advanced Mock Dataset sandbox -->
+            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center;">
+                <a href="mock_data_advanced/README.html" class="learn-btn" style="background: linear-gradient(135deg, rgba(234, 179, 8, 0.15) 0%, rgba(249, 115, 22, 0.15) 100%); border: 1px solid rgba(234, 179, 8, 0.3); color: #fde047; padding: 0.6rem 1.5rem; border-radius: 9999px; font-size: 0.9rem; font-weight: 700; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(234, 179, 8, 0.15); display: flex; align-items: center; gap: 0.4rem; cursor: pointer; text-decoration: none;">
+                    🚀 進階實戰資料集 (HTML) ➔
+                </a>
+                <a href="mock_data_advanced/README.md" class="learn-btn" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); color: var(--text-primary); padding: 0.6rem 1.5rem; border-radius: 9999px; font-size: 0.9rem; font-weight: 700; transition: all 0.3s ease; display: flex; align-items: center; gap: 0.4rem; cursor: pointer; text-decoration: none;">
+                    📄 進階資料集 (MD)
+                </a>
+                <a href="mock_data_advanced/DATASET_MANIFEST.html" class="learn-btn" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); color: var(--accent-cyan); padding: 0.6rem 1.5rem; border-radius: 9999px; font-size: 0.9rem; font-weight: 700; transition: all 0.3s ease; display: flex; align-items: center; gap: 0.4rem; cursor: pointer; text-decoration: none;">
+                    📋 進階 Manifest 對帳 (HTML)
+                </a>
+            </div>
+            <!-- Group 5: Universal Prompt Hub -->
+            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center;">
+                <a href="../falo_prompt_hub/index.html" class="learn-btn" style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%); border: 1px solid rgba(6, 182, 212, 0.3); color: #67e8f9; padding: 0.6rem 1.5rem; border-radius: 9999px; font-size: 0.9rem; font-weight: 700; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(6, 182, 212, 0.15); display: flex; align-items: center; gap: 0.4rem; cursor: pointer; text-decoration: none;">
+                    🌌 FALO Universal Prompt Hub (PWA) ➔
+                </a>
+                <a href="../falo_prompt_hub/README.md" class="learn-btn" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); color: var(--text-primary); padding: 0.6rem 1.5rem; border-radius: 9999px; font-size: 0.9rem; font-weight: 700; transition: all 0.3s ease; display: flex; align-items: center; gap: 0.4rem; cursor: pointer; text-decoration: none;">
+                    📄 Prompt Hub 說明 (MD)
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Timeline Roadmap Header -->
+    <div class="section-header">
+        <h2>🛠️ 課程核心流程主軸</h2>
+        <p>點擊下方任一流程節點，即可啟動脈絡大腦展示其「痛點、方法論與落地工具」對照</p>
+    </div>
+
+    <!-- Timeline Roadmap Diagram -->
+    <div class="roadmap-container">
+        <div class="roadmap-line"></div>
+        <div class="roadmap-grid">
+            
+            <div class="roadmap-node node-rose" onclick="showDetail(1)">
+                <div class="node-icon">01</div>
+                <div class="node-title">歷史文件</div>
+                <div class="node-desc">雜亂的舊碎片</div>
+            </div>
+
+            <div class="roadmap-node node-purple" onclick="showDetail(2)">
+                <div class="node-icon">02</div>
+                <div class="node-title">知識化</div>
+                <div class="node-desc">清洗格式結構</div>
+            </div>
+
+            <div class="roadmap-node node-blue" onclick="showDetail(3)">
+                <div class="node-icon">03</div>
+                <div class="node-title">資產化</div>
+                <div class="node-desc">成為無形資產</div>
+            </div>
+
+            <div class="roadmap-node node-cyan" onclick="showDetail(4)">
+                <div class="node-icon">04</div>
+                <div class="node-title">QA Library</div>
+                <div class="node-desc">企業知識大腦</div>
+            </div>
+
+            <div class="roadmap-node node-emerald" onclick="showDetail(5)">
+                <div class="node-icon">05</div>
+                <div class="node-title">長文件工程</div>
+                <div class="node-desc">元件模組化產出</div>
+            </div>
+
+            <div class="roadmap-node node-gold" onclick="showDetail(6)">
+                <div class="node-icon">06</div>
+                <div class="node-title">PM 中控</div>
+                <div class="node-desc">脈絡風險治理</div>
+            </div>
+
+            <div class="roadmap-node node-inf" onclick="showDetail(7)">
+                <div class="node-icon">∞</div>
+                <div class="node-title">持續價值</div>
+                <div class="node-desc">經驗無痛傳承</div>
+            </div>
+
+        </div>
+
+        <!-- Roadmap Interactive Detail Card -->
+        <div class="roadmap-detail-card" id="detail-card">
+            <div class="detail-grid">
+                <div class="detail-meta-box">
+                    <div class="detail-step-num" id="detail-step-num" style="color: var(--accent-rose);">Step 01</div>
+                    <div class="detail-title" id="detail-title">歷史文件 (Scattered files)</div>
+                    <div class="detail-summary-badge" id="detail-summary-badge">散落各處的歷史碎片</div>
+                </div>
+                <div class="detail-content-area">
+                    <div class="detail-block">
+                        <h4 id="detail-heading-1">🚨 SME 的真實痛點</h4>
+                        <p id="detail-desc">公司做了十年，寫過無數報告、歷史標案、對帳 Excel、會議紀錄。但檔案散落在硬碟深處、名稱混亂，人離職了檔案就失傳，「資料雖然存在，但完全無法被利用」，每次新專案大家只能從零開始做虛工。</p>
+                    </div>
+                    <div class="detail-meta-grid">
+                        <div class="detail-meta-col">
+                            <h5>流程狀態</h5>
+                            <span id="detail-status" style="color: var(--accent-rose);">❌ 尚未資產化</span>
+                        </div>
+                        <div class="detail-meta-col">
+                            <h5>對應核心觀念</h5>
+                            <span id="detail-core-view">存在 ≠ 可利用</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Syllabus Header -->
+    <div class="section-header" style="margin-top: 5rem;">
+        <h2>📂 課程 7 大章節導覽</h2>
+        <p>遵循「成果 ➔ 痛點 ➔ 方法 ➔ 工具」的價值導向，引領學員完成轉型旅程</p>
+    </div>
+
+    <!-- Syllabus Grid -->
+    <div class="syllabus-grid">
+        
+        <!-- Chapter 1 -->
+        <div class="syllabus-card">
+            <span class="chapter-badge chapter-badge-1">第 一 章</span>
+            <div class="syllabus-info">
+                <h3 style="color: #fda4af;">為什麼企業做了很多事卻無法重用？</h3>
+                <ul class="syllabus-points">
+                    <li>人員流動造成的交接記憶斷層</li>
+                    <li>檔案迷宮、名稱混亂，找不到檔案</li>
+                    <li>版本衝突，每次都重新寫、做虛工</li>
+                </ul>
+            </div>
+            <div class="syllabus-bottom" style="display: flex; flex-direction: column; align-items: flex-start; gap: 0.5rem; width: 100%;">
+                <span class="syllabus-core-term">存在 ≠ 可利用</span>
+                <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-top: 0.5rem; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 0.5rem;">
+                    <a href="../01_教材素材庫_Materials_Library/02_target_audience.md" class="learn-btn">觀念 (MD) ➔</a>
+                    <a href="../01_教材素材庫_Materials_Library/02_target_audience.html" class="learn-btn" style="color: var(--accent-rose);">展示 (HTML) ➔</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chapter 2 -->
+        <div class="syllabus-card">
+            <span class="chapter-badge chapter-badge-2">第 二 章</span>
+            <div class="syllabus-info">
+                <h3 style="color: #c084fc;">企業知識資產化 (KM) 的轉化路徑</h3>
+                <ul class="syllabus-points">
+                    <li>歷史標案、SOP、教材、會議紀錄盤點</li>
+                    <li>如何從「垃圾資料」變成「結構化資產」</li>
+                    <li>KM 資產化流程的四個核心對照</li>
+                </ul>
+            </div>
+            <div class="syllabus-bottom" style="display: flex; flex-direction: column; align-items: flex-start; gap: 0.5rem; width: 100%;">
+                <span class="syllabus-core-term">可查詢 / 可產出</span>
+                <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-top: 0.5rem; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 0.5rem;">
+                    <a href="../01_教材素材庫_Materials_Library/03_suitable_tasks.md" class="learn-btn">觀念 (MD) ➔</a>
+                    <a href="../01_教材素材庫_Materials_Library/03_suitable_tasks.html" class="learn-btn" style="color: var(--accent-purple);">展示 (HTML) ➔</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chapter 3 -->
+        <div class="syllabus-card">
+            <span class="chapter-badge chapter-badge-3">第 三 章</span>
+            <div class="syllabus-info">
+                <h3 style="color: #67e8f9;">NotebookLM：零門檻企業知識大腦</h3>
+                <ul class="syllabus-points">
+                    <li>這不是 RAG 技術課，這是大腦記憶庫</li>
+                    <li>資料 ➔ 大腦 ➔ QA ➔ 引用 ➔ 新專案流程</li>
+                    <li>簡單、便宜、導入快，SME 最完美起點</li>
+                </ul>
+            </div>
+            <div class="syllabus-bottom" style="display: flex; flex-direction: column; align-items: flex-start; gap: 0.5rem; width: 100%;">
+                <span class="syllabus-core-term">Searchable 可查詢</span>
+                <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-top: 0.5rem; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 0.5rem;">
+                    <a href="../01_教材素材庫_Materials_Library/04_chat_vs_agent.md" class="learn-btn">觀念 (MD) ➔</a>
+                    <a href="../01_教材素材庫_Materials_Library/04_chat_vs_agent.html" class="learn-btn" style="color: var(--accent-cyan);">展示 (HTML) ➔</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chapter 4 -->
+        <div class="syllabus-card">
+            <span class="chapter-badge chapter-badge-4">第 四 章</span>
+            <div class="syllabus-info">
+                <h3 style="color: #93c5fd;">長文件工程與運作機制 (AIDE)</h3>
+                <ul class="syllabus-points">
+                    <li>不要從零起草，利用既有知識庫</li>
+                    <li>標案、SOP、計畫書的自動化工程</li>
+                    <li>導入 Antigravity 作為長文件執行器</li>
+                </ul>
+            </div>
+            <div class="syllabus-bottom" style="display: flex; flex-direction: column; align-items: flex-start; gap: 0.5rem; width: 100%;">
+                <span class="syllabus-core-term">Generatable 可產出</span>
+                <div style="display: flex; flex-direction: column; width: 100%; gap: 0.5rem; margin-top: 0.5rem; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 0.5rem;">
+                    <!-- Row 1: Main Article -->
+                    <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+                        <a href="../01_教材素材庫_Materials_Library/05_agent_relations.md" class="learn-btn">觀念 (MD) ➔</a>
+                        <a href="../01_教材素材庫_Materials_Library/05_agent_relations.html" class="learn-btn" style="color: var(--accent-blue);">展示 (HTML) ➔</a>
+                    </div>
+                    <!-- Row 2: Compliance Mapping -->
+                    <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; border-top: 1px dashed rgba(255,255,255,0.03); padding-top: 0.4rem;">
+                        <a href="requirement_compliance_mapping.md" class="learn-btn" style="font-size: 0.75rem;">合規 (MD) ➔</a>
+                        <a href="requirement_compliance_mapping.html" class="learn-btn" style="color: var(--accent-purple); font-size: 0.75rem;">合規 (HTML) ➔</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chapter 5 -->
+        <div class="syllabus-card">
+            <span class="chapter-badge chapter-badge-5">第 五 章</span>
+            <div class="syllabus-info">
+                <h3 style="color: #6ee7b7;">知識元件化與模組化積木 (Component)</h3>
+                <ul class="syllabus-points">
+                    <li>文件 ➔ 元件 ➔ 知識 ➔ 規則拆解</li>
+                    <li>如何將長文件打碎成可重複利用的積木</li>
+                    <li>AI Agent 如何調用元件自動組裝標書</li>
+                </ul>
+            </div>
+            <div class="syllabus-bottom" style="display: flex; flex-direction: column; align-items: flex-start; gap: 0.5rem; width: 100%;">
+                <span class="syllabus-core-term">Componentization</span>
+                <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-top: 0.5rem; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 0.5rem;">
+                    <a href="../01_教材素材庫_Materials_Library/07_future_agent_automation.md" class="learn-btn">觀念 (MD) ➔</a>
+                    <a href="../01_教材素材庫_Materials_Library/07_future_agent_automation.html" class="learn-btn" style="color: var(--accent-emerald);">展示 (HTML) ➔</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chapter 6 -->
+        <div class="syllabus-card">
+            <span class="chapter-badge chapter-badge-6">第 六 章</span>
+            <div class="syllabus-info">
+                <h3 style="color: #fde047;">FALO PM：企業知識中控指揮中心</h3>
+                <ul class="syllabus-points">
+                    <li>工具只是手段，進度、避險與交接才是目的</li>
+                    <li>做到哪、缺什麼、誰接手、有何風險</li>
+                    <li>如果明天人離職，企業是否還能照常運轉？</li>
+                </ul>
+            </div>
+            <div class="syllabus-bottom" style="display: flex; flex-direction: column; align-items: flex-start; gap: 0.5rem; width: 100%;">
+                <span class="syllabus-core-term">Manageable 可管理</span>
+                <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-top: 0.5rem; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 0.5rem;">
+                    <a href="../01_教材素材庫_Materials_Library/06_workflow_integration.md" class="learn-btn">觀念 (MD) ➔</a>
+                    <a href="../01_教材素材庫_Materials_Library/06_workflow_integration.html" class="learn-btn" style="color: var(--accent-gold);">展示 (HTML) ➔</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chapter 7 -->
+        <div class="syllabus-card" style="grid-column: span 1; display: flex; flex-direction: column;">
+            <span class="chapter-badge chapter-badge-7">第 七 章</span>
+            <div class="syllabus-info">
+                <h3 style="background: var(--accent-infinite); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">未來發展與 SME AI 升級路徑</h3>
+                <ul class="syllabus-points">
+                    <li>大腦查詢路線 vs 雙手編寫 Agent 路線</li>
+                    <li>自動改名、自動分類貼標、QA 自動生成</li>
+                    <li>SME 與一人部門（OPC）的極簡分級策略</li>
+                </ul>
+            </div>
+            <div class="syllabus-bottom" style="display: flex; flex-direction: column; align-items: flex-start; gap: 0.5rem; width: 100%;">
+                <span class="syllabus-core-term">SME Future Blueprint</span>
+                <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-top: 0.5rem; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 0.5rem;">
+                    <a href="../01_教材素材庫_Materials_Library/07_future_agent_automation.md" class="learn-btn">觀念 ➔</a>
+                    <a href="../falo_prompt_hub/index.html" class="learn-btn" style="color: var(--accent-cyan);">PWA 插卡工具 ➔</a>
+                    <a href="../01_教材素材庫_Materials_Library/07_future_agent_automation.html" class="learn-btn" style="color: #f472b6;">展示 ➔</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer Area -->
+    <footer>
+        🌌 Horizon Class 02 &copy; 2026. Designed by Antigravity (aaa) for Force (ff) Advisor.
+    </footer>
+
+    <!-- Interactive JS for Roadmap Detail Presentation -->
+    <script>
+        const roadmapData = {
+            1: {
+                step: "Step 01",
+                title: "歷史文件 (Scattered files)",
+                summary: "散落各處的歷史碎片",
+                color: "var(--accent-rose)",
+                status: "❌ 尚未資產化",
+                core: "存在 ≠ 可利用",
+                desc: "公司做了十年，寫過無數報告、歷史標案、對帳 Excel、會議紀錄。但檔案散落在硬碟深處、名稱混亂，人離職了檔案就失傳，「資料雖然存在，但完全無法被利用」，每次新專案大家只能從零開始做虛工。"
+            },
+            2: {
+                step: "Step 02",
+                title: "知識化 (Knowledgeization)",
+                summary: "清洗格式與結構重塑",
+                color: "var(--accent-purple)",
+                status: "🧹 處理中 [ETL 清洗]",
+                core: "垃圾進，垃圾出 (GIGO)",
+                desc: "知識化的核心是「整理與清洗（ETL）」。透過統一命名規範、去重、清洗 Excel 髒資料、將口頭會議紀錄寫成明確決議，確保所有輸入大腦的原料都是乾淨、標準的資訊，避免 AI 學到錯誤邏輯。"
+            },
+            3: {
+                step: "Step 03",
+                title: "資產化 (Assetization)",
+                summary: "形成可重用無形資產",
+                color: "var(--accent-blue)",
+                status: "💎 已轉換為企業資產",
+                core: "資產才能持續變現",
+                desc: "只有當資料被賦予「可查詢」、「可產出」與「可管理」的屬性時，才稱得上是「知識資產」。資產化後，過去寫過的每一段文字、每一筆報價，都將變成公司永久留存的智慧遺產，不隨人員異動而流失。"
+            },
+            4: {
+                step: "Step 04",
+                title: "QA Library (Searchable)",
+                summary: "零成本的企業脈絡大腦",
+                color: "var(--accent-cyan)",
+                status: "🧠 企業知識大腦上線",
+                core: "保證不講瞎話、有據可查",
+                desc: "利用 NotebookLM，免 IT、零預算、兩小時內將資產化檔案拖入，建立專屬大腦。任何人提問，大腦能在一秒內給予精準答覆並自動附帶「原文引證標籤」，新人交接只要問大腦即可，老鳥不再需要花時間帶人。"
+            },
+            5: {
+                step: "Step 05",
+                title: "長文件工程 (Generatable)",
+                summary: "元件與章節模組化產出",
+                color: "var(--accent-emerald)",
+                status: "🏗️ 長文件工程平台就緒",
+                core: "元件化組裝，拒絕重寫",
+                desc: "不再從零起草文件。將標案、SOP、計畫書打碎為「知識元件（積木）」（如實績、資安規範）。利用 Antigravity (Long Document Runtime) 自動依據新專案規則，從大腦中檢索並自動組裝章節，確保前後術語一致、格式精美。"
+            },
+            6: {
+                step: "Step 06",
+                title: "PM 中控 (Manageable)",
+                summary: "管理者的天眼與風險避險",
+                color: "var(--accent-gold)",
+                status: "🕹️ 中控指揮塔完全掌控",
+                core: "管理是目的，工具是手段",
+                desc: "將大腦 QA、文件狀態、專案里程碑及交接進度完全收攏於 FALO PM 中控中心。管理者不看底層技術，只看『做到哪、缺什麼、誰接手、有何風險』。當重要合規文件缺件或交接出現漏洞時，中控塔會主動亮起紅燈警示。"
+            },
+            7: {
+                step: "Step 07",
+                title: "持續創造價值 (Continuous)",
+                summary: "企業經驗的無限傳承循環",
+                color: "#ec4899",
+                status: "🌌 閉環價值持續變現",
+                core: "經驗滾動累積，公司持續長大",
+                desc: "FALO PM 的終極狀態。每一個新專案的執行過程、新發現的風險、新生成的 QA 都會自動「知識資產化」回收進大腦，讓公司過去十年的經驗，成為未來十年持續變現的永動機。經驗越滾越厚，企業越做越輕鬆！"
+            }
+        };
+
+        function showDetail(stepId) {
+            const data = roadmapData[stepId];
+            const card = document.getElementById('detail-card');
+            
+            // Temporary fadeout
+            card.style.opacity = 0;
+            card.style.transform = 'translateY(5px)';
+
+            setTimeout(() => {
+                document.getElementById('detail-step-num').innerText = data.step;
+                document.getElementById('detail-step-num').style.color = data.color;
+                document.getElementById('detail-title').innerText = data.title;
+                document.getElementById('detail-summary-badge').innerText = data.summary;
+                document.getElementById('detail-desc').innerText = data.desc;
+                document.getElementById('detail-status').innerText = data.status;
+                document.getElementById('detail-status').style.color = data.color;
+                document.getElementById('detail-core-view').innerText = data.core;
+
+                // Border glowing color change based on step
+                card.style.borderColor = data.color;
+                card.style.boxShadow = `0 12px 40px ${data.color}20`; // 20 represents 12% alpha
+
+                // Fadein
+                card.style.opacity = 1;
+                card.style.transform = 'translateY(0)';
+            }, 150);
+        }
+    </script>
+</body>
+</html>

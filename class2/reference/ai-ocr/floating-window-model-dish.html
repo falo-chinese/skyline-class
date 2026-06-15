@@ -1,0 +1,941 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fly Window v1.01｜浮動上層工具窗</title>
+  <meta name="description" content="Fly Window v1.01 是 Falo x Force Cheng 製作的浮動上層工具窗元件，適合 OCR 圖片檢查、教學輔助說明、文件比對與單檔 HTML 展示。">
+  <meta name="keywords" content="Fly Window, FALO, Force Cheng, 浮動上層工具窗, OCR, 圖片檢查, 教學工具, GitHub Pages, RWD">
+  <meta name="author" content="Falo x Force Cheng">
+  <meta name="copyright" content="Falo x Force Cheng 2026/6/1">
+  <meta name="application-name" content="Fly Window">
+  <meta name="robots" content="index, follow">
+  <meta name="generator" content="FALO Model Dish Component">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="og:title" content="Fly Window v1.01｜浮動上層工具窗">
+  <meta property="og:description" content="可拖曳、可 resize、可縮放、可調透明度，並依直式/橫式圖片自動切換小中大視窗尺寸的教學型 UI 元件。">
+  <meta property="og:site_name" content="FALO Model Dish">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Fly Window v1.01">
+  <meta name="twitter:description" content="Falo x Force Cheng 的浮動上層工具窗模型菜，適合 OCR 與教學輔助。">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareSourceCode",
+      "name": "Fly Window",
+      "alternateName": "浮動上層工具窗",
+      "version": "v1.01",
+      "datePublished": "2026-06-01",
+      "creator": {
+        "@type": "Person",
+        "name": "Force Cheng"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "FALO"
+      },
+      "programmingLanguage": ["HTML", "CSS", "JavaScript"],
+      "runtimePlatform": "Web Browser / GitHub Pages",
+      "applicationCategory": "UserInterfaceComponent",
+      "description": "A responsive floating utility window component for OCR image inspection, teaching assistance, and document comparison.",
+      "keywords": ["Fly Window", "FALO", "Model Dish", "OCR", "RWD", "GitHub Pages"]
+    }
+  </script>
+  <style>
+    :root {
+      --bg: #f7f9fc;
+      --panel: #ffffff;
+      --panel-soft: #eef4f8;
+      --text: #1d2433;
+      --muted: #64748b;
+      --line: #d7e1ec;
+      --accent: #2563eb;
+      --accent-strong: #1d4ed8;
+      --danger: #be123c;
+      --shadow: 0 18px 48px rgba(15, 23, 42, 0.16);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background: var(--bg);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      line-height: 1.6;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--line);
+      background: rgba(247, 249, 252, 0.92);
+      backdrop-filter: blur(12px);
+    }
+
+    .topbar-inner {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 14px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: grid;
+      gap: 2px;
+    }
+
+    .brand-title {
+      margin: 0;
+      font-size: 20px;
+      letter-spacing: 0;
+    }
+
+    .brand-subtitle {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 650;
+    }
+
+    .main {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 56px;
+      display: grid;
+      gap: 24px;
+    }
+
+    .workbench {
+      display: grid;
+      grid-template-columns: minmax(300px, 430px) minmax(0, 1fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 8px 28px rgba(15, 23, 42, 0.06);
+    }
+
+    .panel-body {
+      padding: 22px;
+    }
+
+    .panel h2,
+    .panel h3 {
+      margin: 0 0 14px;
+      letter-spacing: 0;
+      line-height: 1.25;
+    }
+
+    .panel h2 {
+      font-size: 24px;
+    }
+
+    .panel h3 {
+      font-size: 18px;
+    }
+
+    .hint {
+      margin: 0 0 16px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .file-row {
+      display: grid;
+      gap: 10px;
+    }
+
+    .file-input {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 12px;
+      background: #fff;
+    }
+
+    .preview-stage {
+      min-height: 360px;
+      border: 1px dashed #9db2cc;
+      border-radius: var(--radius);
+      background:
+        linear-gradient(45deg, rgba(148, 163, 184, 0.10) 25%, transparent 25%),
+        linear-gradient(-45deg, rgba(148, 163, 184, 0.10) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, rgba(148, 163, 184, 0.10) 75%),
+        linear-gradient(-45deg, transparent 75%, rgba(148, 163, 184, 0.10) 75%);
+      background-size: 22px 22px;
+      background-position: 0 0, 0 11px, 11px -11px, -11px 0;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .preview-stage.empty {
+      cursor: default;
+      color: var(--muted);
+      text-align: center;
+      font-weight: 650;
+    }
+
+    .preview-stage img {
+      max-width: 100%;
+      max-height: 540px;
+      border-radius: 6px;
+      box-shadow: 0 12px 34px rgba(15, 23, 42, 0.14);
+      background: #fff;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .btn {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 10px 14px;
+      background: #fff;
+      color: var(--text);
+      font-weight: 750;
+      cursor: pointer;
+      transition: transform 0.12s ease, border-color 0.12s ease, background 0.12s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      border-color: #93b4e8;
+      background: #f8fbff;
+    }
+
+    .btn.primary {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .btn.primary:hover {
+      background: var(--accent-strong);
+    }
+
+    .example-copy {
+      display: grid;
+      gap: 14px;
+    }
+
+    .note {
+      border-left: 4px solid var(--accent);
+      background: #eff6ff;
+      padding: 14px 16px;
+      border-radius: 0 var(--radius) var(--radius) 0;
+      color: #1e3a8a;
+      font-weight: 650;
+    }
+
+    .docs-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .doc-block {
+      padding: 18px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+
+    .doc-block h3 {
+      margin: 0 0 10px;
+      font-size: 17px;
+    }
+
+    .doc-block ul {
+      margin: 0;
+      padding-left: 20px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .recipe {
+      display: grid;
+      gap: 12px;
+    }
+
+    .recipe-row {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 14px;
+      border-top: 1px solid var(--line);
+      padding-top: 12px;
+    }
+
+    .recipe-row:first-child {
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    .recipe-label {
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      background: #eef2f7;
+      border: 1px solid #dbe4ef;
+      border-radius: 6px;
+      padding: 2px 6px;
+      font-size: 0.92em;
+    }
+
+    .footer {
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      background: #fff;
+    }
+
+    .footer-inner {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 18px 0 24px;
+      display: grid;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 650;
+    }
+
+    .utility-window {
+      position: fixed;
+      top: 84px;
+      left: 84px;
+      width: 720px;
+      height: 520px;
+      min-width: 320px;
+      min-height: 240px;
+      z-index: 9999;
+      display: none;
+      resize: both;
+      overflow: hidden;
+      border: 1px solid rgba(148, 163, 184, 0.72);
+      border-radius: var(--radius);
+      background: rgba(15, 23, 42, 0.96);
+      box-shadow: var(--shadow);
+      color: #fff;
+    }
+
+    .utility-window.is-open {
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+    }
+
+    .utility-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px;
+      background: rgba(15, 23, 42, 0.86);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      cursor: move;
+      user-select: none;
+    }
+
+    .window-title-row {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+      background: rgba(15, 23, 42, 0.72);
+      padding: 7px 12px;
+    }
+
+    .window-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: rgba(255, 255, 255, 0.88);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .tool-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding-left: 8px;
+      border-left: 1px solid rgba(255, 255, 255, 0.14);
+    }
+
+    .tool-btn {
+      min-width: 32px;
+      height: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.10);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 850;
+      cursor: pointer;
+      padding: 0 10px;
+    }
+
+    .tool-btn:hover,
+    .tool-btn.active {
+      background: rgba(37, 99, 235, 0.88);
+      border-color: rgba(255, 255, 255, 0.32);
+    }
+
+    .tool-btn.close:hover {
+      background: var(--danger);
+    }
+
+    .opacity-control {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 154px;
+    }
+
+    .opacity-control label {
+      font-size: 12px;
+      font-weight: 800;
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+    .opacity-control input {
+      width: 84px;
+      accent-color: #60a5fa;
+    }
+
+    .opacity-value {
+      width: 36px;
+      text-align: right;
+      font-size: 12px;
+      font-weight: 800;
+      color: rgba(255, 255, 255, 0.86);
+    }
+
+    .utility-viewport {
+      overflow: auto;
+      display: block;
+      padding: 18px;
+      background:
+        radial-gradient(circle at 18px 18px, rgba(255, 255, 255, 0.08) 2px, transparent 2px),
+        rgba(2, 6, 23, 0.40);
+      background-size: 36px 36px;
+    }
+
+    .utility-content {
+      width: max-content;
+      min-width: 100%;
+      min-height: 100%;
+      display: grid;
+      place-items: center;
+      transform-origin: center center;
+      transition: transform 0.12s ease;
+    }
+
+    .utility-content img {
+      display: block;
+      width: 900px;
+      max-width: none;
+      max-height: none;
+      border-radius: 6px;
+      background: #fff;
+      box-shadow: 0 18px 52px rgba(0, 0, 0, 0.24);
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .sample-card {
+      width: 640px;
+      max-width: 100%;
+      padding: 28px;
+      border-radius: var(--radius);
+      background: #fff;
+      color: var(--text);
+      box-shadow: 0 18px 52px rgba(0, 0, 0, 0.24);
+    }
+
+    .sample-card h2 {
+      margin: 0 0 12px;
+      font-size: 26px;
+    }
+
+    .sample-card p {
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-weight: 650;
+    }
+
+    @media (max-width: 880px) {
+      .topbar-inner {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .workbench,
+      .docs-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .recipe-row {
+        grid-template-columns: 1fr;
+        gap: 4px;
+      }
+
+      .utility-window {
+        top: 16px;
+        left: 12px;
+        width: calc(100vw - 24px);
+        height: min(70vh, 560px);
+      }
+
+      .utility-toolbar {
+        flex-wrap: wrap;
+        cursor: default;
+      }
+
+      .window-title-row {
+        padding: 6px 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <h1 class="brand-title">Fly Window</h1>
+        <div class="brand-subtitle">浮動上層工具窗模型菜｜v1.01｜Falo x Force Cheng｜2026/6/1</div>
+      </div>
+      <button class="btn primary" id="openWindowBtn" type="button">開啟浮動工具窗</button>
+    </div>
+  </header>
+
+  <main class="main">
+    <section class="workbench" aria-label="Floating window demo">
+      <div class="panel">
+        <div class="panel-body">
+          <h2>案例：載入圖片後，用浮動窗檢查細節</h2>
+          <p class="hint">這個案例刻意貼近 OCR、截圖比對、教材說明的工作流：圖片留在主畫面，浮動窗放在最上層輔助查看。</p>
+          <div class="file-row">
+            <label for="imageInput"><strong>選擇圖片</strong></label>
+            <input class="file-input" id="imageInput" type="file" accept="image/*">
+            <div class="preview-stage empty" id="previewStage">
+              <div>
+                尚未載入圖片<br>
+                <span style="font-size:13px;">選圖後可點圖片或按上方按鈕開啟浮動工具窗</span>
+              </div>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="btn primary" id="openImageWindowBtn" type="button">用浮動窗查看</button>
+            <button class="btn" id="loadSampleBtn" type="button">載入示範圖片</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-body example-copy">
+          <h2>為什麼這個元件實用</h2>
+          <div class="note">
+            它不是一般彈窗，而是一個「可停在最上層的臨時工作區」。主畫面不用離開，輔助資料可以拖到旁邊、放大、縮小、半透明覆蓋。
+          </div>
+          <p>
+            在 OCR 情境中，使用者常需要一邊看原圖，一邊看辨識結果或 Prompt 設定。若圖片只在頁面左側，捲動或比對時容易失去上下文；浮動上層工具窗可以把圖片變成可移動參考物。
+          </p>
+          <p>
+            在教學情境中，老師可以把補充說明、截圖、流程圖或範例答案放進工具窗，停在畫面上方講解，不需要把整個頁面切換成另一個模式。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="docs-grid" aria-label="Model dish explanation">
+      <article class="doc-block">
+        <h3>核心能力</h3>
+        <ul>
+          <li>固定於 viewport 最上層</li>
+          <li>拖曳移動與右下角 resize</li>
+          <li>內容縮放固定刻度：10%、20%、50%、70%、100%、150%、200%、300%、400%</li>
+          <li>圖片載入後依比例自動選擇直式或橫式尺寸組</li>
+          <li>視窗大小預設：小、中、大會跟著直式/橫式切換，另有近滿版</li>
+          <li>內容超出時可用水平與垂直捲動條查看</li>
+          <li>透明度調整：40% 到 100%</li>
+        </ul>
+      </article>
+      <article class="doc-block">
+        <h3>適用場景</h3>
+        <ul>
+          <li>OCR 圖片放大檢查</li>
+          <li>文件、截圖、表格比對</li>
+          <li>教學提示窗或操作說明</li>
+          <li>dashboard 的臨時參考區</li>
+          <li>長頁面中的浮動輔助面板</li>
+        </ul>
+      </article>
+      <article class="doc-block">
+        <h3>可抽換參數</h3>
+        <ul>
+          <li>視窗初始位置與大小</li>
+          <li>尺寸 preset 清單</li>
+          <li>透明度範圍與預設值</li>
+          <li>內容來源：圖片、文字、HTML 區塊</li>
+          <li>是否允許拖曳、resize、縮放</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="panel">
+      <div class="panel-body">
+        <h2>模型菜配方</h2>
+        <div class="recipe">
+          <div class="recipe-row">
+            <div class="recipe-label">版本</div>
+            <div><strong>v1.01</strong>｜Falo x Force Cheng｜2026/6/1</div>
+          </div>
+          <div class="recipe-row">
+            <div class="recipe-label">模型菜名稱</div>
+            <div>Fly Window｜浮動上層工具窗元件</div>
+          </div>
+          <div class="recipe-row">
+            <div class="recipe-label">直覺理解</div>
+            <div>把一段內容變成可以停在畫面上方的「臨時參考窗」，讓使用者不必離開主要工作流。</div>
+          </div>
+          <div class="recipe-row">
+            <div class="recipe-label">核心技術</div>
+            <div><code>position: fixed</code>、高 <code>z-index</code>、Pointer/Mouse drag、CSS <code>resize</code>、CSS <code>transform: scale()</code>、range input 控制 opacity。</div>
+          </div>
+          <div class="recipe-row">
+            <div class="recipe-label">邊界</div>
+            <div>這是前端 UI 元件，不負責 OCR、AI 推論或資料保存；它只處理「如何把輔助內容放在主畫面上層並可操作」。</div>
+          </div>
+          <div class="recipe-row">
+            <div class="recipe-label">導入方式</div>
+            <div>將 <code>.utility-window</code> HTML、CSS、JS 控制器複製到任一單檔教材或工具頁，將 <code>setWindowContent()</code> 換成自己的內容來源。</div>
+          </div>
+          <div class="recipe-row">
+            <div class="recipe-label">RWD 原則</div>
+            <div>桌機使用雙欄工作台；窄螢幕改單欄，浮動窗寬度收斂到 viewport 內，工具列可換行，避免小視窗按鈕被檔名擠壓。</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div><strong>Fly Window v1.01</strong>｜浮動上層工具窗模型菜</div>
+      <div>Falo x Force Cheng｜2026/6/1｜Responsive single-file HTML component.</div>
+    </div>
+  </footer>
+
+  <aside class="utility-window" id="utilityWindow" aria-label="Floating utility window">
+    <div class="utility-toolbar" id="utilityToolbar">
+      <button class="tool-btn close" id="closeWindowBtn" type="button" title="關閉浮動窗">×</button>
+      <div class="tool-group" aria-label="Content zoom controls">
+        <button class="tool-btn" id="zoomOutBtn" type="button" title="縮小內容">-</button>
+        <button class="tool-btn" id="zoomResetBtn" type="button" title="還原內容縮放">100%</button>
+        <button class="tool-btn" id="zoomInBtn" type="button" title="放大內容">+</button>
+      </div>
+      <div class="tool-group" aria-label="Window size presets">
+        <button class="tool-btn" data-size="small" type="button" title="小視窗">小</button>
+        <button class="tool-btn" data-size="medium" type="button" title="中視窗">中</button>
+        <button class="tool-btn" data-size="large" type="button" title="大視窗">大</button>
+        <button class="tool-btn" data-size="wide" type="button" title="近滿版">滿</button>
+      </div>
+      <div class="tool-group opacity-control">
+        <label for="opacityRange">透明</label>
+        <input id="opacityRange" type="range" min="40" max="100" value="96">
+        <span class="opacity-value" id="opacityValue">96%</span>
+      </div>
+    </div>
+    <div class="window-title-row">
+      <div class="window-title" id="windowTitle">浮動工具窗</div>
+    </div>
+    <div class="utility-viewport" id="utilityViewport">
+      <div class="utility-content" id="utilityContent"></div>
+    </div>
+  </aside>
+
+  <script>
+    const els = {
+      imageInput: document.getElementById("imageInput"),
+      previewStage: document.getElementById("previewStage"),
+      openWindowBtn: document.getElementById("openWindowBtn"),
+      openImageWindowBtn: document.getElementById("openImageWindowBtn"),
+      loadSampleBtn: document.getElementById("loadSampleBtn"),
+      utilityWindow: document.getElementById("utilityWindow"),
+      utilityToolbar: document.getElementById("utilityToolbar"),
+      utilityViewport: document.getElementById("utilityViewport"),
+      utilityContent: document.getElementById("utilityContent"),
+      windowTitle: document.getElementById("windowTitle"),
+      zoomOutBtn: document.getElementById("zoomOutBtn"),
+      zoomResetBtn: document.getElementById("zoomResetBtn"),
+      zoomInBtn: document.getElementById("zoomInBtn"),
+      opacityRange: document.getElementById("opacityRange"),
+      opacityValue: document.getElementById("opacityValue"),
+      closeWindowBtn: document.getElementById("closeWindowBtn")
+    };
+
+    const sizePresets = {
+      portrait: {
+        small: { width: 420, height: 560 },
+        medium: { width: 560, height: 760 },
+        large: { width: 720, height: 920 }
+      },
+      landscape: {
+        small: { width: 560, height: 420 },
+        medium: { width: 860, height: 560 },
+        large: { width: 1060, height: 700 }
+      },
+      neutral: {
+        small: { width: 420, height: 320 },
+        medium: { width: 720, height: 520 },
+        large: { width: 960, height: 680 }
+      },
+      wide: { widthRatio: 0.92, heightRatio: 0.82 }
+    };
+
+    let imageUrl = "";
+    let imageOrientation = "neutral";
+    let zoom = 1;
+    const zoomSteps = [0.10, 0.20, 0.50, 0.70, 1, 1.50, 2, 3, 4];
+    let activeSize = "medium";
+
+    function releaseImageUrl() {
+      if (!imageUrl || imageUrl.startsWith("data:")) return;
+      URL.revokeObjectURL(imageUrl);
+      imageUrl = "";
+    }
+
+    function setPreviewImage(src, name) {
+      els.previewStage.classList.remove("empty");
+      const image = document.createElement("img");
+      image.src = src;
+      image.alt = name || "Preview image";
+      image.addEventListener("load", () => updateImageDefaultSize(image));
+      els.previewStage.replaceChildren(image);
+      els.windowTitle.textContent = name ? `浮動工具窗｜${name}` : "浮動工具窗｜示範圖片";
+    }
+
+    function updateImageDefaultSize(image) {
+      if (!image.naturalWidth || !image.naturalHeight) return;
+      imageOrientation = image.naturalHeight > image.naturalWidth ? "portrait" : "landscape";
+      activeSize = "medium";
+      if (els.utilityWindow.classList.contains("is-open")) {
+        setSizePreset(activeSize);
+      } else {
+        updateSizeButtons();
+      }
+    }
+
+    function loadImageFile(file) {
+      if (!file || !file.type.startsWith("image/")) return;
+      releaseImageUrl();
+      imageUrl = URL.createObjectURL(file);
+      setPreviewImage(imageUrl, file.name);
+    }
+
+    function loadSampleImage() {
+      releaseImageUrl();
+      imageUrl = sampleImageDataUrl();
+      setPreviewImage(imageUrl, "OCR 教學示範圖");
+    }
+
+    function sampleImageDataUrl() {
+      const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="900" height="1180" viewBox="0 0 900 1180">
+          <rect width="900" height="1180" fill="#ffffff"/>
+          <rect x="80" y="78" width="740" height="1024" rx="18" fill="#f8fafc" stroke="#d9e2ef"/>
+          <text x="130" y="150" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#0f172a">OCR / 輔助說明浮動窗示範</text>
+          <rect x="130" y="198" width="640" height="120" rx="16" fill="#eff6ff" stroke="#bfdbfe"/>
+          <text x="160" y="246" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#1d4ed8">使用情境</text>
+          <text x="160" y="286" font-family="Arial, sans-serif" font-size="20" fill="#334155">一邊看原圖，一邊比對 OCR 結果或 Prompt 說明。</text>
+          <text x="130" y="390" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#0f172a">可觀察細節</text>
+          <text x="150" y="440" font-family="Arial, sans-serif" font-size="20" fill="#334155">1. 視窗可以拖曳到任何位置</text>
+          <text x="150" y="486" font-family="Arial, sans-serif" font-size="20" fill="#334155">2. 圖片內容可以用 + / - 放大縮小</text>
+          <text x="150" y="532" font-family="Arial, sans-serif" font-size="20" fill="#334155">3. 視窗可以切換小、中、大、滿版</text>
+          <text x="150" y="578" font-family="Arial, sans-serif" font-size="20" fill="#334155">4. 透明度可以降低，看到底下畫面</text>
+          <rect x="130" y="650" width="640" height="270" rx="16" fill="#ffffff" stroke="#d9e2ef"/>
+          <text x="160" y="710" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#be123c">教學重點</text>
+          <text x="160" y="765" font-family="Arial, sans-serif" font-size="20" fill="#334155">這不是 AI 模型本身，而是 AI 工具工作流中的</text>
+          <text x="160" y="805" font-family="Arial, sans-serif" font-size="20" fill="#334155">「檢查、比對、輔助理解」介面層。</text>
+          <text x="160" y="870" font-family="Arial, sans-serif" font-size="18" fill="#64748b">Fly Window</text>
+          <text x="130" y="1010" font-family="Arial, sans-serif" font-size="18" fill="#64748b">FALO Model Dish Component · v1.01 · 2026/6/1</text>
+        </svg>`;
+      return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+    }
+
+    function renderDefaultContent() {
+      els.windowTitle.textContent = "浮動工具窗｜說明卡";
+      els.utilityContent.innerHTML = `
+        <div class="sample-card">
+          <h2>浮動上層工具窗</h2>
+          <p>這個視窗可以拖曳、resize、縮放內容、切換尺寸與調整透明度。</p>
+          <p>放入圖片時，它適合做 OCR 原圖檢查；放入文字時，它適合做教學提示或輔助說明。</p>
+        </div>`;
+    }
+
+    function renderImageContent() {
+      if (!imageUrl) {
+        renderDefaultContent();
+        return;
+      }
+      const image = document.createElement("img");
+      image.src = imageUrl;
+      image.alt = "Floating preview";
+      image.addEventListener("load", () => updateImageDefaultSize(image));
+      els.utilityContent.replaceChildren(image);
+    }
+
+    function setZoom(nextZoom) {
+      zoom = Math.max(0.10, Math.min(4, nextZoom));
+      els.utilityContent.style.transform = `scale(${zoom})`;
+      els.zoomResetBtn.textContent = `${Math.round(zoom * 100)}%`;
+    }
+
+    function zoomOut() {
+      const currentIndex = zoomSteps.findIndex((step) => step >= zoom - 0.001);
+      const nextIndex = Math.max(0, currentIndex - 1);
+      setZoom(zoomSteps[nextIndex]);
+    }
+
+    function zoomIn() {
+      const currentIndex = zoomSteps.findIndex((step) => step >= zoom - 0.001);
+      const nextIndex = Math.min(zoomSteps.length - 1, currentIndex + 1);
+      setZoom(zoomSteps[nextIndex]);
+    }
+
+    function setOpacity(value) {
+      const opacity = Math.max(40, Math.min(100, Number(value)));
+      els.utilityWindow.style.opacity = String(opacity / 100);
+      els.opacityRange.value = String(opacity);
+      els.opacityValue.textContent = `${opacity}%`;
+    }
+
+    function setSizePreset(name) {
+      const preset = getSizePreset(name);
+      activeSize = name;
+      const width = preset.widthRatio ? Math.round(window.innerWidth * preset.widthRatio) : preset.width;
+      const height = preset.heightRatio ? Math.round(window.innerHeight * preset.heightRatio) : preset.height;
+      const safeWidth = Math.min(width, window.innerWidth - 24);
+      const safeHeight = Math.min(height, window.innerHeight - 24);
+      els.utilityWindow.style.width = `${Math.max(320, safeWidth)}px`;
+      els.utilityWindow.style.height = `${Math.max(240, safeHeight)}px`;
+      els.utilityWindow.style.left = `${Math.max(12, Math.round((window.innerWidth - safeWidth) / 2))}px`;
+      els.utilityWindow.style.top = `${Math.max(12, Math.round((window.innerHeight - safeHeight) / 2))}px`;
+      updateSizeButtons();
+    }
+
+    function getSizePreset(name) {
+      if (name === "wide") return sizePresets.wide;
+      const group = sizePresets[imageOrientation] || sizePresets.neutral;
+      return group[name] || sizePresets.neutral.medium;
+    }
+
+    function updateSizeButtons() {
+      document.querySelectorAll("[data-size]").forEach((button) => {
+        button.classList.toggle("active", button.dataset.size === activeSize);
+      });
+    }
+
+    function openUtilityWindow(useImage) {
+      if (useImage) {
+        renderImageContent();
+      } else {
+        renderDefaultContent();
+      }
+      setSizePreset(activeSize);
+      setZoom(1);
+      setOpacity(els.opacityRange.value);
+      els.utilityWindow.classList.add("is-open");
+    }
+
+    function initDragging() {
+      let isDragging = false;
+      let startX = 0;
+      let startY = 0;
+      let initialLeft = 0;
+      let initialTop = 0;
+
+      els.utilityToolbar.addEventListener("mousedown", (event) => {
+        if (event.target.closest("button") || event.target.closest("input")) return;
+        isDragging = true;
+        startX = event.clientX;
+        startY = event.clientY;
+        const rect = els.utilityWindow.getBoundingClientRect();
+        initialLeft = rect.left;
+        initialTop = rect.top;
+        document.body.style.userSelect = "none";
+      });
+
+      window.addEventListener("mousemove", (event) => {
+        if (!isDragging) return;
+        const nextLeft = initialLeft + event.clientX - startX;
+        const nextTop = initialTop + event.clientY - startY;
+        const maxLeft = window.innerWidth - 80;
+        const maxTop = window.innerHeight - 48;
+        els.utilityWindow.style.left = `${Math.max(8, Math.min(maxLeft, nextLeft))}px`;
+        els.utilityWindow.style.top = `${Math.max(8, Math.min(maxTop, nextTop))}px`;
+      });
+
+      window.addEventListener("mouseup", () => {
+        isDragging = false;
+        document.body.style.userSelect = "";
+      });
+    }
+
+    els.imageInput.addEventListener("change", (event) => {
+      loadImageFile(event.target.files[0]);
+    });
+
+    els.previewStage.addEventListener("click", () => {
+      if (imageUrl) openUtilityWindow(true);
+    });
+
+    els.openWindowBtn.addEventListener("click", () => openUtilityWindow(Boolean(imageUrl)));
+    els.openImageWindowBtn.addEventListener("click", () => openUtilityWindow(Boolean(imageUrl)));
+    els.loadSampleBtn.addEventListener("click", () => {
+      loadSampleImage();
+      openUtilityWindow(true);
+    });
+
+    els.zoomOutBtn.addEventListener("click", zoomOut);
+    els.zoomResetBtn.addEventListener("click", () => setZoom(1));
+    els.zoomInBtn.addEventListener("click", zoomIn);
+    els.opacityRange.addEventListener("input", (event) => setOpacity(event.target.value));
+    els.closeWindowBtn.addEventListener("click", () => els.utilityWindow.classList.remove("is-open"));
+
+    document.querySelectorAll("[data-size]").forEach((button) => {
+      button.addEventListener("click", () => setSizePreset(button.dataset.size));
+    });
+
+    window.addEventListener("resize", () => {
+      if (els.utilityWindow.classList.contains("is-open")) setSizePreset(activeSize);
+    });
+
+    initDragging();
+    loadSampleImage();
+  </script>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🤖 AIDE 指令五：同步中控指揮台</title>
+    <style>
+        
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.6;
+    color: #e2e8f0;
+    background-color: #0f172a;
+    max-width: 850px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+}
+h1, h2, h3, h4, h5, h6 {
+    color: #f8fafc;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    font-weight: 700;
+}
+h1 { font-size: 2.2rem; border-bottom: 1px solid #334155; padding-bottom: 0.5rem; }
+h2 { font-size: 1.6rem; border-bottom: 1px solid #1e293b; padding-bottom: 0.25rem; margin-top: 2rem; }
+h3 { font-size: 1.25rem; }
+a { color: #38bdf8; text-decoration: none; font-weight: 500; }
+a:hover { text-decoration: underline; }
+code {
+    background-color: #1e293b;
+    color: #f1f5f9;
+    padding: 0.15rem 0.3rem;
+    border-radius: 4px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 0.85em;
+}
+pre {
+    background-color: #1e293b;
+    padding: 1rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    border: 1px solid #334155;
+    margin: 1.5rem 0;
+}
+pre code {
+    background-color: transparent;
+    padding: 0;
+    border-radius: 0;
+    font-size: 0.85rem;
+    color: #f1f5f9;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.9rem;
+}
+th, td {
+    border: 1px solid #334155;
+    padding: 0.75rem;
+    text-align: left;
+}
+th {
+    background-color: #1e293b;
+    color: #f8fafc;
+    font-weight: bold;
+}
+tr:nth-child(even) {
+    background-color: rgba(30, 41, 59, 0.5);
+}
+blockquote {
+    border-left: 4px solid #38bdf8;
+    padding: 0.5rem 1rem;
+    background-color: rgba(30, 41, 59, 0.5);
+    margin: 1.5rem 0;
+    border-radius: 0 8px 8px 0;
+    color: #cbd5e1;
+}
+.alert {
+    padding: 1rem;
+    border-radius: 8px;
+    margin: 1.5rem 0;
+    border-left: 4px solid #3b82f6;
+}
+.alert-note {
+    background-color: rgba(59, 130, 246, 0.1);
+    border-left-color: #3b82f6;
+    color: #93c5fd;
+}
+.alert-tip {
+    background-color: rgba(16, 185, 129, 0.1);
+    border-left-color: #10b981;
+    color: #a7f3d0;
+}
+.alert-warning {
+    background-color: rgba(245, 158, 11, 0.1);
+    border-left-color: #f59e0b;
+    color: #fde047;
+}
+.alert-important {
+    background-color: rgba(139, 92, 246, 0.1);
+    border-left-color: #8b5cf6;
+    color: #ddd6fe;
+}
+.back-link {
+    display: inline-block;
+    font-size: 0.9rem;
+    color: #94a3b8;
+}
+.back-link:hover {
+    color: #f8fafc;
+}
+ul, ol {
+    padding-left: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+li {
+    margin-bottom: 0.5rem;
+}
+hr {
+    border: 0;
+    height: 1px;
+    background: #334155;
+    margin: 2rem 0;
+}
+
+    </style>
+</head>
+<body>
+    <div style="margin-bottom: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+        <a href="../../index.html" class="back-link">🌌 回 Class 02 課程入口首頁</a>
+        <span style="color: #475569;">|</span>
+        <a href="../README.html" class="back-link">📦 回 實作資料集導覽 (README)</a>
+    </div>
+    
+    <article>
+        <h1>🤖 AIDE 指令五：同步中控指揮台</h1>
+<br/>
+<p><strong>用途</strong>：複製並投餵至 Agent，同步最新專案與避險狀態至 FALO PM。</p>
+<p><strong>對應課程</strong>：第六章：FALO PM：企業知識中控指揮中心。</p>
+<br/>
+<hr/>
+<br/>
+<h2>💬 投餵 Agent 指令 (複製框)：</h2>
+<pre><code>
+aaa，投標專案第二章草稿已產出且完成避險審查。
+請將目前標案的最新進度（Stage 5/7）、文件合規覆蓋率（90%）
+以及鼎盛專案公文缺件之黃燈風險，一鍵同步回星河 PM 中控控制台。
+</code></pre>
+<br/>
+    </article>
+</body>
+</html>

@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌌 星河 Class 02 企業知識資產化實作資料集 (Mock Dataset)</title>
+    <!-- Google Fonts: Outfit & Noto Sans TC -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #07080d;
+            --card-bg: rgba(17, 19, 32, 0.7);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --text-primary: #f3f4f6;
+            --text-secondary: #9ca3af;
+            --accent-cyan: #06b6d4;
+            --accent-purple: #8b5cf6;
+            --accent-rose: #f43f5e;
+            --accent-emerald: #10b981;
+            --accent-gold: #eab308;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            font-family: 'Outfit', 'Noto Sans TC', sans-serif;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.06) 0px, transparent 50%);
+            background-attachment: fixed;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        h1, h2, h3 {
+            font-weight: 700;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            background: linear-gradient(135deg, #fff 40%, #c7d2fe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.75rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            color: var(--accent-cyan);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 0.4rem;
+            margin-top: 2.5rem;
+        }
+
+        a.back-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        a.back-link:hover {
+            color: var(--accent-cyan);
+        }
+
+        p {
+            line-height: 1.7;
+            color: #d1d5db;
+            margin-bottom: 1.25rem;
+        }
+
+        /* Premium Folder Container */
+        .folder-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+        }
+
+        .folder-card:hover {
+            border-color: rgba(6, 182, 212, 0.3);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .folder-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .folder-icon {
+            font-size: 1.4rem;
+        }
+
+        .folder-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #f3f4f6;
+        }
+
+        .folder-desc {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        /* File Links List */
+        .file-list {
+            list-style: none;
+            padding-left: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 8px;
+            padding: 0.6rem 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .file-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .file-icon {
+            color: var(--accent-cyan);
+            font-size: 0.95rem;
+        }
+
+        .file-label {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #e5e7eb;
+        }
+
+        .file-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            padding: 0.35rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-html {
+            background: rgba(6, 182, 212, 0.1);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+        }
+
+        .btn-html:hover {
+            background: var(--accent-cyan);
+            color: #000;
+        }
+
+        .btn-md {
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-secondary);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .btn-md:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        .alert-box {
+            background: rgba(139, 92, 246, 0.08);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-left: 4px solid var(--accent-purple);
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin-top: 2rem;
+        }
+
+        .alert-title {
+            font-weight: 700;
+            color: #ddd6fe;
+            margin-bottom: 0.5rem;
+        }
+
+        .alert-content {
+            font-size: 0.95rem;
+            color: #c084fc;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div style="margin-bottom: 2.5rem; display: flex; gap: 1.25rem; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 1.25rem;">
+        <a href="../index.html" class="back-link">🌌 回 Class 02 課程入口首頁</a>
+        <span style="color: rgba(255,255,255,0.15);">|</span>
+        <a href="DATASET_MANIFEST.html" class="back-link">📋 前往資料集清單與映射說明 (Manifest)</a>
+    </div>
+
+    <article>
+        <h1>🌌 星河 Class 02 企業知識資產化實作資料集 (Mock Dataset)</h1>
+        
+        <p style="margin-top: 1.5rem;">本資料集專門為 <strong>星河 Class 02 — 企業知識資產化與 AI 應用實務</strong> 的現場實作所設計。資料集完全去識別化，使用模擬的企業與專案資訊（如「星河科技」、「鼎盛 ERP 專案」、「浩宇專案」），且不包含任何真實的客戶隱私、個資、地址與統一編號。</p>
+        
+        <h2>🗂️ 實作資料夾與檔案導覽 (Click to Open)</h2>
+        <p style="font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 2rem;">以下為本資料集的所有實體檔案清單，您可以直接點選 <strong>HTML 版（網頁版）</strong> 在瀏覽器直接開看，或點選 <strong>MD 版（原始碼）</strong> 查看原始 markdown 格式：</p>
+
+        <!-- 01_rfp -->
+        <div class="folder-card">
+            <div class="folder-header">
+                <span class="folder-icon">📄</span>
+                <span class="folder-name">01_rfp/ (模擬招標書)</span>
+            </div>
+            <div class="folder-desc">包含精簡版與完整版模擬招標規範書，作為外部死要求的基準。</div>
+            <ul class="file-list">
+                <li class="file-item">
+                    <div class="file-info">
+                        <span class="file-icon">📝</span>
+                        <span class="file-label">模擬 RFP 摘要說明 (精簡 1 頁版)</span>
+                    </div>
+                    <div class="file-actions">
+                        <a href="01_rfp/mock_rfp_summary.html" class="action-btn btn-html" target="_blank">🌐 開啟網頁</a>
+                        <a href="01_rfp/mock_rfp_summary.md" class="action-btn btn-md" target="_blank">📄 原始碼</a>
+                    </div>
+                </li>
+                <li class="file-item">
+                    <div class="file-info">
+                        <span class="file-icon">📝</span>
+                        <span class="file-label">模擬 RFP 招標書全文 (完整 3 頁版)</span>
+                    </div>
+                    <div class="file-actions">
+                        <a href="01_rfp/mock_rfp_full.html" class="action-btn btn-html" target="_blank">🌐 開啟網頁</a>
+                        <a href="01_rfp/mock_rfp_full.md" class="action-btn btn-md" target="_blank">📄 原始碼</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 02_internal_knowledge_assets -->
+        <div class="folder-card">
+            <div class="folder-header">
+                <span class="folder-icon">🧱</span>
+                <span class="folder-name">02_internal_knowledge_assets/ (內部知識積木)</span>
+            </div>
+            <div class="folder-desc">包含星河科技 6 大標準知識元件積木（SOP 與專案歷史資訊）。</div>
+            <ul class="file-list">
+                <li class="file-item">
+                    <div class="file-info">
+                        <span class="file-icon">🧱</span>
+                        <span class="file-label">公司標準簡介組件</span>
+                    </div>
+                    <div class="file-actions">
+                        <a href="02_internal_knowledge_assets/company_profile_component.html" class="action-btn btn-html" target="_blank">🌐 開啟網頁</a>
+                        <a href="02_internal_knowledge_assets/company_profile_component.md" class="action-btn btn-md" target="_blank">📄 原始碼</a>
+                    </div>
+                </li>
+                <li class="file-item">
+                    <div class="file-info">
+                        <span class="file-icon">🧱</span>
+                        <span class="file-label">歷年最佳專案案例 - 鼎盛 ERP (450萬實績)</span>
+                    </div>
+                    <div class="file-actions">
+                        <a href="02_internal_knowledge_assets/2025_apex_erp_project_case.html" class="action-btn btn-html" target="_blank">🌐 開啟網頁</a>
+                        <a href="02_internal_knowledge_assets/2025_apex_erp_project_case.md" class="action-btn btn-md" target="_blank">📄 原始碼</a>
+                    </div>
+                </li>
+                <li class="file-item">
+                    <div class="file-info">
+                        <span class="file-icon">🧱</span>
+                        <span class="file-label">公司資訊安全維護政策</span>
+                    </div>
+                    <div class="file-actions">
+                        <a href="02_internal_knowledge_assets/information_security_policy.html" class="action-btn btn-html" target="_blank">🌐 開啟網頁</a>
+                        <a href="02_internal_knowledge_assets/information_security_policy.md" class="action-btn btn-md" target="_blank">📄 原始碼</a>
+                    </div>
+                </li>
+                <li class="file-item">
+                    <div class="file-info">
+                        <span class="file-icon">🧱</span>
+                        <span class="file-label">FALO PM 流程映射方法論</span>
+                    </div>
+                    <div class="file-actions">
+                        <a href="02_internal_knowledge_assets/falo_pm_methodology_component.html" class="action-btn btn-html" target="_blank">🌐 開啟網頁</a>
+                        <a href="02_internal_knowledge_assets/falo_pm_methodology_component.md" class="action-btn btn-md" target="_blank">📄 原始碼</a>
+                    </div>
+                </li>
+                <li class="file-item">
+                    <div class="file-info">
+                        <span class="file-icon">🧱</span>
+                        <span class="file-label">教育訓練與專案交接計畫</span>
+                    </div>
+                    <div class="file-actions">
+                        <a href="02_internal_knowledge_assets/training_and_handover_plan.html" class="action-btn btn-html" target="_blank">🌐 開啟網頁</a>
+                        <a href="02_internal_knowledge_assets/training_and_handover_plan.md" class="action-btn btn-md" target="_blank">📄 原始碼</a>
+                    </div>
+                </li>
+                <li class="file-item">
+                    <div class="file-info">
+                        <span class="file-icon">🧱</span>
+                        <span class="file-label">售後維護支援 SLA 元件 (標準 4小時響應)</span>
+                    </div>
+                    <div class="file-actions">
+                        <a href="02_internal_knowledge_assets/maintenance_service_component.html" class="action-btn btn-html" target="_blank">🌐 開啟網頁</a>
+                        <a href="02_internal_knowledge_assets/maintenance_service_component.md" class="action-btn btn-md" target="_blank">📄 原始碼</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 03_missing_items -->
+        <div class="folder-card">
+            <div class="folder-header">
+                <span class="folder-icon">⚠️</span>
+                <span class="folder-name">03_missing_items/ (實體缺件與避險雷區)</span>
+            </div>
+            <div class="folder-desc">記錄真實專案中高頻發生的缺件雷區，作為學員稽核查帳的對帳依據。</div>
+            <ul class="file-list">
+                <li class="file-item">
+                    <div class="file-info">
+                        <span class="file-icon">⚠️</span>
+                        <span class="file-label">實體缺件登錄表 (鼎盛 ERP 合格公文尚未歸檔)</span>
+                    </div>
+                    <div class="file-actions">
+                        <a href="03_missing_items/missing_items_register.html" class="action-btn btn-html" target="_blank">🌐 開啟網頁</a>
+                        <a href="03_missing_items/missing_items_register.md" class="action-btn btn-md" target="_blank">📄 原始碼</a>
+                    </div>
+                </li>
+                <li class="file-item">
+                    <div class="file-info">
+                        <span class="file-icon">⚠️</span>
+                        <span class="file-label">避險與偽造防線核心講義</span>
+                    </div>
+                    <div class="file-actions">
+                        <a href="03_missing_items/risk_notes.html" class="action-btn btn-html" target="_blank">🌐 開啟網頁</a>
+                        <a href="03_missing_items/risk_notes.md" class="action-btn btn-md" target="_blank">📄 原始碼</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 04_student_templates -->
+        <div class="folder-card">
+            <div class="folder-header">
+                <span class="folder-icon">✏️</span>
+                <span class="folder-name">04_student_templates/ (學員空白現場練習表)</span>
+            </div>
+            <div class="folder-desc">提供給學員現場動手練習的空白表單，建立結構化文件工程思維。</div>
+            <ul class="file-list">
+                <li class="file-item">
+                    <div class="file-info">
+                        <span class="file-icon">✏️</span>
+                        <span class="file-label">需求提取對帳表 - 空白</span>
+                    </div>
+                    <div class="file-actions">
+                        <a href="04_student_templates/requirement_extraction_blank.html" class="action-btn btn-html" target="_blank">🌐 開啟網頁</a>
+                        <a href="04_student_templates/requirement_extraction_blank.md" class="action-btn btn-md" target="_blank">📄 原始碼</a>
+                    </div>
+                </li>
+                <li class="file-item">
+                    <div class="file-info">
+                        <span class="file-icon">✏️</span>
+                        <span class="file-label">合規回應對照矩陣 - 空白</span>
+                    </div>
+                    <div class="file-actions">
+                        <a href="04_student_templates/compliance_matrix_blank.html" class="action-btn btn-html" target="_blank">🌐 開啟網頁</a>
+                        <a href="04_student_templates/compliance_matrix_blank.md" class="action-btn btn-md" target="_blank">📄 原始碼</a>
+                    </div>
+                </li>
+                <li class="file-item">
+                    <div class="file-info">
+                        <span class="file-icon">✏️</span>
+                        <span class="file-label">風險避險決策卡 - 空白</span>
+                    </div>
+                    <div class="file-actions">
+                        <a href="04_student_templates/risk_audit_blank.html" class="action-btn btn-html" target="_blank">🌐 開啟網頁</a>
+                        <a href="04_student_templates/risk_audit_blank.md" class="action-btn btn-md" target="_blank">📄 原始碼</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 05_answer_keys -->
+        <div class="folder-card">
+            <div class="folder-header">
+                <span class="folder-icon">🔑</span>
+                <span class="folder-name">05_answer_keys/ (標準答案庫)</span>
+            </div>
+            <div class="folder-desc">對帳與對答案用的標準答案庫，可直接點開看成果。</div>
+            <ul class="file-list">
+                <li class="file-item">
+                    <div class="file-info">
+                        <span class="file-icon">🔑</span>
+                        <span class="file-label">需求提取對帳表 - 標準答案</span>
+                    </div>
+                    <div class="file-actions">
+                        <a href="05_answer_keys/requirement_extraction_answer.html" class="action-btn btn-html" target="_blank">🌐 開啟網頁</a>
+                        <a href="05_answer_keys/requirement_extraction_answer.md" class="action-btn btn-md" target="_blank">📄 原始碼</a>
+                    </div>
+                </li>
+                <li class="file-item">
+                    <div class="file-info">
+                        <span class="file-icon">🔑</span>
+                        <span class="file-label">合規回應對照矩陣 - 標準答案</span>
+                    </div>
+                    <div class="file-actions">
+                        <a href="05_answer_keys/compliance_matrix_answer.html" class="action-btn btn-html" target="_blank">🌐 開啟網頁</a>
+                        <a href="05_answer_keys/compliance_matrix_answer.md" class="action-btn btn-md" target="_blank">📄 原始碼</a>
+                    </div>
+                </li>
+                <li class="file-item">
+                    <div class="file-info">
+                        <span class="file-icon">🔑</span>
+                        <span class="file-label">風險避險決策卡 - 標準答案</span>
+                    </div>
+                    <div class="file-actions">
+                        <a href="05_answer_keys/risk_audit_answer.html" class="action-btn btn-html" target="_blank">🌐 開啟網頁</a>
+                        <a href="05_answer_keys/risk_audit_answer.md" class="action-btn btn-md" target="_blank">📄 原始碼</a>
+                    </div>
+                </li>
+                <li class="file-item">
+                    <div class="file-info">
+                        <span class="file-icon">🔑</span>
+                        <span class="file-label">專案經理中控摘要 - 標準答案</span>
+                    </div>
+                    <div class="file-actions">
+                        <a href="05_answer_keys/expected_management_summary.html" class="action-btn btn-html" target="_blank">🌐 開啟網頁</a>
+                        <a href="05_answer_keys/expected_management_summary.md" class="action-btn btn-md" target="_blank">📄 原始碼</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 06_antigravity_prompts -->
+        <div class="folder-card">
+            <div class="folder-header">
+                <span class="folder-icon">🤖</span>
+                <span class="folder-name">06_antigravity_prompts/ (AIDE 文件工程 Prompts 控制台)</span>
+            </div>
+            <div class="folder-desc">學員在課堂上可一鍵複製、投遞至 AI Agent 的 5 階段工程指令集。</div>
+            <ul class="file-list">
+                <li class="file-item">
+                    <div class="file-info">
+                        <span class="file-icon">🤖</span>
+                        <span class="file-label">第一階段：提取 RFP 硬性需求</span>
+                    </div>
+                    <div class="file-actions">
+                        <a href="06_antigravity_prompts/01_extract_requirements.html" class="action-btn btn-html" target="_blank">🌐 開啟網頁</a>
+                        <a href="06_antigravity_prompts/01_extract_requirements.md" class="action-btn btn-md" target="_blank">📄 原始碼</a>
+                    </div>
+                </li>
+                <li class="file-item">
+                    <div class="file-info">
+                        <span class="file-icon">🤖</span>
+                        <span class="file-label">第二階段：建立合規回應對照矩陣</span>
+                    </div>
+                    <div class="file-actions">
+                        <a href="06_antigravity_prompts/02_build_compliance_matrix.html" class="action-btn btn-html" target="_blank">🌐 開啟網頁</a>
+                        <a href="06_antigravity_prompts/02_build_compliance_matrix.md" class="action-btn btn-md" target="_blank">📄 原始碼</a>
+                    </div>
+                </li>
+                <li class="file-item">
+                    <div class="file-info">
+                        <span class="file-icon">🤖</span>
+                        <span class="file-label">第三階段：自動盤點致命漏件與避險</span>
+                    </div>
+                    <div class="file-actions">
+                        <a href="06_antigravity_prompts/03_identify_missing_items_and_risks.html" class="action-btn btn-html" target="_blank">🌐 開啟網頁</a>
+                        <a href="06_antigravity_prompts/03_identify_missing_items_and_risks.md" class="action-btn btn-md" target="_blank">📄 原始碼</a>
+                    </div>
+                </li>
+                <li class="file-item">
+                    <div class="file-info">
+                        <span class="file-icon">🤖</span>
+                        <span class="file-label">第四階段：產出標案第二章技術方法論草稿</span>
+                    </div>
+                    <div class="file-actions">
+                        <a href="06_antigravity_prompts/04_generate_proposal_chapter.html" class="action-btn btn-html" target="_blank">🌐 開啟網頁</a>
+                        <a href="06_antigravity_prompts/04_generate_proposal_chapter.md" class="action-btn btn-md" target="_blank">📄 原始碼</a>
+                    </div>
+                </li>
+                <li class="file-item">
+                    <div class="file-info">
+                        <span class="file-icon">🤖</span>
+                        <span class="file-label">第五階段：同步 FALO PM 中控台控制欄位</span>
+                    </div>
+                    <div class="file-actions">
+                        <a href="06_antigravity_prompts/05_sync_management_summary.html" class="action-btn btn-html" target="_blank">🌐 開啟網頁</a>
+                        <a href="06_antigravity_prompts/05_sync_management_summary.md" class="action-btn btn-md" target="_blank">📄 原始碼</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 07_expected_outputs -->
+        <div class="folder-card">
+            <div class="folder-header">
+                <span class="folder-icon">🟢</span>
+                <span class="folder-name">07_expected_outputs/ (預期 Agent 產出成果)</span>
+            </div>
+            <div class="folder-desc">讓學員與總經理驗證對帳的最終生成結果。</div>
+            <ul class="file-list">
+                <li class="file-item">
+                    <div class="file-info">
+                        <span class="file-icon">🟢</span>
+                        <span class="file-label">標案第二章：技術方法論草案 (SLA 自動小幅增強版)</span>
+                    </div>
+                    <div class="file-actions">
+                        <a href="07_expected_outputs/proposal_chapter_2_methodology_draft.html" class="action-btn btn-html" target="_blank">🌐 開啟網頁</a>
+                        <a href="07_expected_outputs/proposal_chapter_2_methodology_draft.md" class="action-btn btn-md" target="_blank">📄 原始碼</a>
+                    </div>
+                </li>
+                <li class="file-item">
+                    <div class="file-info">
+                        <span class="file-icon">🟢</span>
+                        <span class="file-label">總經理 4 防線審批結果卡</span>
+                    </div>
+                    <div class="file-actions">
+                        <a href="07_expected_outputs/executive_status_summary.html" class="action-btn btn-html" target="_blank">🌐 開啟網頁</a>
+                        <a href="07_expected_outputs/executive_status_summary.md" class="action-btn btn-md" target="_blank">📄 原始碼</a>
+                    </div>
+                </li>
+                <li class="file-item">
+                    <div class="file-info">
+                        <span class="file-icon">🟢</span>
+                        <span class="file-label">FALO PM 中控台控制欄位 JSON 同步規格</span>
+                    </div>
+                    <div class="file-actions">
+                        <a href="07_expected_outputs/falo_pm_control_fields.html" class="action-btn btn-html" target="_blank">🌐 開啟網頁</a>
+                        <a href="07_expected_outputs/falo_pm_control_fields.md" class="action-btn btn-md" target="_blank">📄 原始碼</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="alert-box">
+            <div class="alert-title">💡 重要心法提醒</div>
+            <div class="alert-content">
+                本資料集的檔案之間具備嚴密的前後一致性，旨在訓練學員以「對帳與避險」的管理眼光看待 AI 工作流。請詳閱清單映射說明，體會資料、大腦與決策的完美咬合。
+            </div>
+        </div>
+    </article>
+</body>
+</html>
