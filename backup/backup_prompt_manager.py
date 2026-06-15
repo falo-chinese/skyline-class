@@ -4,7 +4,7 @@ from datetime import datetime
 
 source_dir = "/Users/force/Google_Antigravity/horizon_class/skyline-class/class2/reference/falo-prompt-manager"
 backup_dir = "/Users/force/Google_Antigravity/horizon_class/skyline-class/backup/prompt-manager-backups"
-version = "v2.1"
+version = "v2.2"
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 zip_filename = f"falo_prompt_manager_{version}_{timestamp}.zip"
 zip_filepath = os.path.join(backup_dir, zip_filename)
@@ -20,18 +20,11 @@ FALO Prompt Manager 備份版本重點說明
 日期: 2026/6/15
 --------------------------------------------------
 新增與優化功能說明：
-1. 置頂固定變數面板 (Sticky Variables Panel)：
-   - 將變數輸入面板移至外掛側邊欄最上方固定顯示。
-   - 支援即時變數代入預覽與變數快取記憶。
-2. 五級字型大小調整 (5-Level Font Scaling)：
-   - 側邊欄提供 5 個字型調整等級，使用者可透過 +/- 按鈕即時縮放文字，改善閱讀體驗。
-3. 雙向身分握手機制與心跳偵測 (Bi-directional Handshake & Heartbeat)：
-   - PWA 端新增連線狀態徽章 UI。
-   - 外掛與 PWA 間每 5 秒發送心跳探測 PING，並設定 6 秒超時監控，自動更新雙向連線狀態與連線分頁資訊。
-4. 多 PWA 連線選擇器 (Multi-PWA Connection Selector)：
-   - 當開啟多個 PWA 網頁時，外掛同步控制區會顯示下拉選單 `<select id="pwaTargetSelector">`，允許自由切換要連線的目標 PWA 分頁，並指向性進行拉取/推送。
-5. CSV Overwrite 覆寫與 PWA Metadata 機制：
-   - 支援匯入新 CSV 時動態定義 `window.__FALO_PWA_METADATA__`，確保變數與欄位名稱映射的即時更新與匯入還原。
+1. PWA 主中心新增「精簡模式」與「完整模式」切換鈕 (Compact/Full Mode Switcher)：
+   - 於頂部動作列加入模式切換的 Segmented Control，預設為「精簡模式」並自動在 localStorage 記憶使用者最後選取的狀態。
+   - 精簡模式下保留全部動作與編輯功能，但從卡片檢視與編輯器網格中隱藏狀態、說明、標籤、預期輸出、人工檢查點、目標 AI、版本等行政與次要欄位，提供乾淨、專注於複製 Prompt 的極簡檢視。
+2. 兩端版本號同步升級至 v2.2：
+   - PWA 主網頁、Web App 資訊宣告、以及 Chrome 衛星外掛側邊欄版本顯示統一升級為 v2.2，發布日期為 2026/6/15。
 """
 
 # Write temporary changelog file inside the PWA source directory to package it
