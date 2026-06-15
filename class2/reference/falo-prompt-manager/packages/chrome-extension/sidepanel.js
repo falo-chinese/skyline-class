@@ -19,6 +19,8 @@ let currentMode = "compact"; // Default is compact mode
 let currentTheme = "light";  // Default is light theme
 let currentFontSize = 3;     // Default font size level is 3 (1-5)
 const openCategoryIds = new Set(); // Stores manually toggled category IDs
+let discoveredPwas = [];     // List of discovered PWA instances
+let activePwaTabId = null;   // Active target PWA tab ID
 
 // Target PWA URL patterns for Live Sync
 const PWA_PATTERNS = [
@@ -64,7 +66,8 @@ const els = {
   fontDecBtn: document.getElementById("fontDecBtn"),
   fontIncBtn: document.getElementById("fontIncBtn"),
   fontSizeLvl: document.getElementById("fontSizeLvl"),
-  fixedVariablesPanel: document.getElementById("fixedVariablesPanel")
+  fixedVariablesPanel: document.getElementById("fixedVariablesPanel"),
+  pwaTargetSelector: document.getElementById("pwaTargetSelector")
 };
 
 // -------------------------------------------------------------
@@ -559,8 +562,9 @@ function compilePrompt(card) {
 // -------------------------------------------------------------
 
 // Search open tabs to see if a PWA is active
-async function findPwaTab() {
+async function scanPwaTabs() {
   const tabs = await chrome.tabs.query({});
+  const found = [];
   for (const tab of tabs) {
     if (!tab.url) continue;
     // Check if URL matches any pattern
@@ -568,23 +572,112 @@ async function findPwaTab() {
       const regexStr = "^" + pat.split("*").map(s => s.replace(/[-\/\\^$+?.()|[\]{}]/g, '\\$&')).join(".*") + "$";
       return new RegExp(regexStr).test(tab.url);
     });
-    if (matched) return tab;
+    if (matched) {
+      try {
+        // Execute a quick script to check for FALO PWA metadata
+        const [res] = await chrome.scripting.executeScript({
+          target: { tabId: tab.id },
+          func: () => {
+            return typeof window.__FALO_PWA_METADATA__ !== 'undefined' ? window.__FALO_PWA_METADATA__ : null;
+          }
+        });
+        if (res && res.result) {
+          found.push({
+            tabId: tab.id,
+            pwaInstanceId: res.result.pwaInstanceId || "unknown",
+            sourceName: res.result.sourceName || "FALO PWA",
+            url: tab.url
+          });
+        }
+      } catch (e) {
+        // Skip if script cannot be executed (e.g. extension page)
+      }
+    }
   }
-  return null;
+  discoveredPwas = found;
+  return found;
+}
+
+async function findPwaTab() {
+  if (!activePwaTabId) return null;
+  try {
+    const tab = await chrome.tabs.get(activePwaTabId);
+    return tab;
+  } catch (e) {
+    return null;
+  }
 }
 
 async function checkPwaTabStatus() {
-  const tab = await findPwaTab();
-  if (tab) {
-    els.syncIndicator.className = "status-indicator connected";
-    els.syncStatusText.textContent = "偵測到地端 PWA 網頁";
-    els.syncPullBtn.disabled = false;
-    els.syncPushBtn.disabled = false;
-  } else {
+  await scanPwaTabs();
+  
+  if (discoveredPwas.length === 0) {
+    activePwaTabId = null;
     els.syncIndicator.className = "status-indicator disconnected";
     els.syncStatusText.textContent = "未偵測到地端 PWA";
+    els.syncStatusText.style.display = "inline";
+    if (els.pwaTargetSelector) {
+      els.pwaTargetSelector.style.display = "none";
+      els.pwaTargetSelector.innerHTML = "";
+    }
     els.syncPullBtn.disabled = true;
     els.syncPushBtn.disabled = true;
+    return;
+  }
+
+  // If activePwaTabId is not in the list of discovered tabs, select the first one
+  const exists = discoveredPwas.some(p => p.tabId === activePwaTabId);
+  if (!exists) {
+    activePwaTabId = discoveredPwas[0].tabId;
+  }
+
+  els.syncIndicator.className = "status-indicator connected";
+  els.syncPullBtn.disabled = false;
+  els.syncPushBtn.disabled = false;
+
+  if (discoveredPwas.length === 1) {
+    // Only one PWA target, show text
+    els.syncStatusText.textContent = discoveredPwas[0].sourceName;
+    els.syncStatusText.style.display = "inline";
+    if (els.pwaTargetSelector) {
+      els.pwaTargetSelector.style.display = "none";
+    }
+  } else {
+    // Multiple PWA targets, show dropdown
+    els.syncStatusText.style.display = "none";
+    if (els.pwaTargetSelector) {
+      const selectHtml = discoveredPwas.map(p => {
+        let displayHost = "unknown";
+        try {
+          const urlObj = new URL(p.url);
+          displayHost = urlObj.host === "localhost" || urlObj.host === "127.0.0.1" ? `${urlObj.host}:${urlObj.port || '80'}` : urlObj.host;
+        } catch (err) {}
+        const selected = p.tabId === activePwaTabId ? "selected" : "";
+        return `<option value="${p.tabId}" ${selected}>${p.sourceName} (${displayHost})</option>`;
+      }).join("");
+      els.pwaTargetSelector.innerHTML = selectHtml;
+      els.pwaTargetSelector.style.display = "inline-block";
+    }
+  }
+
+  // Send heartbeat ping to active PWA tab
+  if (activePwaTabId) {
+    try {
+      chrome.scripting.executeScript({
+        target: { tabId: activePwaTabId },
+        args: [chrome.runtime.id],
+        func: (extId) => {
+          window.dispatchEvent(new CustomEvent("faloExtensionPing", {
+            detail: {
+              extensionId: extId,
+              clientName: "FALO Satellite Client"
+            }
+          }));
+        }
+      });
+    } catch (e) {
+      // Ignore if tab is closed or reloading
+    }
   }
 }
 
@@ -1244,6 +1337,14 @@ function initEventListeners() {
       await chrome.storage.local.set({ [STORAGE_KEYS.fontSize]: currentFontSize });
     }
   });
+  
+  // PWA Target selector dropdown change
+  if (els.pwaTargetSelector) {
+    els.pwaTargetSelector.addEventListener("change", (e) => {
+      activePwaTabId = parseInt(e.target.value, 10);
+      checkPwaTabStatus(); // Update and ping PWA immediately
+    });
+  }
   
   // Sync actions
   els.syncPullBtn.addEventListener("click", pullFromPwa);

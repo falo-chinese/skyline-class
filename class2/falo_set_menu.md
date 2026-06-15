@@ -15,7 +15,9 @@ flowchart LR
 
 ## 🍲 主菜：指令包裝與變數代入 (FALO Prompt Manager)
 * **功能**：調用 Prompt 平台內建的 `[標前需求預判 Checklist]` 範本，自動套入變數（如公司名稱、技術參數）。
-* **衛星外掛 (Chrome Extension)**：為了加速日常工作流，我們同時提供了 **FALO Prompt Manager 衛星外掛版 (Chrome Extension)**。該外掛直接承接地端主 Prompt 中心的資料庫（支援一鍵 Live Tab 雙向同步），常駐於瀏覽器側邊欄 (Side Panel)，當同仁開啟 ChatGPT, Gemini, Claude 等 AI 網站時，可在側邊欄填入變數後「一鍵自動填入」對話框，免去手動複製貼上，使指令套用更直覺。
+* **衛星外掛 (Chrome Extension)**：為了加速日常工作流，我們同時提供了 **FALO Prompt Manager 衛星外掛版 (Chrome Extension)**。該外掛直接承接地端主 Prompt 中心的資料庫，常駐於瀏覽器側邊欄 (Side Panel)，當同仁開啟 ChatGPT, Gemini, Claude 等 AI 網站時，可在側邊欄填入變數後「一鍵自動填入」對話框，免去手動複製貼上。
+  * **雙向身分握手連線**：外掛與地端 PWA 具備安全身分互認標籤，PWA 右上角會顯示「🛰️ 衛星外掛連線狀態」（綠燈表示已連線並顯示客戶端標記，外掛關閉超時 6 秒後自動亮灰燈離線），大幅提升安全與透明度。
+  * **多主控台切換 (1對多)**：外掛支援同時偵測多個開啟的真理中心分頁，並在頂部自動提供「下拉式選單」供一鍵選取要拉取/推送的目標中心。
 * **外掛與 NotebookLM 整合工作流示意**：
   ![FALO Prompt Manager 搭配 NotebookLM 填充示意圖](reference/falo-prompt-manager/docs/notebooklm_extension_flow.png)
 * **輸出**：拼裝成上下文完整、語意清晰、免去人工手動複製修改的「高精度 Prompt」，並直接注入 AI 平台對話框中。

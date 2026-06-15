@@ -41,8 +41,9 @@
       
       <!-- Sync Panel -->
       <div class="sync-panel">
-        <div class="sync-status">
+        <div class="sync-status" style="display: flex; align-items: center; gap: 4px; overflow: hidden; max-width: 170px;">
           <span class="status-indicator" id="syncIndicator"></span>
+          <select id="pwaTargetSelector" class="select-pwa" style="display: none;"></select>
           <span id="syncStatusText">偵測中...</span>
         </div>
         <div class="sync-actions">

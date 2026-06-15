@@ -1092,4 +1092,24 @@ body.mode-compact .prompt-card {
   border-radius: 2px;
 }
 
+/* PWA Target selector dropdown */
+.select-pwa {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 1px 4px;
+  color: var(--text-primary);
+  font-family: var(--font-family);
+  font-size: var(--base-fs-11);
+  font-weight: 600;
+  outline: none;
+  max-width: 140px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.select-pwa:hover {
+  border-color: var(--primary);
+}
+
 

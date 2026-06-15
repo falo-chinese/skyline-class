@@ -1031,6 +1031,50 @@
         flex-direction: column;
       }
     }
+
+    /* 衛星外掛狀態徽章樣式 */
+    .extension-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(120, 120, 120, 0.05);
+      border: 1px solid var(--border-color, rgba(120, 120, 120, 0.15));
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 11px;
+      color: #64748b;
+      cursor: default;
+      user-select: none;
+      transition: all 0.2s ease;
+      height: 34px;
+    }
+    
+    .extension-status-badge.connected {
+      background: rgba(16, 185, 129, 0.08);
+      border-color: rgba(16, 185, 129, 0.3);
+      color: #059669;
+    }
+    
+    .extension-status-badge .badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #64748b;
+      display: inline-block;
+      transition: all 0.2s ease;
+    }
+    
+    .extension-status-badge.connected .badge-dot {
+      background-color: #10b981;
+      box-shadow: 0 0 8px #10b981;
+      animation: pulse-green 1.5s infinite;
+    }
+    
+    @keyframes pulse-green {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+      70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
   </style>
 </head>
 <body data-theme="light">
@@ -1062,6 +1106,12 @@
             <option value="dark">風格選擇：Dark</option>
             <option value="warm">風格選擇：Warm</option>
           </select>
+          
+          <!-- 衛星外掛狀態徽章 -->
+          <div class="extension-status-badge" id="extStatusBadge" title="等待外掛偵測...">
+            <span class="badge-dot"></span>
+            <span class="badge-text">🛰️ 衛星外掛：未連線</span>
+          </div>
           
           <!-- 隱藏的檔案輸入框 -->
           <input class="file-input" id="fileInput" type="file" accept="application/json,.json">
@@ -3888,6 +3938,43 @@
     setupVoiceRecognition();
     setupPwa();
     render();
+
+    // 衛星外掛雙向身分偵測與握手機制
+    Object.defineProperty(window, "__FALO_PWA_METADATA__", {
+      get: () => ({
+        pwaInstanceId: "falo-pwa-uuid-class02",
+        sourceName: sourceName || "內建模型菜題庫",
+        version: "1.01",
+        url: window.location.href
+      }),
+      configurable: true,
+      enumerable: true
+    });
+
+    let extLastHeartbeat = 0;
+    
+    window.addEventListener("faloExtensionPing", (e) => {
+      extLastHeartbeat = Date.now();
+      const badge = document.getElementById("extStatusBadge");
+      if (badge) {
+        badge.classList.add("connected");
+        const clientName = e.detail && e.detail.clientName ? e.detail.clientName : "未知衛星";
+        badge.querySelector(".badge-text").textContent = `🛰️ 衛星外掛：已連線 (${clientName})`;
+        badge.title = `已連接外掛\nID: ${e.detail && e.detail.extensionId ? e.detail.extensionId : "未知"}\n最後活動: ${new Date().toLocaleTimeString()}`;
+      }
+    });
+
+    setInterval(() => {
+      if (extLastHeartbeat > 0 && Date.now() - extLastHeartbeat > 6000) {
+        extLastHeartbeat = 0;
+        const badge = document.getElementById("extStatusBadge");
+        if (badge) {
+          badge.classList.remove("connected");
+          badge.querySelector(".badge-text").textContent = "🛰️ 衛星外掛：未連線";
+          badge.title = "等待外掛偵測...";
+        }
+      }
+    }, 2000);
   </script>
 </body>
 </html>
