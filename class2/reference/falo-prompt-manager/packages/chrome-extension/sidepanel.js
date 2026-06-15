@@ -627,7 +627,6 @@ async function pushToPwa() {
 // -------------------------------------------------------------
 // 5. File Import & Export
 // -------------------------------------------------------------
-
 function exportCsv() {
   try {
     const csvContent = stringifyCSV(currentDb);
@@ -649,6 +648,27 @@ function exportCsv() {
   } catch (err) {
     showToast("匯出 CSV 失敗: " + err.message, "error");
   }
+}
+
+function mapHeader(key) {
+  const k = String(key || "").trim();
+  if (/分類ID|Category\s*ID/i.test(k)) return "categoryId";
+  if (/分類名稱|Category\s*(Title|Name)/i.test(k)) return "categoryTitle";
+  if (/分類說明|Category\s*Description/i.test(k)) return "categoryDescription";
+  if (/卡片ID|Card\s*ID|Prompt\s*ID/i.test(k)) return "cardId";
+  if (/卡片名稱|Card\s*(Title|Name)|Prompt\s*(Title|Name)/i.test(k)) return "cardTitle";
+  if (/卡片說明|Card\s*Description|Prompt\s*Description/i.test(k)) return "cardDescription";
+  if (/提示詞範本|提示詞|Prompt\s*Template|Prompt\s*Text/i.test(k)) return "promptText";
+  if (/標籤|Tags/i.test(k)) return "tags";
+  if (/狀態|Status/i.test(k)) return "status";
+  if (/預期輸出|Expected\s*Output/i.test(k)) return "expectedOutput";
+  if (/人工檢查點|檢查點|Review\s*Points|Human\s*Review\s*Points/i.test(k)) return "humanReviewPoints";
+  if (/目標AI|Target\s*AI/i.test(k)) return "targetAI";
+  if (/角色|Role/i.test(k)) return "role";
+  if (/課程|Course/i.test(k)) return "course";
+  if (/版本|Version/i.test(k)) return "version";
+  if (/來源|Source/i.test(k)) return "source";
+  return null;
 }
 
 function triggerImport() {
@@ -675,37 +695,18 @@ function handleFileImport(e) {
       }
       
       const headers = csvData[0];
+      const headerMap = {};
+      headers.forEach((h, index) => {
+        const mappedKey = mapHeader(h);
+        if (mappedKey) {
+          headerMap[mappedKey] = index;
+        }
+      });
       
-      // Try to find indices based on headers
-      const colIndices = {
-        catId: headers.indexOf("Category ID"),
-        catTitle: headers.indexOf("Category Title"),
-        cardId: headers.indexOf("Card ID"),
-        cardTitle: headers.indexOf("Card Title"),
-        desc: headers.indexOf("Description"),
-        promptText: headers.indexOf("Prompt Text"),
-        tags: headers.indexOf("Tags"),
-        status: headers.indexOf("Status"),
-        targetAI: headers.indexOf("Target AI"),
-        humanReviewPoints: headers.indexOf("Human Review Points"),
-        expectedOutput: headers.indexOf("Expected Output")
-      };
-      
-      // Fallback to fixed positions if headers don't match
-      const isHeaderValid = colIndices.catId !== -1 && colIndices.cardTitle !== -1 && colIndices.promptText !== -1;
-      const finalIndices = {
-        catId: isHeaderValid ? colIndices.catId : 0,
-        catTitle: isHeaderValid ? colIndices.catTitle : 1,
-        cardId: isHeaderValid ? colIndices.cardId : 2,
-        cardTitle: isHeaderValid ? colIndices.cardTitle : 3,
-        desc: isHeaderValid ? colIndices.desc : 4,
-        promptText: isHeaderValid ? colIndices.promptText : 5,
-        tags: isHeaderValid ? colIndices.tags : 6,
-        status: isHeaderValid ? colIndices.status : 7,
-        targetAI: isHeaderValid ? colIndices.targetAI : 8,
-        humanReviewPoints: isHeaderValid ? colIndices.humanReviewPoints : 9,
-        expectedOutput: isHeaderValid ? colIndices.expectedOutput : 10
-      };
+      // Basic validation: must have categoryId, cardTitle, promptText
+      if (headerMap.categoryId === undefined || headerMap.cardTitle === undefined || headerMap.promptText === undefined) {
+        throw new Error("CSV 欄位標頭格式不符，找不到必要的「分類ID」、「卡片名稱」或「提示詞範本」欄位");
+      }
       
       const categoriesMap = new Map();
       
@@ -716,40 +717,56 @@ function handleFileImport(e) {
         // Skip empty rows
         if (row.length === 0 || (row.length === 1 && row[0] === "")) continue;
         
-        const catId = row[finalIndices.catId] ? row[finalIndices.catId].trim() : "default-cat";
-        const catTitle = row[finalIndices.catTitle] ? row[finalIndices.catTitle].trim() : "預設分類";
+        const catId = row[headerMap.categoryId] ? row[headerMap.categoryId].trim() : "default-cat";
+        const catTitle = row[headerMap.categoryTitle] ? row[headerMap.categoryTitle].trim() : catId;
+        const catDesc = row[headerMap.categoryDescription] ? row[headerMap.categoryDescription].trim() : "";
         
         if (!categoriesMap.has(catId)) {
           categoriesMap.set(catId, {
             id: catId,
             title: catTitle,
+            description: catDesc,
             items: []
           });
         }
         
         const category = categoriesMap.get(catId);
         
-        const cardTitle = row[finalIndices.cardTitle] ? row[finalIndices.cardTitle].trim() : "";
-        const promptText = row[finalIndices.promptText] || "";
+        const cardTitle = row[headerMap.cardTitle] ? row[headerMap.cardTitle].trim() : "";
+        const promptText = row[headerMap.promptText] || "";
         
         // Skip rows without title or prompt
         if (!cardTitle && !promptText) continue;
         
-        const cardId = row[finalIndices.cardId] ? row[finalIndices.cardId].trim() : "card-" + Date.now() + "-" + Math.random().toString(36).substr(2, 5);
-        const tags = row[finalIndices.tags] ? row[finalIndices.tags].split(",").map(t => t.trim()).filter(t => t !== "") : [];
-        const humanReviewPoints = row[finalIndices.humanReviewPoints] ? row[finalIndices.humanReviewPoints].split("\n").map(l => l.trim()).filter(l => l !== "") : [];
+        const cardId = row[headerMap.cardId] ? row[headerMap.cardId].trim() : "card-" + Date.now() + "-" + Math.random().toString(36).substr(2, 5);
+        
+        const tagsRaw = row[headerMap.tags];
+        let tags = [];
+        if (tagsRaw) {
+          tags = String(tagsRaw).split(/[,，\n]/).map(t => t.trim()).filter(Boolean);
+        }
+        
+        const humanReviewPointsRaw = row[headerMap.humanReviewPoints];
+        let humanReviewPoints = [];
+        if (humanReviewPointsRaw) {
+          humanReviewPoints = String(humanReviewPointsRaw).split(/[\n;；，,]/).map(p => p.trim()).filter(Boolean);
+        }
         
         const card = {
           id: cardId,
           title: cardTitle || "未命名卡片",
-          description: row[finalIndices.desc] || "",
+          description: row[headerMap.cardDescription] || "",
           promptText: promptText,
           tags: tags,
-          status: row[finalIndices.status] || "stable",
+          status: row[headerMap.status] || "stable",
           variables: parseVariables(promptText),
-          targetAI: row[finalIndices.targetAI] || "",
+          targetAI: row[headerMap.targetAI] || "",
           humanReviewPoints: humanReviewPoints,
-          expectedOutput: row[finalIndices.expectedOutput] || ""
+          expectedOutput: row[headerMap.expectedOutput] || "",
+          role: row[headerMap.role] || "",
+          course: row[headerMap.course] || "",
+          version: row[headerMap.version] || "",
+          source: row[headerMap.source] || ""
         };
         
         category.items.push(card);
@@ -823,20 +840,25 @@ function parseCSV(text) {
   return result;
 }
 
-// Re-stringify DB schema to CSV format
+// Re-stringify DB schema to CSV format (matching Master PWA's column headers exactly)
 function stringifyCSV(db) {
   const headers = [
-    "Category ID",
-    "Category Title",
-    "Card ID",
-    "Card Title",
-    "Description",
-    "Prompt Text",
-    "Tags",
-    "Status",
-    "Target AI",
-    "Human Review Points",
-    "Expected Output"
+    "分類ID",
+    "分類名稱",
+    "分類說明",
+    "卡片ID",
+    "卡片名稱",
+    "卡片說明",
+    "提示詞範本",
+    "標籤",
+    "狀態",
+    "預期輸出",
+    "人工檢查點",
+    "目標AI",
+    "角色",
+    "課程",
+    "版本",
+    "來源"
   ];
   
   const rows = [headers];
@@ -844,24 +866,30 @@ function stringifyCSV(db) {
   db.forEach(cat => {
     const catId = cat.id || "";
     const catTitle = cat.title || "";
+    const catDesc = cat.description || "";
     
     if (cat.items && Array.isArray(cat.items)) {
       cat.items.forEach(card => {
-        const tagsStr = (card.tags || []).join(",");
+        const tagsStr = (card.tags || []).join(", ");
         const reviewPointsStr = (card.humanReviewPoints || []).join("\n");
         
         rows.push([
           catId,
           catTitle,
+          catDesc,
           card.id || "",
           card.title || "",
           card.description || "",
           card.promptText || "",
           tagsStr,
-          card.status || "",
-          card.targetAI || "",
+          card.status || "stable",
+          card.expectedOutput || "",
           reviewPointsStr,
-          card.expectedOutput || ""
+          card.targetAI || "",
+          card.role || "",
+          card.course || "",
+          card.version || "",
+          card.source || ""
         ]);
       });
     }
