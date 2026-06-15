@@ -25,6 +25,10 @@ FALO Prompt Manager 備份版本重點說明
    - 精簡模式下保留全部動作與編輯功能，但從卡片檢視與編輯器網格中隱藏狀態、說明、標籤、預期輸出、人工檢查點、目標 AI、版本等行政與次要欄位，提供乾淨、專注於複製 Prompt 的極簡檢視。
 2. 兩端版本號同步升級至 v2.2：
    - PWA 主網頁、Web App 資訊宣告、以及 Chrome 衛星外掛側邊欄版本顯示統一升級為 v2.2，發布日期為 2026/6/15。
+3. 頂部動作控制列雙排排版與外掛下載：
+   - 頂部 actions 區域拆分為兩排 (topbar-row)，在第一排放置資料匯出匯入與狀態徽章，第二排放置設定、模式切換與外掛下載。
+   - 新增 Chrome 衛星外掛資源包 (falo_prompt_satellite_v2.2.zip) 的下載按鈕，並設計為適配 Light/Dark 模式的天空藍視覺風格。
+   - 優化 Service Worker 的快取策略，針對 .zip 結尾檔案排除快取，確保資源包可直接網路下載。
 """
 
 # Write temporary changelog file inside the PWA source directory to package it
