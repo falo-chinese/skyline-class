@@ -11,9 +11,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
 function fillInputText(text) {
   const selectors = [
+    'textarea.query-box-input', // NotebookLM main chat input
     '#prompt-textarea', // ChatGPT
     'div[contenteditable="true"][role="textbox"]', // Claude, Gemini, ChatGPT alternative
     'div[contenteditable="true"]',
+    'textarea:not(.query-box-textarea)', // Exclude NotebookLM source search textarea
     'textarea',
     'input[type="text"]'
   ];
