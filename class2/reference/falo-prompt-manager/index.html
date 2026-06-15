@@ -3111,7 +3111,15 @@
       editingPromptId = "";
       promptDraft = null;
       els.searchInput.value = "";
-      saveState();
+      
+      if (input && typeof input === "object" && input.variables) {
+        savedVariables = { ...DEFAULT_VARIABLES, ...input.variables };
+        variables = { ...savedVariables };
+        saveState({ variables: true });
+      } else {
+        saveState();
+      }
+      
       render();
     }
 
