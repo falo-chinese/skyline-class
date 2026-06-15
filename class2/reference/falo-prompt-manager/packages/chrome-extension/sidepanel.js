@@ -634,8 +634,14 @@ function exportCsv() {
     const blob = new Blob(["\uFEFF" + csvContent], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     
-    const stamp = new Date().toISOString().slice(0, 10).replace(/-/g, "");
-    const filename = `falo_prompt_export_${stamp}.csv`;
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const date = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const stamp = `${year}${month}${date}_${hours}${minutes}`;
+    const filename = `falo_prompt_export_extension_${stamp}.csv`;
     
     const a = document.createElement("a");
     a.href = url;
