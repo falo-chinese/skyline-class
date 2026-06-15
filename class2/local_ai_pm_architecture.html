@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Windows 地端 AI PM 人機協同架構 - Skyline Class02</title>
+  <link rel="stylesheet" href="docs/style.css">
+  <style>
+    .version-switch {
+      position: absolute;
+      top: 2rem;
+      right: 4rem;
+      background: rgba(99, 102, 241, 0.2);
+      border: 1px solid var(--color-primary-light);
+      padding: 0.5rem 1rem;
+      border-radius: 99px;
+      color: var(--color-primary-light);
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    .version-switch:hover {
+      background: var(--color-primary);
+      color: white;
+      text-decoration: none;
+      box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+    }
+    .concept-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 1.75rem;
+      margin-bottom: 2rem;
+    }
+    .concept-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 側邊欄導覽 -->
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      Skyline Class <span>class2</span>
+    </div>
+    
+    <div class="sidebar-menu-title">引導總覽</div>
+    <ul class="sidebar-menu">
+      <li><a href="README.html" class="sidebar-link">🚀 專案啟動說明</a></li>
+      <li><a href="workbench/index.html" class="sidebar-link">🧭 教材工作台</a></li>
+      <li><a href="falo_set_menu.html" class="sidebar-link">🍱 FALO 模型菜組合包範例</a></li>
+    </ul>
+
+    <div class="sidebar-menu-title">核心教材</div>
+    <ul class="sidebar-menu">
+      <li><a href="docs/01_course_map.html" class="sidebar-link">🗺️ 01 課程地圖</a></li>
+      <li><a href="docs/02_tender_workflow.html" class="sidebar-link">⚙️ 02 投標工作流</a></li>
+      <li><a href="docs/03_multi_ai_collaboration.html" class="sidebar-link">👥 03 Multi-AI 協作</a></li>
+      <li><a href="docs/04_artifact_management.html" class="sidebar-link">🛡️ 04 Artifact 管理</a></li>
+    </ul>
+
+    <div class="sidebar-menu-title">輔助工具</div>
+    <ul class="sidebar-menu">
+      <li><a href="memo.html" class="sidebar-link">📝 未來規劃備忘錄</a></li>
+      <li><a href="reference/class02-antigravity/index.html" class="sidebar-link">📚 歷史版本參考</a></li>
+    </ul>
+
+    <div class="sidebar-menu-title">架構共識</div>
+    <ul class="sidebar-menu">
+      <li><a href="local_ai_pm_architecture.html" class="sidebar-link active">🖥️ 地端 AI PM 人機架構</a></li>
+    </ul>
+
+    <div class="sidebar-menu-title">相關專案</div>
+    <ul class="sidebar-menu">
+      <li><a href="https://falo-taiwan.github.io/video-analysis-optimization/" target="_blank" class="sidebar-link">🎥 影音分析與優化專案</a></li>
+    </ul>
+  </nav>
+
+  <!-- 主內容區 -->
+  <main class="main-content">
+    <a href="local_ai_pm_architecture.md" class="version-switch">📄 檢視 Markdown 版本</a>
+    
+    <div class="card">
+      <h1>🖥️ Windows 地端 AI PM 平台人機協同設計架構</h1>
+      <p style="color: var(--color-secondary); font-weight: 600;">LAN & AI Scheduled Analyst Architecture</p>
+      <p style="margin-top: 1rem;">本頁面記錄了團隊針對 <strong>地端 Windows AI 節點</strong> 配合 <strong>人機協同 (Human-AI Co-pilot)</strong> 以及 <strong>AI 定期分析員 (Scheduled Analyst)</strong> 的架構設計共識。</p>
+    </div>
+
+    <!-- 1. 節點部署 -->
+    <div class="concept-card">
+      <div class="concept-title" style="color: #60a5fa;">📌 1. 地端 Windows AI 節點部署 (Local Windows Node)</div>
+      <p>為適應企業內部網路環境，系統採用輕量化、零外部依賴的本地部署架構：</p>
+      <ul style="margin-top: 1rem; padding-left: 1.25rem;">
+        <li style="margin-bottom: 0.5rem;">
+          <strong>核心引擎 (Backend)</strong>：採用 Python (FastAPI) 運行於 Windows 本地環境，提供高併發、非同步的 API 服務，支援本機高負載請求。
+        </li>
+        <li style="margin-bottom: 0.5rem;">
+          <strong>共享資料庫 (Local Database)</strong>：採用 <strong>SQLite</strong> 檔案型資料庫。所有員工提問、標案進度與分析日誌皆儲存於本地 <code>.db</code> 檔，極易進行日常備份與移轉。
+        </li>
+        <li style="margin-bottom: 0.5rem;">
+          <strong>分公司穿透安全 (Ngrok Tunneling)</strong>：
+          <ul>
+            <li>總公司同仁：直接透過內部 LAN IP 進行訪問。</li>
+            <li>分公司同仁：透過開啟具備 <strong>Basic Auth 認證</strong> 的 <code>ngrok</code> 安全隧道連入，確保外網資料存取安全。</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <!-- 2. 人機分流 -->
+    <div class="concept-card">
+      <div class="concept-title" style="color: #a78bfa;">🔄 2. 人＋AI 雙軌協作分流 (Human-AI Role Isolation)</div>
+      <p>系統針對不同角色提供專屬的操作維度，防止核心知識庫污染（RAG Pollution）：</p>
+      <ul style="margin-top: 1rem; padding-left: 1.25rem;">
+        <li style="margin-bottom: 0.5rem;">
+          <strong>員工端 (General Staff - 平台化 UI)</strong>：
+          透過簡易的網頁介面使用標準模板（如：RFP 快速物料清洗、制式報表生成）。對於知識庫僅有「受限讀取權限」，且無法直接寫入地端真理中心 (SSOT)。每一次操作均寫入本地 SQLite 稽核日誌。
+        </li>
+        <li style="margin-bottom: 0.5rem;">
+          <strong>主管端 (Supervisor / Trusted - 決策者主控台)</strong>：
+          擁有 Pro-Grade Agent 的完整控制權（直接規劃、代碼執行、沙盒操作）。可對 Staging 協作暫存區進行深度修改。確認無誤後，透過 <strong>「一鍵收割 (Sync & Commit)」</strong> 機制將黃金知識同步至地端真理中心 (SSOT)，供全體員工與平台調用。
+        </li>
+      </ul>
+    </div>
+
+    <!-- 3. AI 定期分析員 -->
+    <div class="concept-card">
+      <div class="concept-title" style="color: #34d399;">📋 3. AI 定期分析員與 Checklist 排程機制 (AI Scheduled Analyst)</div>
+      <p>AI 不僅是待命的問答機器人，更是主動介入專案的「虛擬同仁」：</p>
+      <ul style="margin-top: 1rem; padding-left: 1.25rem;">
+        <li style="margin-bottom: 0.75rem;">
+          <strong>任務 Checklist 設計 (Modular Checklist)</strong>：
+          AI 的分析工作被拆解為獨立的 Check 項目，主管可於網頁介面自由開關特定任務，無須變更底層代碼：
+          <ul style="margin-top: 0.25rem;">
+            <li>🛡️ <strong>敏感資料去識別化監控 (Data Privacy Check)</strong>：監控 Staging 新檔並進行去敏感化警報。</li>
+            <li>📊 <strong>Token 成本與效能稽核 (FinOps & Token Check)</strong>：每日統計分析 API 費用與低效 Prompt 調用。</li>
+            <li>🔄 <strong>SSOT 污染防範比對 (RAG Conflict Check)</strong>：對抗大腦污染，比對草案與 SSOT 衝突。</li>
+            <li>📜 <strong>人員證照與 SLA 合規掃描 (Compliance Check)</strong>：比對 RFP 人員資格硬性要求與人才庫。</li>
+            <li>📝 <strong>每日專案進度匯總報告 (Daily Report Check)</strong>：主動撰寫每日進度一頁紙摘要。</li>
+          </ul>
+        </li>
+        <li style="margin-bottom: 0.5rem;">
+          <strong>自由設定排程 (Flexible Scheduler)</strong>：
+          後端整合 <code>APScheduler</code> 排程引擎，主管可為每個啟用中的 Checklist 項目單獨設定執行排程（例如：每小時掃描一次資安、每日 18:30 自動彙整進度）。並支持 <strong>「手動即時觸發」</strong> 按鈕強行插隊執行特定稽核。
+        </li>
+      </ul>
+    </div>
+
+    <!-- 4. Token 帳本 -->
+    <div class="concept-card">
+      <div class="concept-title" style="color: #fb7185;">📊 4. Token 帳本與 FinOps 成本控制 (Token & FinOps Ledger)</div>
+      <p>系統精細記錄每一次 AI 調用，做為 AI 分析員進行效能審計的基礎：</p>
+      <ul style="margin-top: 1rem; padding-left: 1.25rem;">
+        <li style="margin-bottom: 0.5rem;">
+          <strong>記錄指標</strong>：每次調用之使用者 ID、調用 AgentID、使用的 Model、Input/Output Token 數、快取節省 Token (Cache Savings) 以及實質 API 成本。
+        </li>
+        <li style="margin-bottom: 0.5rem;">
+          <strong>AI 效能審計</strong>：AI 分析員定期掃描此帳本，若發現低效 Prompt 或異常消耗（如死循環），主動發送警報並給出優化建議（如：「此任務建議移至地端 Nano 執行以省下 85% 成本」）。
+        </li>
+      </ul>
+    </div>
+
+  </main>
+</body>
+</html>

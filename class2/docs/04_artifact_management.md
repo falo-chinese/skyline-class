@@ -12,7 +12,7 @@ RAG 知識檢索系統的黃金鐵律是 **「高品質數據進，高品質答�
 * **痛點**：員工在日常工作中會產出大量未經核對的草稿、臨時對話紀錄或錯誤格式的檔案。如果這些資料直接被大腦吸收，AI 後續的回答就會越來越混亂，甚至產生幻覺。
 * **解決方案 (雙軌隔離)**：
   * **雲端協作沙盒 (Staging)**：員工與 AI 特助日常拼裝、協作、撰寫草稿的臨時工作區。此處數據被物理隔離，大腦**不進行檢索**，不怕弄亂核心庫。
-  * **地端真理中心 (SSOT - Single Source of Truth)**：公司的核心黃金資產庫（如主管的地端 File Server）。鎖定核心資產，對外唯讀，AI 大腦檢索的唯一真理來源。
+  * **地端真理中心 (SSOT - Single Source of Truth)**：公司的核心黃金資產庫（如主管的地端 File Server）。在實務案例中，SSOT 的載體為 **G總 (Julie)** 提供的 [專案執行經驗與改善對策庫 (pm_experience_responses_raw.csv - 已用 AI 去識別化)](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/pm_experience_responses_raw.csv)。鎖定核心資產，對外唯讀，AI 大腦檢索的唯一真理來源。
 
 ---
 

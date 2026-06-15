@@ -1,6 +1,6 @@
 # 🍱 FALO 模型菜組合包範例：企業智能投標工作流
 
-為幫助學員與企業主管（如辜總、陳董）直觀理解，我們將前述所有獨立模組（ETL、Prompt、RAG、PM）串接，形成一套完整的 **「FALO 模型菜組合包 (Set Meal)」** 實戰範例：
+為幫助學員與企業主管（如G總、C董）直觀理解，我們將前述所有獨立模組（ETL、Prompt、RAG、PM）串接，形成一套完整的 **「FALO 模型菜組合包 (Set Meal)」** 實戰範例：
 
 ```mermaid
 flowchart LR

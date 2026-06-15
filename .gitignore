@@ -1,2 +1,6 @@
 backup/
 .DS_Store
+
+# Production data with real names and Google Sheets links (sensitive, not uploaded to GitHub)
+class2/production_data/
+class2/production_data.zip

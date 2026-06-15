@@ -75,6 +75,12 @@
       <li><a href="../reference/class02-antigravity/index.html" class="sidebar-link">📚 歷史版本參考</a></li>
     </ul>
 
+    <div class="sidebar-menu-title">架構共識</div>
+    <ul class="sidebar-menu">
+      <li><a href="../local_ai_pm_architecture.html" class="sidebar-link">🖥️ 地端 AI PM 人機架構</a></li>
+      <li><a href="../notebooklm_master_guide.html" class="sidebar-link">📘 NotebookLM 企業導讀</a></li>
+    </ul>
+
     <div class="sidebar-menu-title">相關專案</div>
     <ul class="sidebar-menu">
       <li><a href="https://falo-taiwan.github.io/video-analysis-optimization/" target="_blank" class="sidebar-link">🎥 影音分析與優化專案</a></li>
@@ -94,14 +100,22 @@
     <!-- 1. 資料管制與審查防線 -->
     <div class="defense-card">
       <div class="defense-title" style="color: #67e8f9;">🔒 第一道防線：資料管制與審查防線 (Data Control & NotebookLM Audit)</div>
-      <p>為了滿足企業在實際營運中對「敏感資料權限隔離與查詢稽核」的日常要求，我們以 <strong>AI NotebookLM</strong> 的存取機制為核心主軸：</p>
+      <p>為了滿足企業在實際營運中對「敏感資料權限隔離與查詢稽核」的日常要求，我們以 <strong>AI NotebookLM</strong> 的存取機制為核心主軸，並以 <strong>G總 (Julie)</strong> 提供的 <a href="../pm_experience_responses_raw.csv" target="_blank" style="color: #fb7185; text-decoration: underline; font-weight: 600;">專案執行經驗與改善對策庫 (pm_experience_responses_raw.csv - 已用 AI 去識別化)</a> 作為具體的「地端真理中心 (SSOT)」資料流範例：</p>
       <ul style="margin-top: 1rem;">
         <li style="margin-bottom: 0.5rem;">
           <strong>實務落地：NotebookLM 分流與知識庫限定 (Access Control)</strong>：
           針對一般員工的查詢，系統透過中介網關限制其僅能閱讀「已獲得授權的特定知識庫/書庫」（例如：歷史得標案例庫），無法越權讀取高度敏感的財務原件。同時，後端自動保留完整的查詢與對話稽核日誌 (Audit Logs)，以備日後安全審查。這已能 100% 滿足此專案與多數企業的實際落地情境。
         </li>
         <li style="margin-bottom: 0.5rem;">
-          <strong>高階拓展：地端安全沙盒與 Built-in AI (未來合作 Reference)</strong>：
+          <strong>架構心法：ai-notebooklm 專注共用與紀錄</strong>：
+          在系統設計上遵循「關注點分離」，<code>ai-notebooklm</code> 本質上只做輕量的<strong>「資料共用網關與安全日誌記錄器」</strong>。複雜度極低，從而保障了日常高頻提問時的絕對穩定，讓專業工具專注於核心價值。
+        </li>
+        <li style="margin-bottom: 0.5rem;">
+          <strong>進階配套：獨立的 NotebookLM 管理程式 (如有需要)</strong>：
+          當企業有客製化需求時（如自動化檔案同步、Google 帳號池輪詢調度、定時更新排程），可額外搭配獨立的<strong>「NotebookLM 管理器」</strong>在後台靜默運行。網關與管理解耦，升級維護時亦不影響同仁端的前台查詢服務。
+        </li>
+        <li style="margin-bottom: 0.5rem;">
+          <strong>未來拓展：地端安全沙盒與 Built-in AI (未來合作 Reference)</strong>：
           作為未來的策略擴展與實力展現，我們預留了地端本機沙盒的防禦通道。對於極敏感數據（如財務報表或去重清洗），可先在 100% 斷網的本機沙盒（使用 Chrome Built-in AI / Gemini Nano）進行前置去敏感化 ETL，隨後才與雲端大模型進行安全拼裝。這可作為未來高端安全合作的技術藍圖。
         </li>
       </ul>
