@@ -23,6 +23,8 @@ flowchart LR
   ![FALO Prompt Manager 中心與衛星連動示意](reference/falo-prompt-manager/docs/falo_extension_mockup.png)
 * **外掛與 NotebookLM 整合工作流示意**：
   ![FALO Prompt Manager 搭配 NotebookLM 填充示意圖](reference/falo-prompt-manager/docs/notebooklm_extension_flow.png)
+* **v2.2 功能操作與同步示範錄影**：
+  [falo_prompt_manager_demo.mp4](reference/falo-prompt-manager/docs/falo_prompt_manager_demo.mp4)
 * **輸出**：拼裝成上下文完整、語意清晰、免去人工手動複製修改的「高精度 Prompt」，並直接注入 AI 平台對話框中。
 
 ## 🍛 湯品：智慧分流與安全檢索 (AI_NotebookLM 網關)
@@ -32,3 +34,10 @@ flowchart LR
 ## 🍨 甜點：日誌合規與進度管控 (AI PM 系統)
 * **功能**：網關在執行問答時，自動透過 GAS 將對話內容與 FinOps Token 費用記錄在 Google Sheet 資料庫中，並由 AI PM 自動更新專案追蹤進度與交付成果稽核。
 * **輸出**：產出透明、合規的專案進度與成本控管日誌。
+
+## ☕ 附餐：AI 財會與稅務自動化專案 (AI Financial POC)
+* **功能**：展示 AI 如何自動處理企業大表（試算表）勾稽與營所稅調整，以及使用多模態 AI 自動掃描紙本薪資印領清冊並進行稽核防呆與扣繳申報。
+* **源起與靈感**：本專案起源於對「財務底稿與報稅自動化」及「紙本薪資條識別」的日常工作痛點討論：
+  ![自動化財務申報之日常對話痛點](reference/falo-prompt-manager/docs/falo_finance_motivation.jpg)
+  ![紙本清冊掃描與扣繳申報之靈感](reference/falo-prompt-manager/docs/falo_finance_release.jpg)
+* **專案連結**：詳細說明與一鍵模擬測試請見 **[AI 財會與稅務自動化專案](https://falo-taiwan.github.io/ai-finance-demo1/)**。
