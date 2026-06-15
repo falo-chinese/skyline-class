@@ -3,18 +3,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
 
 :root {
-  --bg-dark: #090d16;
-  --bg-surface: #121826;
-  --bg-panel: #1a2333;
-  --border-color: rgba(255, 255, 255, 0.08);
-  --border-glow: rgba(45, 212, 191, 0.15);
+  /* Default variables (Theme Light) */
+  --bg-dark: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-panel: #f1f5f9;
+  --border-color: rgba(0, 0, 0, 0.08);
+  --border-glow: rgba(14, 165, 233, 0.12);
   
-  --primary: #2dd4bf;      /* Neon Cyan */
-  --primary-hover: #14b8a6;
-  --primary-glow: rgba(45, 212, 191, 0.4);
+  --primary: #0ea5e9;      /* Sky Blue */
+  --primary-hover: #0284c7;
+  --primary-glow: rgba(14, 165, 233, 0.3);
   
   --secondary: #6366f1;    /* Violet */
-  --secondary-glow: rgba(99, 102, 241, 0.3);
+  --secondary-glow: rgba(99, 102, 241, 0.2);
   
   --danger: #f43f5e;       /* Rose */
   --danger-hover: #e11d48;
@@ -22,12 +23,116 @@
   --success-glow: rgba(16, 185, 129, 0.3);
   --warning: #f59e0b;      /* Amber */
   
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
   --text-muted: #64748b;
+  
+  --btn-primary-text: #ffffff;
+  --preview-bg: #f1f5f9;
+  --preview-color: #4f46e5;
   
   --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   --font-family: 'Outfit', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Theme: Light (Elegant Light) */
+body.theme-light {
+  --bg-dark: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-panel: #f1f5f9;
+  --border-color: rgba(0, 0, 0, 0.08);
+  --border-glow: rgba(14, 165, 233, 0.12);
+  --primary: #0ea5e9;
+  --primary-hover: #0284c7;
+  --primary-glow: rgba(14, 165, 233, 0.3);
+  --secondary: #6366f1;
+  --secondary-glow: rgba(99, 102, 241, 0.2);
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  --btn-primary-text: #ffffff;
+  --preview-bg: #f1f5f9;
+  --preview-color: #4f46e5;
+}
+
+/* Theme: Dark (Obsidian Dark) */
+body.theme-dark {
+  --bg-dark: #090d16;
+  --bg-surface: #121826;
+  --bg-panel: #1a2333;
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-glow: rgba(45, 212, 191, 0.15);
+  --primary: #2dd4bf;      /* Neon Cyan */
+  --primary-hover: #14b8a6;
+  --primary-glow: rgba(45, 212, 191, 0.4);
+  --secondary: #6366f1;
+  --secondary-glow: rgba(99, 102, 241, 0.3);
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --btn-primary-text: #090d16;
+  --preview-bg: #0d121c;
+  --preview-color: #a5b4fc;
+}
+
+/* Theme: Pink (Sakura Pink) */
+body.theme-pink {
+  --bg-dark: #fff5f7;
+  --bg-surface: #ffffff;
+  --bg-panel: #ffe4e6;
+  --border-color: rgba(244, 63, 94, 0.12);
+  --border-glow: rgba(244, 63, 94, 0.15);
+  --primary: #f43f5e;      /* Cherry Blossom Pink */
+  --primary-hover: #e11d48;
+  --primary-glow: rgba(244, 63, 94, 0.3);
+  --secondary: #ec4899;    /* Pink */
+  --secondary-glow: rgba(236, 72, 153, 0.2);
+  --text-primary: #4c0519;
+  --text-secondary: #881337;
+  --text-muted: #db2777;
+  --btn-primary-text: #ffffff;
+  --preview-bg: #fff1f2;
+  --preview-color: #be185d;
+}
+
+/* Theme: Warm (Amber Gold) */
+body.theme-warm {
+  --bg-dark: #fdfaf2;
+  --bg-surface: #ffffff;
+  --bg-panel: #fef3c7;
+  --border-color: rgba(217, 119, 6, 0.12);
+  --border-glow: rgba(245, 158, 11, 0.15);
+  --primary: #d97706;      /* Cozy Amber */
+  --primary-hover: #b45309;
+  --primary-glow: rgba(217, 119, 6, 0.3);
+  --secondary: #b45309;
+  --secondary-glow: rgba(180, 83, 9, 0.2);
+  --text-primary: #451a03;
+  --text-secondary: #78350f;
+  --text-muted: #d97706;
+  --btn-primary-text: #ffffff;
+  --preview-bg: #fffbeb;
+  --preview-color: #b45309;
+}
+
+/* Theme: Cyberpunk (Neon Cyber) */
+body.theme-cyber {
+  --bg-dark: #0f051d;
+  --bg-surface: #190a32;
+  --bg-panel: #2b1154;
+  --border-color: rgba(139, 92, 246, 0.2);
+  --border-glow: rgba(236, 72, 153, 0.3);
+  --primary: #d946ef;      /* Neon Magenta */
+  --primary-hover: #c026d3;
+  --primary-glow: rgba(217, 70, 239, 0.4);
+  --secondary: #8b5cf6;    /* Cyber Purple */
+  --secondary-glow: rgba(139, 92, 246, 0.4);
+  --text-primary: #fdf4ff;
+  --text-secondary: #e879f9;
+  --text-muted: #a78bfa;
+  --btn-primary-text: #0f051d;
+  --preview-bg: #140727;
+  --preview-color: #f472b6;
 }
 
 * {
@@ -96,7 +201,7 @@ body {
 
 /* Sync status block */
 .sync-panel {
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(120, 120, 120, 0.05);
   border: 1px solid var(--border-color);
   border-radius: 6px;
   padding: 6px 10px;
@@ -148,6 +253,8 @@ body {
   justify-content: center;
   transition: var(--transition);
   outline: none;
+  padding: 6px 12px;
+  font-size: 12px;
 }
 
 .btn-xs {
@@ -162,7 +269,7 @@ body {
 
 .btn-outline {
   background: transparent;
-  border-color: rgba(255, 255, 255, 0.15);
+  border-color: var(--border-color);
   color: var(--text-secondary);
 }
 
@@ -187,7 +294,7 @@ body {
 
 .btn-primary {
   background-color: var(--primary);
-  color: #090d16;
+  color: var(--btn-primary-text);
   font-weight: 600;
 }
 
@@ -304,7 +411,7 @@ body {
 .main-content {
   flex: 1;
   overflow-y: auto;
-  padding: 16px;
+  padding: 8px;
 }
 
 .main-content::-webkit-scrollbar {
@@ -324,7 +431,7 @@ body {
 .accordion {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 6px;
 }
 
 .acc-group {
@@ -340,7 +447,7 @@ body {
 }
 
 .acc-header {
-  padding: 12px 14px;
+  padding: 6px 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -398,22 +505,22 @@ body {
 }
 
 .acc-group.open .acc-body {
-  max-height: 2000px; /* Big enough value */
+  max-height: 15000px; /* Highly expanded limit to prevent clipping long content */
 }
 
 .cards-list {
-  padding: 12px;
+  padding: 6px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 6px;
 }
 
 /* Prompt Card */
 .prompt-card {
   background: var(--bg-panel);
   border: 1px solid var(--border-color);
-  border-radius: 6px;
-  padding: 10px;
+  border-radius: 4px;
+  padding: 6px 8px;
   cursor: pointer;
   transition: var(--transition);
   position: relative;
@@ -429,7 +536,7 @@ body {
   justify-content: space-between;
   align-items: flex-start;
   gap: 8px;
-  margin-bottom: 6px;
+  margin-bottom: 3px;
 }
 
 .card-title {
@@ -454,10 +561,10 @@ body {
 .card-status.review { color: var(--secondary); background: rgba(99, 102, 241, 0.1); }
 
 .card-desc {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-secondary);
   line-height: 1.4;
-  margin-bottom: 6px;
+  margin-bottom: 3px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -483,7 +590,7 @@ body {
 .prompt-card.expanded {
   cursor: default;
   border-color: var(--primary);
-  background: #141b2a;
+  background: var(--bg-surface);
   box-shadow: 0 0 15px var(--border-glow);
 }
 
@@ -494,12 +601,12 @@ body {
 }
 
 .card-details-box {
-  margin-top: 10px;
-  padding-top: 10px;
+  margin-top: 6px;
+  padding-top: 6px;
   border-top: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
 }
 
 .detail-section-title {
@@ -524,29 +631,29 @@ body {
 .prompt-template-preview {
   font-family: monospace;
   font-size: 11px;
-  background: #0d121c;
-  padding: 8px;
+  background: var(--preview-bg, #0d121c);
+  padding: 6px;
   border-radius: 4px;
-  color: #a5b4fc;
+  color: var(--preview-color, #a5b4fc);
   white-space: pre-wrap;
   word-break: break-all;
-  max-height: 120px;
+  max-height: 80px;
   overflow-y: auto;
-  border: 1px solid rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
 }
 
 /* Variables Form Panel */
 .variables-panel {
-  background: rgba(0, 0, 0, 0.3);
-  padding: 8px;
-  border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  background: rgba(120, 120, 120, 0.08);
+  padding: 6px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
 }
 
 .variables-list {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
 }
 
 .var-input-group {
@@ -565,8 +672,8 @@ body {
   background: var(--bg-dark);
   border: 1px solid var(--border-color);
   color: var(--text-primary);
-  padding: 4px 8px;
-  font-size: 12px;
+  padding: 3px 6px;
+  font-size: 11px;
   border-radius: 4px;
   outline: none;
   font-family: var(--font-family);
@@ -581,12 +688,14 @@ body {
 /* Card actions toolbar */
 .card-actions {
   display: flex;
-  gap: 6px;
-  margin-top: 8px;
+  gap: 4px;
+  margin-top: 6px;
 }
 
 .card-actions .btn {
   flex: 1;
+  font-size: 11px;
+  padding: 5px 10px;
 }
 
 .card-edit-row {
@@ -628,7 +737,7 @@ body {
   border-radius: 50%;
   background: var(--primary);
   border: none;
-  color: #090d16;
+  color: var(--btn-primary-text);
   font-size: 24px;
   font-weight: 500;
   cursor: pointer;
@@ -811,3 +920,90 @@ body {
   border-color: var(--danger);
   box-shadow: 0 4px 15px rgba(244, 63, 94, 0.2);
 }
+
+/* Mode Switcher & Segmented Control */
+.segmented-control {
+  display: flex;
+  background: rgba(120, 120, 120, 0.1);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 2px;
+  gap: 2px;
+}
+
+.mode-btn {
+  font-family: var(--font-family);
+  font-size: 11px;
+  font-weight: 600;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  padding: 4px 12px;
+  border-radius: 18px;
+  cursor: pointer;
+  transition: var(--transition);
+  outline: none;
+}
+
+.mode-btn:hover {
+  color: var(--text-primary);
+}
+
+.mode-btn.active {
+  background: var(--primary);
+  color: #090d16;
+  box-shadow: 0 0 8px var(--primary-glow);
+}
+
+/* Theme Switcher Dots */
+.theme-switcher {
+  display: flex;
+  gap: 8px;
+}
+
+.theme-dot {
+  width: 18px; /* Larger dots for easy selection */
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid var(--bg-surface);
+  cursor: pointer;
+  padding: 0;
+  transition: var(--transition);
+  outline: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.theme-dot:hover {
+  transform: scale(1.2);
+}
+
+.theme-dot.active {
+  box-shadow: 0 0 8px var(--primary);
+  border-color: var(--text-primary);
+  transform: scale(1.15);
+}
+
+/* Theme dots background colors */
+.dot-dark { background-color: #2dd4bf; }
+.dot-light { background-color: #0ea5e9; }
+.dot-pink { background-color: #ec4899; }
+.dot-warm { background-color: #d97706; }
+.dot-cyber { background-color: #d946ef; }
+
+/* Compact Mode Styles: Hide administrative and secondary fields */
+body.mode-compact .sync-panel,
+body.mode-compact .file-actions,
+body.mode-compact .db-meta,
+body.mode-compact .fab-container,
+body.mode-compact .card-status,
+body.mode-compact .card-desc,        /* Hide description in compact mode */
+body.mode-compact .card-tags,        /* Hide tags in compact mode */
+body.mode-compact .card-edit-row {
+  display: none !important;
+}
+
+/* Adjust card spacing and layout in compact mode */
+body.mode-compact .prompt-card {
+  padding: 6px 8px;
+}
+

@@ -4,7 +4,8 @@
 const STORAGE_KEYS = {
   database: "falo_prompt_manager_database_v03",
   variables: "falo_prompt_manager_variables_v03",
-  theme: "falo_prompt_manager_theme_v03"
+  theme: "falo_prompt_manager_theme_v03",
+  mode: "falo_prompt_manager_ui_mode_v03"
 };
 
 // Global State
@@ -13,6 +14,9 @@ let cachedVariables = {};
 let activeTagFilter = null;
 let currentSearchQuery = "";
 let expandedCardId = null;
+let currentMode = "compact"; // Default is compact mode
+let currentTheme = "light";  // Default is light theme
+const openCategoryIds = new Set(); // Stores manually toggled category IDs
 
 // Target PWA URL patterns for Live Sync
 const PWA_PATTERNS = [
@@ -72,7 +76,20 @@ document.addEventListener("DOMContentLoaded", async () => {
 // Load state from chrome.storage.local
 async function loadState() {
   try {
-    const data = await chrome.storage.local.get([STORAGE_KEYS.database, STORAGE_KEYS.variables]);
+    const data = await chrome.storage.local.get([
+      STORAGE_KEYS.database, 
+      STORAGE_KEYS.variables,
+      STORAGE_KEYS.mode,
+      STORAGE_KEYS.theme
+    ]);
+    
+    // Load UI Mode (Default: compact)
+    currentMode = data[STORAGE_KEYS.mode] || "compact";
+    updateModeClass();
+    
+    // Load Theme (Default: light)
+    currentTheme = data[STORAGE_KEYS.theme] || "light";
+    updateThemeClass();
     
     if (data[STORAGE_KEYS.database] && Array.isArray(data[STORAGE_KEYS.database])) {
       currentDb = data[STORAGE_KEYS.database];
@@ -88,6 +105,34 @@ async function loadState() {
   } catch (err) {
     showToast("讀取資料失敗: " + err.message, "error");
   }
+}
+
+function updateModeClass() {
+  document.body.classList.remove("mode-compact", "mode-full");
+  document.body.classList.add(`mode-${currentMode}`);
+  
+  const buttons = document.querySelectorAll("#uiModeSelector .mode-btn");
+  buttons.forEach(btn => {
+    if (btn.getAttribute("data-mode") === currentMode) {
+      btn.classList.add("active");
+    } else {
+      btn.classList.remove("active");
+    }
+  });
+}
+
+function updateThemeClass() {
+  document.body.classList.remove("theme-light", "theme-dark", "theme-pink", "theme-warm", "theme-cyber");
+  document.body.classList.add(`theme-${currentTheme}`);
+  
+  const dots = document.querySelectorAll("#themeSwitcher .theme-dot");
+  dots.forEach(dot => {
+    if (dot.getAttribute("data-theme") === currentTheme) {
+      dot.classList.add("active");
+    } else {
+      dot.classList.remove("active");
+    }
+  });
 }
 
 // Save state to chrome.storage.local
@@ -202,8 +247,14 @@ function renderAccordion() {
 
     const catGroup = document.createElement("div");
     catGroup.className = "acc-group";
-    // Keep category open by default if searching or filtering
-    if (query !== "" || activeTagFilter) {
+    
+    // Smart default: open the first category on initial load
+    if (openCategoryIds.size === 0 && currentDb.length > 0) {
+      openCategoryIds.add(currentDb[0].id);
+    }
+    
+    // Keep category open if manually toggled open OR if search/filter is active
+    if (query !== "" || activeTagFilter || openCategoryIds.has(cat.id)) {
       catGroup.classList.add("open");
     }
 
@@ -257,41 +308,55 @@ function renderAccordion() {
           `;
         }
 
-        // Expected Output
-        const expOutputHtml = card.expectedOutput ? `
-          <div class="card-details-box">
-            <div class="detail-section-title">預期 AI 輸出</div>
-            <div class="expected-output">${card.expectedOutput}</div>
-          </div>
-        ` : "";
+        if (currentMode === "full") {
+          // Expected Output
+          const expOutputHtml = card.expectedOutput ? `
+            <div class="card-details-box">
+              <div class="detail-section-title">預期 AI 輸出</div>
+              <div class="expected-output">${card.expectedOutput}</div>
+            </div>
+          ` : "";
 
-        // Human Review Points
-        const reviewPointsHtml = (card.humanReviewPoints && card.humanReviewPoints.length > 0) ? `
-          <div class="card-details-box">
-            <div class="detail-section-title">🕵️‍♂️ 人工核對重點</div>
-            <ul style="padding-left: 14px; font-size: 11px; color: var(--text-secondary);">
-              ${card.humanReviewPoints.map(p => `<li>${p}</li>`).join("")}
-            </ul>
-          </div>
-        ` : "";
+          // Human Review Points
+          const reviewPointsHtml = (card.humanReviewPoints && card.humanReviewPoints.length > 0) ? `
+            <div class="card-details-box">
+              <div class="detail-section-title">🕵️‍♂️ 人工核對重點</div>
+              <ul style="padding-left: 14px; font-size: 11px; color: var(--text-secondary);">
+                ${card.humanReviewPoints.map(p => `<li>${p}</li>`).join("")}
+              </ul>
+            </div>
+          ` : "";
 
-        detailsHtml = `
-          <div class="card-details-box">
-            <div class="detail-section-title">指令範本本文</div>
-            <div class="prompt-template-preview">${escapeHtml(card.promptText)}</div>
-          </div>
-          ${variablesForm}
-          ${expOutputHtml}
-          ${reviewPointsHtml}
-          <div class="card-actions">
-            <button class="btn btn-outline btn-copy" data-card-id="${card.id}">📋 複製</button>
-            <button class="btn btn-primary btn-fill" data-card-id="${card.id}">⚡ 填入對話框</button>
-          </div>
-          <div class="card-edit-row">
-            <button class="text-btn btn-edit" data-card-id="${card.id}">編輯卡片</button>
-            <button class="text-btn text-btn-danger btn-delete" data-card-id="${card.id}">刪除</button>
-          </div>
-        `;
+          detailsHtml = `
+            <div class="card-details-box">
+              <div class="detail-section-title">指令範本本文</div>
+              <div class="prompt-template-preview">${escapeHtml(card.promptText)}</div>
+            </div>
+            ${variablesForm}
+            ${expOutputHtml}
+            ${reviewPointsHtml}
+            <div class="card-actions">
+              <button class="btn btn-outline btn-copy" data-card-id="${card.id}">📋 複製</button>
+              <button class="btn btn-primary btn-fill" data-card-id="${card.id}">⚡ 填入對話框</button>
+            </div>
+            <div class="card-edit-row">
+              <button class="text-btn btn-edit" data-card-id="${card.id}">編輯卡片</button>
+              <button class="text-btn text-btn-danger btn-delete" data-card-id="${card.id}">刪除</button>
+            </div>
+          `;
+        } else {
+          // Compact Mode: prompt text preview, variables, and actions
+          detailsHtml = `
+            <div class="card-details-box" style="margin-top: 4px; padding-top: 4px; border-top: none;">
+              <div class="prompt-template-preview">${escapeHtml(card.promptText)}</div>
+            </div>
+            ${variablesForm}
+            <div class="card-actions">
+              <button class="btn btn-outline btn-copy" data-card-id="${card.id}">📋 複製</button>
+              <button class="btn btn-primary btn-fill" data-card-id="${card.id}">⚡ 填入對話框</button>
+            </div>
+          `;
+        }
       }
 
       cardEl.innerHTML = `
@@ -306,17 +371,31 @@ function renderAccordion() {
 
       // Event listeners inside card
       cardEl.addEventListener("click", (e) => {
-        // Prevent expansion if clicking inputs/buttons inside expanded panel
-        if (e.target.closest("input") || e.target.closest("button") || e.target.closest("select") || e.target.closest(".variables-panel")) {
+        // Prevent collapse/expansion if clicking inputs, buttons, or anywhere inside the expanded details area
+        if (e.target.closest("input") || 
+            e.target.closest("button") || 
+            e.target.closest("select") || 
+            e.target.closest(".variables-panel") || 
+            e.target.closest(".card-details-box") || 
+            e.target.closest(".card-actions") || 
+            e.target.closest(".card-edit-row")) {
           return;
         }
         
         if (expandedCardId === card.id) {
           expandedCardId = null;
+          renderAccordion();
         } else {
           expandedCardId = card.id;
+          renderAccordion();
+          // Scroll the newly rendered card into view
+          setTimeout(() => {
+            const newCardEl = document.querySelector(`.prompt-card[data-card-id="${card.id}"]`);
+            if (newCardEl) {
+              newCardEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
+            }
+          }, 100);
         }
-        renderAccordion();
       });
 
       // Expanded sub-actions
@@ -343,17 +422,18 @@ function renderAccordion() {
           fillIntoTab(compiled);
         });
 
-        // Edit button
-        cardEl.querySelector(".btn-edit").addEventListener("click", () => {
-          openEditModal(card.id);
-        });
+        // Edit & Delete button listeners only in full mode
+        if (currentMode === "full") {
+          cardEl.querySelector(".btn-edit").addEventListener("click", () => {
+            openEditModal(card.id);
+          });
 
-        // Delete button
-        cardEl.querySelector(".btn-delete").addEventListener("click", () => {
-          if (confirm(`確定要刪除「${card.title}」提示詞卡片嗎？`)) {
-            deleteCard(card.id);
-          }
-        });
+          cardEl.querySelector(".btn-delete").addEventListener("click", () => {
+            if (confirm(`確定要刪除「${card.title}」提示詞卡片嗎？`)) {
+              deleteCard(card.id);
+            }
+          });
+        }
       }
 
       cardsList.appendChild(cardEl);
@@ -365,7 +445,13 @@ function renderAccordion() {
     
     // Toggle accordion group collapse
     catHeader.addEventListener("click", () => {
-      catGroup.classList.toggle("open");
+      if (openCategoryIds.has(cat.id)) {
+        openCategoryIds.delete(cat.id);
+        catGroup.classList.remove("open");
+      } else {
+        openCategoryIds.add(cat.id);
+        catGroup.classList.add("open");
+      }
     });
 
     els.categoryAccordion.appendChild(catGroup);
@@ -542,22 +628,27 @@ async function pushToPwa() {
 // 5. File Import & Export
 // -------------------------------------------------------------
 
-function exportJson() {
-  const dataStr = JSON.stringify(currentDb, null, 2);
-  const blob = new Blob([dataStr], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-  
-  const stamp = new Date().toISOString().slice(0, 10).replace(/-/g, "");
-  const filename = `falo_prompt_export_${stamp}.json`;
-  
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-  showToast("已成功匯出 JSON 備份");
+function exportCsv() {
+  try {
+    const csvContent = stringifyCSV(currentDb);
+    // Use BOM \uFEFF to support Excel viewing Chinese correctly
+    const blob = new Blob(["\uFEFF" + csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    
+    const stamp = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+    const filename = `falo_prompt_export_${stamp}.csv`;
+    
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast("已成功匯出 CSV 備份");
+  } catch (err) {
+    showToast("匯出 CSV 失敗: " + err.message, "error");
+  }
 }
 
 function triggerImport() {
@@ -571,28 +662,215 @@ function handleFileImport(e) {
   const reader = new FileReader();
   reader.onload = async (event) => {
     try {
-      const imported = JSON.parse(event.target.result);
+      const text = event.target.result;
+      const csvData = parseCSV(text);
       
-      // Basic validation
-      let dataToLoad = null;
-      if (Array.isArray(imported)) {
-        dataToLoad = imported;
-      } else if (imported && Array.isArray(imported.database)) {
-        dataToLoad = imported.database; // Handles full backups
-      } else {
-        throw new Error("匯入格式必須為 Category 陣列或備份 JSON");
+      if (csvData.length < 2) {
+        throw new Error("CSV 檔案內容不足或無資料列");
       }
       
-      currentDb = dataToLoad;
+      const headers = csvData[0];
+      
+      // Try to find indices based on headers
+      const colIndices = {
+        catId: headers.indexOf("Category ID"),
+        catTitle: headers.indexOf("Category Title"),
+        cardId: headers.indexOf("Card ID"),
+        cardTitle: headers.indexOf("Card Title"),
+        desc: headers.indexOf("Description"),
+        promptText: headers.indexOf("Prompt Text"),
+        tags: headers.indexOf("Tags"),
+        status: headers.indexOf("Status"),
+        targetAI: headers.indexOf("Target AI"),
+        humanReviewPoints: headers.indexOf("Human Review Points"),
+        expectedOutput: headers.indexOf("Expected Output")
+      };
+      
+      // Fallback to fixed positions if headers don't match
+      const isHeaderValid = colIndices.catId !== -1 && colIndices.cardTitle !== -1 && colIndices.promptText !== -1;
+      const finalIndices = {
+        catId: isHeaderValid ? colIndices.catId : 0,
+        catTitle: isHeaderValid ? colIndices.catTitle : 1,
+        cardId: isHeaderValid ? colIndices.cardId : 2,
+        cardTitle: isHeaderValid ? colIndices.cardTitle : 3,
+        desc: isHeaderValid ? colIndices.desc : 4,
+        promptText: isHeaderValid ? colIndices.promptText : 5,
+        tags: isHeaderValid ? colIndices.tags : 6,
+        status: isHeaderValid ? colIndices.status : 7,
+        targetAI: isHeaderValid ? colIndices.targetAI : 8,
+        humanReviewPoints: isHeaderValid ? colIndices.humanReviewPoints : 9,
+        expectedOutput: isHeaderValid ? colIndices.expectedOutput : 10
+      };
+      
+      const categoriesMap = new Map();
+      
+      // Start loop from line index 1 (skip headers)
+      for (let i = 1; i < csvData.length; i++) {
+        const row = csvData[i];
+        
+        // Skip empty rows
+        if (row.length === 0 || (row.length === 1 && row[0] === "")) continue;
+        
+        const catId = row[finalIndices.catId] ? row[finalIndices.catId].trim() : "default-cat";
+        const catTitle = row[finalIndices.catTitle] ? row[finalIndices.catTitle].trim() : "預設分類";
+        
+        if (!categoriesMap.has(catId)) {
+          categoriesMap.set(catId, {
+            id: catId,
+            title: catTitle,
+            items: []
+          });
+        }
+        
+        const category = categoriesMap.get(catId);
+        
+        const cardTitle = row[finalIndices.cardTitle] ? row[finalIndices.cardTitle].trim() : "";
+        const promptText = row[finalIndices.promptText] || "";
+        
+        // Skip rows without title or prompt
+        if (!cardTitle && !promptText) continue;
+        
+        const cardId = row[finalIndices.cardId] ? row[finalIndices.cardId].trim() : "card-" + Date.now() + "-" + Math.random().toString(36).substr(2, 5);
+        const tags = row[finalIndices.tags] ? row[finalIndices.tags].split(",").map(t => t.trim()).filter(t => t !== "") : [];
+        const humanReviewPoints = row[finalIndices.humanReviewPoints] ? row[finalIndices.humanReviewPoints].split("\n").map(l => l.trim()).filter(l => l !== "") : [];
+        
+        const card = {
+          id: cardId,
+          title: cardTitle || "未命名卡片",
+          description: row[finalIndices.desc] || "",
+          promptText: promptText,
+          tags: tags,
+          status: row[finalIndices.status] || "stable",
+          variables: parseVariables(promptText),
+          targetAI: row[finalIndices.targetAI] || "",
+          humanReviewPoints: humanReviewPoints,
+          expectedOutput: row[finalIndices.expectedOutput] || ""
+        };
+        
+        category.items.push(card);
+      }
+      
+      if (categoriesMap.size === 0) {
+        throw new Error("未從 CSV 解析出任何有效的提示詞資料");
+      }
+      
+      currentDb = Array.from(categoriesMap.values());
       await saveState();
-      els.dbSourceText.textContent = "匯入自檔案";
+      els.dbSourceText.textContent = "匯入自 CSV 檔案";
       renderUI();
-      showToast("📥 匯入成功！");
+      showToast("📥 CSV 資料匯入成功！");
     } catch (err) {
-      showToast("匯入失敗: " + err.message, "error");
+      showToast("匯入解析失敗: " + err.message, "error");
     }
   };
   reader.readAsText(file);
+}
+
+// RFC 4180 compliant CSV Parser
+function parseCSV(text) {
+  const result = [];
+  let row = [];
+  let cell = '';
+  let inQuotes = false;
+  
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i];
+    const nextChar = text[i + 1];
+    
+    if (inQuotes) {
+      if (char === '"') {
+        if (nextChar === '"') {
+          cell += '"';
+          i++; // Skip escaped quote
+        } else {
+          inQuotes = false; // Quote closed
+        }
+      } else {
+        cell += char;
+      }
+    } else {
+      if (char === '"') {
+        inQuotes = true;
+      } else if (char === ',') {
+        row.push(cell);
+        cell = '';
+      } else if (char === '\r' || char === '\n') {
+        row.push(cell);
+        cell = '';
+        if (row.length > 0 && (row.length > 1 || row[0] !== "")) {
+          result.push(row);
+        }
+        row = [];
+        if (char === '\r' && nextChar === '\n') {
+          i++; // Skip LF if CRLF
+        }
+      } else {
+        cell += char;
+      }
+    }
+  }
+  
+  if (cell !== '' || row.length > 0) {
+    row.push(cell);
+    result.push(row);
+  }
+  
+  return result;
+}
+
+// Re-stringify DB schema to CSV format
+function stringifyCSV(db) {
+  const headers = [
+    "Category ID",
+    "Category Title",
+    "Card ID",
+    "Card Title",
+    "Description",
+    "Prompt Text",
+    "Tags",
+    "Status",
+    "Target AI",
+    "Human Review Points",
+    "Expected Output"
+  ];
+  
+  const rows = [headers];
+  
+  db.forEach(cat => {
+    const catId = cat.id || "";
+    const catTitle = cat.title || "";
+    
+    if (cat.items && Array.isArray(cat.items)) {
+      cat.items.forEach(card => {
+        const tagsStr = (card.tags || []).join(",");
+        const reviewPointsStr = (card.humanReviewPoints || []).join("\n");
+        
+        rows.push([
+          catId,
+          catTitle,
+          card.id || "",
+          card.title || "",
+          card.description || "",
+          card.promptText || "",
+          tagsStr,
+          card.status || "",
+          card.targetAI || "",
+          reviewPointsStr,
+          card.expectedOutput || ""
+        ]);
+      });
+    }
+  });
+  
+  return rows.map(row => 
+    row.map(cell => {
+      const val = String(cell);
+      if (val.includes(',') || val.includes('\n') || val.includes('\r') || val.includes('"')) {
+        return '"' + val.replace(/"/g, '""') + '"';
+      }
+      return val;
+    }).join(',')
+  ).join('\r\n');
 }
 
 // -------------------------------------------------------------
@@ -829,13 +1107,37 @@ function initEventListeners() {
     renderUI();
   });
   
+  // Mode switcher segmented buttons
+  const modeButtons = document.querySelectorAll("#uiModeSelector .mode-btn");
+  modeButtons.forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const mode = btn.getAttribute("data-mode");
+      currentMode = mode;
+      updateModeClass();
+      await chrome.storage.local.set({ [STORAGE_KEYS.mode]: currentMode });
+      renderUI();
+    });
+  });
+  
+  // Theme switcher dots
+  const themeDots = document.querySelectorAll("#themeSwitcher .theme-dot");
+  themeDots.forEach(dot => {
+    dot.addEventListener("click", async () => {
+      const theme = dot.getAttribute("data-theme");
+      currentTheme = theme;
+      updateThemeClass();
+      await chrome.storage.local.set({ [STORAGE_KEYS.theme]: currentTheme });
+      renderUI();
+    });
+  });
+  
   // Sync actions
   els.syncPullBtn.addEventListener("click", pullFromPwa);
   els.syncPushBtn.addEventListener("click", pushToPwa);
   
   // File actions
   els.importBtn.addEventListener("click", triggerImport);
-  els.exportBtn.addEventListener("click", exportJson);
+  els.exportBtn.addEventListener("click", exportCsv);
   els.resetBtn.addEventListener("click", () => {
     if (confirm("您確定要將資料重置為內建教材庫嗎？這將覆蓋現有外掛內的變更！")) {
       resetToDefaultDatabase();

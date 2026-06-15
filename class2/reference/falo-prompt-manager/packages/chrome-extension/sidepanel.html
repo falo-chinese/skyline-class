@@ -16,6 +16,21 @@
           <h1>FALO Prompt</h1>
           <span class="sub">衛星控制台 <span id="appVersion">v1.0</span></span>
         </div>
+        <div class="header-controls" style="margin-left: auto; display: flex; flex-direction: column; align-items: flex-end; gap: 6px;">
+          <!-- Mode Switcher -->
+          <div class="segmented-control" id="uiModeSelector">
+            <button class="mode-btn active" data-mode="compact" title="精簡模式：專注複製與自動填入">精簡</button>
+            <button class="mode-btn" data-mode="full" title="完整模式：支援同步、匯出與編輯">完整</button>
+          </div>
+          <!-- Theme Switcher Dots -->
+          <div class="theme-switcher" id="themeSwitcher">
+            <button class="theme-dot dot-light active" data-theme="light" title="淺色模式 (Light)"></button>
+            <button class="theme-dot dot-dark" data-theme="dark" title="深色模式 (Obsidian)"></button>
+            <button class="theme-dot dot-pink" data-theme="pink" title="粉色模式 (Cherry Blossom)"></button>
+            <button class="theme-dot dot-warm" data-theme="warm" title="暖色模式 (Cozy Amber)"></button>
+            <button class="theme-dot dot-cyber" data-theme="cyber" title="賽博模式 (Cyberpunk)"></button>
+          </div>
+        </div>
       </div>
       
       <!-- Sync Panel -->
@@ -36,10 +51,10 @@
 
       <!-- File Actions -->
       <div class="file-actions">
-        <button id="importBtn" class="btn btn-xs btn-outline" title="匯入備份 JSON">匯入 JSON</button>
-        <button id="exportBtn" class="btn btn-xs btn-outline" title="匯出當前 JSON">匯出 JSON</button>
-        <button id="resetBtn" class="btn btn-xs btn-danger" title="重設為預設教材題庫">重設</button>
-        <input type="file" id="fileInput" accept=".json" style="display: none;">
+        <button id="importBtn" class="btn btn-xs btn-outline" title="匯入備份 CSV">匯入 CSV</button>
+        <button id="exportBtn" class="btn btn-xs btn-outline" title="匯出當前 CSV">匯出 CSV</button>
+        <button id="resetBtn" class="btn btn-xs btn-danger" title="還原為預設教材題庫">還原預設值</button>
+        <input type="file" id="fileInput" accept=".csv" style="display: none;">
       </div>
     </header>
 
