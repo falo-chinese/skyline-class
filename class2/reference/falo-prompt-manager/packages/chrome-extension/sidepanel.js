@@ -659,6 +659,11 @@ function handleFileImport(e) {
   const file = e.target.files[0];
   if (!file) return;
   
+  if (!confirm("匯入 CSV 將會「完全覆蓋」您現有的所有分類與提示詞卡片，此操作無法復原。確定要繼續嗎？")) {
+    e.target.value = ""; // Clear file input
+    return;
+  }
+  
   const reader = new FileReader();
   reader.onload = async (event) => {
     try {
