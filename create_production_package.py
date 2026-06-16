@@ -86,13 +86,13 @@ shared_brains_zip_dst = os.path.join(dest_root, "notebooklm_shared_brains.zip")
 if os.path.exists(shared_brains_zip_src):
     shutil.copy(shared_brains_zip_src, shared_brains_zip_dst)
 
-# Copy class3 recursively
-class3_src = os.path.join(source_root, "class3")
-class3_dst = os.path.join(dest_root, "class3")
-if os.path.exists(class3_dst):
-    shutil.rmtree(class3_dst)
-if os.path.exists(class3_src):
-    shutil.copytree(class3_src, class3_dst)
+# Copy practical recursively
+practical_src = os.path.join(source_root, "practical")
+practical_dst = os.path.join(dest_root, "practical")
+if os.path.exists(practical_dst):
+    shutil.rmtree(practical_dst)
+if os.path.exists(practical_src):
+    shutil.copytree(practical_src, practical_dst)
 
 # Revert placeholders to production data
 for root, dirs, filenames in os.walk(dest_root):

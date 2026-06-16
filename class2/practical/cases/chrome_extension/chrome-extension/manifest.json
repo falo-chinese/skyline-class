@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "銀河 ERP 填單助手",
   "version": "1.0.0",
-  "description": "Class03 教學示範：最簡單的 Chrome 填單外掛 (V1 幫人操作)",
+  "description": "SkyLine class2 教學示範：最簡單的 Chrome 填單外掛 (V1 幫人操作)",
   "_watermark": "Falo x Force Cheng 2026/6/6",
   "icons": {
     "16": "icon.png",
