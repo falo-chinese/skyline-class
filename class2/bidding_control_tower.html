@@ -594,7 +594,6 @@
   </main>
 
   <script>
-    let currentMode = 'manual';
     let currentWorkflowState = 0; // 0: Intake, 1: Audited & Approved, 2: Harvested
     let slaApproved = false;
     let promptLevel = 'advanced'; // 'simple' vs 'advanced'
@@ -667,8 +666,7 @@
 
     function logPMEvent(eventText) {
       const pmAlertConsole = document.getElementById('pm-alert-console');
-      pmAlertConsole.innerText = eventText + '
-' + pmAlertConsole.innerText;
+      pmAlertConsole.innerText = eventText + '\n' + pmAlertConsole.innerText;
       pmAlertConsole.scrollTop = 0;
     }
 
@@ -763,9 +761,9 @@
       if (currentMode === 'manual') {
         navigator.clipboard.writeText(activePrompt).then(() => {
           alert('一鍵收割 Sync Prompt 已複製到剪貼簿！請貼到對話分頁中執行。');
-          consoleLog.innerText += '
+          consoleLog.innerText += `
 
-[MANUAL] 複製了「一鍵收割與寫回 SSOT」的 Prompt。';
+[MANUAL] 複製了「一鍵收割與寫回 SSOT」的 Prompt。`;
           currentWorkflowState = 2;
           updateAIPMAdvisor();
           consoleLog.scrollTop = consoleLog.scrollHeight;
