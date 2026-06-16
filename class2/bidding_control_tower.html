@@ -882,7 +882,7 @@
       navigator.clipboard.writeText(promptText).then(() => {
         alert('步驟 Prompt 已成功複製到剪貼簿！');
         const consoleLog = document.getElementById('supervisor-console');
-        consoleLog.innerText += `\n\n[INFO] 複製了第 \${currentStepIndex + 1} 步的 Prompts。`;
+        consoleLog.innerText += `\n\n[INFO] 複製了第 ${currentStepIndex + 1} 步的 Prompts。`;
         consoleLog.scrollTop = consoleLog.scrollHeight;
       });
     }
@@ -893,12 +893,12 @@
       
       if (currentMode === 'manual') {
         navigator.clipboard.writeText(step.prompt).then(() => {
-          alert(`手動 Prompt 已複製到剪貼簿！請手動貼到外部 AI 分頁中執行。\n\nCLI 指令：\${step.cli}`);
-          consoleLog.innerText += `\n\n[MANUAL] 主管複製了第 \${currentStepIndex+1} 步的 Prompt。可手動執行指令：\${step.cli}`;
+          alert(`手動 Prompt 已複製到剪貼簿！請手動貼到外部 AI 分頁中執行。\n\nCLI 指令：${step.cli}`);
+          consoleLog.innerText += `\n\n[MANUAL] 主管複製了第 ${currentStepIndex+1} 步的 Prompt。可手動執行指令：${step.cli}`;
           consoleLog.scrollTop = consoleLog.scrollHeight;
         });
       } else {
-        consoleLog.innerText = `[SYSTEM] 開始執行第 \${currentStepIndex+1} 步地端 API 模擬跑測...\n`;
+        consoleLog.innerText = `[SYSTEM] 開始執行第 ${currentStepIndex+1} 步地端 API 模擬跑測...\n`;
         const logs = step.log.split('\n');
         let delay = 0;
         logs.forEach(line => {
@@ -960,8 +960,7 @@
           consoleLog.innerText += '\n\n[INFO] 主管複製了「技術特工整合跑測 Prompt」。';
         });
       } else {
-        consoleLog.innerText = '[SYSTEM] 啟動 API 一條龍全自動整合跑測 (1~4步連鎖運行)...
-';
+        consoleLog.innerText = '[SYSTEM] 啟動 API 一條龍全自動整合跑測 (1~4步連鎖運行)...\n';
         let delay = 300;
         
         setTimeout(() => {
@@ -1017,8 +1016,7 @@
           consoleLog.innerText += '\n\n[INFO] 主管複製了「一鍵收割與寫回 SSOT Prompt」。';
         });
       } else {
-        consoleLog.innerText = '[SYSTEM] 觸發一鍵收割與 Sync & Commit 流程...
-';
+        consoleLog.innerText = '[SYSTEM] 觸發一鍵收割與 Sync & Commit 流程...\n';
         setTimeout(() => {
           consoleLog.innerText += '[INFO] 正在將 Staging 區的台南玩具展總包投標書草稿寫入地端 SQLite (ssot_historical_tenders.db)...\n';
         }, 300);
