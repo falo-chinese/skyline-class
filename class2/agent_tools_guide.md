@@ -19,6 +19,8 @@
 > [!TIP]
 > **📂 本章實作學員下載包 (Part 1 Start Pack)**：
 > 學員可在開始實作前，下載並解壓縮 **[part1.zip (原始標案資源與參考範本)](part1/part1.zip)**，將解壓後的 `原始標案資源/` 與 `參考範例/` 資料夾放置於您的專案工作目錄下，即可模擬真實地端環境進行 Prompt 操作。
+> 
+> *您也可以直接下載 **[class2_workspace.zip (Class 2 完整實作資源包)](class2_workspace.zip)**，包含所有原始資源、範本及預建的 `標案工作暫存區` 成果，一包即可適用於全部步驟的實作。*
 
 * **輸入與目錄設定**：
   - 來源資料夾：`原始標案資源`
@@ -132,6 +134,12 @@
 
 比對全新玩具展 RFP 與 Excel 試算表資料庫中的歷史資歷，抓出硬性廢標條款與協力廠 SLA 缺口。
 
+> [!TIP]
+> **📂 本章實作學員下載包 (Part 2 Start Pack)**：
+> 學員可下載並解壓縮 **[part2.zip (Step 1 完工狀態 Staging 目錄)](part2/part2.zip)**，直接獲取包含 Step 1 清洗與 Excel 資料庫建置完成後的 Staging 狀態工作目錄，即可直接進行第二步實作。
+> 
+> *您也可以直接下載 **[class2_workspace.zip (Class 2 完整實作資源包)](class2_workspace.zip)**，包含原始資源、範本與預建暫存資料庫，一包即可暢通所有實作步驟。*
+
 * **輸入檔案**：`標案工作暫存區/2026_招標需求_台南玩具展_RFP.txt`、Excel 試算表資料庫 `標案工作暫存區/標案工作記錄表.xlsx`。
 
 ### 2.1 廢標條款自動提取 (Clause Extraction)
@@ -143,6 +151,11 @@
   ```text
   你現在是合規條款審查特工。請閱讀「標案工作暫存區/2026_招標需求_台南玩具展_RFP.txt」，自動提取所有關於「專案經理持證資格」、「協力商實績金額門檻」、「運維故障響應時間 (SLA)」等顯性與隱性的硬性廢標條款，並將其整理為檢核點。
   ```
+* **📄 獨立 HTML 稽核報告 Prompt (加選)**：
+  ```text
+  你現在是系統稽核特工。針對剛剛的「廢標條款自動提取」動作，請將新標案 RFP 中提取出的「專案經理持證資格」、「協力商實績金額門檻」、「運維故障響應時間 (SLA)」等合規要求，自動生成一份 HTML 檢核表「clause_checklist.html」。表格應包含「合規稽核項目」、「RFP 硬性規定說明」、「對應權責單位」與「是否為關鍵廢標紅線」，以利投標小組作為後續審查之基準。
+  ```
+  *CLI 執行指令*：`python3 scripts/generate_clause_checklist_report.py --rfp 標案工作暫存區/2026_招標需求_台南玩具展_RFP.txt`
 
 ### 2.2 志明證照過期稽核 (PM Certificate Audit)
 * **✍️ 簡單規則版 Prompt**：
@@ -153,6 +166,11 @@
   ```text
   你現在是證照管理稽核特工。請查詢 Excel 標案工作記錄表.xlsx 中的 「欄位萃取 metadata」工作表，核對當前擬定的專案經理志明的 PMP 證書有效期限。若到期日早於投標日（2026年6月），判定為不合規（RED_DISQUALIFY），並主動在證照庫中尋找是否有符合資格的備用人員。
   ```
+* **📄 獨立 HTML 稽核報告 Prompt (加選)**：
+  ```text
+  你現在是系統稽核特工。針對剛剛的「專案經理證照合規性稽核」動作，請對比 Excel 標案工作記錄表.xlsx 中志明的證照到期狀態。請自動生成一份 HTML 稽核報告「pm_audit_report.html」，以醒目樣式展示「擬任 PM 姓名」、「證照到期日」、「投標日前是否有效」、「合規判定（RED_DISQUALIFY）」以及「備降調撥人員姓名與其證照狀態」，並以警示色彩標記不合規狀態，供決策主管快速核閱。
+  ```
+  *CLI 執行指令*：`python3 scripts/generate_pm_audit_report.py --db 標案工作暫存區/標案工作記錄表.xlsx`
 
 ### 2.3 SLA 技術對帳比對 (SLA Alignment Audit)
 * **✍️ 簡單規則版 Prompt**：
@@ -163,6 +181,11 @@
   ```text
   你現在是運維規格對帳特工。請核對 Excel 標案工作記錄表.xlsx 中名音燈光商的 SLA 響應時間。比對是否滿足 RFP 中「2小時現場抵達響應」的硬性規定。若名音燈光僅承諾 4h，標記為 YELLOW_WARNING 合規差距，並提示需要主管決策上調預算或變更協力商。
   ```
+* **📄 獨立 HTML 稽核報告 Prompt (加選)**：
+  ```text
+  你現在是系統稽核特工。針對剛剛的「運維 SLA 技術對帳」動作，請比對 RFP 要求的「2小時內抵達響應」與名音燈光商承諾之「4小時內抵達響應」。請自動生成一份 HTML 差距分析報告「sla_gap_report.html」，以對比表呈現「項目」、「RFP 規格要求」、「名音燈光商承諾值」、「差距 (Gap)」、「合規判定 (YELLOW_WARNING)」，並提供備註欄說明可能需要之溢價成本或調整建議，以便投標小組評估。
+  ```
+  *CLI 執行指令*：`python3 scripts/generate_sla_gap_report.py --db 標案工作暫存區/標案工作記錄表.xlsx`
 
 ---
 
@@ -181,6 +204,11 @@
   ```text
   你現在是物料成本調校特工。請查詢地端 Excel 標案工作記錄表.xlsx 中的南部物料最新費率，並加計當前木作與運輸通膨 5% 的溢價，更新本案的基礎搭建預算。
   ```
+* **📄 獨立 HTML 稽核報告 Prompt (加選)**：
+  ```text
+  你現在是系統稽核特工。針對剛剛的「物料費率調校」動作，請對比 Excel 標案工作記錄表.xlsx 中南部物料在調漲 5% 前後的價格差異。請自動生成一份 HTML 調整報告「material_adjust_report.html」，以表格呈現「項目」、「原單價」、「調整後新單價」、「漲幅比例（5%）」與「預計影響之總成本增幅」，方便主管審查物料調整金額。
+  ```
+  *CLI 執行指令*：`python3 scripts/generate_material_adjust_report.py --db 標案工作暫存區/標案工作記錄表.xlsx`
 
 ### 3.2 2h SLA 加急成本計算 (SLA Cost Escalation)
 * **✍️ 簡單規則版 Prompt**：
@@ -191,6 +219,11 @@
   ```text
   你現在是協力商談判特工。因應 RFP 的 2h SLA 現場響應要求，名音燈光提出 NT$ 300,000 的排班溢價與合約準備金需求。請將此增項預算寫入試算表，並預估故障準備金之財務分攤。
   ```
+* **📄 獨立 HTML 稽核報告 Prompt (加選)**：
+  ```text
+  你現在是系統稽核特工。針對剛剛名音燈光提出的 30 萬 SLA 排班溢價與合約準備金，請自動生成一份 HTML 溢價評估報告「sla_cost_report.html」。表格應包含「項目說明」、「加急 SLA 規格要求 (2h)」、「名音溢價報價 (NT$ 300,000)」、「資金分攤與風險撥備比例」以及「建議核准狀態」，以利投標小組提報利潤壓力測試。
+  ```
+  *CLI 執行指令*：`python3 scripts/generate_sla_cost_report.py --db 標案工作暫存區/標案工作記錄表.xlsx`
 
 ### 3.3 毛利率與決策核算 (Profit Margin Analysis)
 * **✍️ 簡單規則版 Prompt**：
@@ -201,6 +234,11 @@
   ```text
   你現在是財務決策特工。請針對玩具展標案 450 萬元預算進行壓力測試：計算扣除 5% 物料通膨與 30 萬 SLA 溢價後的毛利率，判定是否會低於 15.0% 的獲利紅線。若低於紅線，提出優化搭建成本方案；若高於紅線，生成 green_approve 決策建議書以供主管簽核。
   ```
+* **📄 獨立 HTML 稽核報告 Prompt (加選)**：
+  ```text
+  你現在是系統稽核特工。針對剛剛對玩具展標案 450 萬進行的毛利壓力測試，請自動生成一份 HTML 獲利核算報告「profit_analysis_report.html」。請以視覺化樣式展示「專案總預算」、「基礎物料成本 (加計5%)」、「SLA 溢價支出 (30萬)」、「預估純利潤」、「最終毛利率」與「獲利紅線判定 (高於15% / GREEN_APPROVE)」，以供決策主管簽核。
+  ```
+  *CLI 執行指令*：`python3 scripts/generate_profit_analysis_report.py --db 標案工作暫存區/標案工作記錄表.xlsx`
 
 ---
 
@@ -219,6 +257,11 @@
   ```text
   你現在是知識檢索特工。請向 Google NotebookLM 檢索去識別化後的知識庫，確證「林淑芬 (Sophia) 的有效 PMP 證照編號與截止日期」以及「歷年繁星智慧檔案專案 (350萬)」的得標摘要與技術描述。
   ```
+* **📄 獨立 HTML 稽核報告 Prompt (加選)**：
+  ```text
+  你現在是系統稽核特工。針對剛剛向 Google NotebookLM 進行的知識大腦檢索動作，請自動生成一份 HTML 檢檢索清單「retrieval_manifest.html」。以表格展示「檢索主題」、「擷取來源（如 Sophia 證照、繁星專案）」、「核心內容摘要」與「資料可信度驗證（真實/失效）」，以確保引用的實績與證照數據 100% 準確無誤。
+  ```
+  *CLI 執行指令*：`python3 scripts/generate_retrieval_manifest_report.py`
 
 ### 4.2 PM 備降人員替換 (Sophia Replaces Zhiming)
 * **✍️ 簡單規則版 Prompt**：
@@ -229,6 +272,11 @@
   ```text
   你現在是建議書編譯特工。請讀取投標書草稿模板 `templates/tech_bid.md`。由於志明證照過期，請自動將「團隊資歷與得標實績」章節中的 PM 名字替換為 Sophia，填入檢索到的有效證照資訊與繁星實績，並修飾 Sophia 的經歷，使其更契合「大規模展會管理能力」的評分加分項。
   ```
+* **📄 獨立 HTML 稽核報告 Prompt (加選)**：
+  ```text
+  你現在是系統稽核特工。針對剛剛在投標書草稿中將 PM 志明替換為 Sophia 的人員異動動作，請自動生成一份 HTML 人員變更日誌「pm_replacement_log.html」。表格應詳列「原擬任 PM 志明 (過期)」、「新任 PM Sophia (有效)」、「證照到期日對照」、「經歷強化要點（大規模展會管理能力）」與「異動原因」，以便主管與合規同仁快速把關。
+  ```
+  *CLI 執行指令*：`python3 scripts/generate_pm_replacement_log.py --output 標案工作暫存區/pm_replacement_log.html`
 
 ### 4.3 標註人類審查點 (Mark Human Review Points)
 * **✍️ 簡單規則版 Prompt**：
@@ -239,6 +287,11 @@
   ```text
   你現在是安全稽核特工。凡是在草稿中涉及名音燈光 30 萬 SLA 財務變更、或是備降專案經理人員替換的關鍵段落，自動在行末插入 `[人類審查點: 確證變更已獲主管批准]` 安全標記，確保 HITL 人類在環審核路徑。
   ```
+* **📄 獨立 HTML 稽核報告 Prompt (加選)**：
+  ```text
+  你現在是系統稽核特工。針對技術建議書草稿中標註的 `[人類審查點]` 標籤，請掃描「標案工作暫存區/draft_assembled.md」中所有標記處，自動生成一份 HTML 人工審核檢核表「hitl_review_checklist.html」。以表格列出「段落行號」、「審查點上下文」、「審查類型（財務變更/人員調配）」以及「主管簽章確認欄」，供主管進行實體上傳前的最終核決。
+  ```
+  *CLI 執行指令*：`python3 scripts/generate_hitl_review_report.py --draft 標案工作暫存區/draft_assembled.md`
 
 ---
 
@@ -257,6 +310,11 @@
   ```text
   你現在是沙盒執行特工。請調用 Computer Use 特工在沙盒中啟動虛擬 Chrome 瀏覽器，模擬滑鼠與鍵盤操作，登入政府電子採購網測試區，並自動將「標案工作暫存區/draft_assembled.md」上傳至投標文件欄位。
   ```
+* **📄 獨立 HTML 稽核報告 Prompt (加選)**：
+  ```text
+  你現在是系統稽核特工。針對剛剛 Computer Use 模擬網頁投標文件上傳動作，請自動生成一份 HTML 上傳電子憑證「upload_receipt.html」。憑證應包含「上傳時間」、「目標平台 (電子採購網測試區)」、「投標檔案 (draft_assembled.md)」、「MD5 校校驗碼」與「模擬瀏覽器操作軌跡紀錄 (Success)」，供團隊留底稽核。
+  ```
+  *CLI 執行指令*：`python3 scripts/generate_upload_receipt.py --draft 標案工作暫存區/draft_assembled.md`
 
 ### 5.2 Excel SSOT 資料庫寫入 (SSOT Database Commit)
 * **✍️ 簡單規則版 Prompt**：
@@ -267,6 +325,11 @@
   ```text
   你現在是資料庫收割特工。請在主管核准後，將最終投標總額 (4.5M)、核准 PM (Sophia) 以及主管 Force(ff) 的數位簽章軌跡，正式寫入本地 Excel 黃金資料庫 (SSOT) 的 「已得標標案」工作表中，並在 審計日誌 生成審計日誌。
   ```
+* **📄 獨立 HTML 稽核報告 Prompt (加選)**：
+  ```text
+  你現在是系統稽核特工。針對剛剛寫入 Excel 地端真理庫 (SSOT) 的投標紀錄動作，請對比寫入前後的檔案，自動生成一份 HTML 寫入審計報告「db_sync_audit.html」。表格展示「異動工作表」、「寫入欄位（總額4.5M、PM Sophia、主管Force簽章）」、「寫入狀態 (Success)」與「資料庫雜湊校驗碼」，供審計同仁檢驗資料誠信度。
+  ```
+  *CLI 執行指令*：`python3 scripts/generate_db_sync_audit.py --db 標案工作暫存區/標案工作記錄表.xlsx`
 
 ### 5.3 知識大腦同步發布 (NotebookLM Knowledge Sync)
 * **✍️ 簡單規則版 Prompt**：
@@ -277,6 +340,11 @@
   ```text
   你現在是知識閉環特工。請將本次最終得標並去敏感化後的技術建議書草稿，發布回 Google NotebookLM 脈絡大腦中，使其作為未來的黃金投標範本，完成團隊知識閉環。
   ```
+* **📄 獨立 HTML 稽核報告 Prompt (加選)**：
+  ```text
+  你現在是系統稽核特工。針對將去敏感標書發布回 Google NotebookLM 脈絡大腦的動作，請自動生成一份 HTML 知識同步分析報告「brain_sync_report.html」。列出「發布檔案名稱」、「去敏處理狀態 (100% Scrubbed)」、「大腦同步時間」以及「新黃金投標範本索引建立狀態」，證明團隊已完成閉環學習並更新知識庫。
+  ```
+  *CLI 執行指令*：`python3 scripts/generate_brain_sync_report.py`
 
 ---
 
@@ -297,6 +365,11 @@ AI PM 定期分析員（Scheduled Analyst）負責背景監控 7 天關鍵路徑
   1. 追蹤 7 天關鍵路徑進度，若草稿撰寫進度落後預期超過 12 小時，判定為延誤風險（DELAY_RISK）。
   2. 自動計算對最終遞件截止日的衝擊，並起草一份進度異常分析報告供主管審閱。
   ```
+* **📄 獨立 HTML 稽核報告 Prompt (加選)**：
+  ```text
+  你現在是系統稽核特工。針對 AI PM 排程監控到的 DELAY_RISK 風險，請定時抓取專案日誌與關鍵路徑，自動生成一份 HTML 進度風險日誌「pm_schedule_report.html」。內容包含「當前執行步驟」、「計畫截止時間」、「實際進度落後時數 (12h)」、「關鍵路徑阻礙點」與「建議調配資源方案」，以便團隊即時調整排程。
+  ```
+  *CLI 執行指令*：`python3 scripts/generate_pm_schedule_report.py`
 
 ### 6.2 協力商缺件語意催辦 (Missing Document Semantic Alert)
 * **✍️ 簡單規則版 Prompt**：
@@ -309,6 +382,11 @@ AI PM 定期分析員（Scheduled Analyst）負責背景監控 7 天關鍵路徑
   1. 若檢測到缺少「大同搭建商實績證明」等必備合規文件，自動分析缺件影響。
   2. 使用專業且有禮貌的商務口吻，自動起草一封向大同搭建商窗口催辦補件的電子郵件草稿，存入待發送區。
   ```
+* **📄 獨立 HTML 稽核報告 Prompt (加選)**：
+  ```text
+  你現在是系統稽核特工。針對檢測到的大同搭建商實績證明缺件與催辦信草稿，請自動生成一份 HTML 缺件催辦報告「missing_doc_alert.html」。表格列出「缺失文件名稱」、「受影響協力商」、「預估廢標風險級別」、「催辦郵件窗口」與「郵件草稿預覽」，方便外協同仁審查信件發送。
+  ```
+  *CLI 執行指令*：`python3 scripts/generate_missing_doc_alert.py`
 
 ### 6.3 證照失效主動調配 (Cert Expiry Recovery Alert)
 * **✍️ 簡單規則版 Prompt**：
@@ -321,6 +399,11 @@ AI PM 定期分析員（Scheduled Analyst）負責背景監控 7 天關鍵路徑
   1. 若檢測到預定專案經理（如志明）的證照已失效，主動觸發備降（Fallback）調度機制。
   2. 從公司證照庫中檢索符合 RFP 資格的有效 PM（如 Sophia），自動替換其履歷資訊並產生調配日誌，即時提報主管批准。
   ```
+* **📄 獨立 HTML 稽核報告 Prompt (加選)**：
+  ```text
+  你現在是系統稽核特工。針對 PMP 證照過期觸發 of PM Fallback 替換事件，請自動生成一份 HTML 證照修復調配報告「cert_recovery_report.html」。以醒目色彩對比展示「過期 PM 志明」、「備降 PM Sophia」、「證照比對結果」、「調配寫入日誌狀態 (Success)」與「主管核准狀態」，供 HR 與投標組查閱存檔。
+  ```
+  *CLI 執行指令*：`python3 scripts/generate_cert_recovery_report.py`
 
 ---
 
