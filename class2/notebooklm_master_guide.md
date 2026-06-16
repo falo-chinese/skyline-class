@@ -23,6 +23,15 @@
 * **🖥️ AI Unified Gateway ─ NotebookLM 專區門戶平台介面**：
   ![AI Unified Gateway NotebookLM 介面](reference/skyline-prompt-manager/docs/ai_unified_gateway_notebooklm.png)
 
+  ##### 📂 已同步至 AI Unified Gateway 的示範筆記本清單 (Synchronized Example Notebooks)
+  | 筆記本名稱 (Notebook Name) | Notebook ID (UUID) | 來源 (Source) | 教材與定位說明 (Description) |
+  |---|---|---|---|
+  | **Skyline 企業知識大腦分布索引與標案指南** | `2c039250-b2a8-4cf1-bc3d-f0f8b8441dc3` | `NOTEBOOKLM_SYNC` | **導航索引大腦**：對應 Section 9，整合三大共享大腦分布索引底稿。 |
+  | **Project1_標案黃金範本大腦** | `48242ef2-0393-4feb-b257-fec07293df02` | `NOTEBOOKLM_SYNC` | **大腦一**：標案歷史黃金建議書範本與寫作合規指南 (Section 8)。 |
+  | **Project2_協力商資歷與合規庫** | `0272c9a8-6dd2-4197-9c40-f68c43c0c8e4` | `NOTEBOOKLM_SYNC` | **大腦二**：協力商合規、SLA 響應、綠建材與 PMP 降容。 |
+  | **Project3_專案執行經驗對策大腦** | `ec03930d-a91f-4df6-84be-8a2f76f3429b` | `NOTEBOOKLM_SYNC` | **大腦三**：專案現場去敏痛點記錄與現場危機排障 SOP。 |
+  | **SkyLine 專案執行經驗與改善對策庫** | `73085c64-dea5-4945-9226-949023b0ac9b` | `NOTEBOOKLM_SYNC` | 歷史備份知識庫，作為對照與補充檢索。 |
+
 ---
 
 ## 🔒 1. 帳號無密碼共用安全機制 (No-Password Shared Access)

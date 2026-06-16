@@ -32,7 +32,8 @@ files_to_copy = [
     ("bidding_control_tower.md", "bidding_control_tower.md"),
     ("bidding_control_tower.html", "bidding_control_tower.html"),
     ("notebooklm_index_map.md", "notebooklm_index_map.md"),
-    ("notebooklm_index_map.html", "notebooklm_index_map.html")
+    ("notebooklm_index_map.html", "notebooklm_index_map.html"),
+    ("reference/skyline-prompt-manager/docs/ai_unified_gateway_notebooklm.png", "reference/skyline-prompt-manager/docs/ai_unified_gateway_notebooklm.png")
 ]
 
 sheets_url = "https://docs.google.com/spreadsheets/d/1z5MlDimJl7sO0JuD5LKVPqJkRzldPUt51nqoSM3rt3Q/edit?usp=sharing"
