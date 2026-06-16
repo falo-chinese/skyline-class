@@ -220,10 +220,11 @@
 
         /* Main Content */
         main {
-            margin-left: 300px;
+            margin: 0 auto;
             flex-grow: 1;
-            padding: 6.5rem 2.5rem 3.5rem 2.5rem; /* added top padding to accommodate top-nav */
-            width: calc(100% - 300px);
+            padding: 3rem 1.5rem;
+            max-width: 1000px;
+            width: 100%;
             box-sizing: border-box;
         }
 
@@ -588,37 +589,14 @@
     </div>
 
     <div class="layout-wrapper">
-        <!-- Top Nav matching Class 02 layout -->
-        <nav class="top-nav">
-            <a href="../notebooklm_master_guide.html" class="nav-link-btn">📘 企業 NotebookLM 治理指南</a>
-            <a href="../skyline_set_menu.html" class="nav-link-btn">🍱 Skyline 模型菜組合包</a>
-            <a href="../prompt_hub_guide.html" class="nav-link-btn">💬 Prompt Hub 導入指引</a>
-            <a href="index.html" class="nav-link-btn active">🚀 實戰專案與進階手冊</a>
-            <a href="../workbench/index.html" class="nav-link-btn">🛠️ 教材控制台</a>
-        </nav>
-
-        <!-- Left Sidebar Navigation -->
-        <aside>
-            <div class="brand">
-                <div class="eyebrow">FALO Taiwan Academy</div>
-                <h2>銀河 ERP 內訓</h2>
-                <div class="sub-brand">SkyLine class2 課程主軸導航</div>
-            </div>
-            
-            <ul class="toc">
-                <li class="toc-item"><a href="#history-review" class="toc-link">歷史課程回顧</a></li>
-                <li class="toc-item"><a href="#practical-resources" class="toc-link active">實戰專案與進階手冊</a></li>
-                <li class="toc-item"><a href="#qas-section" class="toc-link">學員提問與技術解答</a></li>
-                <li class="toc-item"><a href="#other-resources" class="toc-link">其他資源</a></li>
-            </ul>
-
-            <div class="sidebar-footer">
-                <a href="https://falo-taiwan.github.io/class/a01/class3/class03_qas.html" target="_blank" class="sidebar-btn">學員課前提問解答 (QA)</a>
-            </div>
-        </aside>
-
         <!-- Right Main Content -->
         <main>
+            <!-- Back Button -->
+            <div style="margin-bottom: 1.5rem;">
+                <a href="../notebooklm_master_guide.html" style="color: var(--primary); text-decoration: none; font-weight: 600; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.5rem; transition: color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--primary)'">
+                    ← 返回 Class 02 主治理指南
+                </a>
+            </div>
             <!-- 實戰專案與進階手冊 -->
             <section id="practical-resources" class="section-card">
                 <h2 class="section-header">實戰專案與進階手冊</h2>
@@ -709,89 +687,6 @@
                             <span class="btn-arrow">➔</span>
                         </a>
                     </div>
-
-                    <!-- Project 5: Q&A -->
-                    <div class="project-card">
-                        <div>
-                            <span class="project-badge">技術問答解答</span>
-                            <h3 class="project-title">學員課前提問解答 (Class 02 QA)</h3>
-                            <p class="project-desc">
-                                針對 Vibe Coding 實戰開發、AI Agent 協作與系統防禦過程中，學員所提出的深度問題進行詳細解答，涵蓋主機架設、安全與權限控制等範疇。
-                            </p>
-                            <ul class="project-features">
-                                <li>Antigravity 2.0 中文化與對話命名</li>
-                                <li>GAS 專案部署限制與存取權限</li>
-                                <li>高階人機協作分工與安全策略</li>
-                            </ul>
-                        </div>
-                        <a href="https://falo-taiwan.github.io/class/a01/class3/class03_qas.html" target="_blank" class="project-btn">
-                            <span>瀏覽技術問答集 (QA)</span>
-                            <span class="btn-arrow">➔</span>
-                        </a>
-                    </div>
-                </div>
-            </section>
-
-            <!-- History Review -->
-            <section id="history-review" class="section-card">
-                <h2 class="section-header">歷史課程回顧</h2>
-                <div class="section-subtitle">Class 01 & Class 02 培訓教材存檔</div>
-                <p>
-                    此專區提供本培訓系列先前課程之完整簡報與實戰教材連結，協助同仁進行知識複習與技術對齊。目前採用簡易密碼保護，未來將升級為基於 Google Apps Script (GAS) 驗證的高強度保密安全版本。
-                </p>
-                <div class="resource-links" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
-                    <a href="https://drive.google.com/file/d/1lcTQQ4ceWf8-I-qxifTIbkTq8gwW0Pp7/view?usp=sharing" class="resource-link protected-link" style="margin-top: 0;">
-                        <span class="badge">Class 01</span>
-                        <span class="link-text">Class 01 課程簡報 (🔒 密碼保護)</span>
-                        <span class="link-arrow">➔</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1FV_SEjwf68vgd_CH28ScJSjz1FiwxxTw/view?usp=sharing" class="resource-link protected-link" style="margin-top: 0;">
-                        <span class="badge">Class 02</span>
-                        <span class="link-text">Class 02 課程簡報 (🔒 密碼保護)</span>
-                        <span class="link-arrow">➔</span>
-                    </a>
-                </div>
-            </section>
-
-            <!-- Q&A & Technical Answers -->
-            <section id="qas-section" class="section-card">
-                <h2 class="section-header">學員提問與技術解答</h2>
-                <div class="section-subtitle">Vibe Coding 實戰常見問題解答</div>
-                <p>
-                    在 Vibe Coding 實戰開發與 AI Agent 協作過程中，學員針對專案開發與安全防禦等提問的深度解答清單：
-                </p>
-                <div class="resource-links">
-                    <a href="https://falo-taiwan.github.io/class/a01/class3/class03_qas.html" target="_blank" class="resource-link">
-                        <span class="badge">Q&A 解答</span>
-                        <span class="link-text">瀏覽全部 Class 02 / SkyLine class2 學員課前與課後提問答覆頁面</span>
-                        <span class="link-arrow">➔</span>
-                    </a>
-                </div>
-            </section>
-
-            <!-- Other Resources -->
-            <section id="other-resources" class="section-card">
-                <h2 class="section-header">其他資源</h2>
-                <div class="section-subtitle">Vibe Coding 實戰武器庫與地雲工具</div>
-                <p>
-                    包含地端架設、GAS 容器串接與 OCR 自動辨識等核心技術參考指引手冊：
-                </p>
-                <div class="resource-links" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
-                    <a href="https://falo-taiwan.github.io/class/a01/class3/class03_tools.html" target="_blank" class="resource-link" style="margin-top: 0;">
-                        <span class="badge">工具庫</span>
-                        <span class="link-text">Vibe Coding 實戰武器庫與地雲工具清單</span>
-                        <span class="link-arrow">➔</span>
-                    </a>
-                    <a href="https://falo-taiwan.github.io/class/a01/class3/class03_ocr_hitl.html" target="_blank" class="resource-link" style="margin-top: 0;">
-                        <span class="badge">OCR & HITL</span>
-                        <span class="link-text">OCR 辨識策略與 HITL 人機協作實務 (分揀案例)</span>
-                        <span class="link-arrow">➔</span>
-                    </a>
-                    <a href="https://falo-taiwan.github.io/class/a01/class3/class03_rpa_to_agent.html" target="_blank" class="resource-link" style="margin-top: 0;">
-                        <span class="badge">自動化演進</span>
-                        <span class="link-text">從 ERP 外掛到 AI Agent 演進與自動化治理</span>
-                        <span class="link-arrow">➔</span>
-                    </a>
                 </div>
             </section>
         </main>
