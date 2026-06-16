@@ -474,30 +474,64 @@
       <div style="background: rgba(255, 255, 255, 0.01); border-left: 4px solid var(--color-accent); padding: 1.25rem; border-radius: 4px;">
         <strong style="color: white; font-size: 1.1rem; display: block; margin-bottom: 0.5rem;">🧠 大腦三：Skyline_Corporate_PM_Lessons_Learned (專案執行經驗對策大腦)</strong>
         
-        <div style="margin-top: 1rem;">
+        <strong style="color: #cbd5e1; display: block; margin-top: 1rem; font-size: 0.95rem;">✍️ 簡單版本 (Simple Prompts) ─ 3 組</strong>
+
+        <!-- 簡單版 Prompt 1 -->
+        <div style="margin-top: 0.75rem; padding-left: 0.5rem; border-left: 2px solid rgba(244, 114, 182, 0.3);">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
-            <strong style="color: #f472b6; display: block;">📝 場景一：現場突發危機排障與歷史經驗對齊 (Emergency On-Site Troubleshooting)</strong>
+            <strong style="color: #f472b6; display: block;">📝 提示詞一：寵物嘉年華現場意外防坑檢索 (Pet Event Exploratory Check)</strong>
             <button class="copy-btn" onclick="copyPrompt('prompt-3-1')">📋 複製提示詞</button>
           </div>
-          <span style="font-size: 0.85rem; color: var(--text-muted); display: block; margin-bottom: 0.5rem;">• 設計目的：在活動現場發生突發事件（如跳電、觀眾絆倒）時，快速查找歷史實績與 SOP 進行應急處置。</span>
-          <pre id="prompt-3-1" style="background: #0f172a; padding: 1rem; border-radius: 6px; border: 1px solid rgba(255,255,255,0.05); font-family: monospace; font-size: 0.85rem; color: #cbd5e1; white-space: pre-wrap; word-break: break-all;">你現在是Skyline (Skyline) 展會現場安全指揮官。目前在博覽會現場發生了「配電箱超載臨時跳電，且現場有觀眾在混亂中被電線絆倒輕微擦傷」的緊急狀況！
-請立即檢索《02_活動現場突發狀況緊急處理手冊.md》與《01_台西市寵物嘉年華_專案執行經驗與改善對策彙整.md》中的歷史教訓：
-1. 提供現場跳電排障的 SOP 處理步驟（包含與機電組協調、備用發電機切換）。
-2. 提供受傷觀眾應急處置與現場紀錄流程（包含醫護站聯絡、主管匯報要點）。
-3. 根據寵物嘉年華的歷史教訓，指出我們在現場佈線與電力規劃上犯過什麼錯誤，此時該如何立刻進行現場補救？</pre>
+          <span style="font-size: 0.85rem; color: var(--text-muted); display: block; margin-bottom: 0.5rem;">• 設計目的：以探索式問法引導大腦主動挖掘寵物活動的歷史安全與秩序缺失。</span>
+          <pre id="prompt-3-1" style="background: #0f172a; padding: 1rem; border-radius: 6px; border: 1px solid rgba(255,255,255,0.05); font-family: monospace; font-size: 0.85rem; color: #cbd5e1; white-space: pre-wrap; word-break: break-all;">我們即將舉辦大型的寵物嘉年華，請幫我檢索歷史專案經驗，在寵物的安全、現場衛生或秩序管理上，曾經出過哪些意外狀況？強烈建議條列說明當時分別是如何處置的？</pre>
         </div>
 
-        <div style="margin-top: 1.25rem;">
+        <!-- 簡單版 Prompt 2 -->
+        <div style="margin-top: 1rem; padding-left: 0.5rem; border-left: 2px solid rgba(244, 114, 182, 0.3);">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
-            <strong style="color: #f472b6; display: block;">📝 場景二：歷史 PM 回報歸納與年度防坑清單 (Lessons Learned Summary)</strong>
+            <strong style="color: #f472b6; display: block;">📝 提示詞二：特定廠商履約缺失快速查核 (Vendor Quick Audit)</strong>
             <button class="copy-btn" onclick="copyPrompt('prompt-3-2')">📋 複製提示詞</button>
           </div>
-          <span style="font-size: 0.85rem; color: var(--text-muted); display: block; margin-bottom: 0.5rem;">• 設計目的：通讀 36 筆歷史 PM 回報紀錄，歸納常犯錯誤並提煉改善對策，供新進同仁培訓參考。</span>
-          <pre id="prompt-3-2" style="background: #0f172a; padding: 1rem; border-radius: 6px; border: 1px solid rgba(255,255,255,0.05); font-family: monospace; font-size: 0.85rem; color: #cbd5e1; white-space: pre-wrap; word-break: break-all;">你現在是Skyline (Skyline) 企業品質保證 (QA) 總監。我們即將帶領新進 PM 團隊執行年度展會。
-請通讀《01_台西市寵物嘉年華_專案執行經驗與改善對策彙整.md》中所有 PM 的回報紀錄，歸納整理：
-1. 統計出最常發生的前 3 大類別問題（例如：電力載量、動線設計、協力商遲到等）。
-2. 對於每一類常犯錯誤，從歷史檔案中提取出最有效的「改善對策」。
-3. 為新進 PM 製作一份條列式的「展會執行防坑檢核表 (Lessons Learned Checklist)」。</pre>
+          <span style="font-size: 0.85rem; color: var(--text-muted); display: block; margin-bottom: 0.5rem;">• 設計目的：秒查特定外協廠商在專案中的歷史表現。</span>
+          <pre id="prompt-3-2" style="background: #0f172a; padding: 1rem; border-radius: 6px; border: 1px solid rgba(255,255,255,0.05); font-family: monospace; font-size: 0.85rem; color: #cbd5e1; white-space: pre-wrap; word-break: break-all;">請檢索所有 PM 經驗回報，列出與【名音】（或特定外協廠商）相關的缺失紀錄與當時 PM 的解決對策。</pre>
+        </div>
+
+        <!-- 簡單版 Prompt 3 -->
+        <div style="margin-top: 1rem; padding-left: 0.5rem; border-left: 2px solid rgba(244, 114, 182, 0.3);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+            <strong style="color: #f472b6; display: block;">📝 提示詞三：財務核銷與行政防坑點檢 (Admin Pitfall Avoidance)</strong>
+            <button class="copy-btn" onclick="copyPrompt('prompt-3-3')">📋 複製提示詞</button>
+          </div>
+          <span style="font-size: 0.85rem; color: var(--text-muted); display: block; margin-bottom: 0.5rem;">• 設計目的：在專案啟動前快速稽核常見的核銷與行政文宣痛點。</span>
+          <pre id="prompt-3-3" style="background: #0f172a; padding: 1rem; border-radius: 6px; border: 1px solid rgba(255,255,255,0.05); font-family: monospace; font-size: 0.85rem; color: #cbd5e1; white-space: pre-wrap; word-break: break-all;">請檢索歷史回報，歸納所有與「財務核銷」與「文宣印刷」相關的常見痛點與預防措施。</pre>
+        </div>
+
+        <strong style="color: #cbd5e1; display: block; margin-top: 1.5rem; font-size: 0.95rem;">🧠 複雜版本 (Complex Prompts) ─ 2 組</strong>
+
+        <!-- 複雜版 Prompt 1 -->
+        <div style="margin-top: 0.75rem; padding-left: 0.5rem; border-left: 2px solid rgba(236, 72, 153, 0.5);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+            <strong style="color: #ec4899; display: block;">📝 提示詞四：外協信用交叉比對與合約合規條款升級 (Complex Vendor Contract Enhancement)</strong>
+            <button class="copy-btn" onclick="copyPrompt('prompt-3-4')">📋 複製提示詞</button>
+          </div>
+          <span style="font-size: 0.85rem; color: var(--text-muted); display: block; margin-bottom: 0.5rem;">• 設計目的：深度稽核歷史履約缺失並自動輸出可寫入合約的 SLA KPI 考核細則。</span>
+          <pre id="prompt-3-4" style="background: #0f172a; padding: 1rem; border-radius: 6px; border: 1px solid rgba(255,255,255,0.05); font-family: monospace; font-size: 0.85rem; color: #cbd5e1; white-space: pre-wrap; word-break: break-all;">你現在是 Skyline 採購合規與法務總監。請全面檢索歷史 Lessons Learned 數據，針對【名音】這家協力廠商在過去專案中的履約缺失進行深度比對：
+1. 統計其最常發生的缺失類別（如設備跳電、工程遲到、配合度差）與發生頻率。
+2. 提取出過去 PM 曾使用的補救方案，並評估其成效。
+3. 為了防範未來標案重複踩坑，請為我擬定 3 條具備法律約束力、且與 SLA 掛鉤的合約考核指標（KPI）及罰扣細則。</pre>
+        </div>
+
+        <!-- 複雜版 Prompt 2 -->
+        <div style="margin-top: 1rem; padding-left: 0.5rem; border-left: 2px solid rgba(236, 72, 153, 0.5);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+            <strong style="color: #ec4899; display: block;">📝 提示詞五：年度活動現場防禦系統與 PM 培訓防坑點檢表 (Complex Pitfalls Summarization & Training Guide)</strong>
+            <button class="copy-btn" onclick="copyPrompt('prompt-3-5')">📋 複製提示詞</button>
+          </div>
+          <span style="font-size: 0.85rem; color: var(--text-muted); display: block; margin-bottom: 0.5rem;">• 設計目的：系統性歸納 36 筆原始反饋並轉譯為 PM 培訓現場避坑指南。</span>
+          <pre id="prompt-3-5" style="background: #0f172a; padding: 1rem; border-radius: 6px; border: 1px solid rgba(255,255,255,0.05); font-family: monospace; font-size: 0.85rem; color: #cbd5e1; white-space: pre-wrap; word-break: break-all;">你現在是 Skyline 企業品質保證 (QA) 總監。請通讀所有專案回報紀錄，為新進 PM 團隊建立一套專案安全防禦與培訓系統：
+1. 歸納出歷史專案中最常發生的前 3 大現場缺失，並分析其具體成因。
+2. 對於每一類缺失，從歷史檔案中提取出已驗證有效的「最佳實踐解決對策」。
+3. 整合這些經驗，為新進 PM 製作一份條列式的「活動現場安全與行政防坑檢核表 (Lessons Learned Checklist)」。</pre>
         </div>
       </div>
     </div>
