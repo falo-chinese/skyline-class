@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>展會標案 AIDE 智慧控制塔 (POC) - Skyline Class02</title>
+  <link rel="stylesheet" href="docs/style.css">
+  <style>
+    .version-switch {
+      position: absolute;
+      top: 2rem;
+      right: 4rem;
+      background: rgba(20, 184, 166, 0.2);
+      border: 1px solid var(--color-secondary);
+      padding: 0.5rem 1rem;
+      border-radius: 99px;
+      color: var(--color-secondary);
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s;
+      z-index: 10;
+    }
+    .version-switch:hover {
+      background: var(--color-secondary);
+      color: white;
+      text-decoration: none;
+      box-shadow: 0 0 15px rgba(20, 184, 166, 0.4);
+    }
+    /* 雙模切換器樣式 */
+    .mode-container {
+      display: flex;
+      align-items: center;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 99px;
+      padding: 0.25rem;
+      margin-bottom: 2rem;
+      width: fit-content;
+      gap: 0.25rem;
+    }
+    .mode-btn {
+      padding: 0.5rem 1.25rem;
+      border-radius: 99px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .mode-btn.active {
+      background: var(--color-primary);
+      color: white;
+      box-shadow: 0 0 12px rgba(99, 102, 241, 0.4);
+    }
+    .mode-btn.api-active {
+      background: var(--color-secondary) !important;
+      color: var(--bg-primary) !important;
+      box-shadow: 0 0 12px rgba(20, 184, 166, 0.4) !important;
+    }
+    /* 控制塔流程圖 */
+    .control-flow {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    @media (max-width: 768px) {
+      .control-flow {
+        grid-template-columns: 1fr;
+      }
+    }
+    .flow-node {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 1rem;
+      text-align: center;
+      position: relative;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+    .flow-node:hover {
+      background: rgba(99, 102, 241, 0.1);
+      border-color: rgba(99, 102, 241, 0.4);
+    }
+    .flow-node.active {
+      border-color: var(--color-primary-light);
+      box-shadow: 0 0 15px rgba(99, 102, 241, 0.2);
+    }
+    .flow-node.selected {
+      background: rgba(99, 102, 241, 0.2) !important;
+      border-color: var(--color-primary-light) !important;
+      box-shadow: 0 0 15px rgba(99, 102, 241, 0.5) !important;
+    }
+    .flow-node-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 0.5rem;
+    }
+    .flow-node-status {
+      font-size: 0.75rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      display: inline-block;
+    }
+    .status-todo { background: rgba(255, 255, 255, 0.08); color: var(--text-muted); }
+    .status-running { background: rgba(99, 102, 241, 0.2); color: var(--color-primary-light); border: 1px solid var(--color-primary); }
+    .status-done { background: rgba(20, 184, 166, 0.2); color: var(--color-secondary); border: 1px solid var(--color-secondary); }
+    .status-warn { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #ef4444; }
+
+    /* 步驟詳細 Inspector 面板樣式 */
+    .inspector-card {
+      background: rgba(30, 41, 59, 0.65);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      border-radius: 16px;
+      padding: 1.75rem;
+      margin-bottom: 2rem;
+      backdrop-filter: blur(12px);
+      transition: all 0.3s ease;
+    }
+    .inspector-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr 1.8fr;
+      gap: 1.5rem;
+    }
+    @media (max-width: 1024px) {
+      .inspector-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .file-badge {
+      font-size: 0.7rem;
+      padding: 0.1rem 0.4rem;
+      border-radius: 4px;
+      font-weight: bold;
+      width: fit-content;
+    }
+    .file-badge-local { background: rgba(20, 184, 166, 0.2); color: var(--color-secondary); border: 1px solid var(--color-secondary); }
+    .file-badge-ext { background: rgba(99, 102, 241, 0.2); color: var(--color-primary-light); border: 1px solid var(--color-primary); }
+    .file-badge-db { background: rgba(236, 72, 153, 0.2); color: var(--color-accent); border: 1px solid var(--color-accent); }
+    
+    .file-card {
+      background: rgba(15, 23, 42, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      transition: all 0.2s;
+    }
+    .file-card:hover {
+      border-color: rgba(255, 255, 255, 0.15);
+      background: rgba(15, 23, 42, 0.6);
+    }
+
+    /* 雙軌左右面板佈局 */
+    .dual-panels {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    @media (max-width: 768px) {
+      .dual-panels {
+        grid-template-columns: 1fr;
+      }
+    }
+    .panel-card {
+      background: rgba(30, 41, 59, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      padding: 1.75rem;
+      backdrop-filter: blur(10px);
+    }
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+    .panel-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .panel-badge {
+      font-size: 0.75rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 99px;
+      font-weight: 700;
+    }
+    .badge-staff { background: rgba(99, 102, 241, 0.2); color: var(--color-primary-light); border: 1px solid var(--color-primary); }
+    .badge-supervisor { background: rgba(236, 72, 153, 0.2); color: var(--color-accent); border: 1px solid var(--color-accent); }
+
+    /* 互動操作與主控台 */
+    .action-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(15, 23, 42, 0.4);
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      margin-bottom: 1rem;
+    }
+    .action-text {
+      font-size: 0.85rem;
+      color: var(--text-main);
+    }
+    .action-btn {
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+      border: 1px solid var(--color-secondary);
+      background: rgba(20, 184, 166, 0.1);
+      color: var(--color-secondary);
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 700;
+      transition: all 0.2s;
+    }
+    .action-btn:hover {
+      background: var(--color-secondary);
+      color: var(--bg-primary);
+    }
+    .console-box {
+      background: #090d16;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 1rem;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.8rem;
+      color: #38bdf8;
+      height: 240px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      line-height: 1.4;
+    }
+    /* 資源庫區塊 */
+    .asset-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+    @media (max-width: 768px) {
+      .asset-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .asset-item {
+      background: rgba(15, 23, 42, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 1rem;
+    }
+    .asset-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    /* AI 顧問面板 */
+    .advisor-alert {
+      background: rgba(245, 158, 11, 0.1);
+      border-left: 4px solid #f59e0b;
+      padding: 1rem;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 1rem;
+      font-size: 0.85rem;
+    }
+    .advisor-alert-title {
+      color: #fbbf24;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+
+    /* 📅 Gantt CSS Removed */
+    
+    /* 15個子環節 Timeline 樣式 */
+    .subtask-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      transition: all 0.3s;
+    }
+    .subtask-badge.done {
+      border-color: rgba(20, 184, 166, 0.3);
+      color: var(--color-secondary);
+      background: rgba(20, 184, 166, 0.05);
+    }
+    .subtask-badge.active {
+      border-color: rgba(99, 102, 241, 0.4);
+      color: var(--color-primary-light);
+      background: rgba(99, 102, 241, 0.08);
+    }
+    .subtask-badge.selected-subtask {
+      border-color: var(--color-secondary) !important;
+      box-shadow: 0 0 10px rgba(20, 184, 166, 0.4);
+      background: rgba(20, 184, 166, 0.15) !important;
+      color: white !important;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 側邊欄導覽 -->
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      Skyline Class <span>class2</span>
+    </div>
+    
+    <div class="sidebar-menu-title">引導總覽</div>
+    <ul class="sidebar-menu">
+      <li><a href="README.html" class="sidebar-link">🚀 專案啟動說明</a></li>
+      <li><a href="workbench/index.html" class="sidebar-link">🧭 教材工作台</a></li>
+      <li><a href="falo_set_menu.html" class="sidebar-link">🍱 FALO 模型菜組合包範例</a></li>
+      <li><a href="agent_tools_guide.html" class="sidebar-link">🤖 Agent 工具使用指南</a></li>
+      <li><a href="bidding_control_tower.html" class="sidebar-link active">🤖 AIDE 智慧投標決策中控台</a></li>
+    </ul>
+
+    <div class="sidebar-menu-title">核心教材</div>
+    <ul class="sidebar-menu">
+      <li><a href="docs/01_course_map.html" class="sidebar-link">🗺️ 01 課程地圖</a></li>
+      <li><a href="docs/02_tender_workflow.html" class="sidebar-link">⚙️ 02 投標工作流</a></li>
+      <li><a href="docs/03_multi_ai_collaboration.html" class="sidebar-link">👥 03 Multi-AI 協作</a></li>
+      <li><a href="docs/04_artifact_management.html" class="sidebar-link">🛡️ 04 Artifact 管理</a></li>
+    </ul>
+
+    <div class="sidebar-menu-title">輔助工具</div>
+    <ul class="sidebar-menu">
+      <li><a href="memo.html" class="sidebar-link">📝 未來規劃備忘錄</a></li>
+      <li><a href="reference/class02-antigravity/index.html" class="sidebar-link">📚 歷史版本參考</a></li>
+    </ul>
+
+    <div class="sidebar-menu-title">架構共識</div>
+    <ul class="sidebar-menu">
+      <li><a href="local_ai_pm_architecture.html" class="sidebar-link">🖥️ 地端 AI PM 人機架構</a></li>
+      <li><a href="notebooklm_master_guide.html" class="sidebar-link">📘 NotebookLM 企業導讀</a></li>
+    </ul>
+
+    <div class="sidebar-menu-title">相關專案</div>
+    <ul class="sidebar-menu">
+      <li><a href="https://falo-taiwan.github.io/video-analysis-optimization/" target="_blank" class="sidebar-link">🎥 影音分析與優化專案</a></li>
+      <li><a href="ai_finance_demo.html" class="sidebar-link">📊 AI 財會與稅務自動化專案</a></li>
+      <li><a href="https://falo-taiwan.github.io/prompt-demo/" target="_blank" class="sidebar-link">💬 FALO Prompt 提示詞管理專案</a></li>
+    </ul>
+  </nav>
+
+  <!-- 主內容區 -->
+  <main class="main-content">
+    <a href="bidding_control_tower.md" class="version-switch">📄 檢視 Markdown 版本</a>
+    
+    <div class="card">
+      <h1>🤖 展會投標 AIDE 決策中控台 (Bidding Cockpit POC)</h1>
+      <p style="color: var(--color-secondary); font-weight: 600;">展覽總包工程標案之雙軌人機協調控制台 (台南玩具展案例)</p>
+      <p style="margin-top: 1rem;">本控制塔展示了在「台南玩具總包標案 (450萬元)」中，AI 如何協助高階主管與基層同仁進行安全的雙軌對帳、SLA 響應、爬蟲分析與 3D 展位圖自動組裝。提供手動與 API 雙模加速操作。</p>
+      <div style="margin-top: 1rem; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 1rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+        <span style="font-size: 0.8rem; color: var(--text-muted);">📦 實作資源包下載：</span>
+        <a href="class2_workspace.zip" download style="background: #a78bfa; color: black; font-weight: bold; padding: 0.35rem 0.75rem; text-decoration: none; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem; border: none; cursor: pointer; transition: opacity 0.2s; white-space: nowrap; gap: 0.25rem;">
+          ⚡ 下載 Class 2 完整實作資源包 (class2_workspace.zip)
+        </a>
+      </div>
+    </div>
+
+    <!-- 💡 系統說明橫幅 -->
+    <div style="background: rgba(20, 184, 166, 0.1); border: 1px solid var(--color-secondary); padding: 1.25rem; border-radius: 12px; margin-bottom: 2rem; display: flex; align-items: flex-start; gap: 1rem;">
+      <span style="font-size: 1.5rem; line-height: 1;">💡</span>
+      <div>
+        <strong style="color: var(--color-secondary); font-size: 0.95rem; display: block; margin-bottom: 0.35rem;">系統說明：AIDE 智慧投標決策中控台</strong>
+        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+          • 本中控台為主管決策中控面板，模擬高階主管透過 AI PM 顧問掌握地端 Staging 區之專案狀態、合規風險並核決成本追加。<br>
+          • <strong>左側團隊協作區</strong>：展示同仁（HITL）的預清洗與合規狀態；<strong>右側決策區</strong>：由主管調配 Pro Agent 進行實機對帳、預算批准與一鍵收割同步。
+        </p>
+      </div>
+    </div>
+
+    <!-- 雙模操作切換開關 -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+      <div class="mode-container" style="margin-bottom: 0;">
+        <button class="mode-btn active" id="btn-manual-mode" onclick="switchMode('manual')">✍️ 人工手動 (Prompt複製)</button>
+        <button class="mode-btn" id="btn-api-mode" onclick="switchMode('api')">⚡ API 自動加速 (Gemini/Nano)</button>
+      </div>
+      <div style="font-size: 0.85rem; color: var(--color-secondary); font-weight: bold;" id="mode-status-text">當前狀態：手動 Prompt 複製模式（離線防護/輕 Token）</div>
+    </div>
+
+    <!-- 雙軌左右面板 -->
+    <div class="dual-panels">
+      
+      <!-- 左側欄：員工協作 & 甘特圖/AI PM -->
+      <div style="display: flex; flex-direction: column; gap: 2rem;">
+        
+        <!-- 員工端：HITL 人類在環面板 -->
+        <div class="panel-card">
+          <div class="panel-header">
+            <div class="panel-title">👥 團隊協作 (員工端)</div>
+            <span class="panel-badge badge-staff">HITL 限制模式</span>
+          </div>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;">基層同仁操作介面。同仁不具 SSOT 寫入權，僅能使用輕量 AI 進行資料預清洗，避免 Token 費用暴增與真理庫污染。</p>
+  
+          <!-- 外部搭建商與店家協作檢核 -->
+          <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+            <h4 style="color: white; font-size: 0.95rem; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.25rem;">🛡️ 外部協力廠商合規檢核</h4>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem;">審查「大同搭建商」與「名音燈光商」的投標資歷：</p>
+            <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.5rem;">
+              <span>大同搭建：歷年展會實績 (350萬總包)</span>
+              <span style="color: var(--color-secondary);">🟢 驗收公文齊備</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.8rem;">
+              <span>名音燈光：技術響應承諾 (4h SLA)</span>
+              <span style="color: #f87171;" id="staff-sla-status">⚠️ 需手動修正為 2h</span>
+            </div>
+          </div>
+  
+          <!-- 員工端操作日誌 console -->
+          <h4 style="color: white; font-size: 0.9rem; margin-bottom: 0.5rem;">💻 員工操作日誌 (輕 Token 網關)</h4>
+          <div class="console-box" id="staff-console" style="height: 140px;">[SYSTEM] 員工端 HITL 介面啟動。
+[INFO] 已從 Google NotebookLM 中載入脫敏去識別化後的展會合規標準。
+[INFO] 員工對「台南玩具總包案」提問：「此標案是否接受共同承攬？」
+[AI NANO] 根據來源資料，本標案不接受共同承攬，投標商須為單一總包法人。
+[WARNING] 檢測到員工試圖寫入 staging 區，寫入操作已攔截（權限不足）。</div>
+        </div>
+
+        <!-- 🤖 AI PM 專案決策顧問 (AI PM Advisor POC) -->
+        <div class="panel-card">
+          <div class="panel-header">
+            <div class="panel-title">🤖 AI PM 專案決策顧問</div>
+            <span class="panel-badge badge-supervisor" style="background: rgba(20, 184, 166, 0.2); color: var(--color-secondary); border: 1px solid var(--color-secondary); animation: pulse 2s infinite;">AI PM Advisor POC</span>
+          </div>
+          <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.85rem;">
+            本模組模擬 AI 擔任專案顧問。透過分析地端 Staging 區最新成果物，協助主管掌握現狀、預警風險、並自動規劃下一步行動。
+          </p>
+
+          <!-- 專案資訊 -->
+          <div style="background: rgba(15, 23, 42, 0.4); border: 1px solid rgba(255,255,255,0.05); padding: 0.75rem; border-radius: 8px; margin-bottom: 0.85rem;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem; font-size: 0.78rem;">
+              <div><span style="color: var(--text-muted);">專案名稱：</span><strong style="color: white;">台南玩具展總包標案 (450M)</strong></div>
+              <div><span style="color: var(--text-muted);">負責人：</span><strong style="color: white;" id="ai-pm-owner">王志明 (Jimmy)</strong></div>
+              <div><span style="color: var(--text-muted);">專案狀態：</span><span class="badge" style="background: #1e3a8a; color: #93c5fd; padding: 0.1rem 0.3rem; border-radius: 4px; font-weight: bold; font-size: 0.7rem;">進行中</span></div>
+              <div><span style="color: var(--text-muted);">完成度：</span><strong style="color: var(--color-secondary);" id="ai-pm-progress-text">15%</strong></div>
+            </div>
+            <!-- 進度條 -->
+            <div style="background: rgba(255,255,255,0.08); height: 6px; border-radius: 99px; margin-top: 0.5rem; overflow: hidden;">
+              <div id="ai-pm-progress-bar" style="background: var(--color-secondary); height: 100%; width: 15%; transition: width 0.4s ease;"></div>
+            </div>
+          </div>
+
+          <!-- AI 現況分析 -->
+          <div style="border-left: 3px solid var(--color-primary-light); padding-left: 0.65rem; margin-bottom: 0.85rem;">
+            <div style="font-size: 0.8rem; font-weight: bold; color: var(--color-primary-light); margin-bottom: 0.2rem;">🔍 AI 專案現況分析</div>
+            <div id="ai-pm-status-analysis" style="font-size: 0.76rem; color: #cbd5e1; line-height: 1.4;">
+              正在進行標案前期資料整理，已建立「原始標案資源/」工作目錄，準備進行地端掃描與檔案複製。
+            </div>
+          </div>
+
+          <!-- AI 風險提示 -->
+          <div style="border-left: 3px solid #f87171; padding-left: 0.65rem; margin-bottom: 0.85rem;">
+            <div style="font-size: 0.8rem; font-weight: bold; color: #f87171; margin-bottom: 0.2rem;">⚠️ AI 風險預警提示</div>
+            <div id="ai-pm-risk-alerts" style="font-size: 0.76rem; color: #cbd5e1; line-height: 1.4;">
+              • 地端隨意放置的歷史得標檔案與資格證明格式混亂，尚未進行語意重命名與結構化。<br>
+              • 關鍵協力商「大同空間搭建」之實績證明 PDF 中包含大量敏感個資（身分證字號與電話），直接同步大腦將存在 PII 外洩風險。
+            </div>
+          </div>
+
+          <!-- AI 下一步建議 -->
+          <div style="border-left: 3px solid #fbbf24; padding-left: 0.65rem; margin-bottom: 0.85rem;">
+            <div style="font-size: 0.8rem; font-weight: bold; color: #fbbf24; margin-bottom: 0.2rem;">💡 AI 下一步行動建議</div>
+            <div id="ai-pm-next-steps" style="font-size: 0.76rem; color: #cbd5e1; line-height: 1.4;">
+              1. 執行地端掃描，將 PDF 原始資源複製到隔離的安全「標案工作暫存區」中。<br>
+              2. 呼叫語意分析特工，從內文中提取真實年份以重新智慧命名檔名，便於語意歸類。
+            </div>
+          </div>
+
+          <!-- 最近成果物 -->
+          <div style="margin-bottom: 0.85rem;">
+            <div style="font-size: 0.8rem; font-weight: bold; color: white; margin-bottom: 0.3rem;">📦 最近完成成果物</div>
+            <div id="ai-pm-deliverables" style="display: flex; gap: 0.35rem; flex-wrap: wrap;">
+              <span style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); padding: 0.15rem 0.35rem; border-radius: 4px; font-size: 0.68rem; color: var(--text-muted);">無</span>
+            </div>
+          </div>
+
+          <!-- AI PM 主動催辦與調度日誌 -->
+          <h4 style="color: white; font-size: 0.8rem; margin-bottom: 0.3rem;">📅 專案執行時間線 (Timeline)</h4>
+          <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.05); padding: 0.6rem; border-radius: 8px; height: 110px; overflow-y: auto; font-family: monospace; font-size: 0.7rem; color: #a78bfa; line-height: 1.4;" id="pm-alert-console">
+[D-Day 7 09:00] 🔍 AI PM 檢測到政府採購網玩具展公告，自動初始化地端專案 Staging 資料夾。
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 右側欄：主管控制塔 -->
+      <div class="panel-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+          <div class="panel-header">
+            <div class="panel-title">🛡️ 決策中控 (主管端)</div>
+            <span class="panel-badge badge-supervisor">Pro Agent-First</span>
+          </div>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;">高階決策者專屬中控台。主管擁有完整 API 調用權限、本地檔案磁碟掃描，並可調用 Pro Agent (Codex) 進行 **Computer Use** 的動態模擬測試與最終一鍵收割。</p>
+  
+          <!-- 主管操作列 -->
+          <div class="action-row">
+            <span class="action-text">1. 執行 Codex 實機測試與對帳 (SLA)</span>
+            <button class="action-btn" id="btn-action-test" onclick="runAgentTest()">執行對帳測試</button>
+          </div>
+          
+          <div class="action-row">
+            <span class="action-text">2. 審查並一鍵收割 (Sync & Commit to SSOT)</span>
+            <button class="action-btn" id="btn-action-commit" onclick="runHarvest()" style="border-color: var(--color-accent); color: var(--color-accent); background: rgba(236, 72, 153, 0.1);">一鍵收割</button>
+          </div>
+          
+          <!-- 決策審核核決按鈕 -->
+          <div id="supervisor-decision-approval" style="margin-top: 0.75rem; display: none;"></div>
+        </div>
+
+        <div>
+          <!-- 主管端 Pro Console -->
+          <h4 style="color: white; font-size: 0.9rem; margin-bottom: 0.5rem; margin-top: 1rem;">⚙️ Pro Agent-First 主控台 (含 Computer Use)</h4>
+          <div class="console-box" id="supervisor-console">[SYSTEM] 主管端 Pro 控制塔就緒。
+[INFO] 等待主管下達測試或收割指令...</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 底部：定向爬蟲與圖片資源庫 -->
+    <div class="card">
+      <h2>🌐 定向爬蟲與多源圖片資源庫 (Asset Library)</h2>
+      <p style="font-size: 0.85rem; color: var(--text-muted);">本單元展示如何從 Google 搜索、歷史庫以及多模態 AI 工具獲取寫標書所需的數據與 3D 展場圖：</p>
+      
+      <div class="asset-grid">
+        <!-- 爬蟲數據 -->
+        <div class="asset-item">
+          <div class="asset-title">🔍 Google & 特定展會官網定向關鍵字爬取</div>
+          <div style="font-size: 0.8rem; background: rgba(0,0,0,0.2); padding: 0.75rem; border-radius: 6px; line-height: 1.5;">
+            <div style="color: var(--color-secondary); font-weight: bold; margin-bottom: 0.25rem;">[爬蟲關鍵字: "台南玩具節 施政重點" / "競標對手歷年總包底價"]</div>
+            • <strong>施政重點</strong>：台南市政府今年強調「IP在地授權、ESG綠色環保材質、AI虛擬導覽」。<br>
+            • <strong>競標底價</strong>：歷史數據顯示，競爭對手對此類 200 攤玩具展的報價約落在 420萬 ~ 460萬之間。<br>
+            • <strong>物料費率</strong>：目前南部展板、隔間木作價格上漲 5%，已更新至費率庫。
+          </div>
+        </div>
+
+        <!-- 圖片管理 -->
+        <div class="asset-item">
+          <div class="asset-title">🖼️ 多源展會圖片資源庫 (歷史實績與 AI 生成)</div>
+          <div style="display: flex; gap: 0.5rem;">
+            <div style="flex: 1; text-align: center;">
+              <span style="font-size: 0.7rem; color: var(--text-muted);">[歷史實績 3D 圖]</span>
+              <div style="background: #1e293b; height: 90px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 1px solid rgba(255,255,255,0.08);">📐</div>
+            </div>
+            <div style="flex: 1; text-align: center;">
+              <span style="font-size: 0.7rem; color: var(--color-secondary);">[AI 動態模擬新生成 3D 展位]</span>
+              <div style="background: #0f172a; height: 90px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 1px solid var(--color-secondary); color: var(--color-secondary); box-shadow: 0 0 10px rgba(20,184,166,0.2);">🤖🎨</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI 審計與優化建議面板 -->
+    <div class="card" style="margin-top: 2rem; border-color: rgba(245, 158, 11, 0.3);">
+      <h3 style="color: #fbbf24; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+        <span>🎯</span> AI 審計與優化顧問面板 (Audit & Advisory Console)
+      </h3>
+      
+      <div class="advisor-alert">
+        <div class="advisor-alert-title">💰 Token 費率與效能建議 (FinOps Warning)</div>
+        系統發現有員工頻繁使用 Pro-Grade Agent 進行重複性的招標文件格式對齊。AI 建議：<strong>「此類高頻、低風險的格式比對任務，建議改用本地 built-in 的 Chrome Nano 本地沙盒執行，預期可省下 85% 的雲端 API Token 成本。」</strong>
+      </div>
+
+      <div class="advisor-alert" style="background: rgba(239, 68, 68, 0.1); border-left-color: #ef4444;">
+        <div class="advisor-alert-title" style="color: #f87171;">⚠️ 敏感性資料外洩警告 (Data Leak Risk)</div>
+        檢測到「外部大同搭建商」提供的資歷證明原件中，含有未去識別化的人員真實身分證字號。<strong>AI 已自動執行遮蔽（去識別化），並向主管發送安全警告，防止敏感個資寫入地端真理庫 (SSOT)。</strong>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    let currentWorkflowState = 0; // 0: Intake, 1: Audited & Approved, 2: Harvested
+    let slaApproved = false;
+    let promptLevel = 'advanced'; // 'simple' vs 'advanced'
+    let currentMode = 'manual';   // 'manual' vs 'api'
+
+    const supervisorPrompts = {
+      audit: {
+        simple: "請對我們的投標資料進行合規差距檢查，找出專案經理與協力商的SLA問題，並提報更換名單。",
+        advanced: "你現在是 AIDE 決策特工。請對「原始標案資源」下的投標文件啟動自動化差距對帳。檢索 Jimmy 的 PMP 證照效期，以及名音燈光的 SLA 響應協議，輸出合規差距分析，並提報防禦備降人選與預算調整方案。"
+      },
+      harvest: {
+        simple: "請幫我把建議書上傳，並在歷史資料庫裡新增一筆玩具展得標紀錄。",
+        advanced: "你現在是決策審批 Agent。主管已批准「台南玩具總包標案」投標書。請將本地暫存區的繁星展覽實績、Sophia 的 PM 資歷公文，寫入 Excel 地端歷史庫 (SSOT) 歷史得標庫.xlsx 檔案，並完成知識閉環。"
+      }
+    };
+
+    function switchMode(mode) {
+      currentMode = mode;
+      const btnManual = document.getElementById('btn-manual-mode');
+      const btnApi = document.getElementById('btn-api-mode');
+      const statusText = document.getElementById('mode-status-text');
+      const btnTest = document.getElementById('btn-action-test');
+      
+      if (mode === 'manual') {
+        btnManual.classList.add('active');
+        btnApi.classList.remove('active');
+        statusText.innerText = "當前狀態：手動 Prompt 複製模式（離線防護/輕 Token）";
+        btnTest.innerText = "點擊複製 Prompt";
+      } else {
+        btnManual.classList.remove('active');
+        btnApi.classList.add('active');
+        statusText.innerText = "當前狀態：API 自動加速模式（雙軌 Real-time 網關）";
+        btnTest.innerText = "執行對帳測試";
+      }
+      
+      const consoleLog = document.getElementById('supervisor-console');
+      consoleLog.innerText += `
+[SYSTEM] 工作流模式切換為：` + (mode === 'manual' ? '✍️ 手動 Prompt 複製' : '⚡ API 自動加速') + `。`;
+      consoleLog.scrollTop = consoleLog.scrollHeight;
+    }
+
+    function setPromptLevel(level) {
+      promptLevel = level;
+      const btnSimple = document.getElementById('btn-prompt-simple');
+      const btnAdvanced = document.getElementById('btn-prompt-advanced');
+      
+      if (btnSimple && btnAdvanced) {
+        if (level === 'simple') {
+          btnSimple.classList.add('active');
+          btnSimple.style.background = '#fbbf24';
+          btnSimple.style.color = '#000';
+          btnAdvanced.classList.remove('active');
+          btnAdvanced.style.background = 'transparent';
+          btnAdvanced.style.color = '#94a3b8';
+        } else {
+          btnSimple.classList.remove('active');
+          btnSimple.style.background = 'transparent';
+          btnSimple.style.color = '#94a3b8';
+          btnAdvanced.classList.add('active');
+          btnAdvanced.style.background = 'var(--color-primary)';
+          btnAdvanced.style.color = 'white';
+        }
+      }
+      
+      const consoleLog = document.getElementById('supervisor-console');
+      consoleLog.innerText += `
+[SYSTEM] Prompt 階層切換為：` + (level === 'simple' ? '✍️ 簡單 Prompt 模式' : '🧠 強 Agent 認知模式') + `。`;
+      consoleLog.scrollTop = consoleLog.scrollHeight;
+    }
+
+    function logPMEvent(eventText) {
+      const pmAlertConsole = document.getElementById('pm-alert-console');
+      pmAlertConsole.innerText = eventText + '\n' + pmAlertConsole.innerText;
+      pmAlertConsole.scrollTop = 0;
+    }
+
+    function runAgentTest() {
+      const consoleLog = document.getElementById('supervisor-console');
+      document.getElementById('supervisor-decision-approval').style.display = 'none';
+      
+      const activePrompt = supervisorPrompts.audit[promptLevel];
+
+      if (currentMode === 'manual') {
+        navigator.clipboard.writeText(activePrompt).then(() => {
+          alert(`已複製主管對帳 Prompt！請貼到外部 AI 分頁中執行。`);
+          consoleLog.innerText += `
+
+[MANUAL] 複製了「合規差距與 PM 備降對帳」的 Prompt。`;
+          
+          document.getElementById('supervisor-decision-approval').innerHTML = `
+            <button onclick="approveSLADecision()" class="action-btn" style="background: var(--color-secondary); color: black; font-weight: bold; width: 100%; border: none; margin-top: 0.5rem; display: block;">✔️ 批准 PM 替換與 SLA 2h 溢價支出 (+30萬)</button>
+          `;
+          document.getElementById('supervisor-decision-approval').style.display = 'block';
+          consoleLog.scrollTop = consoleLog.scrollHeight;
+        });
+      } else {
+        consoleLog.innerText = `[SYSTEM] 啟動 Codex 實機測試與對帳 (SLA) 自動化執行...
+`;
+        let delay = 300;
+        
+        const logLines = [
+          `[INFO] 正在對話 Gemini 2.5 Flash / Chrome built-in Nano...`,
+          `[INFO] [CoT] 掃描「原始標案資源/」與 Staging 目錄... 找到大同搭建實績證明。`,
+          `[WARNING] [SLA Audit] 發現協力商名音燈光現場響應 SLA 為 4h，不符 RFP 2h 的合規要求！`,
+          `[ALERT] [PM Cert Audit] 擬任專案經理王志明 (Jimmy) 的 PMP 證照已於 2026-04-30 過期，存在直接廢標風險！`,
+          `[FALLBACK] 觸發備降保護機制：掃描人才庫證照，成功尋獲 Sophia (林淑芬) PMP 證書有效至 2028-12-31。`,
+          `[DECISION] 自動起草變更方案：1. 替換 PM 為 Sophia；2. 名音 2h SLA 溢價追加 300,000 元，請主管進行預算核決...`
+        ];
+        
+        logLines.forEach((line, idx) => {
+          setTimeout(() => {
+            consoleLog.innerText += line + `
+`;
+            consoleLog.scrollTop = consoleLog.scrollHeight;
+            
+            if (idx === logLines.length - 1) {
+              document.getElementById('supervisor-decision-approval').innerHTML = `
+                <button onclick="approveSLADecision()" class="action-btn" style="background: var(--color-secondary); color: black; font-weight: bold; width: 100%; border: none; margin-top: 0.5rem; display: block;">✔️ 批准 PM 替換與 SLA 2h 溢價支出 (+30萬)</button>
+              `;
+              document.getElementById('supervisor-decision-approval').style.display = 'block';
+            }
+          }, delay);
+          delay += 400;
+        });
+      }
+    }
+
+    function approveSLADecision() {
+      slaApproved = true;
+      alert('主管已核准：專案負責人替換為 Sophia，並核准名音燈光 2h SLA 溢價支出 (+NT$ 300,000)！');
+      
+      document.getElementById('supervisor-decision-approval').style.display = 'none';
+      currentWorkflowState = 1;
+      updateAIPMAdvisor();
+      
+      const consoleLog = document.getElementById('supervisor-console');
+      consoleLog.innerText += `
+[DECISION] 主管批准了名音燈光 SLA 2h 溢價預算變更與 PM Sophia 備降。Staging 狀態標記為合規。`;
+      consoleLog.scrollTop = consoleLog.scrollHeight;
+      
+      document.getElementById('staff-sla-status').innerText = '🟢 已由主管批准為 2h SLA';
+      document.getElementById('staff-sla-status').style.color = 'var(--color-secondary)';
+      
+      const staffConsole = document.getElementById('staff-console');
+      staffConsole.innerText += `
+[INFO] 接收到主管指令：合規對帳通過，SLA 預算已核准，專案經理替換為 Sophia。`;
+      staffConsole.scrollTop = staffConsole.scrollHeight;
+
+      logPMEvent("[D-Day 5 11:30] 📅 [AI PM] 主管已批准 PM 備降與 SLA 溢價變更，毛利率 15.55% 在防禦紅線以上。");
+    }
+
+    function runHarvest() {
+      const consoleLog = document.getElementById('supervisor-console');
+      
+      if (!slaApproved) {
+        alert('⚠️ 警告：本案尚未完成合規差距對帳與主管決策核准，無法進行最終收割發布！');
+        consoleLog.innerText += `
+[ERROR] 攔截一鍵收割指令：專案合規對帳尚未通過。`;
+        consoleLog.scrollTop = consoleLog.scrollHeight;
+        return;
+      }
+      
+      const activePrompt = supervisorPrompts.harvest[promptLevel];
+
+      if (currentMode === 'manual') {
+        navigator.clipboard.writeText(activePrompt).then(() => {
+          alert('一鍵收割 Sync Prompt 已複製到剪貼簿！請貼到對話分頁中執行。');
+          consoleLog.innerText += `
+
+[MANUAL] 複製了「一鍵收割與寫回 SSOT」的 Prompt。`;
+          currentWorkflowState = 2;
+          updateAIPMAdvisor();
+          consoleLog.scrollTop = consoleLog.scrollHeight;
+        });
+      } else {
+        consoleLog.innerText += `
+[SYSTEM] 觸發一鍵收割與 Sync & Commit 流程...
+`;
+        let delay = 300;
+        
+        const logLines = [
+          `[INFO] [CoT] 讀取地端建議書草稿... 進行 Hash 完整性驗證... OK.`,
+          `[INFO] [CoT] 正在寫入地端 Excel 歷史得標庫.xlsx 的「已得標標案」與「審計日誌」工作表...`,
+          `[INFO] [RAG Anti-Pollution] 執行防 RAG 污染與資料一致性稽核... 檢查通過。`,
+          `[INFO] [CoT] 將本次得標之大同 3.5M 實績與 Sophia PMP 資歷寫入本地資料庫...`,
+          `[SUCCESS] 最終建議書已同步發佈至地端公司知識庫！一條龍工作流圓滿結束。`
+        ];
+        
+        logLines.forEach((line, idx) => {
+          setTimeout(() => {
+            consoleLog.innerText += line + `
+`;
+            consoleLog.scrollTop = consoleLog.scrollHeight;
+            
+            if (idx === logLines.length - 1) {
+              currentWorkflowState = 2;
+              updateAIPMAdvisor();
+              logPMEvent("[D-Day 1 15:50] 📅 [AI PM] 收割發布成功！正式得標封存於 Excel 與地端資料庫，專案圓滿關閉。");
+            }
+          }, delay);
+          delay += 400;
+        });
+      }
+    }
+
+    function updateAIPMAdvisor() {
+      const ownerEl = document.getElementById('ai-pm-owner');
+      const progressTextEl = document.getElementById('ai-pm-progress-text');
+      const progressBarEl = document.getElementById('ai-pm-progress-bar');
+      const statusAnalysisEl = document.getElementById('ai-pm-status-analysis');
+      const riskAlertsEl = document.getElementById('ai-pm-risk-alerts');
+      const nextStepsEl = document.getElementById('ai-pm-next-steps');
+      const deliverablesEl = document.getElementById('ai-pm-deliverables');
+      
+      if (!ownerEl) return;
+      
+      let owner = "王志明 (Jimmy)";
+      let progress = 15;
+      let statusHtml = "";
+      let riskHtml = "";
+      let nextHtml = "";
+      let deliverables = [];
+      
+      if (currentWorkflowState === 0) {
+        owner = "王志明 (Jimmy) <span style='color: #fbbf24; font-size: 0.72rem; font-weight: bold;'> (PMP 證照過期警報)</span>";
+        progress = 15;
+        statusHtml = "正在進行標案前期資料整理，已建立「原始標案資源/」工作目錄，準備進行地端掃描與檔案複製。";
+        riskHtml = "• 原始標案檔案與資格證明散落，且大同搭建商實績證明 PDF 中存在敏感個資（身分證字號與電話），直接使用存在外洩風險。";
+        nextHtml = "1. 將 PDF 原始資源複製到安全隔離的「標案工作暫存區」中。<br>2. 執行檔名語意智慧重命名與個資去敏感化。<br>3. 請主管下達『執行對帳測試 (SLA)』進行合規審查。";
+        deliverables = ["2026_招標需求_台南玩具展_RFP.pdf", "大同搭建商_實績證明.pdf"];
+      }
+      else if (currentWorkflowState === 1) {
+        owner = "林淑芬 (Sophia) <span style='color: #10b981; font-size: 0.72rem; font-weight: bold;'> (有效 PMP 🟢)</span>";
+        progress = 55;
+        statusHtml = "已完成合規差距對帳與 SLA 壓力測試。備用 PM Sophia 替換成功，SLA 2h 溢價預算 NT$ 300,000 獲主管批准，實質毛利 15.55% 達防禦紅線以上。";
+        riskHtml = "• 大同搭建材料通膨 5% 且名音加急 SLA 溢價使利潤受壓，毛利率 15.55% 在防禦紅線以上。<br>• 技術建議書草稿需檢索 Sophia 證照資訊與繁星 3.5M 實績並妥善標記 [人類審查點] 防止合規漏洞。";
+        nextHtml = "1. 自本地實績與證照資料庫檢索 Sophia 證照與繁星實績。<br>2. 在建議書草稿中標註人類審查點以確保安全審核。<br>3. 主管確認後請點擊執行『一鍵收割 (Sync & Commit)』。";
+        deliverables = ["2026_招標需求_台南玩具展_RFP.pdf", "大同搭建商_實績證明.pdf", "clause_checklist.html", "pm_audit_report.html", "sla_gap_report.html", "material_adjust_report.html", "sla_cost_report.html", "profit_analysis_report.html"];
+      }
+      else if (currentWorkflowState === 2) {
+        owner = "林淑芬 (Sophia) <span style='color: #10b981; font-size: 0.72rem; font-weight: bold;'> (有效 PMP 🟢)</span>";
+        progress = 100;
+        statusHtml = "已完成投標書發布與寫回。投標總額 4.5M、PM Sophia 與 Force 簽章軌跡已寫回 Excel 本地真理庫，並同步發佈至地端公司知識庫。";
+        riskHtml = "• 專案成功閉環並封存。<br>• 偵測到大同搭設實績證明延誤並已生成催辦郵件，Jimmy 證照過期已存檔至 HR 調配。";
+        nextHtml = "1. 本競標專案已全面關閉並安全封存。";
+        deliverables = ["2026_招標需求_台南玩具展_RFP.pdf", "大同搭建商_實績證明.pdf", "clause_checklist.html", "pm_audit_report.html", "sla_gap_report.html", "material_adjust_report.html", "sla_cost_report.html", "profit_analysis_report.html", "draft_assembled.md", "upload_receipt.html", "db_sync_audit.html", "brain_sync_report.html", "pm_schedule_report.html", "missing_doc_alert.html", "cert_recovery_report.html"];
+      }
+      
+      ownerEl.innerHTML = owner;
+      progressTextEl.innerText = `${progress}%`;
+      progressBarEl.style.width = `${progress}%`;
+      statusAnalysisEl.innerText = statusHtml;
+      riskAlertsEl.innerHTML = riskHtml;
+      nextStepsEl.innerHTML = nextHtml;
+      
+      deliverablesEl.innerHTML = "";
+      if (deliverables.length === 0) {
+        deliverablesEl.innerHTML = `<span style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); padding: 0.15rem 0.35rem; border-radius: 4px; font-size: 0.68rem; color: var(--text-muted);">無</span>`;
+      } else {
+        deliverables.forEach(d => {
+          let badgeColor = "var(--text-muted)";
+          let bg = "rgba(255,255,255,0.06)";
+          let border = "rgba(255,255,255,0.1)";
+          if (d.endsWith(".xlsx")) { badgeColor = "#34d399"; bg = "rgba(52, 211, 153, 0.1)"; border = "rgba(52, 211, 153, 0.2)"; }
+          else if (d.endsWith(".html")) { badgeColor = "#38bdf8"; bg = "rgba(56, 189, 248, 0.1)"; border = "rgba(56, 189, 248, 0.2)"; }
+          else if (d.endsWith(".md")) { badgeColor = "#a78bfa"; bg = "rgba(167, 139, 250, 0.1)"; border = "rgba(167, 139, 250, 0.2)"; }
+          else if (d.endsWith(".txt") || d.endsWith(".pdf")) { badgeColor = "#fbbf24"; bg = "rgba(251, 191, 36, 0.1)"; border = "rgba(251, 191, 36, 0.2)"; }
+          
+          deliverablesEl.innerHTML += `
+            <span style="background: ${bg}; border: 1px solid ${border}; padding: 0.15rem 0.35rem; border-radius: 4px; font-size: 0.68rem; color: ${badgeColor}; font-family: monospace; white-space: nowrap;">${d}</span>
+          `;
+        });
+      }
+    }
+
+    window.onload = function() {
+      updateAIPMAdvisor();
+    }
+  </script>
+</body>
+</html>

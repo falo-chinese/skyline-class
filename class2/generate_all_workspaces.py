@@ -110,14 +110,17 @@ def build_excel_db(db_path, step_num):
     meta_headers = ["meta_id", "file_id", "year_extracted", "company_name", "amount_extracted", "cert_expiry_date", "sla_response_hours"]
     ws_meta.append(meta_headers)
 
-    # Sheet 3: 已得標標案 (Only for Step 6 / final SSOT)
-    if step_num >= 6:
+    # Sheet 3: 已得標標案 (For Step 5 historical compare & Step 6 final SSOT)
+    if step_num >= 5:
         ws_bids = wb.create_sheet(title="已得標標案")
         bids_headers = ["bid_id", "project_name", "budget", "assigned_pm", "pm_cert_status", "submitted_date", "approved_by", "status"]
         ws_bids.append(bids_headers)
-        # Add final record
-        ws_bids.append(["B001", "2026年台南玩具博覽會展位搭設與維運案", 4500000, "Sophia", "ACTIVE (2028-12-31)", "2026-06-16", "Force(ff)", "Submitted"])
+        # Add historical record
+        ws_bids.append(["H001", "2023年高雄動漫節大型展位規劃案", 3500000, "Sophia", "ACTIVE", "2023-08-15", "Admin", "Completed"])
+        if step_num >= 6:
+            ws_bids.append(["B001", "2026年台南玩具博覽會展位搭設與維運案", 4500000, "Sophia", "ACTIVE (2028-12-31)", "2026-06-16", "Force(ff)", "Submitted"])
         
+    if step_num >= 6:
         ws_audit = wb.create_sheet(title="審計日誌")
         audit_headers = ["log_id", "timestamp", "action", "operator", "hash_code"]
         ws_audit.append(audit_headers)
@@ -180,8 +183,10 @@ def build_excel_db(db_path, step_num):
     )
     
     sheets_to_format = [ws_files, ws_meta]
+    if step_num >= 5:
+        sheets_to_format.append(ws_bids)
     if step_num >= 6:
-        sheets_to_format.extend([ws_bids, ws_audit])
+        sheets_to_format.append(ws_audit)
 
     for ws in sheets_to_format:
         # Format headers
@@ -210,25 +215,24 @@ def build_excel_db(db_path, step_num):
 def generate_workspace(step_num):
     part_name = f"part{step_num}"
     part_dir = os.path.join(BASE_DIR, part_name)
-    temp_workspace = os.path.join(part_dir, "temp_workspace")
     
-    # Recreate clean workspace
-    if os.path.exists(temp_workspace):
-        shutil.rmtree(temp_workspace)
-    os.makedirs(temp_workspace, exist_ok=True)
+    # Recreate clean workspace folder (unpacked)
+    if os.path.exists(part_dir):
+        shutil.rmtree(part_dir)
+    os.makedirs(part_dir, exist_ok=True)
     
     # Copy original resources and templates
-    shutil.copytree(os.path.join(BASE_DIR, "原始標案資源"), os.path.join(temp_workspace, "原始標案資源"))
-    shutil.copytree(os.path.join(BASE_DIR, "參考範例"), os.path.join(temp_workspace, "參考範例"))
+    shutil.copytree(os.path.join(BASE_DIR, "原始標案資源"), os.path.join(part_dir, "原始標案資源"))
+    shutil.copytree(os.path.join(BASE_DIR, "參考範例"), os.path.join(part_dir, "參考範例"))
     
-    staging_dir = os.path.join(temp_workspace, "標案工作暫存區")
+    staging_dir = os.path.join(part_dir, "標案工作暫存區")
     os.makedirs(staging_dir, exist_ok=True)
     
     # Generate files in Staging area depending on step number
     if step_num >= 2:
         # Step 1 finished outputs: renamed files, RFP txt, initial database
         for rel_src, dst_name in RENAMED_MAPPING.items():
-            src_path = os.path.join(temp_workspace, "原始標案資源", rel_src)
+            src_path = os.path.join(part_dir, "原始標案資源", rel_src)
             dst_path = os.path.join(staging_dir, dst_name)
             shutil.copy(src_path, dst_path)
             
@@ -341,33 +345,28 @@ def generate_workspace(step_num):
             f.write(get_report_html("HITL 安全審核檢核表", body))
 
     if step_num >= 6:
-        # Step 5 finished outputs: Upload and SSOT writeback
-        # upload_receipt.html
-        body = """<h1>政府電子採購網 ─ 標案文件上傳電子憑證</h1>
+        # Step 5 finished outputs: Completeness & Gap Analysis
+        # draft_completeness_report.html
+        body = """<h1>2026年台南玩具博覽會 ─ 建議書完整度評估報告</h1>
         <table>
-            <tr><th>上傳時間</th><th>目標平台</th><th>投標檔案</th><th>MD5 雜湊校驗碼</th><th>操作軌跡</th></tr>
-            <tr><td>2026-06-16 19:40:02</td><td>政府電子採購網測試區</td><td>draft_assembled.md</td><td>5d41402abc4b2a76b9719d911017c592</td><td><span class="badge badge-success">SUCCESS</span></td></tr>
+            <tr><th>對比項目</th><th>玩具展草稿內容</th><th>高雄動漫節歷史規格</th><th>比對結果</th><th>完整度評估</th></tr>
+            <tr><td>技術架構與搭設工程</td><td>大同空間工程承包，環保材料佔比 35%</td><td>大同空間工程承包，實績 3.5M</td><td><span class="badge badge-success">技術規格完全承接</span></td><td>100%</td></tr>
+            <tr><td>證照合規性</td><td>PM Sophia (PMP 有效期至 2028-12-31)</td><td>PM 證照有效</td><td><span class="badge badge-success">證照效期完全對齊</span></td><td>100%</td></tr>
+            <tr><td>財務預算利潤</td><td>報價 4.5M，利潤率 15.55%</td><td>符合毛利防禦紅線</td><td><span class="badge badge-success">高於 15% 紅線</span></td><td>100%</td></tr>
         </table>"""
-        with open(os.path.join(staging_dir, "upload_receipt.html"), "w", encoding="utf-8") as f:
-            f.write(get_report_html("標案上傳電子憑證", body))
+        with open(os.path.join(staging_dir, "draft_completeness_report.html"), "w", encoding="utf-8") as f:
+            f.write(get_report_html("建議書草稿完整度報告", body))
             
-        # db_sync_audit.html
-        body = """<h1>地端 Excel 真理資料庫 (SSOT) 寫入審計報告</h1>
+        # compliance_gap_analysis.html
+        body = """<h1>2026年台南玩具博覽會 ─ 投標前合規差異分析報告</h1>
         <table>
-            <tr><th>影響工作表</th><th>寫入欄位與內容</th><th>主外鍵 file_id</th><th>資料庫雜湊值</th><th>寫入狀態</th></tr>
-            <tr><td>已得標標案</td><td>標案額 4.5M, PM Sophia, 狀態: Submitted</td><td>F001 (台南玩具展_RFP)</td><td>db892cb1082aa90f11</td><td><span class="badge badge-success">Success</span></td></tr>
+            <tr><th>RFP 合規項目</th><th>點檢狀態</th><th>草稿內對應人類審查點說明</th><th>安全覆核狀態</th></tr>
+            <tr><td>專案經理持證資歷</td><td><span class="badge badge-success">符合 (GREEN)</span></td><td>[人類審查點] 已更替過期 PM 志明為有效 PM Sophia</td><td><span class="badge badge-success">主管已確認</span></td></tr>
+            <tr><td>SLA 現場響應時間</td><td><span class="badge badge-success">符合 (GREEN)</span></td><td>[人類審查點] 已核准 SLA 30 萬溢價，名音升級 2h SLA</td><td><span class="badge badge-success">主管已確認</span></td></tr>
+            <tr><td>協力商單案實績</td><td><span class="badge badge-success">符合 (GREEN)</span></td><td>大同搭建單案 3.5M 符合 300 萬門檻</td><td><span class="badge badge-success">自動通過</span></td></tr>
         </table>"""
-        with open(os.path.join(staging_dir, "db_sync_audit.html"), "w", encoding="utf-8") as f:
-            f.write(get_report_html("Excel SSOT 寫入審計報告", body))
-            
-        # brain_sync_report.html
-        body = """<h1>Google NotebookLM 知識大腦同步發佈報告</h1>
-        <table>
-            <tr><th>發佈檔案</th><th>敏感個資去敏狀態</th><th>大腦同步時間</th><th>索引建立狀態</th></tr>
-            <tr><td>2026_玩具展建議書_Sophia_Scrubbed.md</td><td>100% Scrubbed (個資無殘留)</td><td>2026-06-16 19:42:00</td><td><span class="badge badge-success">Synchronized</span></td></tr>
-        </table>"""
-        with open(os.path.join(staging_dir, "brain_sync_report.html"), "w", encoding="utf-8") as f:
-            f.write(get_report_html("知識大腦同步發佈報告", body))
+        with open(os.path.join(staging_dir, "compliance_gap_analysis.html"), "w", encoding="utf-8") as f:
+            f.write(get_report_html("合規差異分析報告", body))
 
         # Step 6 background logs (for PM Monitoring)
         # pm_schedule_report.html
@@ -398,20 +397,7 @@ def generate_workspace(step_num):
         with open(os.path.join(staging_dir, "cert_recovery_report.html"), "w", encoding="utf-8") as f:
             f.write(get_report_html("PM 備降調配修復報告", body))
 
-    # Zip the workspace
-    zip_path = os.path.join(part_dir, f"{part_name}.zip")
-    if os.path.exists(zip_path):
-        os.remove(zip_path)
-        
-    with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
-        for root, dirs, filenames in os.walk(temp_workspace):
-            for filename in filenames:
-                filepath = os.path.join(root, filename)
-                rel_path = os.path.relpath(filepath, temp_workspace)
-                zipf.write(filepath, rel_path)
-                
-    print(f"SUCCESS: Created {part_name}.zip at {zip_path}")
-    shutil.rmtree(temp_workspace)
+    print(f"SUCCESS: Generated unpacked workspace for {part_name} at {part_dir}")
 
 def build_unified_workspace():
     # Build a complete workspace covering Step 6 (final Reference)
@@ -454,9 +440,8 @@ def build_unified_workspace():
         "retrieval_manifest.html": "知識庫真理檢索核對清單",
         "pm_replacement_log.html": "PM 替換安全日誌",
         "hitl_review_checklist.html": "HITL 安全審核檢核表",
-        "upload_receipt.html": "標案上傳電子憑證",
-        "db_sync_audit.html": "Excel SSOT 寫入審計報告",
-        "brain_sync_report.html": "知識大腦同步發佈報告",
+        "draft_completeness_report.html": "建議書草稿完整度報告",
+        "compliance_gap_analysis.html": "合規差異分析報告",
         "pm_schedule_report.html": "AI PM 進度風險日誌",
         "missing_doc_alert.html": "缺失文件催辦報告",
         "cert_recovery_report.html": "PM 備降調配修復報告"

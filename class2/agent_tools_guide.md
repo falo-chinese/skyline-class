@@ -17,8 +17,8 @@
 在開始任何分析前，必須將地端隨意放置的歷史得標檔案、Excel、PDF 進行清洗與結構化，存入本地中文暫存區以隔離資料，並自動建置本地 Excel 試算表資料庫。
 
 > [!TIP]
-> **📂 本章實作學員下載包 (Part 1 Start Pack)**：
-> 學員可在開始實作前，下載並解壓縮 **[part1.zip (原始標案資源與參考範本)](part1/part1.zip)**，將解壓後的 `原始標案資源/` 與 `參考範例/` 資料夾放置於您的專案工作目錄下，即可模擬真實地端環境進行 Prompt 操作。
+> **📂 本章實作學員工作區 (Part 1 Start Directory)**：
+> 學員可在開始實作前，直接瀏覽或複製 **[part1/ 目錄 (原始標案資源與參考範本)](part1/)**，將其中的 `原始標案資源/` 與 `參考範例/` 資料夾複製到您的專案工作目錄下，即可模擬真實地端環境進行 Prompt 操作。
 > 
 > *您也可以直接下載 **[class2_workspace.zip (Class 2 完整實作資源包)](class2_workspace.zip)**，包含所有原始資源、範本及預建的 `標案工作暫存區` 成果，一包即可適用於全部步驟的實作。*
 
@@ -135,8 +135,8 @@
 比對全新玩具展 RFP 與 Excel 試算表資料庫中的歷史資歷，抓出硬性廢標條款與協力廠 SLA 缺口。
 
 > [!TIP]
-> **📂 本章實作學員下載包 (Part 2 Start Pack)**：
-> 學員可下載並解壓縮 **[part2.zip (Step 1 完工狀態 Staging 目錄)](part2/part2.zip)**，直接獲取包含 Step 1 清洗與 Excel 資料庫建置完成後的 Staging 狀態工作目錄，即可直接進行第二步實作。
+> **📂 本章實作學員工作區 (Part 2 Start Directory)**：
+> 學員可直接瀏覽或複製 **[part2/ 目錄 (Step 1 完工狀態 Staging 目錄)](part2/)** 下的檔案，直接獲取包含 Step 1 清洗與 Excel 資料庫建置完成後的 Staging 狀態工作目錄，即可直接進行第二步實作。
 > 
 > *您也可以直接下載 **[class2_workspace.zip (Class 2 完整實作資源包)](class2_workspace.zip)**，包含原始資源、範本與預建暫存資料庫，一包即可暢通所有實作步驟。*
 
@@ -193,6 +193,12 @@
 
 評估協力廠商改為 2h SLA 增加的人工與保證金支出，對總利潤紅線 (15%) 的衝擊，進行壓力測試。
 
+> [!TIP]
+> **📂 本章實作學員工作區 (Part 3 Start Directory)**：
+> 學員可直接瀏覽或複製 **[part3/ 目錄 (Step 2 完工狀態 Staging 目錄)](part3/)** 下的檔案，直接獲取包含 Step 2 差距對帳完成後的 Staging 狀態工作目錄，即可直接進行第三步實作。
+> 
+> *您也可以直接下載 **[class2_workspace.zip (Class 2 完整實作資源包)](class2_workspace.zip)**，一包即可適用於全部步驟的實作。*
+
 * **輸入檔案**：Excel 試算表資料庫 `標案工作暫存區/標案工作記錄表.xlsx`。
 
 ### 3.1 物料上漲費率調校 (Material Rates Adjustment)
@@ -245,6 +251,12 @@
 ## 📘 4. 技術建議書草稿 RAG 組裝 (RAG Draft Compiling)
 
 結合地端實績與證照資料夾（如 `歷史得標庫.xlsx` 本地 Excel 與本地 PMP 證照 PDF 影本），編譯最終技術建議書草稿。
+
+> [!TIP]
+> **📂 本章實作學員工作區 (Part 4 Start Directory)**：
+> 學員可直接瀏覽或複製 **[part4/ 目錄 (Step 3 完工狀態 Staging 目錄)](part4/)** 下的檔案，直接獲取包含 Step 3 成本調試與決策完成後的 Staging 狀態工作目錄，即可直接進行第四步實作。
+> 
+> *您也可以直接下載 **[class2_workspace.zip (Class 2 完整實作資源包)](class2_workspace.zip)**，一包即可適用於全部步驟的實作。*
 
 > 📌 **雙軌人機分權架構設計**：
 > * **高階主管與特許同仁**：擁有地端真實檔案與資料庫的存取權，可調用 RAG 編譯特工，直接讀取並掃描地端機密資料庫以編譯建議書草稿，確保核心資產安全性。
@@ -299,66 +311,59 @@
 
 ---
 
-## 🖥️ 5. 實機跑測與收割發佈 (Sandbox Run & Harvest)
+## 📊 5. 招標文件完整度與差異分析 (Bid Draft Completeness & Gap Analysis)
 
-模擬沙盒上傳並同步本地 Excel SSOT 黃金得標庫，打通最後一哩路。
+比對技術建議書草稿與歷史成功得標報告、合規檢核表，並確證所有人類審查點。
+
+> [!TIP]
+> **📂 本章實作學員工作區 (Part 5 Start Directory)**：
+> 學員可直接瀏覽或複製 **[part5/ 目錄 (Step 4 完工狀態 Staging 目錄)](part5/)** 下的檔案，直接獲取包含 Step 4 建議書草稿編譯與安全標註完成後的 Staging 狀態工作目錄，即可直接進行第五步實作。
+> 
+> *您也可以直接下載 **[class2_workspace.zip (Class 2 完整實作資源包)](class2_workspace.zip)**，一包即可適用於全部步驟的實作。*
 
 > 📌 **雙軌人機分權架構設計**：
-> * **高階主管**：在完成合規審查後，可啟動地端一鍵收割，引導 Pro Agent 將真實得標資訊寫回地端絕對真理源（`歷史得標庫.xlsx`）中封存，並將建議書發佈至地端公司知識庫（`參考範例/`）。
-> * **全體一般同仁**：地端更新完成後，可將去敏建議書同步上傳至 **Google NotebookLM 共享大腦** 中作為未來的「黃金投標範本」，並搭配特工自動生成的 HTML 知識同步報告（`brain_sync_report.html`）進行高效傳承。
+> * **高階主管與特許同仁**：啟動一鍵差異分析，調用 Pro Agent 自動將本次生成之草稿與地端歷史得標庫（`歷史得標庫.xlsx`）及點檢表進行技術規格比對與合規勾稽，檢視毛利率與成本是否符合規範。
+> * **全體一般同仁**：則可檢閱產出的 HTML 完整度報告與差異分析報告（`draft_completeness_report.html` 與 `compliance_gap_analysis.html`），以確保建議書無潛在合規風險與文字漏洞。
 
-* **輸入檔案**：`標案工作暫存區/draft_assembled.md`、地端 Excel 歷史真理庫。
+* **輸入檔案**：`標案工作暫存區/draft_assembled.md`、`標案工作記錄表.xlsx`（包含歷史得標庫與點檢表資訊）。
 
-### 5.1 Computer Use 網頁上傳模擬 (Computer Use Simulation)
+### 5.1 歷史實績與技術對比 (Historical Achievements Comparison)
 * **✍️ 簡單規則版 Prompt**：
   ```text
-  請幫我把寫好的建議書草稿上傳到測試系統。
+  請幫我比對新建議書和歷史得標標案，看看技術內容和預算有沒有寫錯或遺漏。
   ```
 * **🧠 強 Agent 認知版 Prompt**：
   ```text
-  你現在是沙盒執行特工。請調用 Computer Use 特工在沙盒中啟動虛擬 Chrome 瀏覽器，模擬滑鼠與鍵盤操作，登入政府電子採購網測試區，並自動將「標案工作暫存區/draft_assembled.md」上傳至投標文件欄位。
+  你現在是歷史標案對帳特工。請讀取地端 Excel 歷史得標庫的「已得標標案」工作表，比對本次台南玩具展建議書草稿（draft_assembled.md）與 2023 年高雄動漫節（繁星專案 350 萬）的技術內容，核對是否承接了相同的技術規格、大同搭設實績，並驗證預算利潤是否在 15% 防禦紅線以上。
   ```
 * **📄 獨立 HTML 稽核報告 Prompt (加選)**：
   ```text
-  你現在是系統稽核特工。針對剛剛 Computer Use 模擬網頁投標文件上傳動作，請自動生成一份 HTML 上傳電子憑證「upload_receipt.html」。憑證應包含「上傳時間」、「目標平台 (電子採購網測試區)」、「投標檔案 (draft_assembled.md)」、「MD5 校校驗碼」與「模擬瀏覽器操作軌跡紀錄 (Success)」，供團隊留底稽核。
+  你現在是系統稽核特工。針對剛剛歷史標案對帳比對動作，請自動生成一份 HTML 建議書完整度報告「draft_completeness_report.html」。表格列出「對比項目」、「玩具展草稿內容」、「高雄動漫節歷史規格」、「比對結果（一致/差異）」與「完整度評估百分比（如 100%）」，以證明技術內容無重漏。
   ```
-  *CLI 執行指令*：`python3 scripts/generate_upload_receipt.py --draft 標案工作暫存區/draft_assembled.md`
 
-### 5.2 Excel SSOT 資料庫寫入 (SSOT Database Commit)
+### 5.2 合規點檢與人類審查點確證 (Checklist Validation & HITL Verification)
 * **✍️ 簡單規則版 Prompt**：
   ```text
-  在 Excel 的歷史得標庫裡新增一筆台南玩具展 Submitted 的紀錄。
+  幫我對一下點檢表，看建議書草稿裡有沒有確實寫好人類審查點。
   ```
 * **🧠 強 Agent 認知版 Prompt**：
   ```text
-  你現在是資料庫收割特工。請在主管核准後，將最終投標總額 (4.5M)、核准 PM (Sophia) 以及主管 Force(ff) 的數位簽章軌跡，正式寫入本地 Excel 黃金資料庫 (SSOT) 的 「已得標標案」工作表中，並在 審計日誌 生成審計日誌。
+  你現在是合規點檢特工。請掃描本次玩具展技術建議書草稿（draft_assembled.md）中的所有 `[人類審查點]` 標記，並比對「標案工作暫存區/clause_checklist.html」中的硬性廢標條款（如 PM 證照過期、SLA 響應、環保建材比例），確證所有合規變更與溢價調整均有主管簽核軌跡。
   ```
 * **📄 獨立 HTML 稽核報告 Prompt (加選)**：
   ```text
-  你現在是系統稽核特工。針對剛剛寫入 Excel 地端真理庫 (SSOT) 的投標紀錄動作，請對比寫入前後的檔案，自動生成一份 HTML 寫入審計報告「db_sync_audit.html」。表格展示「異動工作表」、「寫入欄位（總額4.5M、PM Sophia、主管Force簽章）」、「寫入狀態 (Success)」與「資料庫雜湊校驗碼」，供審計同仁檢驗資料誠信度。
+  你現在是系統稽核特工。針對剛剛合規點檢與人類審查點比對動作，請自動生成一份 HTML 合規差異分析報告「compliance_gap_analysis.html」。表格列出「RFP 合規項目」、「點檢狀態（符合/警告）」、「草稿內對應人類審查點說明」與「安全覆核狀態（主管核准）」，證明建議書無任何投標前廢標風險。
   ```
-  *CLI 執行指令*：`python3 scripts/generate_db_sync_audit.py --db 標案工作暫存區/標案工作記錄表.xlsx`
-
-### 5.3 地端公司知識庫同步與 Excel 寫回 (Local Knowledge Base & Excel Sync)
-* **✍️ 簡單規則版 Prompt**：
-  ```text
-  請幫我把這次寫好的標書傳回我們的知識庫裡。
-  ```
-* **🧠 強 Agent 認知版 Prompt**：
-  ```text
-  你現在是知識閉環特工。請將本次最終得標並去敏感化後的技術建議書草稿，發布回地端公司知識庫（`參考範例/` 資料夾）中，並將得標紀錄寫回地端 `歷史得標庫.xlsx` 本地 Excel 表格中，完成團隊知識閉環。*(備註：完成後同仁可手動將地端最新資料同步至 NotebookLM 供全體同仁手動共享查詢)*
-  ```
-* **📄 獨立 HTML 稽核報告 Prompt (加選)**：
-  ```text
-  你現在是系統稽核特工.針對將去敏感標書同步至地端公司知識庫與 Excel 歷史庫的動作，請自動生成一份 HTML 知識同步分析報告「brain_sync_report.html」。列出「發布檔案名稱」、「去敏處理狀態 (100% Scrubbed)」、「地端資料庫寫入狀態」、「大腦同步準備時間」以及「新黃金投標範本備份狀態」，證明團隊已完成閉環學習並更新地端知識庫。
-  ```
-  *CLI 執行指令*：`python3 scripts/generate_brain_sync_report.py`
-
----
 
 ## 📅 6. AI PM 排程與進度協調 (Progress & AI PM Orchestration)
 
 AI PM 定期分析員（Scheduled Analyst）負責背景監控 7 天關鍵路徑，管理協力商交付，實施主動協調。
+
+> [!TIP]
+> **📂 本章實作學員工作區 (Part 6 Start Directory)**：
+> 學員可直接瀏覽或複製 **[part6/ 目錄 (Step 5 完整度與差異分析完成後的 Staging 目錄)](part6/)** 下的檔案，直接獲取包含 Step 5 完整度與差異分析完成後的 Staging 狀態工作目錄，即可直接進行第六步實作。
+> 
+> *您也可以直接下載 **[class2_workspace.zip (Class 2 完整實作資源包)](class2_workspace.zip)**，一包即可適用於全部步驟的實作。*
 
 > 📌 **雙軌人機分權架構設計**：
 > * **高階主管與專案經理 (PM)**：在後台運行地端定時監控排程，負責監控 7 天關鍵路徑，並直接進行地端的人力調配與證照替換（如 PM Jimmy 證照過期時由地端自動遞補 Sophia）。

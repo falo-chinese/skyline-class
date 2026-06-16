@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>運維 SLA 差距分析報告</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background: #0f172a; color: #e2e8f0; padding: 2rem; margin: 0; }
+        .container { max-width: 900px; margin: 0 auto; background: #1e293b; padding: 2rem; border-radius: 12px; border: 1px solid #334155; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3); }
+        h1 { color: #38bdf8; font-size: 1.5rem; margin-top: 0; border-bottom: 2px solid #334155; padding-bottom: 0.75rem; }
+        table { width: 100%; border-collapse: collapse; margin-top: 1.5rem; }
+        th { background: #0f172a; text-align: left; padding: 0.75rem; font-size: 0.9rem; color: #38bdf8; border: 1px solid #334155; }
+        td { padding: 0.75rem; font-size: 0.85rem; border: 1px solid #334155; }
+        tr:nth-child(even) { background: #1e293b; }
+        tr:nth-child(odd) { background: #172554; }
+        .badge { display: inline-block; padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: bold; font-size: 0.75rem; }
+        .badge-success { background: #065f46; color: #34d399; }
+        .badge-fail { background: #7f1d1d; color: #f87171; }
+        .badge-warning { background: #78350f; color: #fbbf24; }
+        .footer { margin-top: 2rem; font-size: 0.75rem; color: #64748b; text-align: center; border-top: 1px solid #334155; padding-top: 1rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>協力廠商運維 SLA 差距分析報告</h1>
+        <table>
+            <tr><th>項目</th><th>RFP 規格要求</th><th>名音燈光商原始承諾</th><th>差距 (Gap)</th><th>合規判定</th></tr>
+            <tr><td>SLA現場響應時間</td><td>2 小時以內現場抵達</td><td>4 小時以內抵達現場</td><td>+2 小時 (延遲風險)</td><td><span class="badge badge-warning">不合規 (YELLOW_WARNING)</span></td></tr>
+        </table>
+        <p><strong>調整方案：</strong> 名音提議增加 300,000 元排班準備金即可將 SLA 上調至 2h；或改為極光音響 (2h SLA)。建議追加預算以保留長期合作名音。</p>
+        <div class="footer">Falo AIDE 智慧審計控制塔 - 稽核報告存檔</div>
+    </div>
+</body>
+</html>

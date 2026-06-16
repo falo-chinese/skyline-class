@@ -516,8 +516,8 @@
           </div>
           
           <div class="action-row">
-            <span class="action-text">2. 審查並一鍵收割 (Sync & Commit to SSOT)</span>
-            <button class="action-btn" id="btn-action-commit" onclick="runHarvest()" style="border-color: var(--color-accent); color: var(--color-accent); background: rgba(236, 72, 153, 0.1);">一鍵收割</button>
+            <span class="action-text">2. 執行完整度與差異分析 (Compare & Audit Draft)</span>
+            <button class="action-btn" id="btn-action-commit" onclick="runGapAnalysis()" style="border-color: var(--color-accent); color: var(--color-accent); background: rgba(236, 72, 153, 0.1);">一鍵差異分析</button>
           </div>
           
           <!-- 決策審核核決按鈕 -->
@@ -597,9 +597,9 @@
         simple: "請對我們的投標資料進行合規差距檢查，找出專案經理與協力商的SLA問題，並提報更換名單。",
         advanced: "你現在是 AIDE 決策特工。請對「原始標案資源」下的投標文件啟動自動化差距對帳。檢索 Jimmy 的 PMP 證照效期，以及名音燈光的 SLA 響應協議，輸出合規差距分析，並提報防禦備降人選與預算調整方案。"
       },
-      harvest: {
-        simple: "請幫我把建議書上傳，並在歷史資料庫裡新增一筆玩具展得標紀錄。",
-        advanced: "你現在是決策審批 Agent。主管已批准「台南玩具總包標案」投標書。請將本地暫存區的繁星展覽實績、Sophia 的 PM 資歷公文，寫入 Excel 地端歷史庫 (SSOT) 歷史得標庫.xlsx 檔案，並完成知識閉環。"
+      compare: {
+        simple: "請比對建議書草稿和歷史報告與點檢表，看有沒有遺漏或是沒對齊的地方。",
+        advanced: "你現在是標案分析與合規稽核特工。請比對本次生成之建議書草稿與歷史得標庫（歷史得標庫.xlsx）中類似標案（如 350 萬繁星專案）的核心技術規格與報價費率，並比對點檢表核對是否所有硬性合規條款（如 PM 證照、2h SLA 溢價、35% 環保建材）已正確標註人類審查點，產出完整度與差異比對報告。"
       }
     };
 
@@ -738,53 +738,51 @@
       logPMEvent("[D-Day 5 11:30] 📅 [AI PM] 主管已批准 PM 備降與 SLA 溢價變更，毛利率 15.55% 在防禦紅線以上。");
     }
 
-    function runHarvest() {
+    function runGapAnalysis() {
       const consoleLog = document.getElementById('supervisor-console');
       
       if (!slaApproved) {
-        alert('⚠️ 警告：本案尚未完成合規差距對帳與主管決策核准，無法進行最終收割發布！');
+        alert('⚠️ 警告：本案尚未完成合規差距對帳與主管決策核准，無法進行差異與完整度分析！');
         consoleLog.innerText += `
-[ERROR] 攔截一鍵收割指令：專案合規對帳尚未通過。`;
+[ERROR] 攔截完整度分析指令：專案合規對帳尚未通過。`;
         consoleLog.scrollTop = consoleLog.scrollHeight;
         return;
       }
       
-      const activePrompt = supervisorPrompts.harvest[promptLevel];
+      const activePrompt = supervisorPrompts.compare[promptLevel];
 
       if (currentMode === 'manual') {
         navigator.clipboard.writeText(activePrompt).then(() => {
-          alert('一鍵收割 Sync Prompt 已複製到剪貼簿！請貼到對話分頁中執行。');
+          alert('差異分析 Prompt 已複製到剪貼簿！請貼到對話分頁中執行。');
           consoleLog.innerText += `
 
-[MANUAL] 複製了「一鍵收割與寫回 SSOT」的 Prompt。`;
+[MANUAL] 複製了「建議書完整度與差異分析」的 Prompt。`;
           currentWorkflowState = 2;
           updateAIPMAdvisor();
           consoleLog.scrollTop = consoleLog.scrollHeight;
         });
       } else {
         consoleLog.innerText += `
-[SYSTEM] 觸發一鍵收割與 Sync & Commit 流程...
+[SYSTEM] 啟動建議書草稿完整度與差異分析 Agent...
 `;
         let delay = 300;
         
         const logLines = [
-          `[INFO] [CoT] 讀取地端建議書草稿... 進行 Hash 完整性驗證... OK.`,
-          `[INFO] [CoT] 正在寫入地端 Excel 歷史得標庫.xlsx 的「已得標標案」與「審計日誌」工作表...`,
-          `[INFO] [RAG Anti-Pollution] 執行防 RAG 污染與資料一致性稽核... 檢查通過。`,
-          `[INFO] [CoT] 將本次得標之大同 3.5M 實績與 Sophia PMP 資歷寫入本地資料庫...`,
-          `[SUCCESS] 最終建議書已同步發佈至地端公司知識庫！一條龍工作流圓滿結束。`
+          `[INFO] [CoT] 讀取「標案工作暫存區/draft_assembled.md」建議書草稿...`,
+          `[COMPARE] 比對 A. 歷史得標實績 (歷史得標庫.xlsx) ➔ 繁星 3.5M 核心技術規格比對通過，完整度 100%。`,
+          `[COMPARE] 比對 B. 合規點檢表 (clause_checklist.html) ➔ 偵測到文中已精確標註 2 處 [人類審查點]（Sophia 替換、SLA 30萬溢價）。`,
+          `[SUCCESS] 完整度與差異分析報告已生成！草稿無合規風險，等待主管簽核投標。`
         ];
         
         logLines.forEach((line, idx) => {
           setTimeout(() => {
-            consoleLog.innerText += line + `
-`;
+            consoleLog.innerText += line + `\n`;
             consoleLog.scrollTop = consoleLog.scrollHeight;
             
             if (idx === logLines.length - 1) {
               currentWorkflowState = 2;
               updateAIPMAdvisor();
-              logPMEvent("[D-Day 1 15:50] 📅 [AI PM] 收割發布成功！正式得標封存於 Excel 與地端資料庫，專案圓滿關閉。");
+              logPMEvent("[D-Day 1 15:50] 📅 [AI PM] 完整度與差異分析完成！已比對 Excel 歷史實績與點檢表，建議書準備就緒，專案安全閉環。");
             }
           }, delay);
           delay += 400;
@@ -823,16 +821,16 @@
         progress = 55;
         statusHtml = "已完成合規差距對帳與 SLA 壓力測試。備用 PM Sophia 替換成功，SLA 2h 溢價預算 NT$ 300,000 獲主管批准，實質毛利 15.55% 達防禦紅線以上。";
         riskHtml = "• 大同搭建材料通膨 5% 且名音加急 SLA 溢價使利潤受壓，毛利率 15.55% 在防禦紅線以上。<br>• 技術建議書草稿需檢索 Sophia 證照資訊與繁星 3.5M 實績並妥善標記 [人類審查點] 防止合規漏洞。";
-        nextHtml = "1. 自本地實績與證照資料庫檢索 Sophia 證照與繁星實績。<br>2. 在建議書草稿中標註人類審查點以確保安全審核。<br>3. 主管確認後請點擊執行『一鍵收割 (Sync & Commit)』。";
+        nextHtml = "1. 自本地實績與證照資料庫檢索 Sophia 證照與繁星實績。<br>2. 在建議書草稿中標註人類審查點以確保安全審核。<br>3. 主管確認後請點擊執行『一鍵差異分析』。";
         deliverables = ["2026_招標需求_台南玩具展_RFP.pdf", "大同搭建商_實績證明.pdf", "clause_checklist.html", "pm_audit_report.html", "sla_gap_report.html", "material_adjust_report.html", "sla_cost_report.html", "profit_analysis_report.html"];
       }
       else if (currentWorkflowState === 2) {
         owner = "林淑芬 (Sophia) <span style='color: #10b981; font-size: 0.72rem; font-weight: bold;'> (有效 PMP 🟢)</span>";
-        progress = 100;
-        statusHtml = "已完成投標書發布與寫回。投標總額 4.5M、PM Sophia 與 Force 簽章軌跡已寫回 Excel 本地真理庫，並同步發佈至地端公司知識庫。";
-        riskHtml = "• 專案成功閉環並封存。<br>• 偵測到大同搭設實績證明延誤並已生成催辦郵件，Jimmy 證照過期已存檔至 HR 調配。";
-        nextHtml = "1. 本競標專案已全面關閉並安全封存。";
-        deliverables = ["2026_招標需求_台南玩具展_RFP.pdf", "大同搭建商_實績證明.pdf", "clause_checklist.html", "pm_audit_report.html", "sla_gap_report.html", "material_adjust_report.html", "sla_cost_report.html", "profit_analysis_report.html", "draft_assembled.md", "upload_receipt.html", "db_sync_audit.html", "brain_sync_report.html", "pm_schedule_report.html", "missing_doc_alert.html", "cert_recovery_report.html"];
+        progress = 85;
+        statusHtml = "已完成建議書草稿 RAG 組裝與差異分析。草稿完整度達 98%，已成功比對歷史得標庫與合規點檢表。";
+        riskHtml = "• 無重大合規性與財務風險，僅餘 2 處標註之人行審批點待主管進行最後簽署。";
+        nextHtml = "1. 主管點擊並審閱人工審核點（Sophia 替換與 SLA 成本變更）；<br>2. 匯出最終版技術建議書，準備交付投標。";
+        deliverables = ["2026_招標需求_台南玩具展_RFP.pdf", "大同搭建商_實績證明.pdf", "clause_checklist.html", "pm_audit_report.html", "sla_gap_report.html", "material_adjust_report.html", "sla_cost_report.html", "profit_analysis_report.html", "draft_assembled.md", "draft_completeness_report.html", "compliance_gap_analysis.html", "pm_schedule_report.html", "missing_doc_alert.html", "cert_recovery_report.html"];
       }
       
       ownerEl.innerHTML = owner;
