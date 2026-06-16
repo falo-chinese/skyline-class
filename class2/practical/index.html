@@ -30,6 +30,7 @@
             --badge-color: #d8b4fe;
             --badge-border: rgba(192, 132, 252, 0.25);
             --h1-gradient: linear-gradient(135deg, #ffffff 40%, #c084fc 100%);
+            --sub-card-bg: rgba(255, 255, 255, 0.03);
         }
 
         body.theme-light {
@@ -55,6 +56,7 @@
             --badge-color: #0891b2;
             --badge-border: rgba(8, 145, 178, 0.15);
             --h1-gradient: linear-gradient(135deg, #1e293b 30%, #4f46e5 100%);
+            --sub-card-bg: rgba(0, 0, 0, 0.03);
         }
 
         * {
@@ -436,6 +438,116 @@
                 margin-bottom: 1.5rem;
             }
         }
+
+        /* Custom project grid and card styles */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .project-card {
+            background: var(--sub-card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1.75rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .project-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.12);
+        }
+
+        .project-badge {
+            display: inline-block;
+            padding: 0.25rem 0.6rem;
+            background: var(--badge-bg);
+            border: 1px solid var(--badge-border);
+            color: var(--badge-color);
+            font-size: 0.72rem;
+            font-weight: 700;
+            border-radius: 6px;
+            margin-bottom: 0.85rem;
+            align-self: flex-start;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .project-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 0.65rem;
+            line-height: 1.4;
+        }
+
+        .project-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 1.25rem;
+            flex-grow: 1;
+        }
+
+        .project-features {
+            list-style: none;
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.45rem;
+            border-top: 1px solid var(--card-border);
+            padding-top: 1rem;
+        }
+
+        .project-features li {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .project-features li::before {
+            content: "✦";
+            color: var(--primary);
+            font-size: 0.95rem;
+        }
+
+        .project-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.7rem 1rem;
+            background: var(--btn-bg);
+            color: #ffffff !important;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px var(--btn-shadow);
+        }
+
+        .project-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 16px var(--btn-shadow);
+        }
+
+        .project-btn .btn-arrow {
+            transition: transform 0.2s ease;
+        }
+
+        .project-btn:hover .btn-arrow {
+            transform: translateX(4px);
+        }
     </style>
 </head>
 <body>
@@ -512,34 +624,108 @@
                 <h2 class="section-header">實戰專案與進階手冊</h2>
                 <div class="section-subtitle">延伸學習：高階實務指南與開源專案</div>
                 <p>
-                    以下為本培訓主題之實務應用專案與技術手冊，協助同仁深入掌握 AI Agent、Chrome 外掛、GAS 與 ETL 等進階技術：
+                    以下為本培訓主題之實務應用專案與技術手冊，協助同仁深入掌握 AI Agent、Chrome 外掛、GAS 與 ETL 等進階技術。點擊按鈕即可跳轉至對應的原始官方教學手冊網頁：
                 </p>
-                <div class="resource-links" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
-                    <a href="https://falo-taiwan.github.io/antigravity/" target="_blank" class="resource-link" style="margin-top: 0;">
-                        <span class="badge">Antigravity</span>
-                        <span class="link-text">Antigravity 實戰開發與協作教學手冊</span>
-                        <span class="link-arrow">➔</span>
-                    </a>
-                    <a href="https://falo-taiwan.github.io/class/a01/class3/cases/chrome_extension/#tech-appendix" target="_blank" class="resource-link" style="margin-top: 0;">
-                        <span class="badge">Chrome Ext</span>
-                        <span class="link-text">Chrome Extension 填單助手實戰</span>
-                        <span class="link-arrow">➔</span>
-                    </a>
-                    <a href="https://falo-taiwan.github.io/class/a01/class3/cases/ipas-etl/" target="_blank" class="resource-link" style="margin-top: 0;">
-                        <span class="badge">ETL 實務</span>
-                        <span class="link-text">教材開發革命：從 PDF 到互動網站</span>
-                        <span class="link-arrow">➔</span>
-                    </a>
-                    <a href="https://falo-taiwan.github.io/gas-demo/#gas-v3-security-practice" target="_blank" class="resource-link" style="margin-top: 0;">
-                        <span class="badge">GAS 自動化</span>
-                        <span class="link-text">GAS 開發架構與部署實戰手冊</span>
-                        <span class="link-arrow">➔</span>
-                    </a>
-                    <a href="https://falo-taiwan.github.io/class/a01/class3/class03_qas.html" target="_blank" class="resource-link" style="margin-top: 0;">
-                        <span class="badge">學員 QA</span>
-                        <span class="link-text">學員課前提問解答 (QA)</span>
-                        <span class="link-arrow">➔</span>
-                    </a>
+                <div class="projects-grid">
+                    <!-- Project 1: Antigravity -->
+                    <div class="project-card">
+                        <div>
+                            <span class="project-badge">AI Agent 協作</span>
+                            <h3 class="project-title">Antigravity 實戰開發與協作教學手冊</h3>
+                            <p class="project-desc">
+                                引導使用 Google DeepMind 開發的 Antigravity AI 助理進行高效率的程式開發與自動化部署。學習如何安全授予權限，並藉由 CoT (思維鏈) 引導 Agent 進行檔案讀寫與測試。
+                            </p>
+                            <ul class="project-features">
+                                <li>免安裝 Python 環境設置與配置</li>
+                                <li>終端機安全授權與自主指令執行</li>
+                                <li>CoT (思維鏈) 高階引導心法與提示</li>
+                            </ul>
+                        </div>
+                        <a href="https://falo-taiwan.github.io/antigravity/" target="_blank" class="project-btn">
+                            <span>瀏覽 Antigravity 實戰手冊</span>
+                            <span class="btn-arrow">➔</span>
+                        </a>
+                    </div>
+
+                    <!-- Project 2: Chrome Extension -->
+                    <div class="project-card">
+                        <div>
+                            <span class="project-badge">瀏覽器自動化</span>
+                            <h3 class="project-title">Chrome Extension 填單助手實戰開發</h3>
+                            <p class="project-desc">
+                                瀏覽器擴充功能開發實務，示範如何建立一個填單外掛，自動控制網頁 DOM 並與外掛側邊欄 (Sidepanel) 進行資料通訊，實現 ERP 表單自動填寫。
+                            </p>
+                            <ul class="project-features">
+                                <li>Manifest V3 規範與底層權限架構</li>
+                                <li>Content Scripts 進行網頁 DOM 控制</li>
+                                <li>Sidepanel 側邊欄互動與通訊設計</li>
+                            </ul>
+                        </div>
+                        <a href="https://falo-taiwan.github.io/class/a01/class3/cases/chrome_extension/#tech-appendix" target="_blank" class="project-btn">
+                            <span>瀏覽 Chrome 外掛實戰</span>
+                            <span class="btn-arrow">➔</span>
+                        </a>
+                    </div>
+
+                    <!-- Project 3: GAS -->
+                    <div class="project-card">
+                        <div>
+                            <span class="project-badge">雲端與安全防禦</span>
+                            <h3 class="project-title">GAS 開發架構與安全部署實戰手冊</h3>
+                            <p class="project-desc">
+                                Google Apps Script 地雲串接與安全防禦實務。介紹如何透過 Web App 部署安全的自動化簽核與 API 服務，並防範潛在的安全性漏洞。
+                            </p>
+                            <ul class="project-features">
+                                <li>Clasp 地端版控與自動化部署</li>
+                                <li>GAS Web App API 架構與路由</li>
+                                <li>GAS V3 安全性防禦實踐與防護</li>
+                            </ul>
+                        </div>
+                        <a href="https://falo-taiwan.github.io/gas-demo/#gas-v3-security-practice" target="_blank" class="project-btn">
+                            <span>瀏覽 GAS 部署實戰</span>
+                            <span class="btn-arrow">➔</span>
+                        </a>
+                    </div>
+
+                    <!-- Project 4: IPAS ETL -->
+                    <div class="project-card">
+                        <div>
+                            <span class="project-badge">資料工程 & Vibe Coding</span>
+                            <h3 class="project-title">教材開發革命：從 PDF 到互動網站</h3>
+                            <p class="project-desc">
+                                介紹如何將傳統的 PDF 資料與 CSV 題庫，透過 AI 進行 ETL (擷取、轉換、載入)，並使用 Vibe Coding 技術在一分鐘內轉化為高品質的互動練習網站。
+                            </p>
+                            <ul class="project-features">
+                                <li>AI 輔助 ETL 資料管道建置與清洗</li>
+                                <li>CSV 題庫自動解析與動態 DOM 渲染</li>
+                                <li>Vibe Coding 一鍵部署與互動設計</li>
+                            </ul>
+                        </div>
+                        <a href="https://falo-taiwan.github.io/class/a01/class3/cases/ipas-etl/" target="_blank" class="project-btn">
+                            <span>瀏覽 ETL 實務手冊</span>
+                            <span class="btn-arrow">➔</span>
+                        </a>
+                    </div>
+
+                    <!-- Project 5: Q&A -->
+                    <div class="project-card">
+                        <div>
+                            <span class="project-badge">技術問答解答</span>
+                            <h3 class="project-title">學員課前提問解答 (Class 02 QA)</h3>
+                            <p class="project-desc">
+                                針對 Vibe Coding 實戰開發、AI Agent 協作與系統防禦過程中，學員所提出的深度問題進行詳細解答，涵蓋主機架設、安全與權限控制等範疇。
+                            </p>
+                            <ul class="project-features">
+                                <li>Antigravity 2.0 中文化與對話命名</li>
+                                <li>GAS 專案部署限制與存取權限</li>
+                                <li>高階人機協作分工與安全策略</li>
+                            </ul>
+                        </div>
+                        <a href="https://falo-taiwan.github.io/class/a01/class3/class03_qas.html" target="_blank" class="project-btn">
+                            <span>瀏覽技術問答集 (QA)</span>
+                            <span class="btn-arrow">➔</span>
+                        </a>
+                    </div>
                 </div>
             </section>
 
