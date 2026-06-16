@@ -43,6 +43,13 @@ for src, dst in files_to_copy:
     os.makedirs(os.path.dirname(dst_path), exist_ok=True)
     shutil.copy(src_path, dst_path)
 
+# Copy the demo/ai-parser-demo1 folder recursively
+demo_src = os.path.join(source_root, "demo/ai-parser-demo1")
+demo_dst = os.path.join(dest_root, "demo/ai-parser-demo1")
+if os.path.exists(demo_dst):
+    shutil.rmtree(demo_dst)
+shutil.copytree(demo_src, demo_dst)
+
 # Revert placeholders to production data
 for root, dirs, filenames in os.walk(dest_root):
     for filename in filenames:

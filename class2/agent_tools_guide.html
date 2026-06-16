@@ -358,6 +358,28 @@
           </div>
         </div>
       </div>
+
+      <!-- Sub-step 1.5 -->
+      <div style="margin-bottom: 1rem; border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 1.5rem;">
+        <h3 style="font-size: 1.05rem; color: white; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.5rem;">
+          <span style="color: var(--color-secondary);">1.5</span> 實務 ETL 與網頁資料爬取展示 (ETL & Web Crawler Demo)
+        </h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+          除了處理地端檔案外，AI Agent 也廣泛用於擷取政府網站或公開觀測站等網頁數據。此時，可利用瀏覽器自動化進行 ETL 流程。
+          本課程隨附了 <strong><a href="demo/ai-parser-demo1/index.html" target="_blank" style="color: var(--color-secondary); text-decoration: underline;">🤖 Falo AI Parser Demo 1 (ETL 爬蟲展示頁面)</a></strong> 資源包與線上版 <strong><a href="https://falo-taiwan.github.io/ai-parser-demo1/" target="_blank" style="color: var(--color-secondary); text-decoration: underline;">Falo AI Parser Demo 1 (GitHub Pages)</a></strong>。
+        </p>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+          此專案展示了完整的 <strong>ETL 爬蟲流程</strong>：
+          <ul style="margin-left: 1.5rem; margin-top: 0.25rem; font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+            <li><strong>Extract (擷取)</strong>：利用 AI 解析口語化請求（如「台積電今年五月資料」）轉化為結構化查詢計畫，並透過 Chrome Extension 自動化操作公開資訊觀測站（MOPS）進行查詢與截圖。</li>
+            <li><strong>Transform (轉換)</strong>：AI 自動處理公司代號解析（台積電 ➔ 2330）、民國年與西元年的時間正規化，並提供 HITL (人類在環) 介面供使用者審查、手動修改或覆寫 AI 的假設。</li>
+            <li><strong>Load (載入)</strong>：將抓取出的數據轉換並載入為 CSV、Excel 可讀取的格式，或生成動態展示主控台，供進一步財務利潤對帳使用。</li>
+          </ul>
+        </p>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+          學員可於本地解壓縮 <code>demo/ai-parser-demo1/downloads/falo_ai_parser_demo1_v1_draft_resource_pack.zip</code>，依照其中的說明在 Chrome 瀏覽器中載入擴充功能（開啟 <code>chrome://extensions</code> 開發者模式，點選「載入未打包擴充功能」選擇 <code>chrome_extension</code> 目錄），即可親自操作與體驗網頁資料自動化爬取。
+        </p>
+      </div>
     </div>
 
     <!-- 2. 合規差距比對 -->

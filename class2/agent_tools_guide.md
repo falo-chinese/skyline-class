@@ -86,6 +86,17 @@
   請檢查範本中的「檔案清冊」與「欄位萃取 metadata」工作表的 Schema、資料格式與填寫規範，確保新寫入的檔案資料（包含檔名、大小、類別、公司名稱、金額、過期日及SLA時數等萃取欄位）與範本完全一致，保持資料的一致性與關聯性。
   ```
 
+### 1.5 實務 ETL 與網頁資料爬取展示 (ETL & Web Crawler Demo)
+除了處理地端檔案外，AI Agent 也廣泛用於擷取政府網站或公開觀測站等網頁數據。此時，可利用瀏覽器自動化進行 ETL 流程。
+本課程隨附了 **[🤖 Falo AI Parser Demo 1 (ETL 爬蟲展示頁面)](demo/ai-parser-demo1/index.html)** 資源包與線上版 **[Falo AI Parser Demo 1 (GitHub Pages)](https://falo-taiwan.github.io/ai-parser-demo1/)**。
+
+此專案展示了完整的 **ETL 爬蟲流程**：
+* **Extract (擷取)**：利用 AI 解析口語化請求（如「台積電今年五月資料」）轉化為結構化查詢計畫，並透過 Chrome Extension 自動化操作公開資訊觀測站（MOPS）進行查詢與截圖。
+* **Transform (轉換)**：AI 自動處理公司代號解析（台積電 ➔ 2330）、民國年與西元年的時間正規化，並提供 HITL (人類在環) 介面供使用者審查、手動修改或覆寫 AI 的假設。
+* **Load (載入)**：將抓取出的數據轉換並載入為 CSV、Excel 可讀取的格式，或生成動態展示主控台，供進一步財務利潤對帳使用。
+
+學員可於本地解壓縮 `demo/ai-parser-demo1/downloads/falo_ai_parser_demo1_v1_draft_resource_pack.zip`，依照其中的說明在 Chrome 瀏覽器中載入擴充功能（開啟 `chrome://extensions` 開發者模式，點選「載入未打包擴充功能」選擇 `chrome_extension` 目錄），即可親自操作與體驗網頁資料自動化爬取。
+
 ---
 
 ## 🔍 2. 招標合規差距對帳 (Compliance Gap Audit)

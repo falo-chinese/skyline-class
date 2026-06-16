@@ -1,0 +1,987 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Falo AI Parser Demo 1 v1.0 草稿版，由 Falo x Force Cheng 2026/6/16 製作。主題是怎麼透過口語化指令，運用強大的 AI 去抓取政府網站資料，並示範 Vibe Coding、Chrome 外掛、AI 爬蟲、HITL 與 ETL 輸出。">
+  <meta name="keywords" content="Falo, Force Cheng, Vibe Coding, Falo AI Parser Demo 1, Falo OpenQuery Agent, Chrome Extension, MOPS, 公開資訊觀測站, 政府網站查詢, AI 爬蟲, HITL, Human in the loop, AI Browser, AI Agent, ETL, RWD, GitHub Pages, GEO, SEO, AI crawler metadata">
+  <meta name="author" content="Falo x Force Cheng">
+  <meta name="version" content="v1.0 草稿版">
+  <meta name="project-date" content="2026-06-16">
+  <meta name="geo.region" content="TW">
+  <meta name="geo.placename" content="Taipei, Taiwan">
+  <meta name="geo.position" content="25.0330;121.5654">
+  <meta name="ICBM" content="25.0330, 121.5654">
+  <meta name="ai-owner" content="Falo x Force Cheng 2026/6/16">
+  <meta name="ai-version" content="v1.0 草稿版">
+  <meta name="ai-summary" content="Falo AI Parser Demo 1 is a draft v1.0 RWD GitHub Pages teaching artifact and Chrome Extension resource pack. The main teaching idea is using conversational instructions and AI to collect government website data, with Vibe Coding, Chrome Extension automation, AI crawler workflows, HITL confirmation, and ETL-style outputs.">
+  <meta name="ai-purpose" content="Teaching page, resource pack download, and beginner-friendly explanation for Vibe Coding, AI crawler workflows, AI Browser automation, human-in-the-loop confirmation, public query interfaces, and ETL outputs.">
+  <meta name="ai-crawl-hint" content="Use this page as the public introduction for falo-taiwan/ai-parser-demo1. The downloadable ZIP contains the Chrome Extension draft resource pack. Page media includes renamed demo screenshots and screen recordings.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Falo AI Parser Demo 1 v1.0 草稿版">
+  <meta property="og:description" content="怎麼透過口語化指令，運用強大的 AI 去抓取政府網站資料。">
+  <meta property="og:image" content="assets/sidepanel-live-query.png">
+  <meta property="og:locale" content="zh_TW">
+  <title>Falo AI Parser Demo 1 v1.0 草稿版｜Falo x Force Cheng 2026/6/16</title>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Falo AI Parser Demo 1",
+    "applicationCategory": "BrowserExtension",
+    "softwareVersion": "v1.0 草稿版",
+    "creator": {
+      "@type": "Organization",
+      "name": "Falo x Force Cheng"
+    },
+    "dateCreated": "2026-06-16",
+    "operatingSystem": "Chrome",
+    "description": "Teaching demo about using conversational instructions and AI to collect government website data, with Vibe Coding, Chrome Extension automation, AI crawler workflows, HITL confirmation, and ETL-style outputs.",
+    "keywords": "Falo, Force Cheng, Vibe Coding, AI crawler, AI Browser, Chrome Extension, MOPS, Public Query, HITL, ETL, AI Parser Demo"
+  }
+  </script>
+  <style>
+    :root {
+      --bg: #f5f7fa;
+      --panel: #ffffff;
+      --ink: #1f2933;
+      --muted: #647086;
+      --line: #d9dee7;
+      --teal: #6f5bd8;
+      --teal-dark: #4c3da0;
+      --leaf: #2f7d5c;
+      --gold: #9a6b00;
+      --soft-teal: #f2f0ff;
+      --soft-gold: #fff7e3;
+      --shadow: 0 18px 55px rgba(31, 41, 51, .12);
+    }
+
+    body[data-theme="sakura"] {
+      --bg: #fff6f8;
+      --panel: #ffffff;
+      --ink: #2d2027;
+      --muted: #735d68;
+      --line: #efd3dc;
+      --teal: #b84d74;
+      --teal-dark: #833556;
+      --leaf: #6f8d68;
+      --gold: #9a6b00;
+      --soft-teal: #fff0f5;
+      --soft-gold: #fff8e8;
+      --shadow: 0 18px 55px rgba(131, 53, 86, .13);
+    }
+
+    body[data-theme="night"] {
+      --bg: #111827;
+      --panel: #182230;
+      --ink: #f5f7fb;
+      --muted: #b8c2d6;
+      --line: #334155;
+      --teal: #2f9ca5;
+      --teal-dark: #9ee7eb;
+      --leaf: #76c893;
+      --gold: #f7c948;
+      --soft-teal: #132f35;
+      --soft-gold: #2e2a18;
+      --shadow: 0 18px 55px rgba(0, 0, 0, .35);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      line-height: 1.58;
+    }
+
+    a { color: inherit; }
+
+    code {
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+
+    .hidden-watermark {
+      position: fixed;
+      inset: 0 auto auto 0;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .site {
+      min-height: 100vh;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 18px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      font-weight: 800;
+      color: var(--teal-dark);
+    }
+
+    .brand img {
+      width: 38px;
+      height: 38px;
+      flex: 0 0 auto;
+    }
+
+    .brand span {
+      overflow-wrap: anywhere;
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      padding: 7px 9px;
+      border: 1px solid transparent;
+      border-radius: 7px;
+    }
+
+    .nav-links a:hover {
+      border-color: var(--line);
+      background: #fff;
+    }
+
+    body[data-theme="night"] .nav-links a:hover,
+    body[data-theme="night"] .button.secondary,
+    body[data-theme="night"] .meta-strip span,
+    body[data-theme="night"] .step,
+    body[data-theme="night"] .card,
+    body[data-theme="night"] .resource {
+      background: var(--panel);
+    }
+
+    .theme-switcher {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .theme-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      min-height: 36px;
+      padding: 7px 10px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: var(--panel);
+      color: var(--ink);
+      cursor: pointer;
+      font-weight: 800;
+    }
+
+    .theme-button[aria-pressed="true"] {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--teal) 18%, transparent);
+    }
+
+    .swatch {
+      width: 16px;
+      height: 16px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      flex: 0 0 auto;
+    }
+
+    .swatch.cool { background: #6f5bd8; }
+    .swatch.sakura { background: #f3a7bd; }
+    .swatch.night { background: #111827; }
+
+    .hero {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(0, 1.02fr) minmax(320px, .98fr);
+      gap: 24px;
+      align-items: center;
+      padding: 34px 0 28px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 14px;
+      padding: 6px 10px;
+      border: 1px solid rgba(31, 111, 120, .25);
+      border-radius: 999px;
+      background: var(--soft-teal);
+      color: var(--teal-dark);
+      font-size: 13px;
+      font-weight: 750;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 780px;
+      color: var(--ink);
+      font-size: clamp(30px, 4.6vw, 52px);
+      line-height: 1.12;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      margin: 18px 0 0;
+      max-width: 720px;
+      color: #475467;
+      font-size: clamp(17px, 2.2vw, 22px);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 10px 16px;
+      border: 1px solid var(--teal-dark);
+      border-radius: 7px;
+      background: var(--teal);
+      color: #fff;
+      text-decoration: none;
+      font-weight: 800;
+    }
+
+    .button.secondary {
+      background: #fff;
+      color: var(--teal-dark);
+      border-color: var(--line);
+    }
+
+    .button.small {
+      min-height: 38px;
+      padding: 8px 12px;
+      font-size: 14px;
+    }
+
+    .meta-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .meta-strip span {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      padding: 5px 9px;
+    }
+
+    .preview {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    .preview img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .preview-note {
+      border-top: 1px solid var(--line);
+      padding: 12px 14px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .media-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .media-card {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+    }
+
+    .media-card img,
+    .media-card video {
+      display: block;
+      width: 100%;
+      height: auto;
+      background: #101828;
+    }
+
+    .media-open {
+      display: block;
+      width: 100%;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      cursor: zoom-in;
+    }
+
+    .media-open:focus-visible {
+      outline: 3px solid rgba(31, 111, 120, .38);
+      outline-offset: 3px;
+    }
+
+    .media-body {
+      padding: 14px;
+    }
+
+    .media-body h3 {
+      margin: 0 0 6px;
+      color: var(--teal-dark);
+      font-size: 16px;
+    }
+
+    .media-body p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .media-body a {
+      color: var(--teal-dark);
+      font-weight: 800;
+    }
+
+    .media-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .viewer {
+      width: min(1120px, calc(100% - 24px));
+      max-height: calc(100vh - 32px);
+      padding: 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
+
+    .viewer::backdrop {
+      background: rgba(15, 23, 42, .72);
+    }
+
+    .viewer-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .viewer-title {
+      margin: 0;
+      color: var(--ink);
+      font-size: 17px;
+    }
+
+    .viewer-body {
+      max-height: calc(100vh - 150px);
+      overflow: auto;
+      background: #101828;
+    }
+
+    .viewer-body img,
+    .viewer-body video {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-height: calc(100vh - 150px);
+      object-fit: contain;
+      background: #101828;
+    }
+
+    .viewer-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+      padding: 12px 14px;
+      border-top: 1px solid var(--line);
+    }
+
+    .section {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0;
+    }
+
+    .section h2 {
+      margin: 0 0 14px;
+      color: var(--ink);
+      font-size: clamp(24px, 3vw, 34px);
+      letter-spacing: 0;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      padding: 16px;
+    }
+
+    .card h3 {
+      margin: 0 0 8px;
+      color: var(--teal-dark);
+      font-size: 18px;
+    }
+
+    .card p, .card li, .note {
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .card ul {
+      margin: 10px 0 0;
+      padding-left: 18px;
+    }
+
+    .resource {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: center;
+      border: 1px solid rgba(154, 107, 0, .28);
+      border-radius: 8px;
+      background: var(--soft-gold);
+      padding: 18px;
+    }
+
+    .resource code {
+      color: var(--teal-dark);
+      overflow-wrap: anywhere;
+    }
+
+    .steps {
+      display: grid;
+      gap: 10px;
+      counter-reset: step;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 12px;
+      align-items: start;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 14px;
+    }
+
+    .step::before {
+      counter-increment: step;
+      content: counter(step);
+      display: inline-grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      background: var(--teal);
+      color: #fff;
+      font-weight: 800;
+    }
+
+    .footer {
+      margin-top: 28px;
+      border-top: 1px solid var(--line);
+      padding: 22px 0 34px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 1040px) {
+      .media-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 860px) {
+      .nav {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .nav-links {
+        justify-content: flex-start;
+      }
+
+      .theme-switcher {
+        align-items: flex-start;
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+        padding-top: 22px;
+      }
+
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      .resource {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .button {
+        width: 100%;
+      }
+
+      .hero-actions {
+        width: 100%;
+      }
+
+      .media-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body data-theme="cool">
+  <!-- Falo x Force Cheng 2026/6/16 | Falo AI Parser Demo 1 v1.0 草稿版 | GitHub Pages RWD intro | SEO GEO AI crawler metadata | media renamed for public release -->
+  <div class="hidden-watermark" aria-hidden="true">Falo x Force Cheng 2026/6/16 | Falo AI Parser Demo 1 v1.0 草稿版 | hidden watermark for SEO GEO AI crawler metadata | falo-taiwan/ai-parser-demo1</div>
+
+  <main class="site">
+    <nav class="nav" aria-label="頁面導覽">
+      <a class="brand" href="#top" aria-label="Falo AI Parser Demo 1">
+        <img src="assets/falo-ai-parser-demo1-logo.svg" alt="">
+        <span>Falo AI Parser Demo 1</span>
+      </a>
+      <div class="nav-links">
+        <a href="#media">素材展示</a>
+        <a href="#why">核心概念</a>
+        <a href="#etl">ETL 教學</a>
+        <a href="#models">模型選擇</a>
+        <a href="#automation">自動化模式</a>
+        <a href="#download">資源包</a>
+        <a href="#install">安裝</a>
+        <a href="#notes">備註</a>
+      </div>
+    </nav>
+    <div class="theme-switcher" aria-label="版型顏色切換">
+      <span>版型顏色</span>
+      <button class="theme-button" type="button" data-theme-choice="cool" aria-pressed="true">
+        <span class="swatch cool" aria-hidden="true"></span>
+        舒適紫淺色
+      </button>
+      <button class="theme-button" type="button" data-theme-choice="sakura" aria-pressed="false">
+        <span class="swatch sakura" aria-hidden="true"></span>
+        櫻花粉淺色
+      </button>
+      <button class="theme-button" type="button" data-theme-choice="night" aria-pressed="false">
+        <span class="swatch night" aria-hidden="true"></span>
+        深色展示
+      </button>
+    </div>
+
+    <section id="top" class="hero">
+      <div>
+        <p class="eyebrow">v1.0 草稿版｜RWD GitHub Pages 測試</p>
+        <h1>怎麼透過口語化指令，運用強大的 AI 去抓取政府網站資料</h1>
+        <p class="lead">這不是要取代公開資訊觀測站主網頁，而是一個教學案例：用 Vibe Coding 快速做出 Chrome 外掛，示範 AI 如何把「台積電今年五月資料」這類口語任務，轉成可確認、可修正、可輸出的 AI 爬蟲、HITL 人機協作與 ETL 流程。</p>
+        <div class="hero-actions">
+          <a class="button" href="downloads/falo_ai_parser_demo1_v1_draft_resource_pack.zip" download>下載 v1.0 草稿版資源包</a>
+          <a class="button secondary" href="#install">查看安裝流程</a>
+        </div>
+        <div class="meta-strip" aria-label="專案資訊">
+          <span>Falo x Force Cheng 2026/6/16</span>
+          <span>Vibe Coding 教學示範</span>
+          <span>Chrome Extension</span>
+          <span>政府公開網站 AI 爬蟲</span>
+          <span>HITL 人機協作</span>
+          <span>Asia/Taipei 時間戳</span>
+        </div>
+      </div>
+      <figure class="preview">
+        <img src="assets/sidepanel-live-query.png" alt="Falo AI Parser Demo 1 側邊欄與 MOPS 查詢結果示意畫面">
+        <figcaption class="preview-note">示意：AI 解析後的欄位用狀態色標示，讓人分辨 AI 理解值與手動覆寫值。</figcaption>
+      </figure>
+    </section>
+
+    <section id="media" class="section">
+      <h2>操作介面與素材展示</h2>
+      <div class="media-grid">
+        <article class="media-card">
+          <button class="media-open" type="button" data-viewer-type="image" data-viewer-src="assets/mops-empty-query.png" data-viewer-title="公開介面原始狀態">
+            <img src="assets/mops-empty-query.png" alt="MOPS 查詢頁面尚未帶入結果的示意截圖">
+          </button>
+          <div class="media-body">
+            <h3>公開介面原始狀態</h3>
+            <p>素材檔：<code>mops-empty-query.png</code>。用來說明一般使用者面對欄位時，需要自己知道公司代號、年份與月份。</p>
+            <div class="media-actions">
+              <button class="button small" type="button" data-viewer-type="image" data-viewer-src="assets/mops-empty-query.png" data-viewer-title="公開介面原始狀態">放大查看</button>
+              <a class="button small secondary" href="assets/mops-empty-query.png" download>下載 PNG</a>
+            </div>
+          </div>
+        </article>
+        <article class="media-card">
+          <button class="media-open" type="button" data-viewer-type="image" data-viewer-src="assets/sidepanel-live-query.png" data-viewer-title="AI 側邊欄協作狀態">
+            <img src="assets/sidepanel-live-query.png" alt="Chrome 側邊欄與公開資訊觀測站查詢結果截圖">
+          </button>
+          <div class="media-body">
+            <h3>AI 側邊欄協作狀態</h3>
+            <p>素材檔：<code>sidepanel-live-query.png</code>。展示 AI 解析、公司代碼候選、MOPS 查詢結果同時存在的教學情境。</p>
+            <div class="media-actions">
+              <button class="button small" type="button" data-viewer-type="image" data-viewer-src="assets/sidepanel-live-query.png" data-viewer-title="AI 側邊欄協作狀態">放大查看</button>
+              <a class="button small secondary" href="assets/sidepanel-live-query.png" download>下載 PNG</a>
+            </div>
+          </div>
+        </article>
+        <article class="media-card">
+          <div class="media-open" role="button" tabindex="0" data-viewer-type="video" data-viewer-src="assets/ai-parser-demo-recording-160030.mp4" data-viewer-title="自動化操作工作流">
+            <video muted playsinline preload="metadata" poster="assets/mops-empty-query.png">
+              <source src="assets/ai-parser-demo-recording-160030.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="media-body">
+            <h3>自動化操作工作流</h3>
+            <p>素材檔：<code>ai-parser-demo-recording-160030.mp4</code>。說明如何把自然語言任務轉成自動化操作流程，讓 Chrome 外掛協助完成查詢、整理與輸出。</p>
+            <div class="media-actions">
+              <button class="button small" type="button" data-viewer-type="video" data-viewer-src="assets/ai-parser-demo-recording-160030.mp4" data-viewer-title="自動化操作工作流">放大播放</button>
+              <a class="button small secondary" href="assets/ai-parser-demo-recording-160030.mp4" download>下載 MP4</a>
+            </div>
+          </div>
+        </article>
+        <article class="media-card">
+          <div class="media-open" role="button" tabindex="0" data-viewer-type="video" data-viewer-src="assets/ai-parser-demo-recording-162652.mp4" data-viewer-title="多家公司與不完整名稱解析">
+            <video muted playsinline preload="metadata" poster="assets/sidepanel-live-query.png">
+              <source src="assets/ai-parser-demo-recording-162652.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="media-body">
+            <h3>多家公司與不完整名稱解析</h3>
+            <p>素材檔：<code>ai-parser-demo-recording-162652.mp4</code>。示範當使用者輸入多家公司、公司名稱不完整或簡稱時，系統如何自動轉換成正確公司代碼並交由使用者確認。</p>
+            <div class="media-actions">
+              <button class="button small" type="button" data-viewer-type="video" data-viewer-src="assets/ai-parser-demo-recording-162652.mp4" data-viewer-title="多家公司與不完整名稱解析">放大播放</button>
+              <a class="button small secondary" href="assets/ai-parser-demo-recording-162652.mp4" download>下載 MP4</a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="why" class="section">
+      <h2>這個測試想教什麼？</h2>
+      <div class="cards">
+        <article class="card">
+          <h3>Vibe Coding 快速成形</h3>
+          <p>用 AI 協作把需求、畫面、測試案例逐步寫成 Chrome 外掛，讓初學者看見「邊做邊校正」的開發方式。</p>
+        </article>
+        <article class="card">
+          <h3>AI 爬蟲不是只抓資料</h3>
+          <p>AI 先解析自然語言、公司代號與時間範圍，再把公開網站查詢流程整理成可執行的操作計畫。</p>
+        </article>
+        <article class="card">
+          <h3>HITL 人機協作</h3>
+          <p>AI 先提出理解，人類再確認或修正。欄位狀態會顯示哪些條件來自 AI，哪些已被手動覆寫。</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="etl" class="section">
+      <h2>用 ETL 看懂這個專案</h2>
+      <div class="cards">
+        <article class="card">
+          <h3>Extract：取得資料與任務意圖</h3>
+          <p>這一層負責把「人說的需求」與「政府公開介面的資料」抓進流程。</p>
+          <ul>
+            <li>自然語言輸入：例如「台積電今年五月資料」。</li>
+            <li>政府公開網站：公開資訊觀測站 MOPS 查詢頁與歷史重大訊息結果。</li>
+            <li>公司名稱、簡稱、股票代碼對應表。</li>
+            <li>Chrome 外掛綁定頁面、資料流模式與 Computer Use 模擬操作素材。</li>
+            <li>截圖、錄影、原始查詢畫面作為教學證據。</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>Transform：AI 解析與人類確認</h3>
+          <p>這一層負責把模糊說法轉成可檢查、可修正、可執行的結構化條件。</p>
+          <ul>
+            <li>公司名稱反查代碼與候選清單。</li>
+            <li>民國年、西元年、季度、月份、單數月份等時間解析。</li>
+            <li>自然語言轉 JSON-like 操作計畫。</li>
+            <li>AI 理解欄位與人類手動覆寫欄位的狀態標示。</li>
+            <li>台北時間戳、成本估算與執行紀錄。</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>Load：輸出成可用成果</h3>
+          <p>這一層負責把查詢結果整理成不同角色能使用的格式，而不只是停在爬蟲資料。</p>
+          <ul>
+            <li>CSV：適合快速匯入試算表與資料清理。</li>
+            <li>Excel / 工作表概念：適合課堂整理、篩選、排序與人工覆核。</li>
+            <li>JSON：適合工程串接、AI 再分析與保留結構。</li>
+            <li>HTML 報告：適合人閱讀、交付與教學說明。</li>
+            <li>HTML 互動查詢式：適合讓使用者自行篩選月份、排序欄位與檢視結果。</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="models" class="section">
+      <h2>如何善用合適的 AI 模型</h2>
+      <div class="cards">
+        <article class="card">
+          <h3>地端規則與小模型就能做很多</h3>
+          <p>公司代號查表、月份判斷、民國年換算、固定欄位輸出，這些多半是規則明確的工作，不一定需要高級模型。</p>
+          <ul>
+            <li>適合：字典查詢、格式轉換、欄位檢查、固定 JSON schema。</li>
+            <li>優點：成本低、速度快、可離線或少量連網。</li>
+            <li>教學重點：先把資料結構設計好，模型只負責補足模糊處。</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>雲端模型處理模糊語意</h3>
+          <p>當使用者寫「去年第四季」「下半年單數月份」「台達」這種需要背景判斷的說法，雲端模型可以協助產生候選與解釋。</p>
+          <ul>
+            <li>適合：公司名稱歧義、自然語言時間範圍、跨資料源確認。</li>
+            <li>做法：先讓 AI 解析，再顯示操作計畫給人確認。</li>
+            <li>成本觀念：短 prompt、固定 schema、少量輸出即可，不必一開始就用最高階模型。</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>高級模型留給高價值判斷</h3>
+          <p>最高級模型適合用在需求拆解、教材設計、例外案例討論、跨系統流程規劃，而不是每一次欄位查詢都呼叫。</p>
+          <ul>
+            <li>基礎查詢：地端規則或低成本模型。</li>
+            <li>模糊解析：中階雲端模型加 HITL 確認。</li>
+            <li>複雜設計：高階模型協助架構、教案與風險判斷。</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="automation" class="section">
+      <h2>電腦自動化的幾種模式</h2>
+      <div class="cards">
+        <article class="card">
+          <h3>資料流 / API 模式</h3>
+          <p>直接理解網站請求、資料結構與查詢參數，用較高效率取得結果。這是目前此 demo 主要採用的穩定方式。</p>
+          <ul>
+            <li>適合：大量查詢、固定欄位、可重複下載。</li>
+            <li>優點：速度快、成本低、容易記錄執行時間與輸出格式。</li>
+            <li>限制：需要理解資料來源與公開介面的規則。</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>Chrome 外掛頁面操作</h3>
+          <p>透過 Extension 綁定使用者開啟的頁面，讀取欄位、填入條件、整理結果，適合把公開網站變成教學型工作流程。</p>
+          <ul>
+            <li>適合：政府網站、商業公開查詢介面、需要使用者授權的頁面。</li>
+            <li>優點：貼近真實瀏覽器環境，可保留畫面與操作證據。</li>
+            <li>限制：網站改版時需要重新檢查 selector 與流程。</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>Computer Use 模擬人操作</h3>
+          <p>讓電腦像人一樣看畫面、輸入、點按鈕、捲動結果。它通常不是最高效，但很適合展示 AI 現在到未來的操作趨勢。</p>
+          <ul>
+            <li>適合：沒有 API、頁面結構不穩、需要示範人類節奏的場景。</li>
+            <li>優點：直覺、可展示、讓非工程背景容易理解。</li>
+            <li>限制：速度較慢，穩定性與成本要靠 HITL 和流程設計控制。</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="download" class="section">
+      <h2>資源包下載</h2>
+      <div class="resource">
+        <div>
+          <h3>Falo AI Parser Demo 1 v1.0 草稿版</h3>
+          <p class="note">檔案：<code>falo_ai_parser_demo1_v1_draft_resource_pack.zip</code></p>
+          <p class="note">SHA256：<code>ba68e7341357b0a7e58c9745e4d5ab1eba8b5de445a743c410ec9310fae3676a</code></p>
+          <p class="note">用途：課堂示範、GitHub Pages 測試、Chrome Extension 未封裝載入。</p>
+        </div>
+        <a class="button" href="downloads/falo_ai_parser_demo1_v1_draft_resource_pack.zip" download>下載 ZIP</a>
+      </div>
+    </section>
+
+    <section id="install" class="section">
+      <h2>安裝方式</h2>
+      <div class="steps">
+        <div class="step">
+          <div>
+            <strong>下載並解壓縮資源包</strong>
+            <p class="note">下載 ZIP 後解壓縮，找到 Chrome Extension 專案資料夾。</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>開啟 Chrome Extension 開發者模式</strong>
+            <p class="note">進入 <code>chrome://extensions/</code>，打開「開發人員模式」。</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>載入未封裝項目</strong>
+            <p class="note">選擇解壓縮後的 <code>chrome_extensions/public_query_agent</code> 資料夾。</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>用自然語言測試</strong>
+            <p class="note">例如輸入：<code>台積電 今年五月資料</code>，觀察 AI 如何解析公司、年份與月份。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="notes" class="section">
+      <h2>備註</h2>
+      <div class="cards">
+        <article class="card">
+          <h3>公開頁負責介紹與下載</h3>
+          <p>GitHub Pages 適合放介紹、教學、資源包下載、SEO / GEO / AI crawler metadata。</p>
+        </article>
+        <article class="card">
+          <h3>外掛負責實際操作</h3>
+          <p>真正跨站填表、綁定頁面、讀回結果與匯出資料，仍由 Chrome Extension 在使用者授權後執行；這正是 AI 爬蟲與 HITL 示範的核心。</p>
+        </article>
+        <article class="card">
+          <h3>草稿版定位</h3>
+          <p>v1.0 草稿版適合教學與測試，不是正式商用版本。使用者應自行確認公開資料來源與查詢結果。</p>
+        </article>
+      </div>
+    </section>
+
+    <footer class="section footer">
+      <p>Falo x Force Cheng 2026/6/16｜Falo AI Parser Demo 1 v1.0 草稿版｜RWD GitHub Pages introduction page.</p>
+      <p>AI-readable note: this page introduces a draft Chrome Extension resource pack for teaching AI-assisted public query workflows, HITL confirmation, and Taiwan MOPS automation concepts.</p>
+    </footer>
+  </main>
+  <dialog class="viewer" id="assetViewer" aria-labelledby="assetViewerTitle">
+    <div class="viewer-head">
+      <h2 class="viewer-title" id="assetViewerTitle">素材預覽</h2>
+      <button class="button small secondary" type="button" id="assetViewerClose">關閉</button>
+    </div>
+    <div class="viewer-body" id="assetViewerBody"></div>
+    <div class="viewer-actions">
+      <a class="button small" id="assetViewerDownload" href="#" download>下載檔案</a>
+    </div>
+  </dialog>
+  <script>
+    const themeButtons = document.querySelectorAll("[data-theme-choice]");
+    const themeNames = new Set(["cool", "sakura", "night"]);
+
+    function applyTheme(theme) {
+      const safeTheme = themeNames.has(theme) ? theme : "cool";
+      document.body.dataset.theme = safeTheme;
+      themeButtons.forEach((button) => {
+        button.setAttribute("aria-pressed", String(button.dataset.themeChoice === safeTheme));
+      });
+      localStorage.setItem("falo-ai-parser-demo1-theme", safeTheme);
+    }
+
+    applyTheme(localStorage.getItem("falo-ai-parser-demo1-theme") || "cool");
+    themeButtons.forEach((button) => {
+      button.addEventListener("click", () => applyTheme(button.dataset.themeChoice));
+    });
+
+    const viewer = document.querySelector("#assetViewer");
+    const viewerTitle = document.querySelector("#assetViewerTitle");
+    const viewerBody = document.querySelector("#assetViewerBody");
+    const viewerDownload = document.querySelector("#assetViewerDownload");
+    const viewerClose = document.querySelector("#assetViewerClose");
+
+    function openAssetViewer(trigger) {
+      const type = trigger.dataset.viewerType;
+      const src = trigger.dataset.viewerSrc;
+      const title = trigger.dataset.viewerTitle || "素材預覽";
+      viewerTitle.textContent = title;
+      viewerDownload.href = src;
+      viewerDownload.setAttribute("download", src.split("/").pop());
+      viewerBody.replaceChildren();
+
+      if (type === "video") {
+        const video = document.createElement("video");
+        video.controls = true;
+        video.autoplay = true;
+        video.playsInline = true;
+        video.src = src;
+        viewerBody.append(video);
+      } else {
+        const image = document.createElement("img");
+        image.src = src;
+        image.alt = title;
+        viewerBody.append(image);
+      }
+
+      viewer.showModal();
+    }
+
+    document.querySelectorAll("[data-viewer-src]").forEach((trigger) => {
+      trigger.addEventListener("click", (event) => {
+        event.preventDefault();
+        openAssetViewer(trigger);
+      });
+      trigger.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          openAssetViewer(trigger);
+        }
+      });
+    });
+
+    viewerClose.addEventListener("click", () => viewer.close());
+    viewer.addEventListener("click", (event) => {
+      if (event.target === viewer) viewer.close();
+    });
+    viewer.addEventListener("close", () => viewerBody.replaceChildren());
+  </script>
+</body>
+</html>
