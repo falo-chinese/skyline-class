@@ -21,7 +21,7 @@
 
 *   👉 **線上 PWA 體驗入口**：[https://falo-taiwan.github.io/prompt-demo/](https://falo-taiwan.github.io/prompt-demo/) (一鍵加入主畫面)
 *   👉 **GitHub 專案原始碼**：[https://github.com/falo-taiwan/prompt-demo](https://github.com/falo-taiwan/prompt-demo) (包含 Extension 原始碼)
-*   👉 **GitHub 組織入口**：[https://github.com/falo-taiwan](https://github.com/falo-taiwan) (掌握最新工具鏈發布)
+*   💾 **下載 NotebookLM 黃金 Prompt 資源包 (CSV)**：[notebooklm_shared_brains_prompts.csv](notebooklm_shared_brains_prompts.csv) (相容 Prompt Hub，含 11 組大腦範本)
 
 ---
 
@@ -46,13 +46,7 @@ flowchart TD
 
 ---
 
-## 📥 下載 NotebookLM 黃金 Prompt 資源包
-
-本資源包包含標案黃金範本、外協合規、經驗對策以及導航大腦共 11 組高價值 Prompt 指令，相容於 Prompt Hub CSV 規格：
-
-*   **[💾 下載提示詞資源包 (CSV)](notebooklm_shared_brains_prompts.csv)**
-
-### 🛠️ 快速匯入步驟
+## 🛠️ 快速匯入步驟
 1. 下載上方的 `notebooklm_shared_brains_prompts.csv` 資源包。
 2. 開啟您的 Prompt Hub (PWA)。
 3. 點擊右上角 **「⚙️ 管理」** 面板，選擇 **「📥 匯入 CSV」** 並選取該 CSV 檔案。
