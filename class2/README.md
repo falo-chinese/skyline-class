@@ -26,7 +26,7 @@ graph TD
 | **SME** | 專案發起人 (Domain Expert) | 提供核心 Know-how、實務需求、架構方向與顧問觀點。 |
 | **PM** | **大腦 / PM / Architect** | 核心價值在於**長期記憶、專案脈絡管理、角色關係、架構整合與跨專案連結**。 |
 | **Content** | **主力產線** | 專注於 **Agent-First** 模式。負責**長文件寫作、教材工程、HTML/CSS 展示、GitHub Pages、工作台與 Artifact 管理**。 |
-| **Dev** | **技術特工** | 專注於 **Python、Automation、API、Runtime、工具開發與技術驗證**。在 Content 卡住或完成規格後進行實作補位。 |
+| **Dev (Codex)** | **技術特工 (自動化與動態測試專家)** | 專注於 **Python、Automation、API、Runtime、工具開發與技術驗證**。在應用實務中，**Codex 在動態測試上展現極佳能耐**，不僅是代碼審查，更能靈活運用各種方式（如 **Computer Use 螢幕操控與環境控制**）去模擬人類、真實調用系統工具運行整合測試，在 Content 完成規格後進行最終的工程實作與環境跑測補位。 |
 | **Search** | **搜尋研究員** | 負責網頁深度搜尋與背景資料研究。 |
 | **Google** | **Google 生態系專家** | 專注於 Google 生態系工具（如 Google Workspace、Docs、GAS 等）的深度整合。 |
 | **Reviewer** | **品質驗證人 (Reviewer)** | 尋找漏洞、分析風險、挑戰既有假設以確保交付品質。 |
