@@ -9,7 +9,7 @@
 | `02_internal_knowledge_assets/company_profile_component.md` | 星河公司簡介積木元件 | 3. 內部知識積木 | 熟悉資本額與組織資產 | 無 | 否 |
 | `02_internal_knowledge_assets/2025_apex_erp_project_case.md` | 鼎盛 ERP 專案 450w 實績 | 3. 內部知識積木 | 作為 REQ-01 資格對映積木 | 無 | 否 |
 | `02_internal_knowledge_assets/information_security_policy.md` | 資訊安全維護政策積木 | 3. 內部知識積木 | 作為 REQ-02 資安切結積木 | 無 | 否 |
-| `02_internal_knowledge_assets/falo_pm_methodology_component.md` | FALO PM 流程映射方法論 | 3. 內部知識積木 | 作為 REQ-03 技術方法論積木 | 無 | 否 |
+| `02_internal_knowledge_assets/skyline_pm_methodology_component.md` | Skyline PM 流程映射方法論 | 3. 內部知識積木 | 作為 REQ-03 技術方法論積木 | 無 | 否 |
 | `02_internal_knowledge_assets/training_and_handover_plan.md` | 教育訓練與無痛交接大綱 | 3. 內部知識積木 | 作為 REQ-04 培訓與交接積木 | 無 | 否 |
 | `02_internal_knowledge_assets/maintenance_service_component.md` | 售後維護支持 SLA 元件 | 3. 內部知識積木 | 對齊維護條款，小幅增強 | 無 | 否 |
 | `03_missing_items/missing_items_register.md` | 實體缺件登錄表 (公文未歸檔) | 5. 缺件與避險 | 練習查出 REQ-01 的致命缺件 | 無 | 否 |
@@ -24,7 +24,7 @@
 | `06_antigravity_prompts/` (5個檔案) | 5 階段 AIDE 投遞 Prompts | 5. Antigravity 指令 | 學員複製並投投至 Agent | `07_expected_outputs/` | 否 |
 | `07_expected_outputs/proposal_chapter_2_methodology_draft.md` | 標案第二章合規草稿產出 | 5. Antigravity 指令 | 對齊 Agent 一鍵組裝成果 | 無 | **🟢 是** |
 | `07_expected_outputs/executive_status_summary.md` | 總經理 4 防線審批結果 | 6. 中控收束與管理 | 對照總經理指令審核結果 | 無 | **🟢 是** |
-| `07_expected_outputs/falo_pm_control_fields.md` | 中控台控制欄位同步輸出 | 6. 中控收束與管理 | 對齊 FALO PM 指標同步 | 無 | **🟢 是** |
+| `07_expected_outputs/skyline_pm_control_fields.md` | 中控台控制欄位同步輸出 | 6. 中控收束與管理 | 對齊 Skyline PM 指標同步 | 無 | **🟢 是** |
 
 ---
 

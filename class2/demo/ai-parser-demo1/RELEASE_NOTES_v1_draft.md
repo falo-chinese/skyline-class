@@ -1,13 +1,13 @@
-# Falo AI Parser Demo 1 v1.0 草稿版
+# Skyline AI Parser Demo 1 v1.0 草稿版
 
 Date: 2026-06-16  
-Credit: Falo x Force Cheng 2026/6/16  
-Target path: `falo-taiwan/ai-parser-demo1`
+Credit: Skyline x Force Cheng 2026/6/16  
+Target path: `__Skyline_TAIWAN__/ai-parser-demo1`
 
 ## 改版重點
 
 - 建立可掛 GitHub Pages 的 RWD 介紹頁。
-- 對外名稱調整為 `Falo AI Parser Demo 1`。
+- 對外名稱調整為 `Skyline AI Parser Demo 1`。
 - 保留 Chrome Extension 資源包下載，並改成公開發佈用檔名。
 - 加入 SEO、GEO、Open Graph、AI-readable meta tags、JSON-LD、HTML 備註與隱藏浮水印。
 - 放入並重新命名四個教學素材：兩張截圖、兩支操作錄影。
@@ -29,5 +29,5 @@ Target path: `falo-taiwan/ai-parser-demo1`
 - `python3 -m unittest tests.test_tsmc_public_query_extension.TsmcPublicQueryExtensionTest.test_github_pages_intro_contains_resource_pack_and_metadata`
 - `node --check` for extension scripts.
 - Full Python unittest suite: 28 tests passed.
-- Browser RWD verification: desktop and 390px mobile viewport checked; mobile horizontal overflow fixed.
+- Browser RWD verification: desktop and 390px mobile viewport checked; mobile skylinetal overflow fixed.
 - Browser media verification: image cards and video cards can open in the in-page viewer; public MP4 and download URLs return HTTP 200 after deployment.

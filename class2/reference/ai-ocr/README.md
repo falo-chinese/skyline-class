@@ -1,14 +1,14 @@
-# FALO OCR Workbench Demo v1.02
+# Skyline OCR Workbench Demo v1.02
 
-FALO OCR Workbench v1.02 是一個獨立的、具備離線快取支援的 PWA 智能文字辨識與比對工具。
+Skyline OCR Workbench v1.02 是一個獨立的、具備離線快取支援的 PWA 智能文字辨識與比對工具。
 
-👉 **[線上測試 Live Demo 連結](https://falo-taiwan.github.io/ai-ocr-demo/)**
+👉 **[線上測試 Live Demo 連結](https://__Skyline_TAIWAN_IO__/ai-ocr-demo/)**
 
 ---
 
 ## 💡 聲明與版權宣告
 
-- **開發作者**：FALO x TAAT x Force Cheng 2026/6/1. All rights reserved.
+- **開發作者**：Skyline x TAAT x Force Cheng 2026/6/1. All rights reserved.
 - **教學示範**：**此專案為 AI 老師 Force Cheng 教學示範用途。**
 - **商業用途授權**：**本專案之程式碼與設計若有商業用途需求，請務必聯繫本人 (Force Cheng) 授權與洽談。**
 

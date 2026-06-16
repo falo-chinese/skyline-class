@@ -1,16 +1,16 @@
 <!doctype html>
-<!-- Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved. -->
+<!-- Copyright (c) Skyline X TAAT x Force Cheng 2026/6/1. All rights reserved. -->
 <html lang="zh-Hant">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0f766e">
-  <title>FALO OCR Workbench</title>
-  <meta name="author" content="FALO X TAAT x Force Cheng 2026/6/1">
+  <title>Skyline OCR Workbench</title>
+  <meta name="author" content="Skyline X TAAT x Force Cheng 2026/6/1">
   <link rel="manifest" href="./ocr-manifest.webmanifest">
   <link rel="icon" href="./icon.svg" type="image/svg+xml">
   <style>
-    /* Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved. */
+    /* Copyright (c) Skyline X TAAT x Force Cheng 2026/6/1. All rights reserved. */
     :root {
       --bg: #f7f8fb;
       --panel: #ffffff;
@@ -522,7 +522,7 @@
     }
 
     /* Dual OCR & Chrome Built-in AI Styles */
-    /* Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved. */
+    /* Copyright (c) Skyline X TAAT x Force Cheng 2026/6/1. All rights reserved. */
     .ocr-results-container {
       display: flex;
       flex-direction: column;
@@ -586,7 +586,7 @@
   <header class="topbar">
     <div class="topbar-inner">
       <div>
-        <h1>FALO OCR Workbench <span style="font-size: 13px; color: var(--accent);">v1.02</span></h1>
+        <h1>Skyline OCR Workbench <span style="font-size: 13px; color: var(--accent);">v1.02</span></h1>
         <p class="subtitle">獨立 PWA 元件：圖片 + OCR 操作 Prompt → 可編修文字結果。</p>
       </div>
       <div class="toolbar-actions">
@@ -807,7 +807,7 @@
 
   <!-- Copyright Footer -->
   <footer style="max-width: 1240px; margin: 20px auto; padding: 20px; text-align: center; color: var(--muted); font-size: 13px; border-top: 1px solid var(--line);">
-    <p>Copyright © FALO x TAAT x Force Cheng 2026/6/1. All rights reserved.</p>
+    <p>Copyright © Skyline x TAAT x Force Cheng 2026/6/1. All rights reserved.</p>
     <p style="margin-top: 4px; font-weight: 600;">此為 AI老師Force Cheng教學示範，如果商業用途請聯繫本人。</p>
   </footer>
 
@@ -903,7 +903,7 @@
                 <th style="padding: 8px 10px; border-bottom: 1px solid var(--line); white-space: nowrap;">模型名稱 (Model Identifier)</th>
                 <th style="padding: 8px 10px; border-bottom: 1px solid var(--line); white-space: nowrap;">官方輸入 (USD/1M Tokens)</th>
                 <th style="padding: 8px 10px; border-bottom: 1px solid var(--line); white-space: nowrap;">官方輸出 (USD/1M Tokens)</th>
-                <th style="padding: 8px 10px; border-bottom: 1px solid var(--line); white-space: nowrap;">FALO 估算匯率折合 (TWD/1M)</th>
+                <th style="padding: 8px 10px; border-bottom: 1px solid var(--line); white-space: nowrap;">Skyline 估算匯率折合 (TWD/1M)</th>
               </tr>
             </thead>
             <tbody>
@@ -981,18 +981,18 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script>
-    // Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved.
-    const WATERMARK = "FALO x TAAT x Force Cheng 2026/6/1 (AI老師Force Cheng教學示範，商業用途請聯繫本人)";
+    // Copyright (c) Skyline X TAAT x Force Cheng 2026/6/1. All rights reserved.
+    const WATERMARK = "Skyline x TAAT x Force Cheng 2026/6/1 (AI老師Force Cheng教學示範，商業用途請聯繫本人)";
     const STORAGE_KEYS = {
-      templates: "falo_ocr_templates_v01",
-      selectedTemplate: "falo_ocr_selected_template_v01",
-      geminiKey: "falo_ocr_gemini_key_v01",
-      selectedModel: "falo_ocr_selected_model_v01",
-      selectedModelB: "falo_ocr_selected_model_b_v01",
-      selectedLongSide: "falo_ocr_selected_longside_v01",
-      dualOcrMode: "falo_ocr_dual_mode_v01",
-      nanoTemplates: "falo_nano_prompt_templates_v102",
-      selectedNanoTemplate: "falo_nano_selected_template_v101"
+      templates: "skyline_ocr_templates_v01",
+      selectedTemplate: "skyline_ocr_selected_template_v01",
+      geminiKey: "skyline_ocr_gemini_key_v01",
+      selectedModel: "skyline_ocr_selected_model_v01",
+      selectedModelB: "skyline_ocr_selected_model_b_v01",
+      selectedLongSide: "skyline_ocr_selected_longside_v01",
+      dualOcrMode: "skyline_ocr_dual_mode_v01",
+      nanoTemplates: "skyline_nano_prompt_templates_v102",
+      selectedNanoTemplate: "skyline_nano_selected_template_v101"
     };
 
     const DEFAULT_TEMPLATES = [
@@ -1350,7 +1350,7 @@
     }
 
     function initDraggableWindow(el) {
-      // Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved.
+      // Copyright (c) Skyline X TAAT x Force Cheng 2026/6/1. All rights reserved.
       let isDragging = false;
       let startX = 0;
       let startY = 0;
@@ -1398,7 +1398,7 @@
     }
 
     function addLogEntry(action, details = {}) {
-      // Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved.
+      // Copyright (c) Skyline X TAAT x Force Cheng 2026/6/1. All rights reserved.
       const now = new Date();
       const ms = String(now.getMilliseconds()).padStart(3, "0");
       const timestamp = now.toLocaleString("zh-TW", { timeZone: "Asia/Taipei", hour12: false }) + "." + ms;
@@ -1445,7 +1445,7 @@
       
       let logs = [];
       try {
-        const stored = localStorage.getItem("falo_ocr_logs_v01");
+        const stored = localStorage.getItem("skyline_ocr_logs_v01");
         if (stored) logs = JSON.parse(stored);
       } catch (e) {
         logs = [];
@@ -1456,7 +1456,7 @@
       
       if (logs.length > 1000) logs = logs.slice(0, 1000);
       
-      localStorage.setItem("falo_ocr_logs_v01", JSON.stringify(logs));
+      localStorage.setItem("skyline_ocr_logs_v01", JSON.stringify(logs));
       renderLogs();
     }
 
@@ -1486,10 +1486,10 @@
     }
 
     function renderLogs() {
-      // Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved.
+      // Copyright (c) Skyline X TAAT x Force Cheng 2026/6/1. All rights reserved.
       let logs = [];
       try {
-        const stored = localStorage.getItem("falo_ocr_logs_v01");
+        const stored = localStorage.getItem("skyline_ocr_logs_v01");
         if (stored) logs = JSON.parse(stored);
       } catch (e) {
         logs = [];
@@ -1565,10 +1565,10 @@
     }
 
     function showLogDetail(id) {
-      // Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved.
+      // Copyright (c) Skyline X TAAT x Force Cheng 2026/6/1. All rights reserved.
       let logs = [];
       try {
-        const stored = localStorage.getItem("falo_ocr_logs_v01");
+        const stored = localStorage.getItem("skyline_ocr_logs_v01");
         if (stored) logs = JSON.parse(stored);
       } catch (e) {}
       
@@ -1601,10 +1601,10 @@
     }
 
     function exportLogsToCsv() {
-      // Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved.
+      // Copyright (c) Skyline X TAAT x Force Cheng 2026/6/1. All rights reserved.
       let logs = [];
       try {
-        const stored = localStorage.getItem("falo_ocr_logs_v01");
+        const stored = localStorage.getItem("skyline_ocr_logs_v01");
         if (stored) logs = JSON.parse(stored);
       } catch (e) {}
       
@@ -1634,13 +1634,13 @@
         ...logs.map((log) => columns.map((col) => escapeCsv(log[col])).join(","))
       ];
       
-      downloadText(lines.join("\n"), "falo_ocr_reconciliation_audit_logs.csv", "text/csv");
+      downloadText(lines.join("\n"), "skyline_ocr_reconciliation_audit_logs.csv", "text/csv");
       showToast("審計對帳紀錄匯出成功！");
       addLogEntry("匯出對帳日誌", { model: "CSV", rawResponse: `${logs.length} 筆紀錄` });
     }
 
     function importLogsFromCsv(file) {
-      // Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved.
+      // Copyright (c) Skyline X TAAT x Force Cheng 2026/6/1. All rights reserved.
       if (!file) return;
       const reader = new FileReader();
       reader.onload = () => {
@@ -1709,7 +1709,7 @@
             throw new Error("沒有載入任何有效的操作紀錄。");
           }
           
-          localStorage.setItem("falo_ocr_logs_v01", JSON.stringify(importedLogs));
+          localStorage.setItem("skyline_ocr_logs_v01", JSON.stringify(importedLogs));
           renderLogs();
           showToast("對帳審計紀錄匯入成功（全覆蓋）。");
           addLogEntry("匯入對帳日誌", { model: "CSV 匯入", rawResponse: `覆蓋載入 ${importedLogs.length} 筆` });
@@ -1721,10 +1721,10 @@
     }
 
     function clearLogs() {
-      // Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved.
+      // Copyright (c) Skyline X TAAT x Force Cheng 2026/6/1. All rights reserved.
       const confirmed = window.confirm("確定要清空所有的操作紀錄嗎？此動作將清除本機所有日誌。");
       if (!confirmed) return;
-      localStorage.removeItem("falo_ocr_logs_v01");
+      localStorage.removeItem("skyline_ocr_logs_v01");
       renderLogs();
       if (document.getElementById("logDetailView")) {
         document.getElementById("logDetailView").style.display = "none";
@@ -1788,7 +1788,7 @@
     }
 
     function saveCurrentTemplate() {
-      // Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved.
+      // Copyright (c) Skyline X TAAT x Force Cheng 2026/6/1. All rights reserved.
       const template = selectedTemplate();
       if (!template) {
         showToast("錯誤：無效的模板選取。");
@@ -1821,7 +1821,7 @@
     }
 
     function createNewTemplate() {
-      // Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved.
+      // Copyright (c) Skyline X TAAT x Force Cheng 2026/6/1. All rights reserved.
       const newTitle = els.templateTitle.value.trim() || "新的自訂模板";
       const newDesc = els.templateDescInput.value.trim() || "自訂的 Prompt 指令。";
       const newStatus = els.templateStatus.value.trim() || "stable";
@@ -1852,7 +1852,7 @@
     }
 
     function deleteCurrentTemplate() {
-      // Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved.
+      // Copyright (c) Skyline X TAAT x Force Cheng 2026/6/1. All rights reserved.
       const template = selectedTemplate();
       if (!template) {
         showToast("錯誤：無效的模板選取。");
@@ -1880,7 +1880,7 @@
     }
 
     function insertPromptToResult() {
-      // Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved.
+      // Copyright (c) Skyline X TAAT x Force Cheng 2026/6/1. All rights reserved.
       const promptText = els.promptTemplate.value.trim();
       if (!promptText) {
         showToast("提示：沒有可插入的 Prompt 文字。");
@@ -1926,7 +1926,7 @@
         columns.join(","),
         ...templates.map((template) => columns.map((column) => escapeCsv(template[column])).join(","))
       ];
-      downloadText(lines.join("\n"), "falo_ocr_prompt_templates.csv", "text/csv");
+      downloadText(lines.join("\n"), "skyline_ocr_prompt_templates.csv", "text/csv");
       showToast("已匯出 CSV 模板，可用 Excel / Google Sheets 編輯。");
     }
 
@@ -2210,7 +2210,7 @@
       }
 
       const maxLongSide = Number(qualityMode || 1280);
-      // Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved.
+      // Copyright (c) Skyline X TAAT x Force Cheng 2026/6/1. All rights reserved.
       const bitmap = await createImageBitmap(file);
       const longSide = Math.max(bitmap.width, bitmap.height);
       const scale = longSide > maxLongSide ? maxLongSide / longSide : 1;
@@ -2242,7 +2242,7 @@
     }
 
     // Dual OCR Layout & Mode Toggle Logic
-    // Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved.
+    // Copyright (c) Skyline X TAAT x Force Cheng 2026/6/1. All rights reserved.
     function toggleDualOcrMode(forceState) {
       if (typeof forceState === "boolean") {
         dualOcrMode = forceState;
@@ -2274,7 +2274,7 @@
     }
 
     // Gemini REST API calling helper
-    // Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved.
+    // Copyright (c) Skyline X TAAT x Force Cheng 2026/6/1. All rights reserved.
     async function callGeminiOcrApi(apiKey, model, imageInfo, prompt) {
       const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`;
       const response = await fetch(url, {
@@ -2354,7 +2354,7 @@
     }
 
     // Gemini REST API calling logic
-    // Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved.
+    // Copyright (c) Skyline X TAAT x Force Cheng 2026/6/1. All rights reserved.
     async function runGeminiOcr() {
       const apiKey = els.geminiKey.value.trim();
       const file = selectedImageFile;
@@ -2644,7 +2644,7 @@
     }
 
     // Chrome Gemini Nano Local AI controller
-    // Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved.
+    // Copyright (c) Skyline X TAAT x Force Cheng 2026/6/1. All rights reserved.
     function updateNanoStatus(type, text) {
       els.nanoStatusBadge.textContent = text;
       els.nanoStatusBadge.className = `local-ai-badge ${type}`;
@@ -2708,7 +2708,7 @@
     }
 
     async function detectGeminiNano() {
-      // Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved.
+      // Copyright (c) Skyline X TAAT x Force Cheng 2026/6/1. All rights reserved.
       const languageModel = getLanguageModelApi();
       if (!languageModel) {
         updateNanoStatus("no", "不支援 (無 LanguageModel API)");
@@ -2742,7 +2742,7 @@
     }
 
     async function downloadGeminiNano() {
-      // Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved.
+      // Copyright (c) Skyline X TAAT x Force Cheng 2026/6/1. All rights reserved.
       const languageModel = getLanguageModelApi();
       if (!languageModel) {
         showToast("本瀏覽器不支援 Chrome Built-in AI。");
@@ -2779,7 +2779,7 @@
     }
 
     function clearNanoSession() {
-      // Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved.
+      // Copyright (c) Skyline X TAAT x Force Cheng 2026/6/1. All rights reserved.
       if (nanoSession) {
         try {
           nanoSession.destroy();
@@ -2795,7 +2795,7 @@
     }
 
     async function runNanoComparison() {
-      // Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved.
+      // Copyright (c) Skyline X TAAT x Force Cheng 2026/6/1. All rights reserved.
       const finalPrompt = buildAnalysisPrompt();
       if (!finalPrompt) {
         showToast("錯誤：比對分析 Prompt 不能為空。");
@@ -3110,7 +3110,7 @@
     els.runNanoButton.addEventListener("click", runNanoComparison);
     els.runModelAAnalysisButton.addEventListener("click", runModelACloudAnalysis);
     els.copyNanoPromptBtn.addEventListener("click", () => {
-      // Copyright (c) FALO X TAAT x Force Cheng 2026/6/1. All rights reserved.
+      // Copyright (c) Skyline X TAAT x Force Cheng 2026/6/1. All rights reserved.
       const finalPrompt = buildAnalysisPrompt();
       if (!finalPrompt) {
         showToast("錯誤：比對分析 Prompt 不能為空。");

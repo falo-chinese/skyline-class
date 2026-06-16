@@ -11,7 +11,7 @@
 3. **填寫練習表** (在 `04_student_templates/` 練習，對照 `05_answer_keys/` 答案)。
 4. **發現缺件與風險** (在 `03_missing_items/` 與避險卡對照) ➔ 攔截廢標危機。
 5. **運行 Antigravity 提示** (在 `06_antigravity_prompts/`) ➔ 指揮 Agent 進行長文件一鍵組裝與 Diff。
-6. **審查與同步中控** (在 `07_expected_outputs/`) ➔ 產出 100% 合規標書草稿並回推 FALO PM。
+6. **審查與同步中控** (在 `07_expected_outputs/`) ➔ 產出 100% 合規標書草稿並回推 Skyline PM。
 
 ---
 

@@ -12,7 +12,7 @@ Class02 不是工具課。
 
 不是 NotebookLM 教學課。  
 不是 Antigravity 操作課。  
-不是 FALO PM 產品課。
+不是 Skyline PM 產品課。
 
 Class02 的真正主題是：
 
@@ -67,7 +67,7 @@ Class02 的真正主題是：
 flowchart TD
     C["Class02\n教學課程 / 改變認知"]
     A["AIDE\n長文件工程方法論 / 怎麼做"]
-    F["FALO PM\n知識資產中控 / 如何管理"]
+    F["Skyline PM\n知識資產中控 / 如何管理"]
 
     C --> A
     A --> F
@@ -92,7 +92,7 @@ Class02 只負責說清楚：
 - 為什麼既有資料還沒有變成知識資產
 - 為什麼招標書需要工程化
 - 為什麼 Antigravity 適合升級長文件作業
-- 為什麼最後會自然走向 FALO PM
+- 為什麼最後會自然走向 Skyline PM
 
 ### Layer 2：AIDE
 
@@ -138,13 +138,13 @@ Antigravity 長文件工程
 講師要避免把 OCR 說成另一個大系統專案。  
 它只是讓「過去存在但不可利用」的歷史招標文件，進入知識資產化流程的第一道門。
 
-### Layer 3：FALO PM
+### Layer 3：Skyline PM
 
 本質：知識資產中控  
 目的：管理流程、狀態、風險與接手  
 形式：中控清單、狀態視圖、風險與缺件追蹤  
 
-FALO PM 目前不要定位為 PM 軟體。  
+Skyline PM 目前不要定位為 PM 軟體。  
 它不是 Jira、ClickUp、Asana。
 
 它比較接近：
@@ -163,7 +163,7 @@ FALO PM 目前不要定位為 PM 軟體。
 | Antigravity 實作與示範 | 60% | 主軸，讓Grace看到核心作業如何升級 |
 | AI 導入 ROI / 成本產出感 | 20% | 讓主管理解為何值得投入 Pro 以上帳號與系統化 |
 | NotebookLM 串場示範 | 10% | 只作為企業知識大腦示範，不教入門 |
-| FALO PM 誘導理解 | 10% | 說明為什麼最後需要知識資產中控 |
+| Skyline PM 誘導理解 | 10% | 說明為什麼最後需要知識資產中控 |
 
 ---
 
@@ -307,7 +307,7 @@ Antigravity 應示範的流程：
 
 ---
 
-### 2:45 - 3:00｜收束到 FALO PM：為什麼最後要有系統
+### 2:45 - 3:00｜收束到 Skyline PM：為什麼最後要有系統
 
 教學目標：
 
@@ -322,10 +322,10 @@ Antigravity 可以處理一次標案作業
 ↓
 公司會開始需要管理狀態、缺件、風險與可重用成果
 ↓
-這就自然導向 FALO PM
+這就自然導向 Skyline PM
 ```
 
-FALO PM 要管理的問題：
+Skyline PM 要管理的問題：
 
 - 哪些標案處理到哪裡？
 - 哪些附件缺件？
@@ -337,7 +337,7 @@ FALO PM 要管理的問題：
 收束句：
 
 > Antigravity 解決「怎麼做長文件」。  
-> FALO PM 解決「長文件工作流怎麼被管理」。
+> Skyline PM 解決「長文件工作流怎麼被管理」。
 
 ---
 
@@ -360,7 +360,7 @@ NotebookLM 不是本堂主軸。
 ```text
 NotebookLM：查詢與引用
 Antigravity：長文件工程與作業升級
-FALO PM：狀態、風險、接手與管理
+Skyline PM：狀態、風險、接手與管理
 ```
 
 ---
@@ -382,7 +382,7 @@ aaa 要先準備：
 6. 可重用元件清單
 7. Antigravity 任務指令模板
 8. 總經理審核 AI 的指令卡
-9. FALO PM 收束頁：為什麼這會導向知識資產中控
+9. Skyline PM 收束頁：為什麼這會導向知識資產中控
 
 ### 6.2 aaa 輸出限制
 
@@ -390,7 +390,7 @@ aaa 要先準備：
 
 - 建立完整產品
 - 建立正式系統
-- 過度展開 FALO PM
+- 過度展開 Skyline PM
 - 把 NotebookLM 寫成主課
 - 把 AIDE 寫成一本完整方法論書
 - 建太多資料夾與 POC
@@ -414,7 +414,7 @@ aaa 要先準備：
 |---|---|---|
 | Class02 教材 | Class02 | 幫Grace理解 AI 如何升級招標書作業 |
 | AIDE 方法論 | AIDE backlog | 定義長文件工程方法、流程、模板 |
-| FALO PM | FALO PM backlog | 管理進度、缺件、風險、接手、QA、文件狀態 |
+| Skyline PM | Skyline PM backlog | 管理進度、缺件、風險、接手、QA、文件狀態 |
 | NotebookLM 素材 | Class02 supporting | 只作為知識查詢示範 |
 | 產品功能 | Product later | 涉及權限、資料庫、正式流程、自動化後台、部署 |
 
@@ -434,7 +434,7 @@ Grace上完 Class02，不需要記住很多術語。
 
 1. AI 不是只能生文章，而是可以升級核心作業流程。
 2. 幾百頁招標書需要 Antigravity + AIDE 這種長文件工程方式。
-3. 當長文件作業變成常態，公司最後會需要 FALO PM 這種知識資產中控。
+3. 當長文件作業變成常態，公司最後會需要 Skyline PM 這種知識資產中控。
 
 最終一句話：
 

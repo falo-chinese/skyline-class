@@ -92,7 +92,7 @@ def get_report_html(title, body_content):
 <body>
     <div class="container">
         {body_content}
-        <div class="footer">Falo AIDE 智慧審計控制塔 - 稽核報告存檔</div>
+        <div class="footer">Skyline AIDE 智慧審計控制塔 - 稽核報告存檔</div>
     </div>
 </body>
 </html>"""

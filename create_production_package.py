@@ -14,8 +14,8 @@ os.makedirs(os.path.join(dest_root, "docs"), exist_ok=True)
 
 # Files to copy and modify
 files_to_copy = [
-    ("falo_set_menu.md", "falo_set_menu.md"),
-    ("falo_set_menu.html", "falo_set_menu.html"),
+    ("skyline_set_menu.md", "skyline_set_menu.md"),
+    ("skyline_set_menu.html", "skyline_set_menu.html"),
     ("notebooklm_master_guide.md", "notebooklm_master_guide.md"),
     ("notebooklm_master_guide.html", "notebooklm_master_guide.html"),
     ("local_ai_pm_architecture.md", "local_ai_pm_architecture.md"),
@@ -84,9 +84,12 @@ for root, dirs, filenames in os.walk(dest_root):
             content = content.replace("G總", "辜總")
             content = content.replace("C董", "陳董")
             
-            # Revert company name
-            content = content.replace("Skyline", "地平線")
-            content = content.replace("skyline", "地平線")
+            # Ensure no "FALO" or "falo" or "地平線" or "Horizon" exists in the output
+            content = content.replace("FALO", "Skyline")
+            content = content.replace("falo", "skyline")
+            content = content.replace("地平線", "Skyline")
+            content = content.replace("Horizon", "Skyline")
+            content = content.replace("horizon", "skyline")
             
             # Revert links
             # md link

@@ -12,14 +12,14 @@
 
 ```mermaid
 graph TD
-    Start[開始：專案啟動說明] --> SetMenu[FALO 模型菜組合包]
+    Start[開始：專案啟動說明] --> SetMenu[Skyline 模型菜組合包]
     SetMenu --> Map[01. Agent 智能邊界]
     Map --> Flow[02. 安全合規與誠信防線]
     Flow --> MultiAI[03. 實戰對帳演練]
     MultiAI --> Artifact[04. 真理中心與一鍵收割]
 ```
 
-* **[FALO 模型菜組合包範例](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/falo_set_menu.md)**
+* **[Skyline 模型菜組合包範例](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/skyline_set_menu.md)**
   * *「企業智能投標工作流的實戰案例」* —— 串接 ETL 轉運站、Prompt 平台（含 **Chrome 衛星外掛** 隨手取用與雙向同步）、知識庫網關與 AI PM 系統的完整「模型菜」實戰。
 * **[單元 01：Agent 智能邊界與指揮官思維](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/docs/01_course_map.md)**
   * *「從問答到一條龍 Agent 的能耐跨越」* —— 對比舊式單點問答與新式端到端工作流的 Token 消耗效率與作業極限。

@@ -67,7 +67,7 @@ AIDE 觀察到的新流程：
 
 ### 發現一：不要把長文件當文章
 
-招標書、教材包、標準答案、Prompt 指令、FALO PM 中控欄位，都不是彼此孤立的文章。它們互相引用、互相對帳、互相驗證。
+招標書、教材包、標準答案、Prompt 指令、Skyline PM 中控欄位，都不是彼此孤立的文章。它們互相引用、互相對帳、互相驗證。
 
 如果用文章思維處理，就會變成：
 
@@ -153,7 +153,7 @@ AIDE 更接近：
 - 標準答案是驗收基準
 - Prompt 是操作程序
 - expected outputs 是產出規格
-- FALO PM 欄位是管理回推接口
+- Skyline PM 欄位是管理回推接口
 
 這些若能由規則與生成器統一管理，AIDE 就不只是教學框架，而是長文件工程 runtime 的雛形。
 
@@ -263,9 +263,9 @@ Antigravity 可作為長文件工程執行器。
 - 更新 task / walkthrough
 - 形成可重跑的教材資產產線
 
-### FALO PM
+### Skyline PM
 
-FALO PM 可作為管理回推層。
+Skyline PM 可作為管理回推層。
 
 若 AIDE 生成的文件資料集能輸出：
 
@@ -276,7 +276,7 @@ FALO PM 可作為管理回推層。
 - 合規覆蓋率
 - 待人工確認項目
 
-這些就能自然映射到 FALO PM 的 Knowledge Asset Control Center。
+這些就能自然映射到 Skyline PM 的 Knowledge Asset Control Center。
 
 ### QA Library
 
@@ -575,7 +575,7 @@ Workflow Codification
    路徑、檔名、任務目標要一致。
 
 6. Expected outputs 是否能回推管理欄位  
-   例如 FALO PM 是否可看到進度、缺件、風險、負責人、合規覆蓋率。
+   例如 Skyline PM 是否可看到進度、缺件、風險、負責人、合規覆蓋率。
 
 7. 生成器是否值得保留  
    若交付物未來可能改版，生成器應視為正式資產，而不是一次性 scratch。

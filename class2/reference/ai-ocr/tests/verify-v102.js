@@ -29,7 +29,7 @@ assert(html.includes("匯總輸出"), "analysis prompt defaults should include �
 assert(html.includes("彙整出最可能的版本"), "匯總輸出 prompt should ask for the most likely merged version");
 assert(html.includes("{{MODEL_A}}"), "analysis prompt should use MODEL_A for model name");
 assert(html.includes("{{MODEL_B}}"), "analysis prompt should use MODEL_B for model name");
-assert(html.includes("falo_nano_prompt_templates_v102"), "Nano Prompt templates should use v1.02 storage key");
+assert(html.includes("skyline_nano_prompt_templates_v102"), "Nano Prompt templates should use v1.02 storage key");
 assert(!html.includes("compressedFileSize"), "audit data should use neutral prepared file size naming");
 
 const visibleText = html

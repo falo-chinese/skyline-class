@@ -1,7 +1,7 @@
-# Falo AI Parser Demo 1
+# Skyline AI Parser Demo 1
 
 Version: v1.0 草稿版  
-Credit: Falo x Force Cheng 2026/6/16  
+Credit: Skyline x Force Cheng 2026/6/16  
 Purpose: GitHub Pages introduction page and resource package for an AI-assisted public-query Chrome Extension demo.
 
 ## What This Demo Shows
@@ -52,7 +52,7 @@ The page includes three color themes for teaching UI variation:
 
 - `index.html`: RWD GitHub Pages introduction page.
 - `.nojekyll`: GitHub Pages compatibility marker.
-- `downloads/falo_ai_parser_demo1_v1_draft_resource_pack.zip`: Chrome Extension resource pack.
+- `downloads/skyline_ai_parser_demo1_v1_draft_resource_pack.zip`: Chrome Extension resource pack.
 - `assets/mops-empty-query.png`: MOPS public query page screenshot.
 - `assets/sidepanel-live-query.png`: Extension side panel with live MOPS result screenshot.
 - `assets/ai-parser-demo-recording-160030.mp4`: browser-friendly H.264 MP4 recording for the automated operation workflow.
@@ -66,4 +66,4 @@ Each screenshot and video can be opened in a larger in-page viewer and downloade
 
 The page includes SEO, GEO, Open Graph, AI-readable meta tags, JSON-LD, visible attribution, HTML comments, and a hidden watermark:
 
-Falo x Force Cheng 2026/6/16 | Falo AI Parser Demo 1 | v1.0 草稿版
+Skyline x Force Cheng 2026/6/16 | Skyline AI Parser Demo 1 | v1.0 草稿版

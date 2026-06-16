@@ -13,7 +13,7 @@
 | `02_internal_knowledge_assets/2023_stellar_document_automation_case.md` | 實績3: 350w 智慧文件 (2023) | 3. 內部知識積木 | 評估作為資格實績 (🟢 綠燈最佳解，領域完全契合) | 否 |
 | `02_internal_knowledge_assets/2021_galaxy_portal_project_case.md` | 實績4: 800w Portal (2021) | 3. 內部知識積木 | 評估作為資格實績 (紅燈: 時間超期，淘汰) | 否 |
 | `02_internal_knowledge_assets/information_security_policy.md` | 星河標準資安政策規範 | 3. 內部知識積木 | 作為 REQ-02 切結底稿 | 否 |
-| `02_internal_knowledge_assets/falo_pm_methodology_component.md` | FALO 方法論與一致性藍圖 | 3. 內部知識積木 | 作為第二章執行方法論底稿 | 否 |
+| `02_internal_knowledge_assets/skyline_pm_methodology_component.md` | Skyline 方法論與一致性藍圖 | 3. 內部知識積木 | 作為第二章執行方法論底稿 | 否 |
 | `02_internal_knowledge_assets/training_and_handover_plan.md` | 教育訓練與無痛交接大綱 | 3. 內部知識積木 | 滿足 REQ-04 培訓與無痛傳承要求 | 否 |
 | `02_internal_knowledge_assets/maintenance_service_component.md` | 星河標準維護 SLA (4小時) | 3. 內部知識積木 | 比對技術差距 (RFP 要求 2小時) | 否 |
 | `02_internal_knowledge_assets/pm_resume_chihming.md` | PM 志明履歷積木 | 3. 內部知識積木 | 比對人員合規性 (紅燈: PMP證照已過期) | 否 |
@@ -30,7 +30,7 @@
 | `06_antigravity_prompts/` (6個檔案) | 6 階段 AIDE 決策提示集 | 5. Antigravity 指令 | 學員複製並投投至 Agent 進行自動決策與組裝 | 否 |
 | `07_expected_outputs/proposal_chapter_2_methodology_draft.md` | 方法論草稿 (自動增強SLA至2小時) | 5. Antigravity 指令 | 對齊 Agent 一鍵編譯與小幅增強結果 | **🟢 是** |
 | `07_expected_outputs/executive_status_summary.md` | 總經理 4防線進階審批卡 | 6. 中控收束與管理 | 對照總經理送件前最高避險審核結果 | **🟢 是** |
-| `07_expected_outputs/falo_pm_control_fields.md` | 進階中控台指標欄位 (內含黃紅橘變數) | 6. 中控收束與管理 | 對帳 FALO PM 指標同步 | **🟢 是** |
+| `07_expected_outputs/skyline_pm_control_fields.md` | 進階中控台指標欄位 (內含黃紅橘變數) | 6. 中控收束與管理 | 對帳 Skyline PM 指標同步 | **🟢 是** |
 
 ---
 

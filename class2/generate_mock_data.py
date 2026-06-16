@@ -81,7 +81,7 @@ def create_excel_template(filepath):
             cell = ws.cell(row=1, column=col_idx)
             cell.fill = header_fill
             cell.font = header_font
-            cell.alignment = Alignment(horizontal="center", vertical="center")
+            cell.alignment = Alignment(skylinetal="center", vertical="center")
             cell.border = thin_border
         
         ws.row_dimensions[1].height = 24

@@ -8,7 +8,7 @@
 ## 💬 投餵 Agent 指令 (複製框)：
 ```text
 aaa，請調用 /02_internal_knowledge_assets/ 下的 company_profile_component.md
-與 falo_pm_methodology_component.md 兩塊知識積木，
+與 skyline_pm_methodology_component.md 兩塊知識積木，
 幫我一鍵組裝與生成投標書第二章『專案執行方法論』草稿，
 並輸出版本修改 Diff 差分痕跡。
 ```

@@ -115,7 +115,7 @@
 * **示範操作**：點擊「AIDE Phase 4：SLA 衝突避險」複製框。
 * **投餵 aaa 的指令**：
   ```text
-  aaa，請對比外部 RFP 要求的 2 小時緊急維護響應，與 falo_pm_methodology.md 中標配的 4 小時維護響應。
+  aaa，請對比外部 RFP 要求的 2 小時緊急維護響應，與 skyline_pm_methodology.md 中標配的 4 小時維護響應。
   針對此項內外部衝突，請執行雙向治理動作：
   1. 同意在投標書中將維護響應時間執行『小幅增強』，自動編譯改寫為合規的 2 小時。
   2. 主動在內部管理摘要中，發出『SLA 成本與本地工程師備勤預算調撥』黃燈警示，要求財務勾稽。
@@ -137,10 +137,10 @@
 
 ### 📥 1. 核心知識工程：一般 Excel 檔案 (.xlsx) 導入與 PWA 雲地同步戰略
 
-在 Class 02 中，我們教導學員處理傳統 Excel 的匯入限制。結合 **FALO Prompt Hub PWA** 的精神，我們可以將 Excel 導入與 Prompt 資產管理進行整合：
+在 Class 02 中，我們教導學員處理傳統 Excel 的匯入限制。結合 **Skyline Prompt Hub PWA** 的精神，我們可以將 Excel 導入與 Prompt 資產管理進行整合：
 
 #### 🔄 雲地同步戰略：本地 PWA 殼 + 雲端 GAS 派發
-1. **地端 PWA 獨立視窗應用（地端安全）**：學員可透過 [FALO Prompt Hub PWA](../falo_prompt_hub/index.html) 在本地斷網下直接拖放 `.xlsx` 或 `.json` 插卡檔案。SheetJS 引擎在瀏覽器內核沙盒中執行解析，資料不落地、不耗 API 額度、100% 保密。
+1. **地端 PWA 獨立視窗應用（地端安全）**：學員可透過 [Skyline Prompt Hub PWA](../skyline_prompt_hub/index.html) 在本地斷網下直接拖放 `.xlsx` 或 `.json` 插卡檔案。SheetJS 引擎在瀏覽器內核沙盒中執行解析，資料不落地、不耗 API 額度、100% 保密。
 2. **雲端 Apps Script API（雲端即時派發）**：管理者可將最新 Prompt 與經驗元件維護在 Google Sheets 中，一鍵部署為 Apps Script Web App。PWA 端只要填入 GAS URL，即可實時拉取全公司最新的分類與指令卡片，兼具保密性與同步便利性。
 
 #### ⚠️ 核心限制與痛點
@@ -204,7 +204,7 @@
 
 *   **🟢 Path A: 既有資產增強 (Enriching Standard Assets)**
     *   **機制**：屬於重複發生的標準安全風險（如走線絆倒）。
-    *   **AI 自助作業**：Antigravity 在背景會自動將 `comp-07_onsite_wire_safety.md` 中的 SOP 電線黏貼規則，**寫入並合併至星河科技標準專案管理方法論 `falo_pm_methodology.md` 的第四章「現場安全控管」中**。未來投標書調用此方法論時，將自動具備此電線安全防護條款，投標書「越做專案越強」！
+    *   **AI 自助作業**：Antigravity 在背景會自動將 `comp-07_onsite_wire_safety.md` 中的 SOP 電線黏貼規則，**寫入並合併至星河科技標準專案管理方法論 `skyline_pm_methodology.md` 的第四章「現場安全控管」中**。未來投標書調用此方法論時，將自動具備此電線安全防護條款，投標書「越做專案越強」！
 *   **🟣 Path B: 新增防禦類別 (Creating New Defense Perimeter)**
     *   **機制**：暴露了前所未有的新型風險（如 Row 34 攤商提早撤場亂象，或 Row 24 啟動道具珍珠板尺寸反覆修改）。
     *   **AI 自助作業**：大腦發現這不屬於既有的公司簡介或 PMP 等標準資產。Antigravity 會**自動在專案目錄下創建一個全新的文件夾與文件：`case4_stall_management/stall_exit_rules.md`**！並寫入專屬的攤商管理切結與工讀生超時調派規則，自動拓寬公司的防禦疆域！

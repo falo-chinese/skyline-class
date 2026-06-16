@@ -2,7 +2,7 @@
 
 這是一個基於 AI 技術的財會自動化概念驗證（POC）專案。專案具體展示了如何將 AI 結合到會計勾稽與稅務申報的工作流中，以大幅降低人工出錯率並提升底稿核對的效率。
 
-線上 Live Demo 測試平台：**[AI 財會與稅務自動化專案 (Live Demo)](https://falo-taiwan.github.io/ai-finance-demo1/)**
+線上 Live Demo 測試平台：**[AI 財會與稅務自動化專案 (Live Demo)](https://__Skyline_TAIWAN_IO__/ai-finance-demo1/)**
 
 ---
 
@@ -10,8 +10,8 @@
 
 本專案源自於團隊日常對於「財務底稿與報稅自動化」及「紙本簽名薪資清冊稽核」等痛點的真實討論。討論過程中催生了以 AI 多模態技術解決會計人工登錄漏洞的想法：
 
-![自動化財務申報之日常對話痛點](reference/falo-prompt-manager/docs/falo_finance_motivation.jpg)
-![紙本清冊掃描與扣繳申報之靈感](reference/falo-prompt-manager/docs/falo_finance_release.jpg)
+![自動化財務申報之日常對話痛點](reference/skyline-prompt-manager/docs/skyline_finance_motivation.jpg)
+![紙本清冊掃描與扣繳申報之靈感](reference/skyline-prompt-manager/docs/skyline_finance_release.jpg)
 
 ---
 
@@ -19,13 +19,13 @@
 
 平台主畫面的左側載入了由 AI 模擬生成的薪資印領清冊示範影像，右側展示了 AI 結構化資料提取結果。AI 自動比對出人工計算的實領錯誤，以及防呆檢驗出簽名處的「代簽」異常：
 
-![AI 財會系統實機畫面](reference/falo-prompt-manager/docs/falo_finance_dashboard.jpg)
+![AI 財會系統實機畫面](reference/skyline-prompt-manager/docs/skyline_finance_dashboard.jpg)
 
 ---
 
 ## 3. 操作錄影與勾稽示範
 
-示範錄影路徑：[falo_finance_demo.mp4](reference/falo-prompt-manager/docs/falo_finance_demo.mp4)
+示範錄影路徑：[skyline_finance_demo.mp4](reference/skyline-prompt-manager/docs/skyline_finance_demo.mp4)
 
 ---
 

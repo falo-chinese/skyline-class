@@ -1,4 +1,4 @@
-const CACHE_NAME = "falo-prompt-manager-v03-20260602-ocr-component-v102-fly-window";
+const CACHE_NAME = "skyline-prompt-manager-v03-20260602-ocr-component-v102-fly-window";
 const APP_SHELL = [
   "./",
   "./index.html",

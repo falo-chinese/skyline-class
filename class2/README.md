@@ -52,17 +52,17 @@ Skyline 這堂課要展示的，**不是哪一個 AI 最強，而是如何用最
 
 ---
 
-## 🍱 FALO 模型菜組合包範例：企業智能投標工作流
+## 🍱 Skyline 模型菜組合包範例：企業智能投標工作流
 
-我們已將前述所有獨立模組（ETL、Prompt、RAG、PM）串接，形成一套完整的 **「FALO 模型菜組合包 (Set Meal)」** 實戰範例。
-* 完整內容請見：**[FALO 模型菜組合包範例](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/falo_set_menu.md)**
+我們已將前述所有獨立模組（ETL、Prompt、RAG、PM）串接，形成一套完整的 **「Skyline 模型菜組合包 (Set Meal)」** 實戰範例。
+* 完整內容請見：**[Skyline 模型菜組合包範例](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/skyline_set_menu.md)**
 
 ---
 
 ## 導覽指引
 
 * 進入 [教材工作台 (Workbench)](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/workbench/index.md)
-* 閱讀 [FALO 模型菜組合包範例](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/falo_set_menu.md)
+* 閱讀 [Skyline 模型菜組合包範例](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/skyline_set_menu.md)
 * 閱讀 [01 課程地圖](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/docs/01_course_map.md)
 * 閱讀 [02 投標文件工作流說明](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/docs/02_tender_workflow.md)
 * 閱讀 [03 Multi-AI 協作說明](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/docs/03_multi_ai_collaboration.md)

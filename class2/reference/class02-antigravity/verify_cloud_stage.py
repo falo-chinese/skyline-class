@@ -181,7 +181,7 @@ def run_sync_verification():
     print("👉 【提醒 2】: [PM 履歷更新] Sophia (林淑芬, 證照有效期至 2028-06-30) 作為合規專案經理，履歷元件已核實。")
     print("    ➔ 建議動作: [一鍵收割] 同步更新地端 PM 中心 Sophia 狀態為【Active PM 備降首選】。")
     print("👉 【提醒 3】: [SLA 成本調撥] 案中 SLA 響應時間已成功『小幅增強』改寫為 2h。")
-    print("    ➔ 建議動作: [中控亮黃燈] 自動在地端 FALO PM 指揮塔登錄『SLA 2h 緊急本地備勤待命預算調撥』，追蹤人工作業。")
+    print("    ➔ 建議動作: [中控亮黃燈] 自動在地端 Skyline PM 指揮塔登錄『SLA 2h 緊急本地備勤待命預算調撥』，追蹤人工作業。")
     print("\n[🕹️ 雲地更新控制鍵 (已為未來 API 一鍵同步保留 Confirm_Sync 控制槽)]")
     print(" ➔ [請高階主管 ff 顧問 / Grace 於中控台點擊 'Confirm_Sync' 一鍵收割雲端精華更新地端真理中心]")
     print("=" * 80)
