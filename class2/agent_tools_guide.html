@@ -200,395 +200,42 @@
     </div>
 
     <!-- 💡 分工說明橫幅 -->
-    <div style="background: rgba(99, 102, 241, 0.1); border: 1px solid var(--color-primary-light); padding: 1rem; border-radius: 12px; margin-bottom: 2rem; display: flex; align-items: flex-start; gap: 1rem;">
-      <span style="font-size: 1.5rem; line-height: 1;">💡</span>
-      <div>
-        <strong style="color: var(--color-primary-light); font-size: 0.95rem; display: block; margin-bottom: 0.25rem;">系統配合說明：指南與控制塔</strong>
-        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4;">
-          本指南屬於<strong>靜態規格指引</strong>，記錄了 CLI 排程與 Prompt 的黃金雙軌範本。<br>
-          欲檢視直觀且動態的人機協調操作、模擬日誌與一鍵收割，請前往 <strong><a href="bidding_control_tower.html" style="color: var(--color-secondary); text-decoration: underline;">智慧投標控制塔 PWA POC</a></strong>。
-        </p>
-      </div>
-    </div>
-
-    <!-- 1. 標前文件整理 -->
-    <div class="guide-section">
-      <div class="guide-title">
-        <span>📂</span> 1. 用 Agent 整理檔案 (File Prep & Excel Build)
-      </div>
-      <p>在開始任何分析前，必須將地端隨意放置的歷史得標檔案、Excel、PDF 進行清洗與結構化，存入本地中文暫存區以隔離資料，並自動建置本地 Excel 試算表資料庫。</p>
-      
-      <!-- 📥 Part 1 學員資源下載區 -->
-      <div style="background: rgba(111, 91, 216, 0.08); border: 1px dashed var(--color-primary-light); border-radius: 8px; padding: 1.25rem; margin-top: 1rem; margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem;">
-        <div style="display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
-          <div style="flex: 1;">
-            <strong style="color: white; font-size: 0.9rem; display: block; margin-bottom: 0.25rem;">📥 本章實作學員下載包 (Part 1 Start Pack)</strong>
-            <span style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.4; display: block;">本課程的所有實務 PDF 檔案與 Excel 對帳範本已打包成 ZIP。學員請先下載並解壓縮，將所得資料夾放置於本機專案目錄下開始演練。</span>
-          </div>
-          <a href="part1/part1.zip" download style="background: var(--color-secondary); color: black; font-weight: bold; padding: 0.5rem 1rem; text-decoration: none; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; min-height: 36px; border: none; cursor: pointer; transition: opacity 0.2s; white-space: nowrap;">
-            ⚡ 下載 part1.zip
-          </a>
-        </div>
-        <div style="border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 0.75rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
-          <div style="flex: 1;">
-            <strong style="color: #a78bfa; font-size: 0.85rem; display: block; margin-bottom: 0.15rem;">📦 統一完整實作資源包 (Class 2 Complete Workspace)</strong>
-            <span style="font-size: 0.75rem; color: var(--text-muted);">包含原始資源、範本與 Step 1 完工狀態的暫存資料庫，一包即可暢通所有實作步驟。</span>
-          </div>
-          <a href="class2_workspace.zip" download style="background: #a78bfa; color: black; font-weight: bold; padding: 0.4rem 0.8rem; text-decoration: none; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem; border: none; cursor: pointer; transition: opacity 0.2s; white-space: nowrap;">
-            📦 下載完整包
-          </a>
-        </div>
-      </div>
-
-      <div style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
-        <strong>來源目錄：</strong> <code>原始標案資源</code> (含台南玩具展 RFP、大同搭建商實績、名音燈光SLA、Sophia PMP 證照)<br>
-        <strong>暫存目錄：</strong> <code>標案工作暫存區</code>
-      </div>
-
-      <div style="margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1rem;">
-        <strong style="font-size: 0.85rem; color: var(--color-primary-light); display: block; margin-bottom: 0.25rem;">📋 Excel 標案工作記錄表.xlsx 資料庫規格</strong>
-        <pre class="prompt-content" style="color: #a78bfa; max-height: 120px; overflow-y: auto;">// 「檔案清冊」工作表：記錄 staged 檔案路徑與大類
-[file_id (PK), original_name, staged_name, staged_path, file_size_bytes, category]
-
-// 「欄位萃取 metadata」工作表：記錄 Agent 從內文解析出的關鍵數值
-[meta_id (PK), file_id (FK), year_extracted, company_name, amount_extracted, cert_expiry_date, sla_response_hours]</pre>
-      </div>
-
-      <!-- Sub-step 1.1 -->
-      <div style="margin-bottom: 2rem;">
-        <h3 style="font-size: 1.05rem; color: white; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.5rem;">
-          <span style="color: var(--color-secondary);">1.1</span> 複製資源至暫存區 (Copy Resources)
-        </h3>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">建立「標案工作暫存區」並複製所有原始檔案，做為後續清洗與對帳的安全環境。</p>
-        <div class="prompt-grid">
-          <div class="prompt-card simple-card">
-            <div class="prompt-header">
-              <span class="prompt-title-text">✍️ 簡單規則版 Prompt</span>
-              <button class="btn-copy" onclick="copyPrompt('prompt-1-1-simple')">複製</button>
-            </div>
-            <pre class="prompt-content simple-content" id="prompt-1-1-simple">請幫我把「原始標案資源」資料夾裡的所有檔案複製到「標案工作暫存區」中。</pre>
-          </div>
-          <div class="prompt-card">
-            <div class="prompt-header">
-              <span class="prompt-title-text">🧠 強 Agent 認知版 Prompt</span>
-              <button class="btn-copy" onclick="copyPrompt('prompt-1-1-advanced')">複製</button>
-            </div>
-            <pre class="prompt-content" id="prompt-1-1-advanced">你現在是檔案整理特工。請掃描「原始標案資源」目錄（包含裡面的所有子資料夾，如招標需求、協力商大同、協力商名音、公司證照庫），找出所有的 PDF、Word 以及 TXT 檔案，並將它們複製到「標案工作暫存區」資料夾中，準備進行後續處理。</pre>
-          </div>
-        </div>
-        <!-- Standalone HTML Report Card -->
-        <div class="prompt-card html-report-card" style="margin-top: 1rem; border-color: rgba(165, 243, 252, 0.25); background: rgba(15, 23, 42, 0.45);">
-          <div class="prompt-header">
-            <span class="prompt-title-text" style="color: var(--color-secondary);">📄 獨立 HTML 稽核報告 Prompt (加選)</span>
-            <button class="btn-copy" onclick="copyPrompt('prompt-1-1-html')">複製</button>
-          </div>
-          <pre class="prompt-content" id="prompt-1-1-html" style="color: #a5f3fc; white-space: pre-wrap; margin-bottom: 0.5rem;">你現在是系統稽核特工。針對剛剛的「檔案複製至暫存區」動作，請掃描「原始標案資源」目錄與「標案工作暫存區」目錄。請自動生成一份名為「copy_manifest.html」的網頁清單，以簡潔的表格列出「來源路徑」、「複製後路徑」、「檔案大小（Bytes）」與「複製狀態（成功/跳過）」，以便使用者一目了然核對複製的完整性。</pre>
-          <div style="font-size: 0.75rem; color: var(--text-muted); border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 0.5rem; margin-top: 0.5rem;">
-            CLI 執行指令：<code style="color: var(--color-secondary); font-family: monospace;">python3 scripts/generate_copy_report.py --src 原始標案資源 --dst 標案工作暫存區</code>
-          </div>
+    
         </div>
       </div>
 
       <!-- Sub-step 1.2 -->
-      <div style="margin-bottom: 2rem; border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 1.5rem;">
-        <h3 style="font-size: 1.05rem; color: white; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.5rem;">
-          <span style="color: var(--color-secondary);">1.2</span> 智慧語意檔名重置 (Rename Files)
-        </h3>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">分析檔案內文提及的真實年份與廠商名稱，以統一格式重命名以利辨識。</p>
-        <div class="prompt-grid">
-          <div class="prompt-card simple-card">
-            <div class="prompt-header">
-              <span class="prompt-title-text">✍️ 簡單規則版 Prompt</span>
-              <button class="btn-copy" onclick="copyPrompt('prompt-1-2-simple')">複製</button>
-            </div>
-            <pre class="prompt-content simple-content" id="prompt-1-2-simple">請幫我把「標案工作暫存區」裡的檔案檔名，前面都加上今天的日期。</pre>
-          </div>
-          <div class="prompt-card">
-            <div class="prompt-header">
-              <span class="prompt-title-text">🧠 強 Agent 認知版 Prompt</span>
-              <button class="btn-copy" onclick="copyPrompt('prompt-1-2-advanced')">複製</button>
-            </div>
-            <pre class="prompt-content" id="prompt-1-2-advanced">你現在是智慧命名特工。請閱讀「標案工作暫存區」中每一個剛複製過來的檔案內容：
-1. 從內文中尋找該檔案提及的「真實年份」（例如招標公告年份或合約發布年份）與「廠商或專案名稱」。
-2. 依據你理解的資訊，將檔名修改為「[年份]_[項目或廠商]_[原檔名]」的格式（例如：將台南玩具展_RFP.pdf 重命名為 2026_招標需求_台南玩具展_RFP.pdf）。</pre>
-          </div>
-        </div>
-        <!-- Standalone HTML Report Card -->
-        <div class="prompt-card html-report-card" style="margin-top: 1rem; border-color: rgba(165, 243, 252, 0.25); background: rgba(15, 23, 42, 0.45);">
-          <div class="prompt-header">
-            <span class="prompt-title-text" style="color: var(--color-secondary);">📄 獨立 HTML 稽核報告 Prompt (加選)</span>
-            <button class="btn-copy" onclick="copyPrompt('prompt-1-2-html')">複製</button>
-          </div>
-          <pre class="prompt-content" id="prompt-1-2-html" style="color: #a5f3fc; white-space: pre-wrap; margin-bottom: 0.5rem;">你現在是系統稽核特工。針對剛剛的「檔名智慧重命名」動作，請對比「原始標案資源」中的原始檔案名稱與「標案工作暫存區」中重命名後的檔案名稱。請自動生成一份名為「rename_report.html」的網頁報告，以表格呈現「原舊檔名」、「變更後新檔名」、「修改時間」以及「提取真實年份與廠商名稱的命名原因」，以利主管視覺化審查與追溯檔案改動。</pre>
-          <div style="font-size: 0.75rem; color: var(--text-muted); border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 0.5rem; margin-top: 0.5rem;">
-            CLI 執行指令：<code style="color: var(--color-secondary); font-family: monospace;">python3 scripts/generate_rename_report.py --dir 標案工作暫存區</code>
-          </div>
+      
         </div>
       </div>
 
       <!-- Sub-step 1.3 -->
-      <div style="margin-bottom: 2rem; border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 1.5rem;">
-        <h3 style="font-size: 1.05rem; color: white; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.5rem;">
-          <span style="color: var(--color-secondary);">1.3</span> 內容分析與類別歸類 (Content Analysis & PII Scrubbing)
-        </h3>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">理解商業語意進行大類歸檔，並自動將敏感個資進行去識別化遮蔽。</p>
-        <div class="prompt-grid">
-          <div class="prompt-card simple-card">
-            <div class="prompt-header">
-              <span class="prompt-title-text">✍️ 簡單規則版 Prompt</span>
-              <button class="btn-copy" onclick="copyPrompt('prompt-1-3-simple')">複製</button>
-            </div>
-            <pre class="prompt-content simple-content" id="prompt-1-3-simple">請幫我看看「標案工作暫存區」裡的這些檔案，各是什麼種類的檔案，用簡單的文字告訴我。</pre>
-          </div>
-          <div class="prompt-card">
-            <div class="prompt-header">
-              <span class="prompt-title-text">🧠 強 Agent 認知版 Prompt</span>
-              <button class="btn-copy" onclick="copyPrompt('prompt-1-3-advanced')">複製</button>
-            </div>
-            <pre class="prompt-content" id="prompt-1-3-advanced">你現在是語意分析與歸類特工。請通讀「標案工作暫存區」中重命名後的各個檔案，理解其商業語意，自動將其歸類為以下四種大類之一：
-- 「招標需求 (RFP)」
-- 「協力商資格證明 (Credentials)」
-- 「服務承諾 (SLA)」
-- 「員工資歷證書 (Certs)」
-特別注意：如果是大同搭建商的實績證明，請自動掃描是否有包含身分證字號或聯絡電話等敏感個資，並執行去識別化遮蔽（PII Scrubbing），將去敏後的文字儲存。</pre>
-          </div>
-        </div>
-        <!-- Standalone HTML Report Card -->
-        <div class="prompt-card html-report-card" style="margin-top: 1rem; border-color: rgba(165, 243, 252, 0.25); background: rgba(15, 23, 42, 0.45);">
-          <div class="prompt-header">
-            <span class="prompt-title-text" style="color: var(--color-secondary);">📄 獨立 HTML 稽核報告 Prompt (加選)</span>
-            <button class="btn-copy" onclick="copyPrompt('prompt-1-3-html')">複製</button>
-          </div>
-          <pre class="prompt-content" id="prompt-1-3-html" style="color: #a5f3fc; white-space: pre-wrap; margin-bottom: 0.5rem;">你現在是資安合規特工。針對剛剛的「檔案分類與 PII 去敏」動作，請分析「標案工作暫存區」中的檔案。請將分類結果與 PII 去敏處理前後之對照數據，自動生成一份 HTML 報告檔「scrub_report.html」，以表格展示各檔案的「商業分類」與「敏感個資遮蔽前後比對（例如：去敏前後之身分證字號與聯絡電話對照狀態）」，以供資安審計人員檢驗合規性。</pre>
-          <div style="font-size: 0.75rem; color: var(--text-muted); border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 0.5rem; margin-top: 0.5rem;">
-            CLI 執行指令：<code style="color: var(--color-secondary); font-family: monospace;">python3 scripts/generate_scrub_report.py --dir 標案工作暫存區</code>
-          </div>
+      
         </div>
       </div>
 
       <!-- Sub-step 1.4.A -->
-      <div style="margin-bottom: 1rem; border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 1.5rem;">
-        <h3 style="font-size: 1.05rem; color: white; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.5rem;">
-          <span style="color: var(--color-secondary);">1.4.A</span> 地端 Excel 試算表資料庫建置 (首次無範本自規劃建置)
-        </h3>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">首次無範本建置：由 Agent 自行規劃資料表結構（如檔案清冊與元數據表）並寫入資料。</p>
-        <div class="prompt-grid">
-          <div class="prompt-card simple-card">
-            <div class="prompt-header">
-              <span class="prompt-title-text">✍️ 簡單規則版 Prompt</span>
-              <button class="btn-copy" onclick="copyPrompt('prompt-1-4a-simple')">複製</button>
-            </div>
-            <pre class="prompt-content simple-content" id="prompt-1-4a-simple">請幫我做一個 檔案清冊 Excel，把「標案工作暫存區」裡的檔名、大小、種類，還有從裡面看出的公司名稱寫進去。</pre>
-          </div>
-          <div class="prompt-card">
-            <div class="prompt-header">
-              <span class="prompt-title-text">🧠 強 Agent 認知版 Prompt</span>
-              <button class="btn-copy" onclick="copyPrompt('prompt-1-4a-advanced')">複製</button>
-            </div>
-            <pre class="prompt-content" id="prompt-1-4a-advanced">你現在是地端Excel/HTML 資料庫建置特工。請在「標案工作暫存區」建立一個 Excel 試算表資料庫 標案工作記錄表.xlsx。因為這是首次建置且無範本，你需要自己設計兩個工作表：
-- 「檔案清冊」工作表欄位：file_id (PK), original_name, staged_name, staged_path, file_size_bytes, category
-- 「欄位萃取 metadata」工作表欄位：meta_id (PK), file_id (FK), year_extracted, company_name, amount_extracted, cert_expiry_date, sla_response_hours
-建立完成後，將前面步驟中分析、歸類、重命名後的檔案資訊，以及從檔案內文抽取出的關鍵欄位值（如金額、過期日、SLA時數），寫入對應的資料表中。</pre>
-          </div>
-        </div>
-        <!-- Standalone HTML Report Card -->
-        <div class="prompt-card html-report-card" style="margin-top: 1rem; border-color: rgba(165, 243, 252, 0.25); background: rgba(15, 23, 42, 0.45);">
-          <div class="prompt-header">
-            <span class="prompt-title-text" style="color: var(--color-secondary);">📄 獨立 HTML 稽核報告 Prompt (加選)</span>
-            <button class="btn-copy" onclick="copyPrompt('prompt-1-4a-html')">複製</button>
-          </div>
-          <pre class="prompt-content" id="prompt-1-4a-html" style="color: #a5f3fc; white-space: pre-wrap; margin-bottom: 0.5rem;">你現在是地端資料庫稽核特工。針對剛剛無範本建置的 標案工作記錄表.xlsx Excel 資料庫，請依據該資料表 Schema 結構，自動生成一份 HTML 報告檔「db_init_report.html」，詳細展示「資料表 Schema 規劃欄位」、「主外鍵關係」與「首批寫入檔案之 Metadata 資料預覽」，方便開發同仁快速掌握資料庫架載。</pre>
-          <div style="font-size: 0.75rem; color: var(--text-muted); border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 0.5rem; margin-top: 0.5rem;">
-            CLI 執行指令：<code style="color: var(--color-secondary); font-family: monospace;">python3 scripts/generate_db_init_report.py --db 標案工作暫存區/標案工作記錄表.xlsx</code>
-          </div>
+      
         </div>
       </div>
 
       <!-- Sub-step 1.4.B -->
-      <div style="margin-bottom: 1rem; border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 1.5rem;">
-        <h3 style="font-size: 1.05rem; color: white; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.5rem;">
-          <span style="color: var(--color-secondary);">1.4.B</span> 地端 Excel 試算表資料庫建置 (依據參考範本對齊建置)
-        </h3>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">依範本對齊建置：參考既有範本結構，將新資料規範化填寫入庫以保持一致性。</p>
-        <div class="prompt-grid">
-          <div class="prompt-card simple-card">
-            <div class="prompt-header">
-              <span class="prompt-title-text">✍️ 簡單規則版 Prompt</span>
-              <button class="btn-copy" onclick="copyPrompt('prompt-1-4b-simple')">複製</button>
-            </div>
-            <pre class="prompt-content simple-content" id="prompt-1-4b-simple">請參考「參考範例/標案工作記錄表_範本.xlsx」的格式，把「標案工作暫存區」裡的新檔案資訊填加到 Excel 裡面。</pre>
-          </div>
-          <div class="prompt-card">
-            <div class="prompt-header">
-              <span class="prompt-title-text">🧠 強 Agent 認知版 Prompt</span>
-              <button class="btn-copy" onclick="copyPrompt('prompt-1-4b-advanced')">複製</button>
-            </div>
-            <pre class="prompt-content" id="prompt-1-4b-advanced">你現在是地端Excel/HTML 資料庫建置特工。請在「標案工作暫存區」建立/更新 標案工作記錄表.xlsx。這次建置請務必參考「參考範例/標案工作記錄表_範本.xlsx」的結構與欄位定義。
-請檢查範本中的「檔案清冊」與「欄位萃取 metadata」工作表的 Schema、資料格式與填寫規範，確保新寫入的檔案資料（包含檔名、大小、類別、公司名稱、金額、過期日及SLA時數等萃取欄位）與範本完全一致，保持資料的一致性與關聯性。</pre>
-          </div>
-        </div>
-        <!-- Standalone HTML Report Card -->
-        <div class="prompt-card html-report-card" style="margin-top: 1rem; border-color: rgba(165, 243, 252, 0.25); background: rgba(15, 23, 42, 0.45);">
-          <div class="prompt-header">
-            <span class="prompt-title-text" style="color: var(--color-secondary);">📄 獨立 HTML 稽核報告 Prompt (加選)</span>
-            <button class="btn-copy" onclick="copyPrompt('prompt-1-4b-html')">複製</button>
-          </div>
-          <pre class="prompt-content" id="prompt-1-4b-html" style="color: #a5f3fc; white-space: pre-wrap; margin-bottom: 0.5rem;">你現在是地端資料庫稽核特工。針對剛剛依範本對齊建置的 標案工作記錄表.xlsx Excel 資料庫，請針對本次同步寫入動作自動生成一份 HTML 對齊驗證報告「db_sync_report.html」，列出「已成功對齊寫入欄位數」、「對齊範本 Schema 驗證狀態（成功/失敗）」與「主外鍵 file_id 關聯檢驗結果」，以確保資料庫未發生欄位錯位或主外鍵斷裂。</pre>
-          <div style="font-size: 0.75rem; color: var(--text-muted); border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 0.5rem; margin-top: 0.5rem;">
-            CLI 執行指令：<code style="color: var(--color-secondary); font-family: monospace;">python3 scripts/generate_db_sync_report.py --db 標案工作暫存區/標案工作記錄表.xlsx --template 參考範例/標案工作記錄表_範本.xlsx</code>
-          </div>
+      
         </div>
       </div>
 
       <!-- Sub-step 1.5 -->
-      <div style="margin-bottom: 1rem; border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 1.5rem;">
-        <h3 style="font-size: 1.05rem; color: white; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.5rem;">
-          <span style="color: var(--color-secondary);">1.5</span> 實務 ETL 與網頁資料爬取展示 (ETL & Web Crawler Demo)
-        </h3>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">
-          除了處理地端檔案外，AI Agent 也廣泛用於擷取政府網站或公開觀測站等網頁數據。此時，可利用瀏覽器自動化進行 ETL 流程。
-          本課程隨附了 <strong><a href="demo/ai-parser-demo1/index.html" target="_blank" style="color: var(--color-secondary); text-decoration: underline;">🤖 Falo AI Parser Demo 1 (ETL 爬蟲展示頁面)</a></strong> 資源包與線上版 <strong><a href="https://falo-taiwan.github.io/ai-parser-demo1/" target="_blank" style="color: var(--color-secondary); text-decoration: underline;">Falo AI Parser Demo 1 (GitHub Pages)</a></strong>。
-        </p>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">
-          此專案展示了完整的 <strong>ETL 爬蟲流程</strong>：
-          <ul style="margin-left: 1.5rem; margin-top: 0.25rem; font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
-            <li><strong>Extract (擷取)</strong>：利用 AI 解析口語化請求（如「台積電今年五月資料」）轉化為結構化查詢計畫，並透過 Chrome Extension 自動化操作公開資訊觀測站（MOPS）進行查詢與截圖。</li>
-            <li><strong>Transform (轉換)</strong>：AI 自動處理公司代號解析（台積電 ➔ 2330）、民國年與西元年的時間正規化，並提供 HITL (人類在環) 介面供使用者審查、手動修改或覆寫 AI 的假設。</li>
-            <li><strong>Load (載入)</strong>：將抓取出的數據轉換並載入為 CSV、Excel 可讀取的格式，或生成動態展示主控台，供進一步財務利潤對帳使用。</li>
-          </ul>
-        </p>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">
-          學員可於本地解壓縮 <code>demo/ai-parser-demo1/downloads/falo_ai_parser_demo1_v1_draft_resource_pack.zip</code>，依照其中的說明在 Chrome 瀏覽器中載入擴充功能（開啟 <code>chrome://extensions</code> 開發者模式，點選「載入未打包擴充功能」選擇 <code>chrome_extension</code> 目錄），即可親自操作與體驗網頁資料自動化爬取。
-        </p>
-      </div>
-    </div>
-
-    <!-- 2. 合規差距比對 -->
-    <div class="guide-section">
-      <div class="guide-title">
-        <span>🔍</span> 2. 招標合規差距對帳 (Compliance Gap Audit)
-      </div>
-      <p>比對 RFP 需求檔與地端 Excel 試算表資料庫的歷史員工證照、協力商規格，抓出影響合規的廢標紅線。</p>
       
-      <div style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
-        <strong>輸入檔案：</strong> <code>標案工作暫存區/2026_招標需求_台南玩具展_RFP.txt</code>、Excel 試算表資料庫 <code>標案工作暫存區/標案工作記錄表.xlsx</code>
-      </div>
-
-      <!-- 📥 Part 2 學員資源下載區 -->
-      <div style="background: rgba(111, 91, 216, 0.08); border: 1px dashed var(--color-primary-light); border-radius: 8px; padding: 1.25rem; margin-top: 1rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
-        <div style="flex: 1;">
-          <strong style="color: white; font-size: 0.9rem; display: block; margin-bottom: 0.25rem;">📥 本章實作學員下載包 (Part 2 Start Pack)</strong>
-          <span style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.4; display: block;">包含 Step 1 清洗與 Excel 資料庫建置完成後的 Staging 狀態工作目錄。適合直接開始第二步對帳實作的學員。</span>
-        </div>
-        <a href="part2/part2.zip" download style="background: var(--color-secondary); color: black; font-weight: bold; padding: 0.5rem 1rem; text-decoration: none; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; min-height: 36px; border: none; cursor: pointer; transition: opacity 0.2s; white-space: nowrap;">
-          ⚡ 下載 part2.zip
-        </a>
-      </div>
-
-      
-
-      <!-- Sub-step 2.1 -->
-      <div style="margin-bottom: 2rem;">
-        <h3 style="font-size: 1.05rem; color: white; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.5rem;">
-          <span style="color: var(--color-secondary);">2.1</span> 廢標條款自動提取 (Clause Extraction)
-        </h3>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">自動讀取招標規範文件，提取硬性專案經理、協力商及運維合規條款。</p>
-        <div class="prompt-grid">
-          <div class="prompt-card simple-card">
-            <div class="prompt-header">
-              <span class="prompt-title-text">✍️ 簡單規則版 Prompt</span>
-              <button class="btn-copy" onclick="copyPrompt('prompt-2-1-simple')">複製</button>
-            </div>
-            <pre class="prompt-content simple-content" id="prompt-2-1-simple">請幫我搜尋新標案 RFP 中是否有出現 "PMP"、"SLA" 等關鍵字，列出這些句子。</pre>
-          </div>
-          <div class="prompt-card">
-            <div class="prompt-header">
-              <span class="prompt-title-text">🧠 強 Agent 認知版 Prompt</span>
-              <button class="btn-copy" onclick="copyPrompt('prompt-2-1-advanced')">複製</button>
-            </div>
-            <pre class="prompt-content" id="prompt-2-1-advanced">你現在是合規條款審查特工。請閱讀「標案工作暫存區/2026_招標需求_台南玩具展_RFP.txt」，自動提取所有關於「專案經理持證資格」、「協力商實績金額門檻」、「運維故障響應時間 (SLA)」等顯性與隱性的硬性廢標條款，並將其整理為檢核點。</pre>
-          </div>
-        </div>
-        <!-- Standalone HTML Report Card -->
-        <div class="prompt-card html-report-card" style="margin-top: 1rem; border-color: rgba(165, 243, 252, 0.25); background: rgba(15, 23, 42, 0.45);">
-          <div class="prompt-header">
-            <span class="prompt-title-text" style="color: var(--color-secondary);">📄 獨立 HTML 稽核報告 Prompt (加選)</span>
-            <button class="btn-copy" onclick="copyPrompt('prompt-2-1-html')">複製</button>
-          </div>
-          <pre class="prompt-content" id="prompt-2-1-html" style="color: #a5f3fc; white-space: pre-wrap; margin-bottom: 0.5rem;">你現在是系統稽核特工。針對剛剛的「廢標條款自動提取」動作，請將新標案 RFP 中提取出的「專案經理持證資格」、「協力商實績金額門檻」、「運維故障響應時間 (SLA)」等合規要求，自動生成一份 HTML 檢核表「clause_checklist.html」。表格應包含「合規稽核項目」、「RFP 硬性規定說明」、「對應權責單位」與「是否為關鍵廢標紅線」，以利投標小組作為後續審查之基準。</pre>
-          <div style="font-size: 0.75rem; color: var(--text-muted); border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 0.5rem; margin-top: 0.5rem;">
-            CLI 執行指令：<code style="color: var(--color-secondary); font-family: monospace;">python3 scripts/generate_clause_checklist_report.py --rfp 標案工作暫存區/2026_招標需求_台南玩具展_RFP.txt</code>
-          </div>
         </div>
       </div>
 
       <!-- Sub-step 2.2 -->
-      <div style="margin-bottom: 2rem; border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 1.5rem;">
-        <h3 style="font-size: 1.05rem; color: white; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.5rem;">
-          <span style="color: var(--color-secondary);">2.2</span> 志明證照過期稽核 (PM Certificate Audit)
-        </h3>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">核對專案經理志明的 PMP 證書有效期限，若過期則標記不合規並啟動備降方案。</p>
-        <div class="prompt-grid">
-          <div class="prompt-card simple-card">
-            <div class="prompt-header">
-              <span class="prompt-title-text">✍️ 簡單規則版 Prompt</span>
-              <button class="btn-copy" onclick="copyPrompt('prompt-2-2-simple')">複製</button>
-            </div>
-            <pre class="prompt-content simple-content" id="prompt-2-2-simple">請幫我查詢我們資料庫裡志明的 PMP 證照到期了沒有。</pre>
-          </div>
-          <div class="prompt-card">
-            <div class="prompt-header">
-              <span class="prompt-title-text">🧠 強 Agent 認知版 Prompt</span>
-              <button class="btn-copy" onclick="copyPrompt('prompt-2-2-advanced')">複製</button>
-            </div>
-            <pre class="prompt-content" id="prompt-2-2-advanced">你現在是證照管理稽核特工。請查詢 Excel 標案工作記錄表.xlsx 中的 「欄位萃取 metadata」工作表，核對當前擬定的專案經理志明的 PMP 證書有效期限。若到期日早於投標日（2026年6月），判定為不合規（RED_DISQUALIFY），並主動在證照庫中尋找是否有符合資格的備用人員。</pre>
-          </div>
-        </div>
-        <!-- Standalone HTML Report Card -->
-        <div class="prompt-card html-report-card" style="margin-top: 1rem; border-color: rgba(165, 243, 252, 0.25); background: rgba(15, 23, 42, 0.45);">
-          <div class="prompt-header">
-            <span class="prompt-title-text" style="color: var(--color-secondary);">📄 獨立 HTML 稽核報告 Prompt (加選)</span>
-            <button class="btn-copy" onclick="copyPrompt('prompt-2-2-html')">複製</button>
-          </div>
-          <pre class="prompt-content" id="prompt-2-2-html" style="color: #a5f3fc; white-space: pre-wrap; margin-bottom: 0.5rem;">你現在是系統稽核特工。針對剛剛的「專案經理證照合規性稽核」動作，請對比 Excel 標案工作記錄表.xlsx 中志明的證照到期狀態。請自動生成一份 HTML 稽核報告「pm_audit_report.html」，以醒目樣式展示「擬任 PM 姓名」、「證照到期日」、「投標日前是否有效」、「合規判定（RED_DISQUALIFY）」以及「備降調撥人員姓名與其證照狀態」，並以警示色彩標記不合規狀態，供決策主管快速核閱。</pre>
-          <div style="font-size: 0.75rem; color: var(--text-muted); border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 0.5rem; margin-top: 0.5rem;">
-            CLI 執行指令：<code style="color: var(--color-secondary); font-family: monospace;">python3 scripts/generate_pm_audit_report.py --db 標案工作暫存區/標案工作記錄表.xlsx</code>
-          </div>
+      
         </div>
       </div>
 
       <!-- Sub-step 2.3 -->
-      <div style="margin-bottom: 1rem; border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 1.5rem;">
-        <h3 style="font-size: 1.05rem; color: white; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.5rem;">
-          <span style="color: var(--color-secondary);">2.3</span> SLA 技術對帳比對 (SLA Alignment Audit)
-        </h3>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">核對名音燈光的服務承諾，比對是否滿足 RFP 的 2h 現場響應規定。</p>
-        <div class="prompt-grid">
-          <div class="prompt-card simple-card">
-            <div class="prompt-header">
-              <span class="prompt-title-text">✍️ 簡單規則版 Prompt</span>
-              <button class="btn-copy" onclick="copyPrompt('prompt-2-3-simple')">複製</button>
-            </div>
-            <pre class="prompt-content simple-content" id="prompt-2-3-simple">請幫我查名音燈光商服務承諾書裡的 SLA 時間是幾個小時。</pre>
-          </div>
-          <div class="prompt-card">
-            <div class="prompt-header">
-              <span class="prompt-title-text">🧠 強 Agent 認知版 Prompt</span>
-              <button class="btn-copy" onclick="copyPrompt('prompt-2-3-advanced')">複製</button>
-            </div>
-            <pre class="prompt-content" id="prompt-2-3-advanced">你現在是運維規格對帳特工。請核對 Excel 標案工作記錄表.xlsx 中名音燈光商的 SLA 響應時間。比對是否滿足 RFP 中「2小時現場抵達響應」的硬性規定。若名音燈光僅承諾 4h，標記為 YELLOW_WARNING 合規差距，並提示需要主管決策上調預算或變更協力商。</pre>
-          </div>
-        </div>
-        <!-- Standalone HTML Report Card -->
-        <div class="prompt-card html-report-card" style="margin-top: 1rem; border-color: rgba(165, 243, 252, 0.25); background: rgba(15, 23, 42, 0.45);">
-          <div class="prompt-header">
-            <span class="prompt-title-text" style="color: var(--color-secondary);">📄 獨立 HTML 稽核報告 Prompt (加選)</span>
-            <button class="btn-copy" onclick="copyPrompt('prompt-2-3-html')">複製</button>
-          </div>
-          <pre class="prompt-content" id="prompt-2-3-html" style="color: #a5f3fc; white-space: pre-wrap; margin-bottom: 0.5rem;">你現在是系統稽核特工。針對剛剛的「運維 SLA 技術對帳」動作，請比對 RFP 要求的「2小時內抵達響應」與名音燈光商承諾之「4小時內抵達響應」。請自動生成一份 HTML 差距分析報告「sla_gap_report.html」，以對比表呈現「項目」、「RFP 規格要求」、「名音燈光商承諾值」、「差距 (Gap)」、「合規判定 (YELLOW_WARNING)」，並提供備註欄說明可能需要之溢價成本或調整建議，以便投標小組評估。</pre>
-          <div style="font-size: 0.75rem; color: var(--text-muted); border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 0.5rem; margin-top: 0.5rem;">
-            CLI 執行指令：<code style="color: var(--color-secondary); font-family: monospace;">python3 scripts/generate_sla_gap_report.py --db 標案工作暫存區/標案工作記錄表.xlsx</code>
-          </div>
+      
         </div>
       </div>
     </div>
@@ -600,124 +247,17 @@
       </div>
       <p>評估協力廠商改為 2h SLA 增加的人工與保證金支出，對總利潤紅線 (15%) 的衝擊，進行壓力測試。</p>
       
-      <div style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
-        <strong>輸入檔案：</strong> Excel 試算表資料庫 <code>標案工作暫存區/標案工作記錄表.xlsx</code>
-      </div>
-      <!-- 📥 Part 3 學員資源下載區 -->
-      <div style="background: rgba(111, 91, 216, 0.08); border: 1px dashed var(--color-primary-light); border-radius: 8px; padding: 1.25rem; margin-top: 1rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
-        <div style="flex: 1;">
-          <strong style="color: white; font-size: 0.9rem; display: block; margin-bottom: 0.25rem;">📥 本章實作學員下載包 (Part 3 Start Pack)</strong>
-          <span style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.4; display: block;">包含 Step 2 差距對帳完成後的 Staging 狀態工作目錄。適合直接開始第三步成本調校的學員。</span>
-        </div>
-        <a href="part3/part3.zip" download style="background: var(--color-secondary); color: black; font-weight: bold; padding: 0.5rem 1rem; text-decoration: none; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; min-height: 36px; border: none; cursor: pointer; transition: opacity 0.2s; white-space: nowrap;">
-          ⚡ 下載 part3.zip
-        </a>
-      </div>
-
       
-
-      <!-- Sub-step 3.1 -->
-      <div style="margin-bottom: 2rem;">
-        <h3 style="font-size: 1.05rem; color: white; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.5rem;">
-          <span style="color: var(--color-secondary);">3.1</span> 物料上漲費率調校 (Material Rates Adjustment)
-        </h3>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">依據南部最新材料費率，加計 5% 物料通膨以更新基礎搭建預算。</p>
-        <div class="prompt-grid">
-          <div class="prompt-card simple-card">
-            <div class="prompt-header">
-              <span class="prompt-title-text">✍️ 簡單規則版 Prompt</span>
-              <button class="btn-copy" onclick="copyPrompt('prompt-3-1-simple')">複製</button>
-            </div>
-            <pre class="prompt-content simple-content" id="prompt-3-1-simple">請幫我把資料庫裡的木作材料費用全部調漲 5%。</pre>
-          </div>
-          <div class="prompt-card">
-            <div class="prompt-header">
-              <span class="prompt-title-text">🧠 強 Agent 認知版 Prompt</span>
-              <button class="btn-copy" onclick="copyPrompt('prompt-3-1-advanced')">複製</button>
-            </div>
-            <pre class="prompt-content" id="prompt-3-1-advanced">你現在是物料成本調校特工。請查詢地端 Excel 標案工作記錄表.xlsx 中的南部物料最新費率，並加計當前木作與運輸通膨 5% 的溢價，更新本案的基礎搭建預算。</pre>
-          </div>
-        </div>
-        <!-- Standalone HTML Report Card -->
-        <div class="prompt-card html-report-card" style="margin-top: 1rem; border-color: rgba(165, 243, 252, 0.25); background: rgba(15, 23, 42, 0.45); text-align: left;">
-          <div class="prompt-header">
-            <span class="prompt-title-text" style="color: var(--color-secondary);">📄 獨立 HTML 稽核報告 Prompt (加選)</span>
-            <button class="btn-copy" onclick="copyPrompt('prompt-3-1-html')">複製</button>
-          </div>
-          <pre class="prompt-content" id="prompt-3-1-html" style="color: #a5f3fc; white-space: pre-wrap; margin-bottom: 0.5rem;">你現在是系統稽核特工。針對剛剛的「物料費率調校」動作，請對比 Excel 標案工作記錄表.xlsx 中南部物料在調漲 5% 前後的價格差異。請自動生成一份 HTML 調整報告「material_adjust_report.html」，以表格呈現「項目」、「原單價」、「調整後新單價」、「漲幅比例（5%）」與「預計影響之總成本增幅」，方便主管審查物料調整金額。</pre>
-          <div style="font-size: 0.75rem; color: var(--text-muted); border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 0.5rem; margin-top: 0.5rem;">
-            CLI 執行指令：<code style="color: var(--color-secondary); font-family: monospace;">python3 scripts/generate_material_adjust_report.py --db 標案工作暫存區/標案工作記錄表.xlsx</code>
-          </div>
         </div>
       </div>
 
       <!-- Sub-step 3.2 -->
-      <div style="margin-bottom: 2rem; border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 1.5rem;">
-        <h3 style="font-size: 1.05rem; color: white; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.5rem;">
-          <span style="color: var(--color-secondary);">3.2</span> 2h SLA 加急成本計算 (SLA Cost Escalation)
-        </h3>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">試算縮短至 2h SLA 增加的加急排班費與備用保障金。</p>
-        <div class="prompt-grid">
-          <div class="prompt-card simple-card">
-            <div class="prompt-header">
-              <span class="prompt-title-text">✍️ 簡單規則版 Prompt</span>
-              <button class="btn-copy" onclick="copyPrompt('prompt-3-2-simple')">複製</button>
-            </div>
-            <pre class="prompt-content simple-content" id="prompt-3-2-simple">名音燈光商因為要改為 2 小時 SLA，要求增加 30 萬元的預算。請幫我記錄這筆費用。</pre>
-          </div>
-          <div class="prompt-card">
-            <div class="prompt-header">
-              <span class="prompt-title-text">🧠 強 Agent 認知版 Prompt</span>
-              <button class="btn-copy" onclick="copyPrompt('prompt-3-2-advanced')">複製</button>
-            </div>
-            <pre class="prompt-content" id="prompt-3-2-advanced">你現在是協力商談判特工。因應 RFP 的 2h SLA 現場響應要求，名音燈光提出 NT$ 300,000 的排班溢價與合約準備金需求。請將此增項預算寫入試算表，並預估故障準備金之財務分攤。</pre>
-          </div>
-        </div>
-        <!-- Standalone HTML Report Card -->
-        <div class="prompt-card html-report-card" style="margin-top: 1rem; border-color: rgba(165, 243, 252, 0.25); background: rgba(15, 23, 42, 0.45); text-align: left;">
-          <div class="prompt-header">
-            <span class="prompt-title-text" style="color: var(--color-secondary);">📄 獨立 HTML 稽核報告 Prompt (加選)</span>
-            <button class="btn-copy" onclick="copyPrompt('prompt-3-2-html')">複製</button>
-          </div>
-          <pre class="prompt-content" id="prompt-3-2-html" style="color: #a5f3fc; white-space: pre-wrap; margin-bottom: 0.5rem;">你現在是系統稽核特工。針對剛剛名音燈光提出的 30 萬 SLA 排班溢價與合約準備金，請自動生成一份 HTML 溢價評估報告「sla_cost_report.html」。表格應包含「項目說明」、「加急 SLA 規格要求 (2h)」、「名音溢價報價 (NT$ 300,000)」、「資金分攤與風險撥備比例」以及「建議核准狀態」，以利投標小組提報利潤壓力測試。</pre>
-          <div style="font-size: 0.75rem; color: var(--text-muted); border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 0.5rem; margin-top: 0.5rem;">
-            CLI 執行指令：<code style="color: var(--color-secondary); font-family: monospace;">python3 scripts/generate_sla_cost_report.py --db 標案工作暫存區/標案工作記錄表.xlsx</code>
-          </div>
+      
         </div>
       </div>
 
       <!-- Sub-step 3.3 -->
-      <div style="margin-bottom: 1rem; border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 1.5rem;">
-        <h3 style="font-size: 1.05rem; color: white; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.5rem;">
-          <span style="color: var(--color-secondary);">3.3</span> 毛利率與決策核算 (Profit Margin Analysis)
-        </h3>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">綜合以上變動進行毛利率壓力測試，核算是否低於 15% 紅線。</p>
-        <div class="prompt-grid">
-          <div class="prompt-card simple-card">
-            <div class="prompt-header">
-              <span class="prompt-title-text">✍️ 簡單規則版 Prompt</span>
-              <button class="btn-copy" onclick="copyPrompt('prompt-3-3-simple')">複製</button>
-            </div>
-            <pre class="prompt-content simple-content" id="prompt-3-3-simple">請幫我把總預算 450 萬扣掉其他成本和這 30 萬，算一下我們還剩下多少利潤。</pre>
-          </div>
-          <div class="prompt-card">
-            <div class="prompt-header">
-              <span class="prompt-title-text">🧠 強 Agent 認知版 Prompt</span>
-              <button class="btn-copy" onclick="copyPrompt('prompt-3-3-advanced')">複製</button>
-            </div>
-            <pre class="prompt-content" id="prompt-3-3-advanced">你現在是財務決策特工。請針對玩具展標案 450 萬元預算進行壓力測試：計算扣除 5% 物料通膨與 30 萬 SLA 溢價後的毛利率，判定是否會低於 15.0% 的獲利紅線。若低於紅線，提出優化搭建成本方案；若高於紅線，生成 green_approve 決策建議書以供主管簽核。</pre>
-          </div>
-        </div>
-        <!-- Standalone HTML Report Card -->
-        <div class="prompt-card html-report-card" style="margin-top: 1rem; border-color: rgba(165, 243, 252, 0.25); background: rgba(15, 23, 42, 0.45); text-align: left;">
-          <div class="prompt-header">
-            <span class="prompt-title-text" style="color: var(--color-secondary);">📄 獨立 HTML 稽核報告 Prompt (加選)</span>
-            <button class="btn-copy" onclick="copyPrompt('prompt-3-3-html')">複製</button>
-          </div>
-          <pre class="prompt-content" id="prompt-3-3-html" style="color: #a5f3fc; white-space: pre-wrap; margin-bottom: 0.5rem;">你現在是系統稽核特工。針對剛剛對玩具展標案 450 萬進行的毛利壓力測試，請自動生成一份 HTML 獲利核算報告「profit_analysis_report.html」。請以視覺化樣式展示「專案總預算」、「基礎物料成本 (加計5%)」、「SLA 溢價支出 (30萬)」、「預估純利潤」、「最終毛利率」與「獲利紅線判定 (高於15% / GREEN_APPROVE)」，以供決策主管簽核。</pre>
-          <div style="font-size: 0.75rem; color: var(--text-muted); border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 0.5rem; margin-top: 0.5rem;">
-            CLI 執行指令：<code style="color: var(--color-secondary); font-family: monospace;">python3 scripts/generate_profit_analysis_report.py --db 標案工作暫存區/標案工作記錄表.xlsx</code>
-          </div>
+      
         </div>
       </div>
     </div>
@@ -729,124 +269,17 @@
       </div>
       <p>結合 Google NotebookLM 知識庫與地端資料庫，編譯最終技術建議書草稿，並標記人類審核點。</p>
       
-      <div style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
-        <strong>輸入檔案：</strong> Google NotebookLM 知識庫、草稿模板 <code>templates/tech_bid.md</code>、Excel 試算表資料庫
-      </div>
-      <!-- 📥 Part 4 學員資源下載區 -->
-      <div style="background: rgba(111, 91, 216, 0.08); border: 1px dashed var(--color-primary-light); border-radius: 8px; padding: 1.25rem; margin-top: 1rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
-        <div style="flex: 1;">
-          <strong style="color: white; font-size: 0.9rem; display: block; margin-bottom: 0.25rem;">📥 本章實作學員下載包 (Part 4 Start Pack)</strong>
-          <span style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.4; display: block;">包含 Step 3 成本調試與決策完成後的 Staging 狀態工作目錄。適合直接開始第四步草稿組裝的學員。</span>
-        </div>
-        <a href="part4/part4.zip" download style="background: var(--color-secondary); color: black; font-weight: bold; padding: 0.5rem 1rem; text-decoration: none; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; min-height: 36px; border: none; cursor: pointer; transition: opacity 0.2s; white-space: nowrap;">
-          ⚡ 下載 part4.zip
-        </a>
-      </div>
-
       
-
-      <!-- Sub-step 4.1 -->
-      <div style="margin-bottom: 2rem;">
-        <h3 style="font-size: 1.05rem; color: white; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.5rem;">
-          <span style="color: var(--color-secondary);">4.1</span> NotebookLM 真理檢索 (NotebookLM RAG Retrieval)
-        </h3>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">向 NotebookLM 大腦檢索 Sophia 的有效 PMP 證書編號以及歷史 350 萬得標專案實績。</p>
-        <div class="prompt-grid">
-          <div class="prompt-card simple-card">
-            <div class="prompt-header">
-              <span class="prompt-title-text">✍️ 簡單規則版 Prompt</span>
-              <button class="btn-copy" onclick="copyPrompt('prompt-4-1-simple')">複製</button>
-            </div>
-            <pre class="prompt-content simple-content" id="prompt-4-1-simple">請讀取我們的得標實績和 Sophia 的證照資料。</pre>
-          </div>
-          <div class="prompt-card">
-            <div class="prompt-header">
-              <span class="prompt-title-text">🧠 強 Agent 認知版 Prompt</span>
-              <button class="btn-copy" onclick="copyPrompt('prompt-4-1-advanced')">複製</button>
-            </div>
-            <pre class="prompt-content" id="prompt-4-1-advanced">你現在是知識檢索特工。請向 Google NotebookLM 檢索去識別化後的知識庫，確證「林淑芬 (Sophia) 的有效 PMP 證照編號與截止日期」以及「歷年繁星智慧檔案專案 (350萬)」的得標摘要與技術描述。</pre>
-          </div>
-        </div>
-        <!-- Standalone HTML Report Card -->
-        <div class="prompt-card html-report-card" style="margin-top: 1rem; border-color: rgba(165, 243, 252, 0.25); background: rgba(15, 23, 42, 0.45); text-align: left;">
-          <div class="prompt-header">
-            <span class="prompt-title-text" style="color: var(--color-secondary);">📄 獨立 HTML 稽核報告 Prompt (加選)</span>
-            <button class="btn-copy" onclick="copyPrompt('prompt-4-1-html')">複製</button>
-          </div>
-          <pre class="prompt-content" id="prompt-4-1-html" style="color: #a5f3fc; white-space: pre-wrap; margin-bottom: 0.5rem;">你現在是系統稽核特工。針對剛剛向 Google NotebookLM 進行的知識大腦檢索動作，請自動生成一份 HTML 檢索清單「retrieval_manifest.html」。以表格展示「檢索主題」、「擷取來源（如 Sophia 證照、繁星專案）」、「核心內容摘要」與「資料可信度驗證（真實/失效）」，以確保引用的實績與證照數據 100% 準確無誤。</pre>
-          <div style="font-size: 0.75rem; color: var(--text-muted); border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 0.5rem; margin-top: 0.5rem;">
-            CLI 執行指令：<code style="color: var(--color-secondary); font-family: monospace;">python3 scripts/generate_retrieval_manifest_report.py</code>
-          </div>
         </div>
       </div>
 
       <!-- Sub-step 4.2 -->
-      <div style="margin-bottom: 2rem; border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 1.5rem;">
-        <h3 style="font-size: 1.05rem; color: white; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.5rem;">
-          <span style="color: var(--color-secondary);">4.2</span> PM 備降人員替換 (Sophia Replaces Zhiming)
-        </h3>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">讀取建議書模板，因應志明證照過期，將團隊資歷中的 PM 替換為 Sophia 並修飾學經歷文案。</p>
-        <div class="prompt-grid">
-          <div class="prompt-card simple-card">
-            <div class="prompt-header">
-              <span class="prompt-title-text">✍️ 簡單規則版 Prompt</span>
-              <button class="btn-copy" onclick="copyPrompt('prompt-4-2-simple')">複製</button>
-            </div>
-            <pre class="prompt-content simple-content" id="prompt-4-2-simple">把 template/tech_bid.md 裡的專案經理名字改成 Sophia，並填入 350 萬的得標案例文字。</pre>
-          </div>
-          <div class="prompt-card">
-            <div class="prompt-header">
-              <span class="prompt-title-text">🧠 強 Agent 認知版 Prompt</span>
-              <button class="btn-copy" onclick="copyPrompt('prompt-4-2-advanced')">複製</button>
-            </div>
-            <pre class="prompt-content" id="prompt-4-2-advanced">你現在是建議書編譯特工。請讀取投標書草稿模板 `templates/tech_bid.md`。由於志明證照過期，請自動將「團隊資歷與得標實績」章節中的 PM 名字替換為 Sophia，填入檢索到的有效證照資訊與繁星實績，並修飾 Sophia 的經歷，使其更契合「大規模展會管理能力」的評分加分項。</pre>
-          </div>
-        </div>
-        <!-- Standalone HTML Report Card -->
-        <div class="prompt-card html-report-card" style="margin-top: 1rem; border-color: rgba(165, 243, 252, 0.25); background: rgba(15, 23, 42, 0.45); text-align: left;">
-          <div class="prompt-header">
-            <span class="prompt-title-text" style="color: var(--color-secondary);">📄 獨立 HTML 稽核報告 Prompt (加選)</span>
-            <button class="btn-copy" onclick="copyPrompt('prompt-4-2-html')">複製</button>
-          </div>
-          <pre class="prompt-content" id="prompt-4-2-html" style="color: #a5f3fc; white-space: pre-wrap; margin-bottom: 0.5rem;">你現在是系統稽核特工。針對剛剛在投標書草稿中將 PM 志明替換為 Sophia 的人員異動動作，請自動生成一份 HTML 人員變更日誌「pm_replacement_log.html」。表格應詳列「原擬任 PM 志明 (過期)」、「新任 PM Sophia (有效)」、「證照到期日對照」、「經歷強化要點（大規模展會管理能力）」與「異動原因」，以便主管與合規同仁快速把關。</pre>
-          <div style="font-size: 0.75rem; color: var(--text-muted); border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 0.5rem; margin-top: 0.5rem;">
-            CLI 執行指令：<code style="color: var(--color-secondary); font-family: monospace;">python3 scripts/generate_pm_replacement_log.py --output 標案工作暫存區/pm_replacement_log.html</code>
-          </div>
+      
         </div>
       </div>
 
       <!-- Sub-step 4.3 -->
-      <div style="margin-bottom: 1rem; border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 1.5rem;">
-        <h3 style="font-size: 1.05rem; color: white; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.5rem;">
-          <span style="color: var(--color-secondary);">4.3</span> 標註人類審查點 (Mark Human Review Points)
-        </h3>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">在草稿中所有涉及財務變更或關鍵人員更換的段落，自動標記 [人類審查點]。</p>
-        <div class="prompt-grid">
-          <div class="prompt-card simple-card">
-            <div class="prompt-header">
-              <span class="prompt-title-text">✍️ 簡單規則版 Prompt</span>
-              <button class="btn-copy" onclick="copyPrompt('prompt-4-3-simple')">複製</button>
-            </div>
-            <pre class="prompt-content simple-content" id="prompt-4-3-simple">請幫我在改好的草稿裡有財務變動的地方加個標記。</pre>
-          </div>
-          <div class="prompt-card">
-            <div class="prompt-header">
-              <span class="prompt-title-text">🧠 強 Agent 認知版 Prompt</span>
-              <button class="btn-copy" onclick="copyPrompt('prompt-4-3-advanced')">複製</button>
-            </div>
-            <pre class="prompt-content" id="prompt-4-3-advanced">你現在是安全稽核特工。凡是在草稿中涉及名音燈光 30 萬 SLA 財務變更、或是備降專案經理人員替換的關鍵段落，自動在行末插入 `[人類審查點: 確證變更已獲主管批准]` 安全標記，確保 HITL 人類在環審核路徑。</pre>
-          </div>
-        </div>
-        <!-- Standalone HTML Report Card -->
-        <div class="prompt-card html-report-card" style="margin-top: 1rem; border-color: rgba(165, 243, 252, 0.25); background: rgba(15, 23, 42, 0.45); text-align: left;">
-          <div class="prompt-header">
-            <span class="prompt-title-text" style="color: var(--color-secondary);">📄 獨立 HTML 稽核報告 Prompt (加選)</span>
-            <button class="btn-copy" onclick="copyPrompt('prompt-4-3-html')">複製</button>
-          </div>
-          <pre class="prompt-content" id="prompt-4-3-html" style="color: #a5f3fc; white-space: pre-wrap; margin-bottom: 0.5rem;">你現在是系統稽核特工。針對技術建議書草稿中標註的 `[人類審查點]` 標籤，請掃描「標案工作暫存區/draft_assembled.md」中所有標記處，自動生成一份 HTML 人工審核檢核表「hitl_review_checklist.html」。以表格列出「段落行號」、「審查點上下文」、「審查類型（財務變更/人員調配）」以及「主管簽章確認欄」，供主管進行實體上傳前的最終核決。</pre>
-          <div style="font-size: 0.75rem; color: var(--text-muted); border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 0.5rem; margin-top: 0.5rem;">
-            CLI 執行指令：<code style="color: var(--color-secondary); font-family: monospace;">python3 scripts/generate_hitl_review_report.py --draft 標案工作暫存區/draft_assembled.md</code>
-          </div>
+      
         </div>
       </div>
     </div>
@@ -858,124 +291,17 @@
       </div>
       <p>主管一鍵收割，引導 Pro Agent 模擬瀏覽器登入政府採購網進行跑測上傳，並將最終得標標準寫回 Excel 本地黃金真理庫，更新 NotebookLM。</p>
       
-      <div style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
-        <strong>輸入檔案：</strong> <code>標案工作暫存區/draft_assembled.md</code>、Excel 本地真理庫
-      </div>
-      <!-- 📥 Part 5 學員資源下載區 -->
-      <div style="background: rgba(111, 91, 216, 0.08); border: 1px dashed var(--color-primary-light); border-radius: 8px; padding: 1.25rem; margin-top: 1rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
-        <div style="flex: 1;">
-          <strong style="color: white; font-size: 0.9rem; display: block; margin-bottom: 0.25rem;">📥 本章實作學員下載包 (Part 5 Start Pack)</strong>
-          <span style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.4; display: block;">包含 Step 4 草稿編譯與安全標註完成後的 Staging 狀態工作目錄。適合直接開始第五步上傳寫回的學員。</span>
-        </div>
-        <a href="part5/part5.zip" download style="background: var(--color-secondary); color: black; font-weight: bold; padding: 0.5rem 1rem; text-decoration: none; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; min-height: 36px; border: none; cursor: pointer; transition: opacity 0.2s; white-space: nowrap;">
-          ⚡ 下載 part5.zip
-        </a>
-      </div>
-
       
-
-      <!-- Sub-step 5.1 -->
-      <div style="margin-bottom: 2rem;">
-        <h3 style="font-size: 1.05rem; color: white; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.5rem;">
-          <span style="color: var(--color-secondary);">5.1</span> Computer Use 網頁上傳模擬 (Computer Use Simulation)
-        </h3>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">呼叫具備 Computer Use 能力的 Agent 啟動模擬瀏覽器，登入採購網測試區自動上傳建議書。</p>
-        <div class="prompt-grid">
-          <div class="prompt-card simple-card">
-            <div class="prompt-header">
-              <span class="prompt-title-text">✍️ 簡單規則版 Prompt</span>
-              <button class="btn-copy" onclick="copyPrompt('prompt-5-1-simple')">複製</button>
-            </div>
-            <pre class="prompt-content simple-content" id="prompt-5-1-simple">請幫我把寫好的建議書草稿上傳到測試系統。</pre>
-          </div>
-          <div class="prompt-card">
-            <div class="prompt-header">
-              <span class="prompt-title-text">🧠 強 Agent 認知版 Prompt</span>
-              <button class="btn-copy" onclick="copyPrompt('prompt-5-1-advanced')">複製</button>
-            </div>
-            <pre class="prompt-content" id="prompt-5-1-advanced">你現在是沙盒執行特工。請調用 Computer Use 特工在沙盒中啟動虛擬 Chrome 瀏覽器，模擬滑鼠與鍵盤操作，登入政府電子採購網測試區，並自動將「標案工作暫存區/draft_assembled.md」上傳至投投標文件欄位。</pre>
-          </div>
-        </div>
-        <!-- Standalone HTML Report Card -->
-        <div class="prompt-card html-report-card" style="margin-top: 1rem; border-color: rgba(165, 243, 252, 0.25); background: rgba(15, 23, 42, 0.45); text-align: left;">
-          <div class="prompt-header">
-            <span class="prompt-title-text" style="color: var(--color-secondary);">📄 獨立 HTML 稽核報告 Prompt (加選)</span>
-            <button class="btn-copy" onclick="copyPrompt('prompt-5-1-html')">複製</button>
-          </div>
-          <pre class="prompt-content" id="prompt-5-1-html" style="color: #a5f3fc; white-space: pre-wrap; margin-bottom: 0.5rem;">你現在是系統稽核特工。針對剛剛 Computer Use 模擬網頁投標文件上傳動作，請自動生成一份 HTML 上傳電子憑證「upload_receipt.html」。憑證應包含「上傳時間」、「目標平台 (電子採購網測試區)」、「投標檔案 (draft_assembled.md)」、「MD5 校驗碼」與「模擬瀏覽器操作軌跡紀錄 (Success)」，供團隊留底稽核。</pre>
-          <div style="font-size: 0.75rem; color: var(--text-muted); border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 0.5rem; margin-top: 0.5rem;">
-            CLI 執行指令：<code style="color: var(--color-secondary); font-family: monospace;">python3 scripts/generate_upload_receipt.py --draft 標案工作暫存區/draft_assembled.md</code>
-          </div>
         </div>
       </div>
 
       <!-- Sub-step 5.2 -->
-      <div style="margin-bottom: 2rem; border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 1.5rem;">
-        <h3 style="font-size: 1.05rem; color: white; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.5rem;">
-          <span style="color: var(--color-secondary);">5.2</span> Excel SSOT 資料庫寫入 (SSOT Database Commit)
-        </h3>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">經主管核准後，將最終投標總額、核准 PM 與主管數位簽章寫入 Excel 黃金真理庫中。</p>
-        <div class="prompt-grid">
-          <div class="prompt-card simple-card">
-            <div class="prompt-header">
-              <span class="prompt-title-text">✍️ 簡單規則版 Prompt</span>
-              <button class="btn-copy" onclick="copyPrompt('prompt-5-2-simple')">複製</button>
-            </div>
-            <pre class="prompt-content simple-content" id="prompt-5-2-simple">在 Excel 的歷史得標庫裡新增一筆台南玩具展 Submitted 的紀錄。</pre>
-          </div>
-          <div class="prompt-card">
-            <div class="prompt-header">
-              <span class="prompt-title-text">🧠 強 Agent 認知版 Prompt</span>
-              <button class="btn-copy" onclick="copyPrompt('prompt-5-2-advanced')">複製</button>
-            </div>
-            <pre class="prompt-content" id="prompt-5-2-advanced">定你現在是資料庫收割特工。請在主管核准後，將最終投標總額 (4.5M)、核准 PM (Sophia) 以及主管 Force(ff) 的數位簽章軌跡，正式寫入本地 Excel 黃金資料庫 (SSOT) 的 「已得標標案」工作表中，並在 審計日誌 生成審計日誌。</pre>
-          </div>
-        </div>
-        <!-- Standalone HTML Report Card -->
-        <div class="prompt-card html-report-card" style="margin-top: 1rem; border-color: rgba(165, 243, 252, 0.25); background: rgba(15, 23, 42, 0.45); text-align: left;">
-          <div class="prompt-header">
-            <span class="prompt-title-text" style="color: var(--color-secondary);">📄 獨立 HTML 稽核報告 Prompt (加選)</span>
-            <button class="btn-copy" onclick="copyPrompt('prompt-5-2-html')">複製</button>
-          </div>
-          <pre class="prompt-content" id="prompt-5-2-html" style="color: #a5f3fc; white-space: pre-wrap; margin-bottom: 0.5rem;">你現在是系統稽核特工。針對剛剛寫入 Excel 地端真理庫 (SSOT) 的投標紀錄動作，請對比寫入前後的檔案，自動生成一份 HTML 寫入審計報告「db_sync_audit.html」。表格展示「異動工作表」、「寫入欄位（總額4.5M、PM Sophia、主管Force簽章）」、「寫入狀態 (Success)」與「資料庫雜湊校驗碼」，供審計同仁檢驗資料誠信度。</pre>
-          <div style="font-size: 0.75rem; color: var(--text-muted); border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 0.5rem; margin-top: 0.5rem;">
-            CLI 執行指令：<code style="color: var(--color-secondary); font-family: monospace;">python3 scripts/generate_db_sync_audit.py --db 標案工作暫存區/標案工作記錄表.xlsx</code>
-          </div>
+      
         </div>
       </div>
 
       <!-- Sub-step 5.3 -->
-      <div style="margin-bottom: 1rem; border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 1.5rem;">
-        <h3 style="font-size: 1.05rem; color: white; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.5rem;">
-          <span style="color: var(--color-secondary);">5.3</span> 知識大腦同步發布 (NotebookLM Knowledge Sync)
-        </h3>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">將本次最終得標並去敏後的建議書草稿，發布回 NotebookLM 脈絡庫中，完成知識閉環。</p>
-        <div class="prompt-grid">
-          <div class="prompt-card simple-card">
-            <div class="prompt-header">
-              <span class="prompt-title-text">✍️ 簡單規則版 Prompt</span>
-              <button class="btn-copy" onclick="copyPrompt('prompt-5-3-simple')">複製</button>
-            </div>
-            <pre class="prompt-content simple-content" id="prompt-5-3-simple">請幫我把這次寫好的標書傳回我們的知識庫裡。</pre>
-          </div>
-          <div class="prompt-card">
-            <div class="prompt-header">
-              <span class="prompt-title-text">🧠 強 Agent 認知版 Prompt</span>
-              <button class="btn-copy" onclick="copyPrompt('prompt-5-3-advanced')">複製</button>
-            </div>
-            <pre class="prompt-content" id="prompt-5-3-advanced">你現在是知識閉環特工。請將本次最終得標並去敏感化後的技術建議書草稿，發布回 Google NotebookLM 脈絡大腦中，使其作為未來的黃金投標範本，完成團隊知識閉環。</pre>
-          </div>
-        </div>
-        <!-- Standalone HTML Report Card -->
-        <div class="prompt-card html-report-card" style="margin-top: 1rem; border-color: rgba(165, 243, 252, 0.25); background: rgba(15, 23, 42, 0.45); text-align: left;">
-          <div class="prompt-header">
-            <span class="prompt-title-text" style="color: var(--color-secondary);">📄 獨立 HTML 稽核報告 Prompt (加選)</span>
-            <button class="btn-copy" onclick="copyPrompt('prompt-5-3-html')">複製</button>
-          </div>
-          <pre class="prompt-content" id="prompt-5-3-html" style="color: #a5f3fc; white-space: pre-wrap; margin-bottom: 0.5rem;">你現在是系統稽核特工。針對將去敏感標書發布回 Google NotebookLM 脈絡大腦的動作，請自動生成一份 HTML 知識同步分析報告「brain_sync_report.html」。列出「發布檔案名稱」、「去敏處理狀態 (100% Scrubbed)」、「大腦同步時間」以及「新黃金投標範本索引建立狀態」，證明團隊已完成閉環學習並更新知識庫。</pre>
-          <div style="font-size: 0.75rem; color: var(--text-muted); border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 0.5rem; margin-top: 0.5rem;">
-            CLI 執行指令：<code style="color: var(--color-secondary); font-family: monospace;">python3 scripts/generate_brain_sync_report.py</code>
-          </div>
+      
         </div>
       </div>
     </div>
@@ -987,118 +313,17 @@
       </div>
       <p>透過背景 Scheduled Analyst 定時任務監跨 7 天關鍵路徑、專案起草延誤風險，並自動執行廠商補件催辦與證照備用調度。</p>
       
-      <div style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
-        <strong>輸入檔案：</strong> Excel 專案排程表、Staging 執行日誌<br>
-      </div>
-
-      <!-- Sub-step 6.1 -->
-      <div style="margin-bottom: 2rem;">
-        <h3 style="font-size: 1.05rem; color: white; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.5rem;">
-          <span style="color: var(--color-secondary);">6.1</span> AI PM 進度與風險監控 (Progress & Risk Monitoring)
-        </h3>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">定期分析 Staging 寫作日誌，若草稿撰寫進度落後則評估延誤風險。</p>
-        <div class="prompt-grid">
-          <div class="prompt-card simple-card">
-            <div class="prompt-header">
-              <span class="prompt-title-text">✍️ 簡單規則版 Prompt</span>
-              <button class="btn-copy" onclick="copyPrompt('prompt-6-1-simple')">複製</button>
-            </div>
-            <pre class="prompt-content simple-content" id="prompt-6-1-simple">請幫我設定一個定時排程，每小時檢查一次 Staging 區的寫作日誌時間。如果時間落後，就在 Console 印出一個 Warn 警告。</pre>
-          </div>
-          <div class="prompt-card">
-            <div class="prompt-header">
-              <span class="prompt-title-text">🧠 強 Agent 認知版 Prompt</span>
-              <button class="btn-copy" onclick="copyPrompt('prompt-6-1-advanced')">複製</button>
-            </div>
-            <pre class="prompt-content" id="prompt-6-1-advanced">你現在是專案進度監控特工。請定期分析「標案工作暫存區」中的寫作日誌：
-1. 追蹤 7 天關鍵路徑進度，若草稿撰寫進度落後預期超過 12 小時，判定為延誤風險（DELAY_RISK）。
-2. 自動計算對最終遞件截止日的衝擊，並起草一份進度異常分析報告供主管審閱。</pre>
-          </div>
-        </div>
-        <!-- Standalone HTML Report Card -->
-        <div class="prompt-card html-report-card" style="margin-top: 1rem; border-color: rgba(165, 243, 252, 0.25); background: rgba(15, 23, 42, 0.45); text-align: left;">
-          <div class="prompt-header">
-            <span class="prompt-title-text" style="color: var(--color-secondary);">📄 獨立 HTML 稽核報告 Prompt (加選)</span>
-            <button class="btn-copy" onclick="copyPrompt('prompt-6-1-html')">複製</button>
-          </div>
-          <pre class="prompt-content" id="prompt-6-1-html" style="color: #a5f3fc; white-space: pre-wrap; margin-bottom: 0.5rem;">你現在是系統稽核特工。針對 AI PM 排程監控到的 DELAY_RISK 風險，請定時抓取專案日誌與關鍵路徑，自動生成一份 HTML 進度風險日誌「pm_schedule_report.html」。內容包含「當前執行步驟」、「計畫截止時間」、「實際進度落後時數 (12h)」、「關鍵路徑阻礙點」與「建議調配資源方案」，以便團隊即時調整排程。</pre>
-          <div style="font-size: 0.75rem; color: var(--text-muted); border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 0.5rem; margin-top: 0.5rem;">
-            CLI 執行指令：<code style="color: var(--color-secondary); font-family: monospace;">python3 scripts/generate_pm_schedule_report.py</code>
-          </div>
+      
         </div>
       </div>
 
       <!-- Sub-step 6.2 -->
-      <div style="margin-bottom: 2rem; border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 1.5rem;">
-        <h3 style="font-size: 1.05rem; color: white; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.5rem;">
-          <span style="color: var(--color-secondary);">6.2</span> 協力商缺件語意催辦 (Missing Document Semantic Alert)
-        </h3>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">語意分析 Staging 區檔案列表與資料庫，若缺少必備證明則自動起草補件信。</p>
-        <div class="prompt-grid">
-          <div class="prompt-card simple-card">
-            <div class="prompt-header">
-              <span class="prompt-title-text">✍️ 簡單規則版 Prompt</span>
-              <button class="btn-copy" onclick="copyPrompt('prompt-6-2-simple')">複製</button>
-            </div>
-            <pre class="prompt-content simple-content" id="prompt-6-2-simple">請幫我看看「標案工作暫存區」裡有沒有少了大同搭建商的實績證明，少了就寫信催他。</pre>
-          </div>
-          <div class="prompt-card">
-            <div class="prompt-header">
-              <span class="prompt-title-text">🧠 強 Agent 認知版 Prompt</span>
-              <button class="btn-copy" onclick="copyPrompt('prompt-6-2-advanced')">複製</button>
-            </div>
-            <pre class="prompt-content" id="prompt-6-2-advanced">你現在是外協溝通特工。請掃描「標案工作暫存區」的檔案列表與資料庫記錄：
-1. 若檢測到缺少「大同搭建商實績證明」等必備合規文件，自動分析缺件影響。
-2. 使用專業且有禮貌的商務口吻，自動起草一封向大同搭建商窗口催辦補件的電子郵件草稿，存入待發送區。</pre>
-          </div>
-        </div>
-        <!-- Standalone HTML Report Card -->
-        <div class="prompt-card html-report-card" style="margin-top: 1rem; border-color: rgba(165, 243, 252, 0.25); background: rgba(15, 23, 42, 0.45); text-align: left;">
-          <div class="prompt-header">
-            <span class="prompt-title-text" style="color: var(--color-secondary);">📄 獨立 HTML 稽核報告 Prompt (加選)</span>
-            <button class="btn-copy" onclick="copyPrompt('prompt-6-2-html')">複製</button>
-          </div>
-          <pre class="prompt-content" id="prompt-6-2-html" style="color: #a5f3fc; white-space: pre-wrap; margin-bottom: 0.5rem;">你現在是系統稽核特工。針對檢測到的大同搭建商實績證明缺件與催辦信草稿，請自動生成一份 HTML 缺件催辦報告「missing_doc_alert.html」。表格列出「缺失文件名稱」、「受影響協力商」、「預估廢標風險級別」、「催辦郵件窗口」與「郵件草稿預覽」，方便外協同仁審查信件發送。</pre>
-          <div style="font-size: 0.75rem; color: var(--text-muted); border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 0.5rem; margin-top: 0.5rem;">
-            CLI 執行指令：<code style="color: var(--color-secondary); font-family: monospace;">python3 scripts/generate_missing_doc_alert.py</code>
-          </div>
+      
         </div>
       </div>
 
       <!-- Sub-step 6.3 -->
-      <div style="margin-bottom: 1rem; border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 1.5rem;">
-        <h3 style="font-size: 1.05rem; color: white; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.5rem;">
-          <span style="color: var(--color-secondary);">6.3</span> 證照失效主動調配 (Cert Expiry Recovery Alert)
-        </h3>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">自動監控預定人員證照效期，若失效則觸發 Fallback 機制，重調合格人員並警示。</p>
-        <div class="prompt-grid">
-          <div class="prompt-card simple-card">
-            <div class="prompt-header">
-              <span class="prompt-title-text">✍️ 簡單規則版 Prompt</span>
-              <button class="btn-copy" onclick="copyPrompt('prompt-6-3-simple')">複製</button>
-            </div>
-            <pre class="prompt-content simple-content" id="prompt-6-3-simple">如果發現資料庫裡志明的證照過期了，請告訴我，並幫我換成 Sophia。</pre>
-          </div>
-          <div class="prompt-card">
-            <div class="prompt-header">
-              <span class="prompt-title-text">🧠 強 Agent 認知版 Prompt</span>
-              <button class="btn-copy" onclick="copyPrompt('prompt-6-3-advanced')">複製</button>
-            </div>
-            <pre class="prompt-content" id="prompt-6-3-advanced">你現在是人力資源調配特工。請自動監控 Excel 試算表資料庫中專案人員的 PMP 證照有效期：
-1. 若檢測到預定專案經理（如志明）的證照已失效，主動觸發備降（Fallback）調度機制。
-2. 從公司證照庫中檢索符合 RFP 資格的有效 PM（如 Sophia），自動替換其履歷資訊並產生調配日誌，即時提報主管批准。</pre>
-          </div>
-        </div>
-        <!-- Standalone HTML Report Card -->
-        <div class="prompt-card html-report-card" style="margin-top: 1rem; border-color: rgba(165, 243, 252, 0.25); background: rgba(15, 23, 42, 0.45); text-align: left;">
-          <div class="prompt-header">
-            <span class="prompt-title-text" style="color: var(--color-secondary);">📄 獨立 HTML 稽核報告 Prompt (加選)</span>
-            <button class="btn-copy" onclick="copyPrompt('prompt-6-3-html')">複製</button>
-          </div>
-          <pre class="prompt-content" id="prompt-6-3-html" style="color: #a5f3fc; white-space: pre-wrap; margin-bottom: 0.5rem;">你現在是系統稽核特工。針對 PMP 證照過期觸發 PM Fallback 替換事件，請自動生成一份 HTML 證照修復調配報告「cert_recovery_report.html」。以醒目色彩對比展示「過期 PM 志明」、「備降 PM Sophia」、「證照比對結果」、「調配寫入日誌狀態 (Success)」與「主管核准狀態」，供 HR 與投標組查閱存檔。</pre>
-          <div style="font-size: 0.75rem; color: var(--text-muted); border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 0.5rem; margin-top: 0.5rem;">
-            CLI 執行指令：<code style="color: var(--color-secondary); font-family: monospace;">python3 scripts/generate_cert_recovery_report.py</code>
-          </div>
+      
         </div>
       </div>
     </div>
