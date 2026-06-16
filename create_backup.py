@@ -25,9 +25,9 @@ for file in files:
             max_major = major
             max_minor = minor
 
-# Set version explicitly for v2.6 release
+# Set version explicitly for v2.8 release
 new_major = 2
-new_minor = 6
+new_minor = 8
 new_version = f"v{new_major}.{new_minor}"
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 zip_filename = f"{project_prefix}_{new_version}_{timestamp}.zip"
@@ -37,16 +37,14 @@ changelog_content = """==================================================
 Skyline Class02 備份版本重點說明
 版本: {}
 時間戳: {}
-1. 雙軌 Prompt (簡單版 vs 強 Agent 認知版) 對比架構升級 (v1.2)：
-   - 全面引入「✍️ 簡單 Prompt 模式」與「🧠 高段 Agent 模式」的對比展示。
-   - 用戶可在控制塔 Inspector 面板動態切換，Prompt 文字與 CLI 指令即時切換。
-   - Console CLI 模擬日誌升級，在強 Agent 模式下模擬輸出極寫實的 Chain-of-Thought (CoT) 思考軌跡。
-2. 目錄名稱與地端資料庫架構升級：
-   - 取代 raw_tenders / staging 等英文預留名，全面改為本地有意義的「原始標案資源/」與「標案工作暫存區/」中文資料夾。
-   - 第一步檔案整理從 JSON Manifest 升級為地端 SQLite 資料庫建置與寫入，自動建立 files_registry 與 extracted_metadata 兩張實體表，模擬 SSOT。
-3. 項目編譯打包與本地備份 (LOCAL ONLY)：
-   - 包含去識別化與地端真正資料版的編譯打包腳本更新。
-   - 保持地端 (LOCAL ONLY)，未獲得主管指示 git push 前，不執行任何雲端上傳命令。
+1. 側邊欄重構與精簡收斂 (v2.8)：
+   - 精簡「引導總覽」區塊為 5 大核心入口（新增 course_overview.html 本次課程說明與 Skyline Prompt 提示詞管理專案）。
+   - 新增「參考資源」區塊，整合本機 ETL 轉運站、AI OCR 辨識、影音優化等專案。
+   - 將所有其他輔助教材與工具（核心教材、架構共識、教材工作台、控制塔 POC）移至「其他」區塊。
+2. 實戰橫幅與圖片更換：
+   - 橫幅圖片更換為全新 ChatGPT 橫幅 png 圖片。
+3. 雙倉庫自動更新與部署：
+   - 全套 workspaces、production_data.zip 已重新生成，並成功推送至 falo-taiwan 及 falo-chinese 遠端 GitHub 倉庫。
 """
 
 print(f"DEBUG: Next version computed as {new_version}")
