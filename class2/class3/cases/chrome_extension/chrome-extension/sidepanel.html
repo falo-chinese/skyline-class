@@ -1,0 +1,324 @@
+<!-- WATERMARK: Falo x Force Cheng 2026/6/6 -->
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>銀河 ERP 填單助手</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #fef9f9 0%, #f3f7fb 100%);
+      --text-main: #334155;
+      --text-muted: #64748b;
+      --primary: #0284c7;
+      --accent-pink: #ec4899;
+      --card-bg: rgba(255, 255, 255, 0.85);
+      --card-border: rgba(255, 255, 255, 0.5);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Noto Sans TC', 'Outfit', sans-serif;
+      padding: 18px;
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      min-height: 100vh;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    .brand {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--accent-pink);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    h3 {
+      font-size: 1.1rem;
+      font-weight: 900;
+      color: #1e293b;
+      margin-top: 2px;
+    }
+
+    .slogan {
+      display: inline-block;
+      margin-top: 4px;
+      padding: 2px 8px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(236, 72, 153, 0.2);
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--accent-pink);
+    }
+
+    .intro {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 12px rgba(148, 163, 184, 0.05);
+    }
+
+    .card-title {
+      font-weight: 900;
+      font-size: 0.85rem;
+      color: #1e293b;
+      margin-bottom: 12px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+      padding-bottom: 6px;
+    }
+
+    .form-group {
+      margin-bottom: 10px;
+    }
+    
+    .form-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .sb-input {
+      flex-grow: 1;
+      width: 50%;
+      padding: 7px 10px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      color: var(--text-main);
+      background: white;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .sb-input:focus {
+      border-color: var(--primary);
+    }
+
+    .btn-icon {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      color: #475569;
+      padding: 4px 6px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.72rem;
+      font-weight: 700;
+      transition: all 0.2s;
+      height: 30px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+    }
+
+    .btn-icon.write {
+      border-color: rgba(2, 132, 199, 0.2);
+      color: var(--primary);
+      background: rgba(2, 132, 199, 0.03);
+    }
+    .btn-icon.write:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-icon.read {
+      border-color: rgba(236, 72, 153, 0.2);
+      color: var(--accent-pink);
+      background: rgba(236, 72, 153, 0.03);
+    }
+    .btn-icon.read:hover {
+      background: var(--accent-pink);
+      color: white;
+    }
+
+    .btn-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .btn-large {
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      color: white;
+    }
+
+    .btn-large.write-all {
+      background: linear-gradient(135deg, var(--primary) 0%, #0369a1 100%);
+    }
+    .btn-large.write-all:hover {
+      opacity: 0.95;
+    }
+
+    .btn-large.read-all {
+      background: linear-gradient(135deg, var(--accent-pink) 0%, #db2777 100%);
+    }
+    .btn-large.read-all:hover {
+      opacity: 0.95;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      margin-top: 20px;
+      border-top: 1px solid rgba(148, 163, 184, 0.1);
+      padding-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="brand">Falo Academy</div>
+    <h3>銀河 ERP 填單助手 (V1)</h3>
+  </div>
+
+  <!-- Form card with textboxes and controls -->
+  <div class="card">
+    <div class="card-title">填單資料與雙向控制</div>
+
+    <!-- PO field row -->
+    <div class="form-group">
+      <label class="form-label">採購單號 (#po-number)</label>
+      <div class="input-row">
+        <input type="text" id="po-input" class="sb-input" value="PO-2026-9918">
+        <button class="btn-icon write" id="btn-write-po" title="填入網頁">填入</button>
+        <button class="btn-icon read" id="btn-read-po" title="從網頁擷取">擷取</button>
+      </div>
+    </div>
+
+    <!-- Product Code field row -->
+    <div class="form-group">
+      <label class="form-label">產品代碼 (#product-code)</label>
+      <div class="input-row">
+        <input type="text" id="code-input" class="sb-input" value="FALO-R1">
+        <button class="btn-icon write" id="btn-write-code" title="填入網頁">填入</button>
+        <button class="btn-icon read" id="btn-read-code" title="從網頁擷取">擷取</button>
+      </div>
+    </div>
+
+    <!-- Department field row -->
+    <div class="form-group">
+      <label class="form-label">進貨部門 (#dept-code)</label>
+      <div class="input-row">
+        <select id="dept-input" class="sb-input" style="height: 32px; padding: 4px 6px;">
+          <option value="">-- 請選擇 --</option>
+          <option value="PUR">採購部 (PUR)</option>
+          <option value="WH" selected>倉管部 (WH)</option>
+          <option value="QC">品管部 (QC)</option>
+          <option value="RD">研發部 (RD)</option>
+        </select>
+        <button class="btn-icon write" id="btn-write-dept" title="填入網頁">填入</button>
+        <button class="btn-icon read" id="btn-read-dept" title="從網頁擷取">擷取</button>
+      </div>
+    </div>
+
+    <!-- Received Qty field row -->
+    <div class="form-group">
+      <label class="form-label">進貨數量 (#received-qty)</label>
+      <div class="input-row">
+        <input type="number" id="qty-input" class="sb-input" value="120">
+        <button class="btn-icon write" id="btn-write-qty" title="填入網頁">填入</button>
+        <button class="btn-icon read" id="btn-read-qty" title="從網頁擷取">擷取</button>
+      </div>
+    </div>
+
+    <!-- Expiry Date field row -->
+    <div class="form-group">
+      <label class="form-label">產品效期 (#expiry-date)</label>
+      <div class="input-row">
+        <input type="date" id="expiry-input" class="sb-input" value="2027-06-09">
+        <button class="btn-icon write" id="btn-write-expiry" title="填入網頁">填入</button>
+        <button class="btn-icon read" id="btn-read-expiry" title="從網頁擷取">擷取</button>
+      </div>
+    </div>
+
+    <!-- System Serial No. field row (Readonly capture target) -->
+    <div class="form-group">
+      <label class="form-label">系統流水序號 (#system-serial-no)</label>
+      <div class="input-row">
+        <input type="text" id="serial-input" class="sb-input" placeholder="請點擊捕捉讀取網頁流水號" readonly style="background: #f8fafc; color: #64748b;">
+        <button class="btn-icon read" id="btn-capture-serial" title="從網頁捕捉流水號" style="flex-shrink: 0; width: 80px;">捕捉</button>
+      </div>
+    </div>
+
+    <!-- Grid for random data and clear form -->
+    <div class="btn-grid" style="margin-top: 15px; margin-bottom: 10px;">
+      <button class="btn-large" id="btn-random-data" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">隨機產生資料</button>
+      <button class="btn-large" id="btn-clear-all" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);">清空表單</button>
+    </div>
+
+    <!-- Grid for CSV Export and Import -->
+    <div class="btn-grid" style="margin-bottom: 10px;">
+      <button class="btn-large" id="btn-export-csv" style="background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);">匯出 CSV</button>
+      <button class="btn-large" id="btn-import-csv" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);">匯入 CSV</button>
+    </div>
+    <input type="file" id="csv-file-input" accept=".csv" style="display: none;">
+
+    <!-- Grid for writing all and reading all -->
+    <div class="btn-grid">
+      <button class="btn-large write-all" id="btn-write-all">一鍵全填入</button>
+      <button class="btn-large read-all" id="btn-read-all">一鍵全擷取</button>
+    </div>
+
+    <!-- Remote Action Buttons -->
+    <div style="margin-top: 15px; border-top: 1px solid rgba(148, 163, 184, 0.15); padding-top: 12px;">
+      <div class="form-label" style="font-size: 0.78rem; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">遠端控制 (點擊網頁)</div>
+      <div class="btn-grid" style="margin-top: 0;">
+        <button class="btn-large" id="btn-remote-check" style="background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);">檢核表單</button>
+        <button class="btn-large" id="btn-remote-submit" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">確認入庫</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    © 2026 Falo x Force Cheng
+  </div>
+
+  <script src="sidepanel.js"></script>
+</body>
+</html>

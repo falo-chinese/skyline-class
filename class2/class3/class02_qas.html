@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkyLine Class 02 學員提問與技術解答 | 銀河軟體 ERP 內訓課程</title>
+    <meta name="description" content="銀河軟體 ERP 內訓課程：SkyLine Class 02 學員提問彙整與深度技術答覆。">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-gradient: radial-gradient(circle at 50% 50%, #0c0824 0%, #020108 100%);
+            --primary: #8b5cf6;
+            --primary-glow: rgba(139, 92, 246, 0.15);
+            --secondary: #3b82f6;
+            --accent: #10b981;
+            --card-bg: rgba(22, 16, 48, 0.5);
+            --card-border: rgba(255, 255, 255, 0.07);
+            --card-hover-border: rgba(139, 92, 246, 0.4);
+            --text-primary: #f3f4f6;
+            --text-secondary: #9ca3af;
+            --text-muted: #4b5563;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Outfit', 'Inter', 'Noto Sans TC', sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 3rem 1.5rem;
+            overflow-x: hidden;
+        }
+
+        .glow {
+            position: absolute;
+            width: 450px;
+            height: 450px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
+            z-index: -1;
+            filter: blur(60px);
+        }
+        .glow-1 { top: 10%; left: 5%; }
+        .glow-2 { bottom: 15%; right: 5%; }
+
+        header {
+            max-width: 1000px;
+            margin: 0 auto 3rem auto;
+            text-align: center;
+        }
+
+        .tagline {
+            display: inline-block;
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.25);
+            color: #c084fc;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            padding: 0.4rem 1.2rem;
+            border-radius: 9999px;
+            margin-bottom: 1.25rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 40%, #c084fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.01em;
+        }
+
+        header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 2.25rem;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            border-color: var(--card-hover-border);
+            box-shadow: 0 15px 40px rgba(139, 92, 246, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            opacity: 0.6;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 0.75rem;
+        }
+
+        .card-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 8px;
+            color: #c084fc;
+        }
+
+        .card-icon svg {
+            width: 20px;
+            height: 20px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+        }
+
+        .card-number {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .card-title h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .question-box {
+            background: rgba(255, 255, 255, 0.02);
+            border-left: 3px solid var(--secondary);
+            padding: 0.75rem 1.25rem;
+            margin-bottom: 1.25rem;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .question-box p {
+            color: #e5e7eb;
+            font-weight: 500;
+            font-size: 1rem;
+        }
+
+        .qa-toggle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.45rem;
+            min-height: 2.4rem;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #ffffff;
+            cursor: pointer;
+            font: inherit;
+            font-size: 0.9rem;
+            font-weight: 700;
+            padding: 0.55rem 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        .qa-toggle:hover,
+        .qa-toggle:focus-visible {
+            background: rgba(139, 92, 246, 0.12);
+            border-color: rgba(139, 92, 246, 0.35);
+            color: #d8b4fe;
+            outline: none;
+        }
+
+        .qa-toggle .toggle-icon {
+            display: inline-block;
+            line-height: 1;
+            transition: transform 0.2s ease;
+        }
+
+        .card.is-open .qa-toggle .toggle-icon {
+            transform: rotate(90deg);
+        }
+
+        .card:not(.is-open) .strategy-note,
+        .card:not(.is-open) .answer-box {
+            display: none;
+        }
+
+        .answer-box {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-top: 1.4rem;
+            padding: 1rem 1.15rem;
+            background: rgba(59, 130, 246, 0.06);
+            border: 1px solid rgba(96, 165, 250, 0.16);
+            border-left: 3px solid var(--secondary);
+            border-radius: 8px;
+        }
+
+        .answer-box p {
+            margin-bottom: 1rem;
+        }
+
+        .answer-box::before {
+            content: "有資源的最佳解 / 參考用";
+            display: inline-flex;
+            align-items: center;
+            color: #93c5fd;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 0.55rem;
+        }
+
+        .advisor-panel {
+            background: rgba(255, 255, 255, 0.035);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 0 0 1rem 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+        }
+
+        .advisor-panel h2 {
+            font-size: 1.2rem;
+            margin-bottom: 0.75rem;
+            color: #ffffff;
+        }
+
+        .advisor-panel p {
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+        }
+
+        .advisor-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .advisor-block {
+            background: rgba(0, 0, 0, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .advisor-grid .advisor-block:first-child {
+            background: rgba(16, 185, 129, 0.06);
+            border-color: rgba(16, 185, 129, 0.18);
+            border-left: 3px solid var(--accent);
+        }
+
+        .advisor-grid .advisor-block:nth-child(2) {
+            background: rgba(59, 130, 246, 0.06);
+            border-color: rgba(96, 165, 250, 0.18);
+            border-left: 3px solid var(--secondary);
+        }
+
+        .advisor-block h3,
+        .strategy-note h3 {
+            font-size: 0.95rem;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+        }
+
+        .strategy-note {
+            margin-top: 1.4rem;
+            padding: 1rem 1.15rem;
+            background: rgba(16, 185, 129, 0.06);
+            border: 1px solid rgba(16, 185, 129, 0.16);
+            border-left: 3px solid var(--accent);
+            border-radius: 8px;
+            color: var(--text-secondary);
+        }
+
+        .strategy-note p {
+            margin-bottom: 0.75rem;
+        }
+
+        .note-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            color: #86efac;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 0.55rem;
+        }
+
+        .risk-list {
+            display: grid;
+            gap: 0.55rem;
+            margin-top: 0.75rem;
+        }
+
+        .risk-item {
+            display: flex;
+            gap: 0.65rem;
+            align-items: flex-start;
+        }
+
+        .risk-tag {
+            flex: 0 0 auto;
+            min-width: 3.4rem;
+            text-align: center;
+            border-radius: 999px;
+            padding: 0.12rem 0.5rem;
+            font-size: 0.78rem;
+            font-weight: 700;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .risk-green { color: #86efac; background: rgba(34, 197, 94, 0.12); }
+        .risk-yellow { color: #fde68a; background: rgba(245, 158, 11, 0.12); }
+        .risk-red { color: #fca5a5; background: rgba(239, 68, 68, 0.12); }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 1rem 0;
+        }
+
+        li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+        }
+
+        li::before {
+            content: "✦";
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: var(--primary);
+        }
+
+        li strong {
+            color: #ffffff;
+        }
+
+        /* Flow Visualizer */
+        .flow-diagram {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            margin: 1rem 0;
+            font-size: 0.85rem;
+            font-family: monospace;
+        }
+
+        .flow-node {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            color: #ffffff;
+        }
+
+        .flow-arrow {
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        code {
+            background: rgba(0, 0, 0, 0.3);
+            color: #f43f5e;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.85rem;
+        }
+
+        .code-block {
+            display: block;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 1rem;
+            color: #e2e8f0;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.85rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        .logs-panel {
+            max-width: 1000px;
+            margin: 3.5rem auto 0 auto;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .logs-panel p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .logs-panel a {
+            color: #60a5fa;
+            text-decoration: none;
+            font-weight: 500;
+            margin: 0 0.5rem;
+        }
+
+        .logs-panel a:hover {
+            text-decoration: underline;
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #ffffff;
+            font-size: 0.9rem;
+            font-weight: 600;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            margin-top: 1rem;
+            align-self: center;
+        }
+
+        .btn-back:hover {
+            background: rgba(139, 92, 246, 0.1);
+            border-color: rgba(139, 92, 246, 0.3);
+            color: #c084fc;
+        }
+
+        footer {
+            max-width: 1000px;
+            margin: 4rem auto 1.5rem auto;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 2.5rem;
+        }
+
+        footer a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        footer a:hover {
+            color: var(--primary);
+        }
+
+        @media (max-width: 720px) {
+            .advisor-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .risk-item {
+                flex-direction: column;
+                gap: 0.35rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
+
+    <header>
+        <div class="tagline">SkyLine Class 02 Pre-Class Q&A</div>
+        <h1>SkyLine Class 02 學員提問與技術解答</h1>
+        <p>為學員解鎖高併發 API 架構、AI 專案控制、環境乾淨度以及跨平台開發的落地心法</p>
+    </header>
+
+    <main>
+        <section class="advisor-panel">
+            <h2>本頁閱讀方式：先看 Force 建議，再看最佳解參考</h2>
+            <p>這份 Q&A 的目的，不是把銀河軟體 ERP 台西分公司的全體同仁訓練成工程師，而是協助大家在 AI 時代提升判斷格局，從 ERP 功能執行者，逐步變成懂流程、懂風險、懂客戶價值的策略協作夥伴。</p>
+            <p>母體 ERP 是正式主系統，核心資料、權限、帳務、庫存、正式流程與寫回機制不能輕易動。分公司可以發展外掛、報表、輔助工具與流程打樣，但案型必須拿捏；重要案子建議先與 Force 顧問團隊交流需求、資料邊界、風險與驗收方式。</p>
+            <div class="advisor-grid">
+                <div class="advisor-block">
+                    <h3>Force 顧問對銀河軟體 ERP 的建議解法</h3>
+                    <p>這是依照銀河軟體 ERP 台西分公司的真實角色與風險邊界，提出可落地、可溝通、可逐步驗證的做法。重點是會判斷、會提問、會協作，不是讓未充分培訓的員工直接開發重要程式。</p>
+                </div>
+                <div class="advisor-block">
+                    <h3>有資源的最佳解（參考用）</h3>
+                    <p>這是大型企業、完整工程團隊、預算與治理都充足時的標準做法。它用來讓大家知道業界天花板在哪裡，不代表每一項都要立刻導入。</p>
+                </div>
+            </div>
+            <div class="risk-list">
+                <div class="risk-item"><span class="risk-tag risk-green">綠燈案</span><span>低風險、可撤回、可人工覆核，例如內部文件整理、SOP、報表輔助、資料清理草稿、非正式 OCR 初稿。</span></div>
+                <div class="risk-item"><span class="risk-tag risk-yellow">黃燈案</span><span>可以打樣，但要有主管、工程師或 Force 顧問一起看，例如外掛、API 串接、客戶流程工具、半自動資料交換。</span></div>
+                <div class="risk-item"><span class="risk-tag risk-red">紅燈案</span><span>不能交給未充分培訓的員工或單一 AI Agent 處理，例如母體 ERP 核心資料表、正式寫回、權限、帳務、庫存與客戶正式營運資料。</span></div>
+            </div>
+        </section>
+
+        <!-- Card 1: API Performance -->
+        <section class="card">
+            <div class="card-header">
+                <div class="card-icon">
+                    <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                </div>
+                <div class="card-title-group">
+                    <div class="card-number">Question 01</div>
+                    <h2>API 效能優化與架構說明</h2>
+                </div>
+            </div>
+            <div class="question-box">
+                <p>API效能要怎麼寫比較快? 架構說明</p>
+            </div>
+            <div class="strategy-note">
+                <div class="note-label">Force 顧問對銀河軟體 ERP 的拿捏</div>
+                <p>如果使用成熟的 AI Coding 工具，產出的 API 初版通常不會太差。它不一定是最佳化版本，但通常會比完全沒有架構概念的手寫程式更穩定：基本路由、錯誤處理、資料驗證、API 結構與可讀性，多半能到達一個可以測試、可以討論、可以逐步改善的起點。</p>
+                <p>真正要注意的是：效能問題常常不是「整段程式都寫爛」，而是某些沒有被注意到的瓶頸，在特定情境下被放大。也就是說，效能可能不是一開始最需要追求的重點；更重要的是知道怎麼測、怎麼觀察、怎麼把瓶頸找出來。</p>
+                <p>常見瓶頸可能藏在資料量突然變大、查詢條件太模糊、權限判斷太複雜、報表一次拉太多資料、外掛 API 重複查詢、使用者操作流程太繞、網路或瀏覽器載入慢，或客戶現場環境與測試環境不同。這些問題不一定靠「把程式碼寫得更漂亮」就會自動解決，而是需要透過測試與證據逐步定位。</p>
+                <p>因此銀河軟體 ERP 同仁不需要先學會自己寫高效能 API。更重要的是建立一套「AI 輔助效能判讀」流程：當客戶反映系統慢時，先把慢的情境、角色、資料量、查詢條件、畫面步驟與錯誤訊息整理成證據，再交由工程或顧問團隊判斷真正瓶頸。</p>
+                <p>Force 建議台西分公司可以先掌握四種低風險的 AI 輔助測試方法，目標不是直接改程式，而是把問題整理成可觀察、可測試、可回報、可交接的知識底稿。</p>
+                <ul>
+                    <li><strong>1. AI Agent 直接幫忙測</strong>：把需求、操作步驟、錯誤訊息、截圖或 log 給 AI，請它協助分類「慢」可能發生在前端、API、資料庫、網路、權限或使用者操作流程。這適合做初步判讀與問題整理。</li>
+                    <li><strong>2. AI Agent 寫測試程式</strong>：請 AI 產生 <code>curl</code>、Postman collection、k6、Playwright 或簡單壓測腳本草稿，用來重複測試不同資料量、不同查詢條件、不同角色權限。這類腳本要先用測試環境與脫敏資料驗證，不能直接打正式系統。</li>
+                    <li><strong>3. 瀏覽器外掛程式輔助</strong>：如果是 Web 程式，可以用瀏覽器 DevTools、Performance、Network、Lighthouse 或相關外掛觀察頁面載入、API request、response time、錯誤狀態碼。這能幫助非工程人員看懂「畫面慢」和「API 慢」不一定是同一件事。</li>
+                    <li><strong>4. Computer Use 混合測試</strong>：Computer Use 是一種模擬真人操作的測試方式。它可以打開系統、點擊查詢、輸入條件、等待畫面、截圖保存、記錄哪一步卡住。這不是單純 API 測試，而是「使用者視角 + 系統視角」的混合測試。</li>
+                </ul>
+                <div class="risk-list">
+                    <div class="risk-item"><span class="risk-tag risk-green">綠燈</span><span>請 AI 幫忙整理慢的情境、設計測試清單、分析截圖與 log，建立問題紀錄。</span></div>
+                    <div class="risk-item"><span class="risk-tag risk-yellow">黃燈</span><span>AI 產生測試腳本、瀏覽器外掛檢測、Computer Use 模擬操作，要用測試資料與測試環境。</span></div>
+                    <div class="risk-item"><span class="risk-tag risk-red">紅燈</span><span>直接對正式客戶環境壓測、批次操作、改母體 ERP 資料庫、正式交易流程或核心效能架構。</span></div>
+                </div>
+            </div>
+            <div class="answer-box">
+                <p><strong>有資源的最佳解（參考用）：</strong>大型團隊處理 API 效能時，第一步通常不是直接改程式，而是先量測、再定位、再最佳化。完整做法會包含監控、壓測、log tracing、profiling、CI/CD 效能回歸測試，系統性找出瓶頸到底在前端、API、資料庫、網路、外部服務，還是使用者流程。</p>
+                <ul>
+                    <li><strong>觀測與量測（先知道慢在哪裡）</strong>：
+                        <ul>
+                            <li><strong>監控指標</strong>：追蹤 response time、error rate、request count、database query time、CPU / memory / network。</li>
+                            <li><strong>壓力測試</strong>：使用 k6、JMeter、autocannon 或雲端壓測工具，模擬不同人數、不同資料量、不同查詢情境。</li>
+                            <li><strong>追蹤與 log</strong>：讓每個 request 都能追蹤從前端、API、資料庫到外部服務的耗時。</li>
+                        </ul>
+                    </li>
+                    <li><strong>資料庫層級優化</strong>：
+                        <ul>
+                            <li><strong>建立合理索引（Index）</strong>：確保常用的 <code>WHERE</code>、<code>JOIN</code> 和 <code>ORDER BY</code> 欄位都有索引，避免全表掃描。</li>
+                            <li><strong>解決 N+1 查詢問題</strong>：在多表關聯查詢時，使用 <code>JOIN</code> 語法或預先載入（Eager Loading），千萬不要在迴圈中重複向資料庫下查詢指令。</li>
+                            <li><strong>資料庫連線池（Connection Pool）</strong>：重複使用連線，省去每次 API 請求都要重新與資料庫 Handshake 的時間成本。</li>
+                        </ul>
+                    </li>
+                    <li><strong>引進快取層（Caching）</strong>：使用 <strong>Redis</strong> 快取讀取極度頻繁但鮮少變動的資料（如：系統設定、基礎字典、用戶基本權限等）。</li>
+                    <li><strong>非同步處理（Asynchronous Workers）</strong>：針對發送驗證信、生成報表等耗時工作，API 不應阻塞等待，應直接丟入訊息佇列（如 BullMQ / RabbitMQ），並立刻回傳 <code>202 Accepted</code>。</li>
+                    <li><strong>容量與架構調整</strong>：當單機或單一 API server 已無法承受負載，才進一步評估水平擴充、Load Balancer、讀寫分離、資料分區、API Gateway 與完整監控告警。</li>
+                </ul>
+                <div class="flow-diagram">
+                    <div class="flow-node">Client</div> <div class="flow-arrow">→</div>
+                    <div class="flow-node">Load Balancer (Nginx)</div> <div class="flow-arrow">→</div>
+                    <div class="flow-node">API Server (Node/Go)</div> <div class="flow-arrow">→</div>
+                    <div class="flow-node">Redis Cache</div> <div class="flow-arrow">/</div>
+                    <div class="flow-node">MySQL DB / MQ</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Card 2: DB Naming -->
+        <section class="card">
+            <div class="card-header">
+                <div class="card-icon">
+                    <svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg>
+                </div>
+                <div class="card-title-group">
+                    <div class="card-number">Question 02</div>
+                    <h2>AI 自動命名的命名風險與資料庫管理</h2>
+                </div>
+            </div>
+            <div class="question-box">
+                <p>AI的確可以自己創建資料表名稱和欄位名稱，但那是他的邏輯去命名的，我們系統做越大，真的越能有效管理嗎?</p>
+            </div>
+            <div class="strategy-note">
+                <div class="note-label">Force 顧問對銀河軟體 ERP 的拿捏</div>
+                <p>這題不應只停在「AI 能不能幫忙建立資料表」或「要不要做 Table Registry」。真正要建立的是 <strong>AI Native ERP Governance</strong>：當 AI 可以協助建立外掛、Schema、API payload 與 runtime table 時，組織必須知道這些資料結構從哪裡來、誰在用、影響哪些客戶、是否能升級、未來能不能退役。</p>
+                <p>很多人以為 AI Native 就是讓 AI 直接建立資料表，這是錯誤理解。真正的 AI Native ERP 不是取消治理，而是讓 AI 成為治理系統的一部分。</p>
+                <p><strong>Force 建議採用「3 + 1 架構」來理解：</strong></p>
+                <ul>
+                    <li><strong>第一層：ERP Core Layer</strong>：母公司 ERP 本體。它代表標準版、穩定性與升級相容性，不允許 AI 自由修改。AI 可以閱讀、理解、產生建議，但不可以自動改表、自動改欄位、自動改正式流程。</li>
+                    <li><strong>第二層：Extension Layer</strong>：客戶外掛層，包含客製功能、AI Runtime、Staging、Mirror、Integration Layer。AI 可以建議 Schema、產生草稿、建立外掛表，但必須符合命名規則、namespace、客戶識別、版本與相依關係。</li>
+                    <li><strong>第三層：Table Governance System</strong>：資料表治理系統，用來管理 ERP Core、Extension Table、API Payload、Workflow Table、AI Runtime Table。它必須記錄誰建立、為何建立、哪個客戶、哪個專案、哪個版本、誰使用、是否仍在使用。</li>
+                    <li><strong>第四層：AI Governance Agent（+1）</strong>：AI Agent 不是第四套資料系統，而是前三層的治理助手。它協助查重、命名建議、Schema 建議、相依分析、文件生成、測試資料、migration draft、API draft、上線前風險檢查、版本相容性檢查、使用率分析、孤兒表分析、退役建議與 audit trail 補齊。</li>
+                </ul>
+                <p>這個架構的重點是：ERP Core 保持穩定，Extension Layer 保持彈性，Table Governance 保持可管理，AI Agent 負責讓前三者變得更聰明。這才是銀河軟體 ERP 在 AI 時代真正需要建立的 <strong>AI Native ERP Governance</strong>。</p>
+                <div class="risk-list">
+                    <div class="risk-item"><span class="risk-tag risk-green">綠燈</span><span>建立術語表、欄位對照表、客戶需求分類與資料字典草稿。</span></div>
+                    <div class="risk-item"><span class="risk-tag risk-yellow">黃燈</span><span>外掛 staging table、匯入匯出格式、非正式 API payload、AI Runtime table，需要命名契約、版本紀錄、客戶識別與相依關係紀錄。</span></div>
+                    <div class="risk-item"><span class="risk-tag risk-red">紅燈</span><span>讓 AI 自行新增或修改母體 ERP 資料表、正式欄位、正式流程，或建立無來源、無負責人、無版本紀錄的外掛表。</span></div>
+                </div>
+            </div>
+            <div class="answer-box">
+                <p><strong>有資源的最佳解（參考用）：</strong>如果是大型 ERP / SaaS 公司，面對 AI 協助建表與外掛擴充，最佳解不是只寫一份命名規則，而是建立完整的 <strong>ERP Data & Extension Governance Platform</strong>。它把資料表、欄位、API payload、workflow table、migration、客戶版本、外掛依賴與 AI 產生紀錄都納入同一套治理流程。</p>
+                <ul>
+                    <li><strong>Metadata Registry</strong>：每一張表、每一個欄位、每一個 payload 都要有 metadata，包含用途、資料來源、負責人、客戶、專案、版本、敏感等級、保留期限與退役條件。</li>
+                    <li><strong>Extension Catalog</strong>：所有外掛、客製功能、AI Runtime、staging table、integration table 都登錄成 catalog item，清楚標示它依賴哪些 ERP core table、API、版本與客戶環境。</li>
+                    <li><strong>Schema Review Workflow</strong>：AI 可以提出 schema draft，但必須經過命名檢查、重複概念檢查、資料型態檢查、權限檢查、升級相容性檢查與人類審批。</li>
+                    <li><strong>Migration Pipeline</strong>：所有 DDL 變更都透過 migration 檔管理，能在 dev / staging / production 逐層驗證，也能回溯誰在什麼版本做了什麼改動。</li>
+                    <li><strong>Impact Analysis</strong>：上線前自動分析哪些客戶、報表、外掛、API、排程、工作流會被影響，避免「改一張表，壞一片功能」。</li>
+                    <li><strong>Lifecycle Management</strong>：資料表不是建立後永遠存在。系統要能追蹤使用率、孤兒表、重複功能、待封存資料、退役流程與 audit trail。</li>
+                    <li><strong>AI Governance Policy</strong>：明確規範 AI 可以做什麼，例如查重、建議命名、產生 migration draft、補文件、分析相依；也明確規範 AI 不可以做什麼，例如未審批自動改 core table、改正式欄位、寫入正式流程。</li>
+                </ul>
+                <p>這種有資源版的核心目標，是讓 AI 加速資料與外掛設計，但所有新增、修改、上線、升級、退役都留在可審查、可追蹤、可治理的軌道上。</p>
+            </div>
+        </section>
+
+        <!-- Card 3: Codex limits -->
+        <section class="card">
+            <div class="card-header">
+                <div class="card-icon">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/></svg>
+                </div>
+                <div class="card-title-group">
+                    <div class="card-number">Question 03</div>
+                    <h2>Codex 付費版額度與 Token 分配策略</h2>
+                </div>
+            </div>
+            <div class="question-box">
+                <p>Codex就算付費後 有用量限制 怎麼樣可以有效分配?</p>
+            </div>
+            <div class="strategy-note">
+                <div class="note-label">Force 顧問對銀河軟體 ERP 的拿捏</div>
+                <p>高價值模型要用在高價值判斷：需求拆解、風險辨識、架構審查、交付文件與重要案型討論。一般摘要、初稿、分類與格式整理可以用較便宜或較快的工具處理；重要客戶案與正式外掛，建議多與 Force 交流，避免把 token 花在大量試錯。</p>
+                <div class="risk-list">
+                    <div class="risk-item"><span class="risk-tag risk-green">綠燈</span><span>用 AI 整理會議紀錄、SOP、QA 初稿、客戶需求摘要。</span></div>
+                    <div class="risk-item"><span class="risk-tag risk-yellow">黃燈</span><span>用 AI 協助規劃外掛或自動化流程，但要保留人類驗收與顧問審查。</span></div>
+                    <div class="risk-item"><span class="risk-tag risk-red">紅燈</span><span>把正式客戶資料、核心程式或未脫敏營運資訊大量丟進不受控工具。</span></div>
+                </div>
+            </div>
+            <div class="answer-box">
+                <p>不論付費與否，大模型都有 <strong>Token 上限（Context Window）</strong> 以及 <strong>速率限制（Rate Limits）</strong>。要妥善分配額度，應掌握以下心法：</p>
+                <ul>
+                    <li><strong>精確提供 Context（拒絕程式碼大鍋炒）</strong>：不要把整個專案的程式碼塞進 Prompt。每次只需餵給 AI 當前需要修改或呼叫的檔案；若需調用其他模組，僅提供該模組的介面或型態定義，不提供實作程式。</li>
+                    <li><strong>任務原子化（Task Chunking）</strong>：不要讓 AI 一口氣寫完「整個購物車功能」，改為將任務拆成極小、職責單一的函數。如「請幫我寫一個驗證電子郵件格式的 Function」。這能省下極多的 Token 消耗，並降低出錯率。</li>
+                    <li><strong>大模型與本地模型分流</strong>：
+                        <ul>
+                            <li><strong>日常打雜（Inline 補全、修復語法錯誤）</strong>：交給本地運行的輕量模型（如 Ollama 運行的 Llama 3 或是 Gemini Flash 插件）。</li>
+                            <li><strong>架構設計與重構（複雜演算法、全域架構分析）</strong>：才使用付費的 Codex、Gemini Pro 或 Claude 3.5。</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Card 4: Antigravity Chinese -->
+        <section class="card">
+            <div class="card-header">
+                <div class="card-icon">
+                    <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                </div>
+                <div class="card-title-group">
+                    <div class="card-number">Question 04</div>
+                    <h2>Antigravity 2.0 中文介面與對話命名問題</h2>
+                </div>
+            </div>
+            <div class="question-box">
+                <p>antigravity 2.0 真的不能中文介面嗎? 他對話框命名都英文? 我還要自己重新命名才容易找</p>
+            </div>
+            <div class="strategy-note">
+                <div class="note-label">Force 顧問對銀河軟體 ERP 的拿捏</div>
+                <p>工具介面語言不是最核心的問題，真正重要的是任務紀錄能不能被追蹤、交接與複盤。銀河軟體 ERP 同仁可以使用不同 AI 工具，但每個重要討論都要留下中文任務名稱、需求背景、決策原因與下一步，讓分公司累積的是知識資產，而不是零散聊天紀錄。</p>
+                <div class="risk-list">
+                    <div class="risk-item"><span class="risk-tag risk-green">綠燈</span><span>用中文標題、案例編號與摘要整理內部 AI 對話。</span></div>
+                    <div class="risk-item"><span class="risk-tag risk-yellow">黃燈</span><span>跨工具協作與外掛需求討論，需要固定紀錄格式與負責人。</span></div>
+                    <div class="risk-item"><span class="risk-tag risk-red">紅燈</span><span>只有 AI 聊天紀錄，沒有需求確認、風險紀錄與驗收標準。</span></div>
+                </div>
+            </div>
+            <div class="answer-box">
+                <p>Antigravity 2.0 是 Google DeepMind 針對高階工程師設計的協作 Agent。目前為了確保在不同語系的開發環境、檔案系統及 Git 紀錄中的最大相容性，其系統 UI 與自動命名的對話 Title 預設會以英文生成。</p>
+                <p><strong>💡 實用對應方式：</strong></p>
+                <ul>
+                    <li><strong>全面中文溝通</strong>：雖然介面是英文，但您可以直接用繁體中文與它交談，它的程式碼理解與文字回答將完全維持流暢的繁體中文。</li>
+                    <li><strong>指定標題生成</strong>：每次開始新話題時，您可以在第一句話指令加上：「<em>請以繁體中文與我協作，並為這次的任務生成一個中文標題作為對話開始，例如：『[修正發票 OCR 邏輯]』</em>」，這能強迫 AI 在對話起手式就以中文來為您標記，便於日後回顧。</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Card 5: Dev Tools Comparison -->
+        <section class="card">
+            <div class="card-header">
+                <div class="card-icon">
+                    <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+                </div>
+                <div class="card-title-group">
+                    <div class="card-number">Question 05</div>
+                    <h2>主流開發工具與 AI 輔助優缺點列示</h2>
+                </div>
+            </div>
+            <div class="question-box">
+                <p>各開發工具的優缺點列示，目前主流好用的開發工具?</p>
+            </div>
+            <div class="strategy-note">
+                <div class="note-label">Force 顧問對銀河軟體 ERP 的拿捏</div>
+                <p>工具比較不是要選出一個最強神器，而是要知道不同角色該用什麼工具。銀河軟體 ERP 全體員工的重點不是直接寫正式程式，而是用 AI 產生文件、流程圖、需求草稿、測試案例與客戶溝通材料；正式開發工具則留給有培訓與審查流程的人使用。</p>
+                <div class="risk-list">
+                    <div class="risk-item"><span class="risk-tag risk-green">綠燈</span><span>用 AI 工具整理文件、比較方案、生成教學素材與內部知識庫。</span></div>
+                    <div class="risk-item"><span class="risk-tag risk-yellow">黃燈</span><span>用 AI 編輯器做外掛雛形或自動化腳本，需要工程或顧問 review。</span></div>
+                    <div class="risk-item"><span class="risk-tag risk-red">紅燈</span><span>未受訓員工直接用 AI 工具改正式系統或交付客戶核心功能。</span></div>
+                </div>
+            </div>
+            <div class="answer-box">
+                <p>以下為目前全球主流開發工具的橫向對比表：</p>
+                <ul>
+                    <li><strong>Cursor (AI 原生編輯器，目前主流首選)</strong>：
+                        <ul>
+                            <li><strong>優點</strong>：AI 整合度極深，其 Composer 模式可同時理解並編輯多個檔案，代碼補全極度流暢。</li>
+                            <li><strong>缺點</strong>：需要每月付費訂閱，且由於是閉源修改版的 VS Code，部分有嚴格資安稽核的企業會限制使用。</li>
+                        </ul>
+                    </li>
+                    <li><strong>Windsurf (新興 AI 原生編輯器)</strong>：
+                        <ul>
+                            <li><strong>優點</strong>：具備極強的 Agentic（代理人）模式，能自主於終端機執行測試、修復 Bug 並重跑，實現 Flow 狀態。</li>
+                            <li><strong>缺點</strong>：社群相對較新，生態系套件不如 VS Code 豐富。</li>
+                        </ul>
+                    </li>
+                    <li><strong>VS Code (傳統天王編輯器 + AI 插件)</strong>：
+                        <ul>
+                            <li><strong>優點</strong>：核心完全免費、插件生態系全球最龐大，資安風險低。</li>
+                            <li><strong>缺點</strong>：AI 只能在側邊欄或補全視窗單點式協作，缺乏多檔案自動重構的全域能力。</li>
+                        </ul>
+                    </li>
+                    <li><strong>JetBrains (專業級 IDE，如 WebStorm / IntelliJ)</strong>：
+                        <ul>
+                            <li><strong>優點</strong>：傳統的靜態代碼分析與安全重構（Refactoring）無懈可擊，對大型物件導向專案極為嚴謹。</li>
+                            <li><strong>缺點</strong>：極度消耗記憶體、專案載入慢，且授權費昂貴。</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Card 6: Senior Developer Perspective -->
+        <section class="card">
+            <div class="card-header">
+                <div class="card-icon">
+                    <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </div>
+                <div class="card-title-group">
+                    <div class="card-number">Question 06</div>
+                    <h2>資深工程師對 AI 開發工具的看待與運用方式</h2>
+                </div>
+            </div>
+            <div class="question-box">
+                <p>資深工程師是如何看待這些工具?  他們運用方式跟我們有一樣嗎?</p>
+            </div>
+            <div class="strategy-note">
+                <div class="note-label">Force 顧問對銀河軟體 ERP 的拿捏</div>
+                <p>銀河軟體 ERP 同仁不需要模仿資深工程師寫程式，而是要學資深工程師的工作方式：先定義問題、邊界、資料來源、風險與驗收，再讓 AI 或工程師協助執行。這會讓員工從「被動處理需求」升級為「能把需求講清楚的策略夥伴」。</p>
+                <div class="risk-list">
+                    <div class="risk-item"><span class="risk-tag risk-green">綠燈</span><span>用 AI 幫忙整理需求、建立檢查清單、產出測試情境。</span></div>
+                    <div class="risk-item"><span class="risk-tag risk-yellow">黃燈</span><span>讓 AI 協助拆流程或規劃外掛，需要人類確認業務邏輯。</span></div>
+                    <div class="risk-item"><span class="risk-tag risk-red">紅燈</span><span>把 AI 當成可以自行決定架構、權限、資料寫回的正式工程師。</span></div>
+                </div>
+            </div>
+            <div class="answer-box">
+                <p>資深工程師不會把 AI 當作「代筆人」，而是將其定位為<strong>「高效率的程式碼實習生（Super Intern）」</strong>。他們的核心原則是：<strong>「人類做架構決策，AI 做代碼填充」</strong>。</p>
+                <p><strong>運用方式的差異：</strong></p>
+                <ul>
+                    <li><strong>架構先行而非直接生成</strong>：資深工程師不會下「請幫我寫一個系統」這種大而無當的指令。他們會自己手寫好 Interface（介面定義）、Data Model（資料模型）與封裝邊界，然後指令 AI：「<em>請幫我實作這個介面，並用原生 JS 處理，確保寫出例外處理</em>」。</li>
+                    <li><strong>委託繁瑣重複的程式（Boilerplate）</strong>：他們會把時間花在核心業務邏輯設計上，而將單純的資料庫欄位對照（DTO mapping）、資料驗證規則、系統設定檔交給 AI 自動完成。</li>
+                    <li><strong>安全審查與反向思考</strong>：他們會寫好程式後丟給 AI 進行「破壞性測試」：「<em>假設我是駭客，這段代碼有什麼資安漏洞？請幫我寫 10 個能讓這段程式 Crash 的 Edge Cases 單元測試。</em>」</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Card 7: Hybrid Workflow -->
+        <section class="card">
+            <div class="card-header">
+                <div class="card-icon">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><path d="M21 16V8a2 2 0 0 0-2-2h-5l-2.29-2.29A1 1 0 0 0 11 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2z"/></svg>
+                </div>
+                <div class="card-title-group">
+                    <div class="card-number">Question 07</div>
+                    <h2>美術設計與程式架構工具的混合搭配術</h2>
+                </div>
+            </div>
+            <div class="question-box">
+                <p>Codex編寫程式很強，但美術設計風格真的蠻直的，Gemini的Canvas美術設計風格不錯，程式架構不嚴謹，也非常不受控，我要怎麼跟其他工具搭配使用?</p>
+            </div>
+            <div class="strategy-note">
+                <div class="note-label">Force 顧問對銀河軟體 ERP 的拿捏</div>
+                <p>視覺工具很適合拿來做概念展示、客戶溝通頁與內部教學頁，但美觀不等於可維護。正式外掛需要有人把資料流、權限、錯誤處理與維護責任補上；重要案子最好先用畫面說清楚，再與 Force 或工程團隊討論如何落地。</p>
+                <div class="risk-list">
+                    <div class="risk-item"><span class="risk-tag risk-green">綠燈</span><span>做靜態展示頁、流程說明、客戶 demo mockup。</span></div>
+                    <div class="risk-item"><span class="risk-tag risk-yellow">黃燈</span><span>把 mockup 變成可操作外掛，需要資料與權限設計。</span></div>
+                    <div class="risk-item"><span class="risk-tag risk-red">紅燈</span><span>直接把 AI 生成的漂亮頁面接上正式 ERP 寫入或客戶資料。</span></div>
+                </div>
+            </div>
+            <div class="answer-box">
+                <p>這是一個非常經典的「優勢互補」工程實踐。我們必須落實<strong>「視覺與邏輯分流」</strong>的協作工作流：</p>
+                <ul>
+                    <li><strong>階段 1：設計與切版發想（Gemini Canvas / Figma）</strong>：
+                        <ul>
+                            <li>利用 Gemini Canvas 對美感與 CSS 漸變、佈局的感知，產生出美觀的網頁靜態版面、RWD 排版與色系配置。</li>
+                        </ul>
+                    </li>
+                    <li><strong>階段 2：抽離與模組化（人工作業）</strong>：
+                        <ul>
+                            <li>將 Canvas 生成的 HTML 與 CSS 複製出來，主動抽離不具彈性的硬編碼，並確保樣式元件化。</li>
+                        </ul>
+                    </li>
+                    <li><strong>階段 3：邏輯工程化與注入（Antigravity / Codex）</strong>：
+                        <ul>
+                            <li>將乾淨的靜態代碼輸入給 Codex 或 Antigravity，下達指令：
+                                <div class="code-block">
+這是已經切好的靜態 HTML/CSS，請幫我使用原生 ES Modules 寫法（Vanilla JS），將資料存取與 API 請求的邏輯抽離到獨立的 service.js 中。確保 UI 渲染與資料處理低耦合，並加入嚴密的錯誤重試機制。</div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Card 8: Clean Dev Environment -->
+        <section class="card">
+            <div class="card-header">
+                <div class="card-icon">
+                    <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                </div>
+                <div class="card-title-group">
+                    <div class="card-number">Question 08</div>
+                    <h2>打造乾淨與可移植的本機開發環境</h2>
+                </div>
+            </div>
+            <div class="question-box">
+                <p>我們電腦開發環境  要怎麼做 才是乾淨的?  移動到其他台電腦安裝才能確保我們軟體沒問題?</p>
+            </div>
+            <div class="strategy-note">
+                <div class="note-label">Force 顧問對銀河軟體 ERP 的拿捏</div>
+                <p>乾淨環境的最高標準可以是 Docker 與 CI/CD，但全體員工第一步不是學會維運容器，而是建立「不要污染正式資料、不要把秘密寫進檔案、不要只在個人電腦成立」的觀念。分公司可先用固定範本、脫敏資料與測試資料夾做外掛打樣。</p>
+                <div class="risk-list">
+                    <div class="risk-item"><span class="risk-tag risk-green">綠燈</span><span>用範本資料夾、脫敏範例資料、固定檔名與操作紀錄做練習。</span></div>
+                    <div class="risk-item"><span class="risk-tag risk-yellow">黃燈</span><span>要搬到客戶現場或多人共用時，需要環境檢查表。</span></div>
+                    <div class="risk-item"><span class="risk-tag risk-red">紅燈</span><span>在個人電腦直接操作正式資料、正式密鑰或不可回復的批次更新。</span></div>
+                </div>
+            </div>
+            <div class="answer-box">
+                <p>為了完全杜絕「在我的電腦可以跑，但別人電腦就不行」的魔咒，必須落實以下三大開發環境管理：</p>
+                <ul>
+                    <li><strong>容器化（Docker）—— 業界絕對標準</strong>：
+                        <ul>
+                            <li>千萬不要在 Windows 或 macOS 全域安裝資料庫（MySQL, Redis）或後端軟體。</li>
+                            <li>將所有的基礎建設與相依套件寫在 <code>docker-compose.yml</code> 中。換電腦時，只需安裝 Docker 並執行 <code>docker compose up -d</code>，一秒即能重建完全一致的開發環境。</li>
+                        </ul>
+                    </li>
+                    <li><strong>使用語系版本管理器（Version Managers）</strong>：
+                        <ul>
+                            <li>使用 <code>nvm</code>/<code>fnm</code>（Node.js 版本管理）或 <code>pyenv</code>（Python 版本管理）來對不同專案進行環境隔離，不污染作業系統全域。</li>
+                        </ul>
+                    </li>
+                    <li><strong>導入 CI/CD（持續整合）虛擬化驗證</strong>：
+                        <ul>
+                            <li>利用 GitHub Actions 或 GitLab CI，在每次推送到 Git 時，在雲端開一台乾淨的虛擬機自動下載程式碼、安裝相依性並進行打包與單元測試。<strong>只要 CI 跑得過，就代表可移植性大幅提高；但仍需確認 OS、硬體、密鑰與外部服務條件。</strong></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Card 9: Code Scan and Security -->
+        <section class="card">
+            <div class="card-header">
+                <div class="card-icon">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                </div>
+                <div class="card-title-group">
+                    <div class="card-number">Question 09</div>
+                    <h2>程式碼安全掃描與 SQL Injection 防禦</h2>
+                </div>
+            </div>
+            <div class="question-box">
+                <p>我要怎麼做程式碼掃描? 檢視邏輯 資安漏洞(例如: sql injection)相關問題?</p>
+            </div>
+            <div class="strategy-note">
+                <div class="note-label">Force 顧問對銀河軟體 ERP 的拿捏</div>
+                <p>安全掃描的最佳解是工具鏈與流程治理，但銀河軟體 ERP 同仁最先要學的是問對問題：有沒有客戶資料？有沒有密碼或 token？會不會寫回正式系統？出錯能不能撤回？重要程式不要只靠 AI 自評，應請工程師或 Force 顧問一起 review。</p>
+                <div class="risk-list">
+                    <div class="risk-item"><span class="risk-tag risk-green">綠燈</span><span>檢查文件、SOP、靜態頁是否含有敏感資訊。</span></div>
+                    <div class="risk-item"><span class="risk-tag risk-yellow">黃燈</span><span>外掛、API、上傳檔案或登入流程，需要安全檢查表與 review。</span></div>
+                    <div class="risk-item"><span class="risk-tag risk-red">紅燈</span><span>把密鑰放在 HTML、直接拼接 SQL、或讓未審查程式接正式客戶資料。</span></div>
+                </div>
+            </div>
+            <div class="answer-box">
+                <p>軟體資安必須透過 <strong>自動化工具（SAST）</strong> 與 <strong>安全編碼守則</strong> 共同把關：</p>
+                <ul>
+                    <li><strong>靜態應用程式安全測試 (SAST) 工具：</strong>
+                        <ul>
+                            <li><strong>SonarQube / SonarCloud</strong>：最主流的代碼品質與資安邏輯掃描工具，能分析內存洩漏、未處理的 Edge Cases 以及常見安全威脅。</li>
+                            <li><strong>Snyk</strong>：極力推薦。專門掃描 npm 等專案第三方依賴套件是否存在已知安全漏洞。</li>
+                            <li><strong>GitHub CodeQL</strong>：GitHub 內建的安全分析工具，能在 Pull Request 時自動檢查程式碼中的潛在漏洞。</li>
+                        </ul>
+                    </li>
+                    <li><strong>防範 SQL 注入的結構性解法：</strong>
+                        <ul>
+                            <li><strong>參數化查詢 (Prepared Statements)</strong>：SQL Injection 來自將用戶輸入字串直接拼接進 SQL 語句。系統開發必須全面使用參數化，或採用現代 ORM 工具（如 Prisma, Sequelize），其底層均自動實施參數化綁定，能從根本阻絕 SQL 注入。</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Card 10: AI Scope Creep -->
+        <section class="card">
+            <div class="card-header">
+                <div class="card-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                </div>
+                <div class="card-title-group">
+                    <div class="card-number">Question 10</div>
+                    <h2>防範 AI 技術越權與原生 Web 堆疊控制</h2>
+                </div>
+            </div>
+            <div class="question-box">
+                <p>如果我一開始指定 HTML5+CSS+JS 來去做開發，會不會系統越做越大，他就自行亂加其他程式語言來做達成我的指令? 如果會，我們要怎麼讓他保證能順? 到時候變成AI開發系統，系統維護移轉工程師手上，反而難度變很高?</p>
+            </div>
+            <div class="strategy-note">
+                <div class="note-label">Force 顧問對銀河軟體 ERP 的拿捏</div>
+                <p>分公司外掛可以從 HTML、CSS、JS 這種輕量技術開始，但必須控制邊界。AI 亂加框架不是小事，代表未來交接、維護、部署與資安審查都會變複雜。重要外掛建議先與 Force 確認技術棧、資料來源與維護責任。</p>
+                <div class="risk-list">
+                    <div class="risk-item"><span class="risk-tag risk-green">綠燈</span><span>單頁工具、靜態報表、非正式資料整理與操作教學頁。</span></div>
+                    <div class="risk-item"><span class="risk-tag risk-yellow">黃燈</span><span>需要登入、API、資料保存或多人使用的外掛。</span></div>
+                    <div class="risk-item"><span class="risk-tag risk-red">紅燈</span><span>AI 自行引入不明框架、後端服務或正式 ERP 寫回機制。</span></div>
+                </div>
+            </div>
+            <div class="answer-box">
+                <p><strong>答案是：會。</strong> 如果沒有適當約束，當系統邏輯變複雜時，AI 會因為網路上大宗的程式碼範本，自作主張引入 React、Vue 語法，或是載入 Webpack/Vite 等複雜建置工具，甚至引入 Node.js 後端語法到瀏覽器端，導致專案技術債爆棚。</p>
+                <p><strong>防範與確保順暢的對策：</strong></p>
+                <ul>
+                    <li><strong>設定強制的 Rule File</strong>：在專案中加入 <code>.clinerules</code> 或 <code>.cursorrules</code> 檔案，明定：
+                        <div class="code-block">
+本專案僅限使用原生 HTML5、CSS3 與原生 ES Modules（Vanilla JavaScript）。禁止引入 React、Vue、Angular、TypeScript 或任何前端打包/編譯工具（如 Vite, Webpack）。所有的模組拆分必須使用瀏覽器原生支援的 import/export。</div>
+                    </li>
+                    <li><strong>實施模組化架構（Vanilla JS 的長大心法）</strong>：不要把所有 JS 寫在一起。即使是用原生 JS，也要定義好清晰的目錄，例如：
+                        <ul>
+                            <li><code>/css/components/</code> 存放 UI 樣式</li>
+                            <li><code>/js/services/</code> 存放 API 串接邏輯</li>
+                            <li><code>/js/components/</code> 存放 UI 模組的 JS 互動</li>
+                        </ul>
+                    </li>
+                    <li><strong>落實 Git 程式碼審查 (Human-in-the-loop)</strong>：工程師在接受 AI 改動前，一定要親自檢視變更，把關系統維護性，不符合原生架構的變更直接要求 AI 重寫。</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Card 11: Systematic Maintenance -->
+        <section class="card">
+            <div class="card-header">
+                <div class="card-icon">
+                    <svg viewBox="0 0 24 24"><path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3zM6 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3z"/></svg>
+                </div>
+                <div class="card-title-group">
+                    <div class="card-number">Question 11</div>
+                    <h2>系統性維護與規模化管理心法</h2>
+                </div>
+            </div>
+            <div class="question-box">
+                <p>日後維護一定會陸續增加很多功能，到底要怎麼樣有系統性維護??</p>
+            </div>
+            <div class="strategy-note">
+                <div class="note-label">Force 顧問對銀河軟體 ERP 的拿捏</div>
+                <p>系統性維護不是叫每位員工都會 Git，而是每個案子都要有負責人、版本、資料來源、修改原因、驗收方式與回復方案。外掛越貼近客戶營運，就越不能靠個人熱心和 AI 一次生成，必須變成可管理的小專案。</p>
+                <div class="risk-list">
+                    <div class="risk-item"><span class="risk-tag risk-green">綠燈</span><span>用表格記錄需求、版本、修改原因、操作人與驗收結果。</span></div>
+                    <div class="risk-item"><span class="risk-tag risk-yellow">黃燈</span><span>多人使用、客戶會看到、或要長期維護的外掛，需要專案管理。</span></div>
+                    <div class="risk-item"><span class="risk-tag risk-red">紅燈</span><span>無負責人、無版本紀錄、無測試資料就交付或接正式流程。</span></div>
+                </div>
+            </div>
+            <div class="answer-box">
+                <p>隨著功能膨脹，系統要能永續維護，必須仰賴<strong>流程規範、自動化測試與定期重構</strong>：</p>
+                <ul>
+                    <li><strong>Git 分支管理策略（例如 GitHub Flow）：</strong>
+                        <ul>
+                            <li><code>main</code> 分支必須永遠保持穩定、可隨時上線部署的狀態。</li>
+                            <li><code>dev</code> 分支做為開發合併與測試。</li>
+                            <li>開發新功能時，必須切出 <code>feature/xxx</code>，開發測試完成後，發起 Pull Request (PR) 進行 Code Review 才能併入。</li>
+                        </ul>
+                    </li>
+                    <li><strong>撰寫單元測試 (Unit Tests) 建立防護網</strong>：
+                        <ul>
+                            <li>新功能增加時，手動測試是不可能測遍所有角落的。寫好單元測試（如使用 Vitest 測試原生 JS），在每次合併程式前自動跑一遍。確保新增功能沒有影響舊功能的正常運作。</li>
+                        </ul>
+                    </li>
+                    <li><strong>主動重構並定期清理技術債</strong>：
+                        <ul>
+                            <li>一旦發現某個 JavaScript 檔案超過 500 行，或是邏輯過於混亂，即主動委託 AI：「<em>請幫我將這個模組重構，抽離出單一職責的輔助函數，以提升可讀性與測試性。</em>」</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Card 12: Mobile App Dev -->
+        <section class="card">
+            <div class="card-header">
+                <div class="card-icon">
+                    <svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+                </div>
+                <div class="card-title-group">
+                    <div class="card-number">Question 12</div>
+                    <h2>ERP 系統的手機 App 開發與上架維護挑戰</h2>
+                </div>
+            </div>
+            <div class="question-box">
+                <p>我們開發APP 對於銀河軟體 ERP 真的好維護嗎? 他不是也要上平台 被驗證和付費? APP開發概念 這領域很陌生 他會有很多手機規格 不同作業系統 受限程度有多高? 還是沒差異?</p>
+            </div>
+            <div class="strategy-note">
+                <div class="note-label">Force 顧問對銀河軟體 ERP 的拿捏</div>
+                <p>銀河軟體 ERP 若要強化行動化服務，優先考慮 PWA、行動版報表、客戶入口頁與輕量外掛，不要一開始就把目標放在正式上架 App。App 一旦涉及帳務、庫存、客戶資料或正式流程，就需要完整專案治理與 Force/工程團隊共同規劃。</p>
+                <div class="risk-list">
+                    <div class="risk-item"><span class="risk-tag risk-green">綠燈</span><span>手機可讀報表、PWA demo、內部查詢頁、文件入口。</span></div>
+                    <div class="risk-item"><span class="risk-tag risk-yellow">黃燈</span><span>客戶可登入的外掛或行動工作流，需要權限、紀錄與驗收設計。</span></div>
+                    <div class="risk-item"><span class="risk-tag risk-red">紅燈</span><span>未經治理就上架 App，或讓 App 直接處理正式 ERP 寫回與敏感資料。</span></div>
+                </div>
+            </div>
+            <div class="answer-box">
+                <p>針對銀河軟體 ERP 這類企業協同/管理軟體，<strong>非常不建議直接開發傳統的原生 iOS / Android App</strong>。因為這會帶來極高的平台審查枷鎖與維護成本：</p>
+                <ul>
+                    <li><strong>平台上架與審查負擔</strong>：Apple App Store 與 Google Play 對 App 審查極嚴，每次修 Bug 改代碼都需要重新打包送審（Apple 通常需 1~3 天），若 App 內提供客戶加值訂閱功能，還會被抽 15%~30% 的平台稅。</li>
+                    <li><strong>手機硬體與作業系統碎片化</strong>：iOS 與 Android 對後台執行限制、推播通知機制以及手機權限（相機、定位）在不同作業系統版本上差異極大，測試與維護工作量常是 Web 專案的三倍以上。</li>
+                </ul>
+                <p><strong>💡 企業 ERP 系統的最佳替代方案：</strong></p>
+                <ul>
+                    <li><strong>首選方案：PWA (Progressive Web App)</strong>
+                        <ul>
+                            <li><strong>原理</strong>：PWA 本質上是寫得極好的響應式網頁，但使用者可以在手機瀏覽器點擊「加入主畫面」，它就會像 App 一樣在手機獨立運作，並支援離線快取、推播通知等。</li>
+                            <li><strong>優點</strong>：<strong>完全不需要上架審查，也不用支付平台年費</strong>。伺服器端一更新，使用者下次開啟即是最新版本，徹底繞過 App Store 的審查困境，維護極為簡單。</li>
+                        </ul>
+                    </li>
+                    <li><strong>次選方案：跨平台框架 (Flutter / Expo React Native)</strong>
+                        <ul>
+                            <li>若因商務因素一定要上架 App Store，應避免用 Swift/Kotlin 分開開發。採用 <strong>Expo React Native</strong> 可實現寫一套 JavaScript 代碼產出雙平台 App，且 Expo 支援 OTA (Over-The-Air) 熱更新，小規模修改 UI 邏輯不需要經過 Apple/Google 重複審查即可推播更新給用戶。</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Back Link -->
+        <a href="index.html" class="btn-back">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+            返回課程首頁
+        </a>
+    </main>
+
+    <div class="logs-panel">
+        <p>
+            銀河軟體 ERP 本次課程的操作、提問與架構日誌已歸檔於：
+            <a href="../../../logs.md" target="_blank">logs.md (變更日誌)</a> | 
+            <a href="../../../logs.json" target="_blank">logs.json (機器後設資料)</a>
+        </p>
+    </div>
+
+    <footer>
+        <p>銀河軟體 ERP 內訓課程 SkyLine Class 02 Q&A &copy; 2026 | 設計符合 AI (Markdown) 與人類 (Premium HTML) 雙重閱讀標準</p>
+        <p style="margin-top: 0.5rem;"><a href="SkyLine class2_qas.md">檢視 AI 專用 Markdown 檔案</a> | <a href="../../../history.md">檢視歷史課程彙整 (Markdown)</a></p>
+    </footer>
+    <script>
+        document.querySelectorAll('.card').forEach((card, index) => {
+            const questionBox = card.querySelector('.question-box');
+            const button = document.createElement('button');
+            const buttonId = `qa-toggle-${index + 1}`;
+            button.type = 'button';
+            button.className = 'qa-toggle';
+            button.id = buttonId;
+            button.setAttribute('aria-expanded', 'false');
+            button.innerHTML = '<span class="toggle-icon">›</span><span class="toggle-text">展開答案</span>';
+            questionBox.insertAdjacentElement('afterend', button);
+
+            button.addEventListener('click', () => {
+                const isOpen = card.classList.toggle('is-open');
+                button.setAttribute('aria-expanded', String(isOpen));
+                button.querySelector('.toggle-text').textContent = isOpen ? '收合答案' : '展開答案';
+            });
+        });
+    </script>
+</body>
+</html>

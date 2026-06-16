@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Antigravity 實戰開發與協作教學手冊</title>
+    <meta name="description" content="本網頁整併了 指導老師指導專案開發的協作規範以及 Antigravity 的主介面功能與專案掛載逐步教學。">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: rgba(23, 28, 41, 0.75);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --primary: #6366f1; /* Indigo */
+            --primary-glow: rgba(99, 102, 241, 0.15);
+            --accent: #10b981; /* Emerald */
+            --accent-glow: rgba(16, 185, 129, 0.15);
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --font-outfit: 'Outfit', 'Noto Sans TC', sans-serif;
+            --font-sans: 'Noto Sans TC', sans-serif;
+        }
+        body.theme-light {
+            --bg-color: #f8fafc;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(99, 102, 241, 0.12);
+            --primary: #4f46e5;
+            --primary-glow: rgba(79, 70, 229, 0.1);
+            --accent: #0891b2;
+            --accent-glow: rgba(8, 145, 178, 0.1);
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+        }
+
+            --bg-color: #0b0f19;
+            --card-bg: rgba(23, 28, 41, 0.75);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --primary: #6366f1; /* Indigo */
+            --primary-glow: rgba(99, 102, 241, 0.15);
+            --accent: #10b981; /* Emerald */
+            --accent-glow: rgba(16, 185, 129, 0.15);
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --font-outfit: 'Outfit', 'Noto Sans TC', sans-serif;
+            --font-sans: 'Noto Sans TC', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0b0f19;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1f2937;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(99, 102, 241, 0.08) 0%, transparent 45%),
+                radial-gradient(circle at 90% 90%, rgba(16, 185, 129, 0.06) 0%, transparent 45%);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 2rem 0;
+        }
+
+        /* Layout Structure */
+        .layout-wrapper {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            gap: 2.5rem;
+        }
+
+        /* Sidebar Navigation */
+        aside {
+            width: 280px;
+            flex-shrink: 0;
+            position: sticky;
+            top: 2rem;
+            height: fit-content;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            animation: fadeInLeft 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Content Area */
+        main {
+            flex-grow: 1;
+            width: 0; /* Prevents overflow */
+            animation: fadeInRight 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Sidebar styling */
+        .aside-title {
+            font-family: var(--font-outfit);
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+            background: linear-gradient(135deg, #ffffff 40%, #c7d2fe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 0.75rem;
+        }
+
+        .nav-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .nav-item a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            padding: 0.6rem 0.8rem;
+            border-radius: 8px;
+            display: block;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item a:hover {
+            color: #ffffff;
+            background: rgba(99, 102, 241, 0.1);
+            padding-left: 1.2rem;
+        }
+
+        /* Main cards styling */
+        header {
+            margin-bottom: 2.5rem;
+            text-align: left;
+        }
+
+        h1 {
+            font-family: var(--font-outfit);
+            font-size: 2.4rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffffff 30%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            font-weight: 300;
+        }
+
+        .section-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            margin-bottom: 2.5rem;
+            scroll-margin-top: 2rem; /* Smooth offset for anchors */
+        }
+
+        h2.section-header {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        h2.section-header::before {
+            content: '';
+            display: inline-block;
+            width: 6px;
+            height: 20px;
+            background: var(--primary);
+            border-radius: 3px;
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        /* Role styling in Section 1 */
+        .role-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .role-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 16px;
+            padding: 1.25rem;
+            transition: all 0.3s ease;
+        }
+
+        .role-card:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(99, 102, 241, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .role-name {
+            font-family: var(--font-outfit);
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .role-desc {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .rule-list {
+            list-style: none;
+            margin-top: 1.5rem;
+        }
+
+        .rule-item {
+            position: relative;
+            padding-left: 2rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .rule-item::before {
+            content: "✦";
+            position: absolute;
+            left: 0.5rem;
+            top: 0;
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        .rule-title {
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 0.25rem;
+        }
+
+        .rule-detail {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .badge {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--accent);
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin: 0 4px;
+            border: 1px solid rgba(16, 185, 129, 0.15);
+        }
+
+        .badge-primary {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+            border: 1px solid rgba(99, 102, 241, 0.15);
+        }
+
+        /* Image styling */
+        .img-wrapper {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 8px;
+            overflow: hidden;
+            margin: 1.5rem 0 2.5rem 0;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+            transition: border-color 0.3s ease;
+        }
+
+        .img-wrapper:hover {
+            border-color: rgba(99, 102, 241, 0.25);
+        }
+
+        .img-wrapper img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            display: block;
+        }
+
+        /* Timeline style for Section 3 */
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+            border-left: 2px solid rgba(255, 255, 255, 0.05);
+            margin: 2rem 0;
+        }
+
+        .timeline-step {
+            position: relative;
+            margin-bottom: 3.5rem;
+        }
+
+        .timeline-step:last-child {
+            margin-bottom: 1rem;
+        }
+
+        .step-num {
+            position: absolute;
+            left: calc(-2rem - 17px);
+            top: 0;
+            background: #0b0f19;
+            border: 3px solid var(--primary);
+            color: #ffffff;
+            font-family: var(--font-outfit);
+            font-size: 1rem;
+            font-weight: 700;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 10px var(--primary-glow);
+            transition: all 0.3s ease;
+        }
+
+        .timeline-step:hover .step-num {
+            border-color: var(--accent);
+            transform: scale(1.1);
+        }
+
+        .step-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+        }
+
+        .step-title span {
+            color: var(--primary);
+            font-family: var(--font-outfit);
+            font-weight: 700;
+            margin-right: 0.5rem;
+        }
+
+        /* Grid for Interface items */
+        .intro-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .intro-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .intro-item {
+            background: rgba(255, 255, 255, 0.015);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .intro-item:hover {
+            background: rgba(255, 255, 255, 0.03);
+            border-color: rgba(99, 102, 241, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .intro-name {
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .intro-name::before {
+            content: "◆";
+            color: var(--primary);
+            font-size: 0.8rem;
+        }
+
+        .intro-desc {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .intro-desc ul {
+            list-style: none;
+            padding-left: 0.75rem;
+            margin-top: 0.25rem;
+        }
+
+        .intro-desc li {
+            position: relative;
+            padding-left: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .intro-desc li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+        }
+
+        /* Details Summary Dropdown Styling */
+        details.skill-dropdown {
+            background: rgba(255, 255, 255, 0.012);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 12px;
+            margin-bottom: 0.75rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        details.skill-dropdown[open] {
+            background: rgba(255, 255, 255, 0.03);
+            border-color: rgba(99, 102, 241, 0.25);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        summary.skill-summary {
+            padding: 1rem 1.25rem;
+            font-weight: 600;
+            color: #ffffff;
+            cursor: pointer;
+            outline: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            list-style: none;
+            user-select: none;
+            font-family: var(--font-outfit);
+        }
+
+        summary.skill-summary::-webkit-details-marker {
+            display: none;
+        }
+
+        summary.skill-summary::after {
+            content: "✦";
+            color: var(--text-muted);
+            font-weight: bold;
+            transition: transform 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        details.skill-dropdown[open] summary.skill-summary::after {
+            content: "－";
+            color: var(--accent);
+        }
+
+        .skill-content {
+            padding: 0 1.25rem 1.25rem 1.25rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .skill-content p {
+            margin-top: 0.75rem;
+        }
+
+        .skill-name {
+            color: #ffffff;
+            font-size: 0.95rem;
+        }
+
+        .skill-badge {
+            background: rgba(16, 185, 129, 0.08);
+            color: var(--accent);
+            border: 1px solid rgba(16, 185, 129, 0.15);
+            font-size: 0.75rem;
+            padding: 1px 6px;
+            border-radius: 4px;
+            margin-right: 1.5rem;
+            margin-left: auto;
+        }
+
+        /* Animations */
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Layout */
+        @media (max-width: 900px) {
+            .layout-wrapper {
+                flex-direction: column;
+            }
+            aside {
+                width: 100%;
+                position: static;
+                margin-bottom: 1rem;
+            }
+            main {
+                width: 100%;
+            }
+        }
+
+        /* Supplemental Chapters Highlighting */
+        .supplement-card {
+            border: 1px solid rgba(6, 182, 212, 0.35) !important;
+            box-shadow: 0 0 25px rgba(6, 182, 212, 0.15) !important;
+            background: linear-gradient(135deg, rgba(8, 47, 73, 0.4), rgba(15, 23, 42, 0.75)) !important;
+        }
+        .supplement-card blockquote, 
+        .supplement-card code {
+            word-break: break-all !important;
+            white-space: pre-wrap !important;
+        }
+        .supplement-nav-item a {
+            color: #22d3ee !important; /* Cyber Cyan highlight */
+            font-weight: bold !important;
+            text-shadow: 0 0 8px rgba(34, 211, 238, 0.3);
+        }
+        
+        .supplement-nav-item a:hover {
+            color: #67e8f9 !important;
+            background: rgba(6, 182, 212, 0.1) !important;
+            padding-left: 1.2rem;
+        }
+    
+
+        /* Copy Button & Prompt Box styling */
+        .prompt-box {
+            position: relative;
+            background: rgba(6, 182, 212, 0.05) !important;
+            border: 1px solid rgba(6, 182, 212, 0.25) !important;
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin-bottom: 0.75rem;
+            transition: all 0.3s ease;
+        }
+        .prompt-header {
+            color: #ffffff;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .copy-btn {
+            background: rgba(6, 182, 212, 0.2) !important;
+            border: 1px solid rgba(6, 182, 212, 0.4) !important;
+            color: #22d3ee !important;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s ease;
+        }
+        .copy-btn:hover {
+            background: rgba(6, 182, 212, 0.45) !important;
+            box-shadow: 0 0 8px rgba(34, 211, 238, 0.45) !important;
+            color: #ffffff !important;
+        }
+    
+    </style>
+    <!-- 版權與版本資訊註解 -->
+    <!-- 
+      Copyright (c) 2026 Falo x Force Cheng. All rights reserved.
+      Release Date: 2026/6/8
+      Version: Ver 1.01
+      License: 教學用途，如有商業用途請聯繫作者 (Educational use only. For commercial use, please contact the author.)
+    -->
+
+    <!-- SEO & Metadata -->
+    <meta name="author" content="Falo x Force Cheng">
+    <meta name="copyright" content="Falo x Force Cheng 2026/6/8">
+    <meta name="version" content="Ver 1.01">
+    <meta name="robots" content="index, follow">
+    
+    <!-- AI Crawler Metadata (給 AI 爬蟲的資訊) -->
+    <meta name="ai-agent-instructions" content="This page is an educational manual. Authorized for AI reading, indexing, and assistance. Copyright Falo x Force Cheng. Commercial reuse is prohibited.">
+    <meta name="ai:author" content="Falo x Force Cheng">
+    <meta name="ai:license" content="Educational use only. Commercial use prohibited.">
+    <meta name="ai:version" content="1.01">
+    
+    <!-- GEO Metadata (地理標記) -->
+    <meta name="geo.region" content="TW-TPE">
+    <meta name="geo.placename" content="Taipei">
+    <meta name="geo.position" content="25.0330;121.5654">
+    <meta name="ICBM" content="25.0330, 121.5654">
+
+    <!-- Schema.org JSON-LD Structured Data for AI & Search Engines -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "Antigravity 實戰開發與協作教學手冊",
+      "alternativeHeadline": "指導老師 指導學生實戰教學系列",
+      "version": "Ver 1.01",
+      "dateCreated": "2026-06-08",
+      "dateModified": "2026-06-10",
+      "author": {
+        "@type": "Person",
+        "name": "Falo x Force Cheng"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Falo x Force Cheng Teaching Team"
+      },
+      "copyrightHolder": {
+        "@type": "Person",
+        "name": "Falo x Force Cheng"
+      },
+      "copyrightYear": "2026",
+      "usageInfo": "教學用途，如有商業用途請聯繫作者 (Educational use only. For commercial use, please contact the author.)",
+      "description": "本網頁整併了 指導老師指導專案開發的協作規範以及 Antigravity 的主介面功能與專案掛載逐步教學。",
+      "inLanguage": "zh-TW"
+    }
+    </script>
+    <style>
+        .ai-watermark {
+            display: none;
+            speak: none;
+        }
+        .visual-watermark {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            opacity: 0.25;
+            pointer-events: none;
+            user-select: none;
+            z-index: 9999;
+            font-family: var(--font-outfit);
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Accessibility Toolbar -->
+    <div style="position: fixed; top: 1.5rem; right: 1.5rem; z-index: 1000; display: flex; gap: 0.5rem; background: var(--card-bg); border: 1px solid var(--card-border); padding: 0.5rem; border-radius: 30px; backdrop-filter: blur(10px);">
+        <button id="theme-toggle" style="background: none; border: none; color: var(--text-main); cursor: pointer; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; transition: all 0.2s;" title="切換深淺配色">
+            <svg id="sun-icon" style="display: none; width: 18px; height: 18px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <svg id="moon-icon" style="width: 18px; height: 18px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+        </button>
+    </div>
+
+<!-- Watermarks & Metadata (Falo x Force Cheng) -->
+<div class="ai-watermark" data-author="Falo x Force Cheng" data-date="2026/06/08" data-version="1.01" data-purpose="Educational only. Commercial use prohibited without author consent.">
+    Copyright © 2026 Falo x Force Cheng. Version 1.01. Educational use only.
+</div>
+<div class="visual-watermark">
+    Falo x Force Cheng 2026/6/8 | Ver 1.01 | 教學用途，商業用途請聯繫作者
+</div>
+
+<div class="layout-wrapper">
+    <!-- Sidebar Navigation -->
+    <aside>
+        <div class="aside-title">課程目錄</div>
+        <ul class="nav-list">
+            <li class="nav-item"><a href="#download-install">1. 下載與安裝 Antigravity</a></li>
+            <li class="nav-item supplement-nav-item"><a href="#python-setup">✦ 補充1. Python環境設定</a></li>
+            <li class="nav-item"><a href="#interface-intro">2. Antigravity 主介面功能導覽</a></li>
+            <li class="nav-item"><a href="#project-setup-load">3. 如何在 Antigravity 中建立專案與載入資料夾</a></li>
+            <li class="nav-item supplement-nav-item"><a href="#pdf-to-csv">✦ 補充2. PDF轉CSV實戰</a></li>
+            <li class="nav-item supplement-nav-item"><a href="#pdf-csv-verify">✦ 補充3. PDF與CSV驗證報告</a></li>
+            <li class="nav-item"><a href="#settings-permissions">4. 設定與安全權限管理</a></li>
+            <li class="nav-item"><a href="#settings-appearance">5. 外觀與對話顯示設定</a></li>
+            <li class="nav-item"><a href="#settings-models">6. AI 模型與配額管理</a></li>
+            <li class="nav-item"><a href="#settings-customizations">7. 自訂指令與外掛技能</a></li>
+            <li class="nav-item"><a href="#settings-browser">8. 瀏覽器自動化設定</a></li>
+            <li class="nav-item"><a href="#settings-app">9. 應用程式基礎設定</a></li>
+            <li class="nav-item"><a href="#custom-skills-practice">10. 建立與管理自訂 Skill</a></li>
+            <li class="nav-item"><a href="#project-specific-settings">11. 專案專屬偏好與本地安全權限設定</a></li>
+            <li class="nav-item"><a href="#github-connector">12. 實戰進階：建立 GitHub Connector 技能</a></li>
+            <li class="nav-item"><a href="#collaboration-rules">附錄：協作規範與原則</a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main>
+        <header>
+            <h1>Antigravity 實戰開發與協作教學手冊</h1>
+            <div class="subtitle">指導老師 指導學生實戰教學系列</div>
+        </header>
+
+        <!-- Section 1 -->
+        <section id="download-install" class="section-card">
+            <h2 class="section-header">1. 下載與安裝 Antigravity (Download & Install)</h2>
+            <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 2rem;">
+                本章將引導學生下載與安裝 Antigravity 2.0 軟體，以進行後續的 AI 協作開發與實作。
+            </p>
+
+            <h3 style="font-size: 1.25rem; color: #ffffff; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span style="color: var(--primary);">✦</span> 1.1 進入官網首頁
+            </h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem;">
+                請使用瀏覽器開啟 Antigravity 官方網站：<a href="https://antigravity.google/" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 1px dashed var(--primary);">https://antigravity.google/</a>。
+            </p>
+
+            <div class="img-wrapper" style="margin-bottom: 2rem;">
+                <img src="./images/download_homepage.png" alt="Antigravity 官網首頁">
+            </div>
+
+            <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 2rem;">
+                在首頁中央，點選 <span class="highlight">Download for Windows</span> 按鈕（若使用其他作業系統，亦可點選右上角的 <span class="highlight">Download</span>），即可導覽至下載頁面。
+            </p>
+
+            <div class="divider"></div>
+
+            <h3 style="font-size: 1.25rem; color: #ffffff; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span style="color: var(--primary);">✦</span> 1.2 選擇對應的作業系統下載
+            </h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem;">
+                官方下載頁面網址為：<a href="https://antigravity.google/download" target="_blank" style="color: var(--primary); text-decoration: none; border-bottom: 1px dashed var(--primary);">https://antigravity.google/download</a>。
+            </p>
+
+            <div class="img-wrapper" style="margin-bottom: 2rem;">
+                <img src="./images/download_options.png" alt="Antigravity 下載頁面選項">
+            </div>
+
+            <div class="intro-grid" style="margin-top: 1.5rem;">
+                <div class="intro-item">
+                    <div class="intro-name">macOS 版本選擇</div>
+                    <div class="intro-desc">
+                        <ul>
+                            <li><strong style="color: #ffffff;">Download for Apple Silicon</strong>：適用於 Apple M1/M2/M3 等處理晶片（目前主流晶片）。</li>
+                            <li><strong style="color: #ffffff;">Download for Intel</strong>：適用於較早期的 Intel 處理器 Mac 電腦。</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="intro-item">
+                    <div class="intro-name">Windows & Linux 版本選擇</div>
+                    <div class="intro-desc">
+                        <ul>
+                            <li><strong style="color: #ffffff;">Download for x64</strong>：適用於一般常見的 64 位元 Intel 或 AMD 處理器電腦。</li>
+                            <li><strong style="color: #ffffff;">Download for ARM64</strong>：適用於採用 ARM 架構處理器的新型電腦。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 1.5rem;">
+                下載完成後，雙擊安裝檔並依據畫面提示步驟完成安裝，即可啟動 Antigravity 主介面。
+            </p>
+        </section>
+
+        <!-- Section 2: Python Environment Setup -->
+        <section id="python-setup" class="section-card supplement-card">
+            <h2 class="section-header">補充1：安裝與設定 Python 開發環境 (Python Environment Setup)</h2>
+            <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 2rem;">
+                在我們開始使用 Antigravity 進行 AI 協作開發與編寫小程式之前，必須先建立好本地主機的 Python 執行環境。
+            </p>
+
+            <div class="intro-grid" style="margin-bottom: 2rem;">
+                <div class="intro-item">
+                    <div class="intro-name">補充1.1 為什麼需要安裝 Python 基本環境？</div>
+                    <div class="intro-desc">
+                        <ul>
+                            <li><strong style="color: #ffffff;">宿主命令支援</strong>：Windows 預設不提供 <code>python</code> 命令。安裝 Python 能讓系統核心認識並執行 <code>python</code> 與 <code>pip</code> 指令。</li>
+                            <li><strong style="color: #ffffff;">腳本執行基石</strong>：後續的所有實戰開發（例如將 IPAS 題庫 PDF 檔案自動解析並轉換為 CSV 檔案）都需要透過本地 Python 腳本來執行。</li>
+                            <li><strong style="color: #ffffff;">AI 助理自動化</strong>：Antigravity 在背景為您分析程式碼、安裝相依套件、甚至執行測試時，都需要依賴您本機安裝的 Python 作為引擎。</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="intro-item">
+                    <div class="intro-name">補充1.2 認識全域變數（PATH 環境變數）</div>
+                    <div class="intro-desc">
+                        <ul>
+                            <li><strong style="color: #ffffff;">工作原理</strong>：當我們在命令列（Terminal）輸入指令（如 <code>python</code>）時，作業系統會自動到 <code>PATH</code> 變數所記錄的資料夾路徑中，尋找對應的執行檔（如 <code>python.exe</code>）。</li>
+                            <li><strong style="color: #ffffff;">重要性</strong>：若未將 Python 目錄加入 <code>PATH</code> 全域變數，在任何目錄下輸入 <code>python</code> 都會出現「無法識別此命令」的錯誤，迫使您每次都要輸入極長的絕對路徑，這會使 AI 自動化執行與人機協作完全卡住。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div style="margin-top: 2rem; margin-bottom: 2rem;">
+                <h3 style="font-size: 1.2rem; color: #ffffff; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <span style="color: var(--accent);">✦</span> 補充1.3 安裝方法一：使用 Agent 自動安裝（推薦使用）
+                </h3>
+                <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem;">
+                    如果您使用的是 Antigravity 2.0 系統，且已啟用終端機安全許可，您可以<strong>直接在對話中指示 AI 助理為您自動安裝與設定</strong>，這是對初學者最友善且不易出錯的方法：
+                </p>
+                <div style="background: rgba(16, 185, 129, 0.05); border: 1px solid var(--accent-glow); border-radius: 8px; padding: 1.25rem;">
+                    <p style="color: #ffffff; font-weight: 500; margin-bottom: 0.75rem; font-size: 0.95rem;">💬 對話指令範例：</p>
+           
+

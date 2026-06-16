@@ -1,0 +1,1723 @@
+<!--
+  Project: iPAS Quiz Data Quality Control Panel
+  Author: Falo x Force Cheng
+  Date: 2026/06/06
+  License: Copyright (c) 2026 Falo x Force Cheng. All rights reserved.
+-->
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <!-- WATERMARK: Falo x Force Cheng 2026/6/6 -->
+  <meta name="author" content="Falo x Force Cheng">
+  <meta name="copyright" content="Falo x Force Cheng 2026/6/6">
+  <meta name="robots" content="index, follow">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "iPAS 題庫資料品質優化對照面板",
+    "description": "展示當前 AI Agent 現代開發模式下的題庫品質控制與對照比對。",
+    "author": {
+      "@type": "Person",
+      "name": "Falo x Force Cheng"
+    },
+    "datePublished": "2026-06-06",
+    "copyrightYear": "2026",
+    "copyrightHolder": {
+      "@type": "Organization",
+      "name": "Falo x Force Cheng"
+    }
+  }
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iPAS 題庫資料品管閉環對照面板 (原本 vs 檢核 vs 修正)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Noto+Sans+TC:wght@400;500;700;900&family=Outfit:wght@400;500;700;900&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card-bg: rgba(17, 24, 39, 0.75);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      
+      --danger: #ef4444;
+      --danger-bg: rgba(239, 68, 68, 0.08);
+      --danger-border: rgba(239, 68, 68, 0.25);
+      --danger-text: #fca5a5;
+      
+      --warning: #f59e0b;
+      --warning-bg: rgba(245, 158, 11, 0.08);
+      --warning-border: rgba(245, 158, 11, 0.25);
+      --warning-text: #fde047;
+      
+      --success: #10b981;
+      --success-bg: rgba(16, 185, 129, 0.08);
+      --success-border: rgba(16, 185, 129, 0.25);
+      --success-text: #a7f3d0;
+
+      --primary: #3b82f6;
+      --primary-glow: rgba(59, 130, 246, 0.15);
+      --shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+      --glow-color: rgba(59, 130, 246, 0.5);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Noto Sans TC', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(30, 41, 59, 0.5) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(17, 24, 39, 0.8) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(15, 23, 42, 0.9) 0px, transparent 50%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      padding: 40px 20px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    header {
+      width: 100%;
+      max-width: 1280px;
+      text-align: center;
+      margin-bottom: 30px;
+      position: relative;
+    }
+
+    .eyebrow {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-bottom: 12px;
+      text-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      background: linear-gradient(to right, #ffffff, #93c5fd, #e0f2fe);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 16px;
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      max-width: 800px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* 頂部數據面板 */
+    .stats-container {
+      width: 100%;
+      max-width: 1280px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+
+    .stat-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--primary), transparent);
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .stat-value {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: #ffffff;
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .stat-value span {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .stat-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* Tab 切換器 */
+    .tabs {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 30px;
+      background: rgba(17, 24, 39, 0.4);
+      padding: 6px;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 10px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tab-btn:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .tab-btn.active {
+      color: #ffffff;
+      background: var(--primary);
+      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.35);
+    }
+
+    /* 主視窗容器 */
+    .content-section {
+      width: 100%;
+      max-width: 1280px;
+      display: none;
+    }
+
+    .content-section.active {
+      display: block;
+      animation: fadeIn 0.4s ease-out forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Tab 1: 互動比對面板佈局 */
+    .interactive-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    @media (min-width: 1024px) {
+      .interactive-layout {
+        grid-template-columns: 280px 1fr;
+      }
+    }
+
+    /* 左側側邊欄列表 */
+    .list-sidebar {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-height: 700px;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .filter-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .filter-select {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      color: #ffffff;
+      padding: 8px 12px;
+      font-size: 0.9rem;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .filter-select:focus {
+      border-color: var(--primary);
+    }
+
+    .question-list {
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-right: 4px;
+    }
+
+    .question-list::-webkit-scrollbar {
+      width: 6px;
+    }
+    .question-list::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .question-list::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.1);
+      border-radius: 3px;
+    }
+    .question-list::-webkit-scrollbar-thumb:hover {
+      background: rgba(255,255,255,0.25);
+    }
+
+    .q-item {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      border-radius: 8px;
+      padding: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      text-align: left;
+    }
+
+    .q-item:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.1);
+      transform: translateX(2px);
+    }
+
+    .q-item.active {
+      background: rgba(59, 130, 246, 0.12);
+      border-color: var(--primary);
+    }
+
+    .q-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .q-item-title {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #ffffff;
+    }
+
+    .q-item-badge {
+      font-size: 0.75rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(255,255,255,0.08);
+      color: var(--text-muted);
+    }
+
+    .q-item.active .q-item-badge {
+      background: var(--primary);
+      color: white;
+    }
+
+    .q-item-desc {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* 右側主對照區域 */
+    .compare-board {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .board-header {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow);
+    }
+
+    .board-title-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .board-badge {
+      background: var(--primary);
+      color: #ffffff;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 900;
+      font-size: 1.1rem;
+      padding: 6px 16px;
+      border-radius: 50px;
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+    }
+
+    .board-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    .board-meta {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      background: rgba(255,255,255,0.04);
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--card-border);
+    }
+
+    /* 三欄對照網格 */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    @media (min-width: 1024px) {
+      .compare-grid {
+        grid-template-columns: 1.2fr 0.9fr 1.2fr;
+      }
+    }
+
+    .column-card {
+      border-radius: 16px;
+      padding: 24px;
+      border: 1px solid transparent;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: var(--shadow);
+      position: relative;
+    }
+
+    .col-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.05rem;
+      font-weight: 800;
+      padding-bottom: 12px;
+      border-bottom: 1px dashed rgba(255,255,255,0.08);
+    }
+
+    .col-status-pill {
+      margin-left: auto;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    /* 原始瑕疵 */
+    .col-original {
+      background: var(--danger-bg);
+      border-color: var(--danger-border);
+    }
+    .col-original .col-header {
+      color: var(--danger-text);
+    }
+    .col-original .col-status-pill {
+      background: rgba(239, 68, 68, 0.2);
+      color: var(--danger-text);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+    }
+
+    /* NotebookLM 檢核 */
+    .col-audit {
+      background: var(--warning-bg);
+      border-color: var(--warning-border);
+    }
+    .col-audit .col-header {
+      color: var(--warning-text);
+    }
+    .col-audit .col-status-pill {
+      background: rgba(245, 158, 11, 0.2);
+      color: var(--warning-text);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+    }
+
+    /* 修正完美 */
+    .col-corrected {
+      background: var(--success-bg);
+      border-color: var(--success-border);
+    }
+    .col-corrected .col-header {
+      color: var(--success-text);
+    }
+    .col-corrected .col-status-pill {
+      background: rgba(16, 185, 129, 0.2);
+      color: var(--success-text);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+    }
+
+    /* 欄位內容樣式 */
+    .col-body {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .field-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .field-content {
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-family: inherit;
+    }
+
+    .options-block {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .opt-line {
+      display: flex;
+      gap: 6px;
+      background: rgba(0,0,0,0.15);
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
+
+    .opt-char {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    /* 比對高亮色 */
+    .diff-removed {
+      background-color: rgba(220, 38, 38, 0.4);
+      color: #ffcdd2;
+      text-decoration: line-through;
+      padding: 0 4px;
+      border-radius: 4px;
+      font-weight: 700;
+      display: inline-block;
+    }
+
+    .diff-added {
+      background-color: rgba(5, 150, 105, 0.4);
+      color: #a7f3d0;
+      border-bottom: 2px solid #059669;
+      padding: 0 4px;
+      border-radius: 4px;
+      font-weight: 700;
+      display: inline-block;
+    }
+
+    .audit-box {
+      font-size: 0.95rem;
+      background: rgba(0, 0, 0, 0.2);
+      border-left: 4px solid var(--warning);
+      padding: 14px;
+      border-radius: 4px 8px 8px 4px;
+      line-height: 1.6;
+    }
+
+    .audit-meta-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .tag {
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border-radius: 50px;
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--warning-text);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    /* CSV 預覽代碼 */
+    .csv-block {
+      margin-top: 8px;
+    }
+
+    .csv-code {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.8rem;
+      background: #05070c;
+      color: #93c5fd;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tab 2: 完整 NotebookLM 檢核報告 */
+    .report-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: var(--shadow);
+      line-height: 1.8;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .report-title-section {
+      text-align: center;
+      margin-bottom: 30px;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 24px;
+    }
+
+    .report-badge {
+      background: rgba(245, 158, 11, 0.1);
+      color: var(--warning);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      padding: 4px 12px;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      display: inline-block;
+      margin-bottom: 12px;
+    }
+
+    .report-card h2 {
+      font-size: 1.8rem;
+      color: #ffffff;
+      margin-top: 30px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      padding-bottom: 8px;
+    }
+
+    .report-card h3 {
+      font-size: 1.2rem;
+      color: #ffffff;
+      margin-top: 24px;
+      margin-bottom: 12px;
+    }
+
+    .report-card p {
+      margin-bottom: 16px;
+      color: rgba(243, 244, 246, 0.85);
+    }
+
+    .report-card ul {
+      margin-bottom: 20px;
+      padding-left: 20px;
+    }
+
+    .report-card li {
+      margin-bottom: 8px;
+      color: rgba(243, 244, 246, 0.85);
+    }
+
+    .report-card strong {
+      color: #ffffff;
+    }
+
+    .report-note-box {
+      background: rgba(59, 130, 246, 0.08);
+      border-left: 4px solid var(--primary);
+      padding: 16px 20px;
+      border-radius: 4px 12px 12px 4px;
+      margin: 20px 0;
+    }
+
+    /* 報告截圖展示 */
+    .screenshot-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin: 30px 0;
+    }
+
+    .screenshot-item {
+      background: rgba(0,0,0,0.2);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .screenshot-item:hover {
+      border-color: var(--primary);
+      transform: translateY(-4px);
+    }
+
+    .screenshot-img-placeholder {
+      width: 100%;
+      height: 180px;
+      background: #0f172a;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      border: 1px dashed rgba(255,255,255,0.1);
+    }
+
+    .screenshot-img-placeholder img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .screenshot-label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #ffffff;
+      text-align: center;
+    }
+
+    .screenshot-desc {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    /* Tab 3: Side-by-side CSV Code Diff */
+    .diff-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: var(--shadow);
+    }
+
+    .diff-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 16px;
+      margin-bottom: 24px;
+    }
+
+    .diff-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .diff-legend {
+      display: flex;
+      gap: 16px;
+      font-size: 0.85rem;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .legend-box {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+    }
+
+    .diff-container {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    @media (min-width: 992px) {
+      .diff-container {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .diff-view-card {
+      background: #05070c;
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .diff-view-title {
+      background: rgba(255,255,255,0.02);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      padding: 10px 16px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .code-editor {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85rem;
+      line-height: 1.7;
+      padding: 16px;
+      overflow-x: auto;
+      height: 500px;
+      color: #93c5fd;
+    }
+
+    .code-line {
+      display: flex;
+      gap: 12px;
+    }
+
+    .line-no {
+      color: #3b4252;
+      width: 30px;
+      text-align: right;
+      user-select: none;
+    }
+
+    .line-content {
+      white-space: pre;
+    }
+
+    .line-removed {
+      background: rgba(239, 68, 68, 0.15);
+      color: #fca5a5;
+      width: 100%;
+      display: inline-block;
+    }
+
+    .line-added {
+      background: rgba(16, 185, 129, 0.15);
+      color: #a7f3d0;
+      width: 100%;
+      display: inline-block;
+    }
+
+    footer {
+      margin-top: 60px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      border-top: 1px solid var(--card-border);
+      padding-top: 24px;
+      width: 100%;
+      max-width: 1280px;
+    }
+
+    /* 圖片放大 modal 燈箱 */
+    .lightbox {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(11, 15, 25, 0.95);
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      cursor: zoom-out;
+    }
+
+    .lightbox.active {
+      display: flex;
+    }
+
+    .lightbox-content {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 12px;
+      box-shadow: 0 10px 50px rgba(0,0,0,0.8);
+      border: 2px solid var(--card-border);
+    }
+  </style>
+<style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: rgba(23, 28, 41, 0.75);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --primary: #6366f1; /* Indigo */
+            --primary-glow: rgba(99, 102, 241, 0.15);
+            --accent: #10b981; /* Emerald */
+            --accent-glow: rgba(16, 185, 129, 0.15);
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --font-outfit: 'Outfit', 'Noto Sans TC', sans-serif;
+            --font-sans: 'Noto Sans TC', sans-serif;
+        }
+        body.theme-light {
+            --bg-color: #f8fafc;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(99, 102, 241, 0.12);
+            --primary: #4f46e5;
+            --primary-glow: rgba(79, 70, 229, 0.1);
+            --accent: #0891b2;
+            --accent-glow: rgba(8, 145, 178, 0.1);
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+        }
+</style></head>
+<body>
+    <!-- Floating Accessibility Toolbar -->
+    <div style="position: fixed; top: 1.5rem; right: 1.5rem; z-index: 1000; display: flex; gap: 0.5rem; background: var(--card-bg); border: 1px solid var(--card-border); padding: 0.5rem; border-radius: 30px; backdrop-filter: blur(10px);">
+        <button id="theme-toggle" style="background: none; border: none; color: var(--text-main); cursor: pointer; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; transition: all 0.2s;" title="切換深淺配色">
+            <svg id="sun-icon" style="display: none; width: 18px; height: 18px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <svg id="moon-icon" style="width: 18px; height: 18px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+        </button>
+    </div>
+
+
+  <!-- 頂部快速導覽 -->
+  <div style="width: 100%; max-width: 1280px; display: flex; justify-content: flex-end; gap: 12px; margin-bottom: 15px;">
+    <a href="practice.html" target="_blank" style="background: rgba(255,255,255,0.04); border: 1px solid var(--card-border); color: var(--text-main); padding: 8px 16px; border-radius: 50px; font-size: 0.85rem; font-weight: 700; text-decoration: none; transition: all 0.2s; display: flex; align-items: center; gap: 6px;" onmouseover="this.style.borderColor='var(--primary)'; this.style.background='rgba(59,130,246,0.15)'" onmouseout="this.style.borderColor='var(--card-border)'; this.style.background='rgba(255,255,255,0.04)'">
+      🎯 模擬練習網頁
+    </a>
+    <a href="index.html" target="_blank" style="background: rgba(255,255,255,0.04); border: 1px solid var(--card-border); color: var(--text-main); padding: 8px 16px; border-radius: 50px; font-size: 0.85rem; font-weight: 700; text-decoration: none; transition: all 0.2s; display: flex; align-items: center; gap: 6px;" onmouseover="this.style.borderColor='var(--primary)'; this.style.background='rgba(59,130,246,0.15)'" onmouseout="this.style.borderColor='var(--card-border)'; this.style.background='rgba(255,255,255,0.04)'">
+      📓 教材開發教學
+    </a>
+  </div>
+
+  <header>
+    <div class="eyebrow">Data Quality Assurance & Control Panel</div>
+    <h1>題庫資料品質優化對照示意檔</h1>
+    <p class="subtitle">
+      展示當前 AI Agent 現代開發模式下的題庫品質控制。透過 PDF 原始提取、NotebookLM 一致性比對，並回饋給 Agent 字典做自動清洗，實現 100% 完美的題庫資料呈現。
+    </p>
+  </header>
+
+  <!-- 頂部數據面板 -->
+  <section class="stats-container">
+    <div class="stat-card">
+      <div class="stat-label">發現排版瑕疵題數</div>
+      <div class="stat-value">33 <span>題 / 50 題</span></div>
+      <div class="stat-desc">中英文斷字、多餘空格與引號格式</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">NotebookLM 審查覆蓋</div>
+      <div class="stat-value" style="color: var(--warning);">100% <span>一致性比對</span></div>
+      <div class="stat-desc">全自動對照原始 PDF 與 CSV 欄位</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">AI Agent 自動修復率</div>
+      <div class="stat-value" style="color: var(--success);">100% <span>一鍵編譯</span></div>
+      <div class="stat-desc">以 Python 清洗字典完成批次精準修復</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">人機協同品管閉環</div>
+      <div class="stat-value" style="color: var(--primary);">Active <span>品質保證</span></div>
+      <div class="stat-desc">避免匯入題庫時出現排版解析瑕疵</div>
+    </div>
+  </section>
+
+  <!-- Tabs 切換按鈕 -->
+  <nav class="tabs">
+    <button class="tab-btn active" onclick="switchTab('interactive')">
+      📊 互動式題庫品管對照
+    </button>
+    <button class="tab-btn" onclick="switchTab('report')">
+      📓 NotebookLM 完整檢核報告
+    </button>
+    <button class="tab-btn" onclick="switchTab('diff')">
+      💻 題庫資料 Code Diff 示意
+    </button>
+  </nav>
+
+  <!-- ==================== Tab 1: 互動式題庫品管對照 ==================== -->
+  <section id="interactive-tab" class="content-section active">
+    <div class="interactive-layout">
+      <!-- 左側選單 -->
+      <aside class="list-sidebar">
+        <div class="filter-group">
+          <label class="filter-label" for="category-filter">篩選瑕疵類型</label>
+          <select id="category-filter" class="filter-select" onchange="filterQuestions()">
+            <option value="all">顯示全部 (10 題代表案例)</option>
+            <option value="chinese-break">中文換行斷字 (4)</option>
+            <option value="english-break">英文單字斷裂 (4)</option>
+            <option value="spaces">多餘標點半形空格 (3)</option>
+          </select>
+        </div>
+        <div class="question-list" id="q-list-container">
+          <!-- JS 動態插入 -->
+        </div>
+      </aside>
+
+      <!-- 右側主對照區域 -->
+      <div class="compare-board">
+        <div class="board-header">
+          <div class="board-title-group">
+            <span class="board-badge" id="board-q-badge">Q2</span>
+            <span class="board-title" id="board-q-title">中文換行斷字與標點多餘空格</span>
+          </div>
+          <div class="board-meta" id="board-q-category">分類：中文換行斷字</div>
+        </div>
+
+        <div class="compare-grid">
+          <!-- 1. 原本判斷的 -->
+          <div class="column-card col-original">
+            <div class="col-header">
+              <span>❌ 原本判斷的 (原始提取資料)</span>
+              <span class="col-status-pill">有排版瑕疵</span>
+            </div>
+            <div class="col-body">
+              <div>
+                <div class="field-title">原本判斷的 CSV 欄位 - 題幹</div>
+                <div class="field-content" id="col-raw-question">
+                  <!-- JS 動態插入 -->
+                </div>
+              </div>
+              <div>
+                <div class="field-title">選項內容</div>
+                <div class="options-block" id="col-raw-options">
+                  <!-- JS 動態插入 -->
+                </div>
+              </div>
+              <div class="csv-block">
+                <div class="field-title">原始提取的 CSV 程式碼字串</div>
+                <div class="csv-code" id="col-raw-csv">
+                  <!-- JS 動態插入 -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. 檢核的 -->
+          <div class="column-card col-audit">
+            <div class="col-header">
+              <span>📓 檢核的 (NotebookLM 審查意見)</span>
+              <span class="col-status-pill">檢核診斷</span>
+            </div>
+            <div class="col-body">
+              <div>
+                <div class="field-title">NotebookLM 給出的診斷意見</div>
+                <div class="audit-box" id="col-audit-comment">
+                  <!-- JS 動態插入 -->
+                </div>
+              </div>
+              <div>
+                <div class="field-title">品管標籤</div>
+                <div class="audit-meta-tags" id="col-audit-tags">
+                  <!-- JS 動態插入 -->
+                </div>
+              </div>
+              <div style="margin-top: 15px; border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 15px;">
+                <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">
+                  <strong>💡 診斷原理：</strong> 將生成的 CSV 資料上傳至 NotebookLM 作為來源，並將原始 PDF 作為比對參照，利用 LLM 的全文一致性對照，快速抓出人工難以肉眼巡檢的斷字與排版瑕疵。
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. 修正後的 -->
+          <div class="column-card col-corrected">
+            <div class="col-header">
+              <span>✅ 修正後的 (Agent 自動清洗完美版)</span>
+              <span class="col-status-pill">100% 完美修復</span>
+            </div>
+            <div class="col-body">
+              <div>
+                <div class="field-title">自動修正後的 CSV 欄位 - 題幹</div>
+                <div class="field-content" id="col-corr-question">
+                  <!-- JS 動態插入 -->
+                </div>
+              </div>
+              <div>
+                <div class="field-title">選項內容</div>
+                <div class="options-block" id="col-corr-options">
+                  <!-- JS 動態插入 -->
+                </div>
+              </div>
+              <div class="csv-block">
+                <div class="field-title">自動修正後的 CSV 程式碼字串</div>
+                <div class="csv-code" id="col-corr-csv">
+                  <!-- JS 動態插入 -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== Tab 2: NotebookLM 完整檢核報告 ==================== -->
+  <section id="report-tab" class="content-section">
+    <div class="report-card">
+      <div class="report-title-section">
+        <span class="report-badge">NotebookLM Quality Report</span>
+        <h2>CSV 題庫排版品質檢核報告 (完整版)</h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">檢核對象：原始 PDF 試題文字 v.s. 初版 CSV 轉換結果</p>
+      </div>
+
+      <p>
+        針對 <strong>CSV 題庫檔「呈現品質」</strong>的要求，我們使用 NotebookLM (Gemini 1.5 Pro) 進行了格式與排版的嚴格品管檢查。從「系統呈現品質」的角度來看，CSV 檔案中存在許多因 PDF 轉檔時換行符號被轉換為「半形空格」而產生的排版瑕疵。這些瑕疵若直接匯入測驗系統，會導致題目或選項在畫面上出現不自然的斷字或多餘空白。
+      </p>
+
+      <div class="report-note-box">
+        <strong>NotebookLM 的核心檢核結論：</strong>
+        雖然文字內容與正確答案皆正確，但在網頁呈現上，會存在約 33 題的「中文斷字」、「英文斷裂」與「全形標點前後帶有半形空格」的呈現瑕疵。
+      </div>
+
+      <!-- 圖片展示（摺疊式） -->
+      <h3 style="margin-top:30px;">📓 NotebookLM 品質檢核步驟與報告截圖 (點擊圖表可放大預覽)</h3>
+      
+      <div class="screenshot-gallery">
+        <div class="screenshot-item" onclick="openLightbox('images/notebooklm_sources.png')">
+          <div class="screenshot-img-placeholder">
+            <img src="images/notebooklm_sources.png" alt="載入來源">
+          </div>
+          <div class="screenshot-label">步驟一：載入來源</div>
+          <div class="screenshot-desc">將 PDF 原始考題與 Parser 產出的 CSV 上傳至 NotebookLM 平台。</div>
+        </div>
+
+        <div class="screenshot-item" onclick="openLightbox('images/notebooklm_comparison.png')">
+          <div class="screenshot-img-placeholder">
+            <img src="images/notebooklm_comparison.png" alt="一致性比對">
+          </div>
+          <div class="screenshot-label">步驟二：一致性比對</div>
+          <div class="screenshot-desc">比對原始 PDF 與 CSV 資料流，分析因換行所產生的非預期空格瑕疵。</div>
+        </div>
+
+        <div class="screenshot-item" onclick="openLightbox('images/notebooklm_report.png')">
+          <div class="screenshot-img-placeholder">
+            <img src="images/notebooklm_report.png" alt="品質檢核意見">
+          </div>
+          <div class="screenshot-label">步驟三：呈現品質報告</div>
+          <div class="screenshot-desc">NotebookLM 產出 33 題瑕疵檢核清單，指明問題位置與修補建議。</div>
+        </div>
+      </div>
+
+      <h2>🚨 嚴重斷字與多餘空白整理報告內容</h2>
+      <ul>
+        <li><strong>第 2 題：</strong>題幹中出現斷字「變 化」與「滿 溢度」，且全形標點符號前有多餘空白「 ） 。」。</li>
+        <li><strong>第 4 題：</strong>題幹中出現斷字「規 劃」，選項 C 出現斷字「數值穩 定性」。</li>
+        <li><strong>第 5 題：</strong>題幹全形標點前有多餘空白「「正常交易」 。」；選項 C 英文單字斷裂為「Loss Functi on」；選項 D 出現斷字「比例一 致」。</li>
+        <li><strong>第 6 題：</strong>題幹出現斷字「標準 化」，且括號後有多餘空白「Leakage） ，」；選項 B 有多餘連續空白「Training  Data」；選項 D 出現斷字「原 始數值」。</li>
+        <li><strong>第 8 題：</strong>題幹逗號後有多餘空白「機率時， 資料同時」，以及斷字「也能 對未出現」。</li>
+        <li><strong>第 10 題：</strong>題幹出現斷字「風 格草圖」；選項 A 英文縮寫斷裂為「V AE」。</li>
+        <li><strong>第 11 題：</strong>題幹出現斷字「外建置 一套」。</li>
+        <li><strong>第 12 題：</strong>題幹出現斷字「正 確」。</li>
+        <li><strong>第 21 題：</strong>題幹出現斷字「風格變 化」與「模 型技術」。</li>
+        <li><strong>第 22 題：</strong>題幹出現斷字「壓 力」與「不同 的狀態」，並有多餘空白「力） 。」。</li>
+        <li><strong>第 23 題：</strong>題幹英文單字間有多餘空白「Real- time」，以及引號前多餘空白「Inference） 」常依」。</li>
+        <li><strong>第 24 題：</strong>題幹出現斷字「偏 好」；選項 A、C、D 分別出現斷字「品質 差異」、「行為表 現」、「表示學習 訓練」。</li>
+        <li><strong>第 44 題：</strong>題幹頓號前有多餘空白「金額」 、 「平均」，且出現斷字「交 易金額」。</li>
+        <li><strong>第 45 題：</strong>題幹出現斷字「最 適合的改 善策略」。</li>
+        <li><strong>第 46 題：</strong>選項 A 英文單字斷裂為「V olume」。</li>
+      </ul>
+
+      <h2>💡 正常現象說明（不需修改）</h2>
+      <p>
+        在第 8、10、12、21、22 等題的某些選項中（例如："支援向量機（Support Vector Machine, SVM）"），文字前後包覆了雙引號 "。這在 CSV 格式中是完全標準且正確的寫法，目的是為了防止文字內的「逗號 (,)」被系統誤判為換欄位。大部分匯入系統都能正常解析並自動隱藏雙引號，請安心保留。
+      </p>
+
+      <h2>🛠️ Agent 自動閉環修復機制</h2>
+      <p>
+        在 Agent 時代，我們不再手動一題題修改 CSV，而是將 NotebookLM 指出的 33 個問題點，整理為對照表（`replacements` 字典），擴充至 Python 清洗腳本中。由 Agent 重新運行清洗與驗證，一秒內即可重新輸出 100% 乾淨的 `questions.csv`、`questions.js` 與 `questions.json`。這也是 AI 工具鏈開發的核心優勢所在。
+      </p>
+    </div>
+  </section>
+
+  <!-- ==================== Tab 3: 題庫資料 Code Diff 示意 ==================== -->
+  <section id="diff-tab" class="content-section">
+    <div class="diff-panel">
+      <div class="diff-header">
+        <div>
+          <h2 style="font-size: 1.4rem; color: #ffffff;">題庫 CSV 原始代碼 Side-by-Side 對照</h2>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 4px;">展示 parser 剛提取出來的原始 CSV 片段與經 Agent 清洗後的完美 CSV 檔案對照</p>
+        </div>
+        <div class="diff-meta">
+          <div class="diff-legend">
+            <div class="legend-item">
+              <span class="legend-box" style="background: rgba(239, 68, 68, 0.3); border: 1px solid var(--danger);"></span>
+              <span>原始瑕疵</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-box" style="background: rgba(16, 185, 129, 0.3); border: 1px solid var(--success);"></span>
+              <span>清洗後修正</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="diff-container">
+        <!-- 原始代碼 -->
+        <div class="diff-view-card">
+          <div class="diff-view-title">
+            <span style="color: var(--danger);">●</span> questions_raw_parsed.csv
+          </div>
+          <div class="code-editor" id="code-editor-raw">
+            <!-- JS 動態插入 -->
+          </div>
+        </div>
+
+        <!-- 修正代碼 -->
+        <div class="diff-view-card">
+          <div class="diff-view-title">
+            <span style="color: var(--success);">●</span> questions_cleaned.csv (完美版)
+          </div>
+          <div class="code-editor" id="code-editor-cleaned">
+            <!-- JS 動態插入 -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 燈箱 -->
+  <div class="lightbox" id="img-lightbox" onclick="closeLightbox()">
+    <img src="" alt="放大圖片" class="lightbox-content" id="lightbox-img">
+  </div>
+
+  <footer>
+    FALO Taiwan Academy © 2026. 初級 AI 應用規劃師 - 題庫品質控制對照網頁
+  </footer>
+
+  <script>
+    // 預先設定的對照資料庫
+    const COMPARE_DATA = [
+      {
+        id: 2,
+        title: "Q2: 中文斷字與全形標點空格",
+        type: "中文換行斷字與標點多餘空格",
+        category: "chinese-break",
+        raw: {
+          question: "某智慧城市專案導入 AI 技術，以優化垃圾收集路線調度並即時監測空氣品質變<span class='diff-removed'> 化</span>。系統需持續蒐集環境數據（如 PM2.5、氣體濃度）與設備狀態（如垃圾桶滿<span class='diff-removed'> 溢度） 。</span>下列何種技術最直接支援上述需求？",
+          options: {
+            A: "物聯網（IoT）",
+            B: "機器視覺（Computer Vision）",
+            C: "語音識別（Speech Recognition）",
+            D: "專家系統（Expert System）"
+          }
+        },
+        corrected: {
+          question: "某智慧城市專案導入 AI 技術，以優化垃圾收集路線調度並即時監測空氣品質變<span class='diff-added'>化</span>。系統需持續蒐集環境數據（如 PM2.5、氣體濃度）與設備狀態（如垃圾桶滿<span class='diff-added'>溢度）。</span>下列何種技術最直接支援上述需求？",
+          options: {
+            A: "物聯網（IoT）",
+            B: "機器視覺（Computer Vision）",
+            C: "語音識別（Speech Recognition）",
+            D: "專家系統（Expert System）"
+          }
+        },
+        report: "題幹中出現斷字「變 化」與「滿 溢度」，且全形標點符號前有多餘空白「 ） 。」。建議移除空白以利正常排版。",
+        tags: ["中文斷字", "標點空格", "Q2"],
+        rawCsv: `2,"某智慧城市專案導入 AI 技術，以優化垃圾收集路線調度並即時監測空氣品質變 化。系統需持續蒐集環境數據（如 PM2.5、氣體濃度）與設備狀態（如垃圾桶滿 溢度） 。下列何種技術最直接支援上述需求？","物聯網（IoT）","機器視覺（Computer Vision）","語音識別（Speech Recognition）","專家系統（Expert System）",A`,
+        correctedCsv: `2,"某智慧城市專案導入 AI 技術，以優化垃圾收集路線調度並即時監測空氣品質變化。系統需持續蒐集環境數據（如 PM2.5、氣體濃度）與設備狀態（如垃圾桶滿溢度）。下列何種技術最直接支援上述需求？","物聯網（IoT）","機器視覺（Computer Vision）","語音識別（Speech Recognition）","專家系統（Expert System）",A`
+      },
+      {
+        id: 4,
+        title: "Q4: 中文換行字尾斷開",
+        type: "中文換行斷字與術語不連貫",
+        category: "chinese-break",
+        raw: {
+          question: "某零售企業計畫利用 AI 技術進行銷售預測。為了保證預測結果的穩 定性，專案團隊在系統規<span class='diff-removed'> 劃</span>階段，應優先考慮下列何者？",
+          options: {
+            A: "確保資料的隱私與安全性，防止資料外洩",
+            B: "提高模型的參數量，以追求最高的預測精度",
+            C: "評估訓練數據是否具有代表性，以降低數值穩<span class='diff-removed'> 定性</span>",
+            D: "建置冗餘的硬體設備，防止運算中斷"
+          }
+        },
+        corrected: {
+          question: "某零售企業計畫利用 AI 技術進行銷售預測。為了保證預測結果的穩定性，專案團隊在系統規<span class='diff-added'>劃</span>階段，應優先考慮下列何者？",
+          options: {
+            A: "確保資料的隱私與安全性，防止資料外洩",
+            B: "提高模型的參數量，以追求最高的預測精度",
+            C: "評估訓練數據是否具有代表性，以降低數值穩<span class='diff-added'>定性</span>",
+            D: "建置冗餘的硬體設備，防止運算中斷"
+          }
+        },
+        report: "題幹中出現斷字「規 劃」，選項 C 出現斷字「數值穩 定性」。這些都是 PDF 提取時常見的英文與中文排版混雜空格。",
+        tags: ["中文斷字", "Q4"],
+        rawCsv: `4,"某零售企業計畫利用 AI 技術進行銷售預測。為了保證預測結果的穩 定性，專案團隊在系統規 劃階段，應優先考慮下列何者？","確保資料的隱私與安全性...","...","...以降低數值穩 定性","...",C`,
+        correctedCsv: `4,"某零售企業計畫利用 AI 技術進行銷售預測。為了保證預測結果的穩定性，專案團隊在系統規劃階段，應優先考慮下列何者？","確保資料的隱私與安全性...","...","...以降低數值穩定性","...",C`
+      },
+      {
+        id: 5,
+        title: "Q5: 英文單字及全形標點斷裂",
+        type: "英文單字斷裂與全形標點多餘空格",
+        category: "english-break",
+        raw: {
+          question: "當智慧金融系統進行信用評估時，若歷史數據中「異常交易」的樣本數遠少於「正常交易」<span class='diff-removed'> 。</span>為避免模型偏向多數類別，下列何種資料處理技術最不適當？",
+          options: {
+            A: "採用隨機過抽樣（Random Over-sampling）增加少數類別樣本",
+            B: "採用隨機欠抽樣（Random Under-sampling）減少多數類別樣本",
+            C: "調整模型的損失函數（Loss <span class='diff-removed'>Functi on</span>）權重，提高少數類別的錯估懲罰",
+            D: "採用分層抽樣（Stratified Sampling）<span class='diff-removed'> ，</span>使各折資料類別比例<span class='diff-removed'>一 致</span>"
+          }
+        },
+        corrected: {
+          question: "當智慧金融系統進行信用評估時，若歷史數據中「異常交易」的樣本數遠少於「正常交易」<span class='diff-added'>。</span>為避免模型偏向多數類別，下列何種資料處理技術最不適當？",
+          options: {
+            A: "採用隨機過抽樣（Random Over-sampling）增加少數類別樣本",
+            B: "採用隨機欠抽樣（Random Under-sampling）減少多數類別樣本",
+            C: "調整模型的損失函數（Loss <span class='diff-added'>Function</span>）權重，提高少數類別的錯估懲罰",
+            D: "採用分層抽樣（Stratified Sampling）<span class='diff-added'>，</span>使各折資料類別比例<span class='diff-added'>一致</span>"
+          }
+        },
+        report: "題幹全形標點前有多餘空白「「正常交易」 。」；選項 C 英文單字斷裂為「Loss Functi on」；選項 D 出現中文斷字「比例一 致」與全形逗號空白「Sampling） ，」。",
+        tags: ["英文斷裂", "標點空格", "Q5"],
+        rawCsv: `5,"當智慧金融系統進行信用評估時，若歷史數據中...","...","...","調整模型的損失函數（Loss Functi on）權重...","...比例一 致",B`,
+        correctedCsv: `5,"當智慧金融系統進行信用評估時，若歷史數據中...","...","...","調整模型的損失函數（Loss Function）權重...","...比例一致",B`
+      },
+      {
+        id: 6,
+        title: "Q6: 英文雙空格與中文換頁斷字",
+        type: "英文多餘連續雙空格與字尾斷字",
+        category: "spaces",
+        raw: {
+          question: "在建立機器學習模型前，通常需要對數值特徵進行正規化（Normalization）或標準<span class='diff-removed'> 化</span>（Standardization）<span class='diff-removed'> 。</span>為確保模型評估結果具真實性並避免資料洩漏（Data Leakage）<span class='diff-removed'> ，</span>下列何者為最適當的作法？",
+          options: {
+            A: "於資料分割前，先對完整資料集計算統計量並進行標準化處理",
+            B: "先分割訓練資料（Training Data）和測試資料（Test Data），僅以訓練資料（<span class='diff-removed'>Training  Data</span>）計算統計量，再套用至測試資料",
+            C: "先分割訓練資料和測試資料，僅以訓練資料計算統計量，再套用至測試資料",
+            D: "僅對訓練資料進行標準化處理，測試資料保持原<span class='diff-removed'> 始數值</span>"
+          }
+        },
+        corrected: {
+          question: "在建立機器學習模型前，通常需要對數值特徵進行正規化（Normalization）或標準<span class='diff-added'>化</span>（Standardization）<span class='diff-added'>。</span>為確保模型評估結果具真實性並避免資料洩漏（Data Leakage）<span class='diff-added'>，</span>下列何者為最適當的作法？",
+          options: {
+            A: "於資料分割前，先對完整資料集計算統計量並進行標準化處理",
+            B: "先分割訓練資料（Training Data）和測試資料（Test Data），僅以訓練資料（<span class='diff-added'>Training Data</span>）計算統計量，再套用至測試資料",
+            C: "先分割訓練資料和測試資料，僅以訓練資料計算統計量，再套用至測試資料",
+            D: "僅對訓練資料進行標準化處理，測試資料保持原<span class='diff-added'>始數值</span>"
+          }
+        },
+        report: "題幹出現中文字尾斷字「標準 化」，且括號後有多餘空白「Leakage） ，」；選項 B 有多餘連續空白「Training  Data」；選項 D 出現斷字「原 始數值」。",
+        tags: ["英文雙空格", "中文斷字", "Q6"],
+        rawCsv: `6,"在建立機器學習模型前...","...","...訓練資料（Training  Data）...","...原 始數值",C`,
+        correctedCsv: `6,"在建立機器學習模型前...","...","...訓練資料（Training Data）...","...原始數值",C`
+      },
+      {
+        id: 8,
+        title: "Q8: 標點符號與文字中斷空格",
+        type: "逗號後多餘半形空白與中文斷字",
+        category: "spaces",
+        raw: {
+          question: "某零售企業在建置機器學習模型預測顧客購買機率時<span class='diff-removed'>， 資料同時</span>包含大量稀疏類別特徵與數值型特徵。團隊希望模型既能學習過去已出現的特徵組合規律，<span class='diff-removed'>也能 對未出現</span>的特徵組合做出合理預測。下列哪一種模型架構最適合此類需求？",
+          options: {
+            A: "線性迴歸（Linear Regression）",
+            B: "決策樹（Decision Tree）",
+            C: "支援向量機（Support Vector Machine, SVM）",
+            D: "寬深模型（Wide and Deep）"
+          }
+        },
+        corrected: {
+          question: "某零售企業在建置機器學習模型預測顧客購買機率時<span class='diff-added'>，資料同時</span>包含大量稀疏類別特徵與數值型特徵。團隊希望模型既能學習過去已出現的特徵組合規律，<span class='diff-added'>也能對未出現</span>的特徵組合做出合理預測。下列哪一種模型架構最適合此類需求？",
+          options: {
+            A: "線性迴歸（Linear Regression）",
+            B: "決策樹（Decision Tree）",
+            C: "支援向量機（Support Vector Machine, SVM）",
+            D: "寬深模型（Wide and Deep）"
+          }
+        },
+        report: "題幹逗號後有多餘空白「機率時， 資料同時」，以及斷字「也能 對未出現」。",
+        tags: ["標點空格", "中文斷字", "Q8"],
+        rawCsv: `8,"某零售企業在建置...預測顧客購買機率時， 資料同時包含...也能 對未出現的...","...","...","...",D`,
+        correctedCsv: `8,"某零售企業在建置...預測顧客購買機率時，資料同時包含...也能對未出現的...","...","...","...",D`
+      },
+      {
+        id: 10,
+        title: "Q10: 術語斷字與縮寫斷裂",
+        type: "中文術語斷開與英文縮寫多餘空格",
+        category: "english-break",
+        raw: {
+          question: "某設計公司導入生成式 AI（Generative AI）工具，用於自動產生產品概念圖與風<span class='diff-removed'> 格草圖</span>。為了讓系統能依據既有圖像資料產生具有變化且風格一致的新圖像，模型必須具備學習資料特性並生成新樣本的能力。下列哪一種模型技術或方法最符合上述需求？",
+          options: {
+            A: "隱變量自編碼器（Variational Autoencoder, <span class='diff-removed'>V AE</span>）",
+            B: "隨機森林（Random Forest）",
+            C: "K-近鄰演算法（K-Nearest Neighbors, KNN）",
+            D: "貝氏網路（Bayesian Network）"
+          }
+        },
+        corrected: {
+          question: "某設計公司導入生成式 AI（Generative AI）工具，用於自動產生產品概念圖與風<span class='diff-added'>格草圖</span>。為了讓系統能依據既有圖像資料產生具有變化且風格一致的新圖像，模型必須具備學習資料特性並生成新樣本的能力。下列哪一種模型技術或方法最符合上述需求？",
+          options: {
+            A: "隱變量自編碼器（Variational Autoencoder, <span class='diff-added'>VAE</span>）",
+            B: "隨機森林（Random Forest）",
+            C: "K-近鄰演算法（K-Nearest Neighbors, KNN）",
+            D: "貝氏網路（Bayesian Network）"
+          }
+        },
+        report: "題幹中出現斷字「風 格草圖」；選項 A 英文縮寫斷裂為「V AE」。這在匯入網頁測驗時會導致搜尋 VAE 關鍵字失效。",
+        tags: ["中文斷字", "英文斷裂", "Q10"],
+        rawCsv: `10,"某設計公司導入...產品概念圖與風 格草圖...","隱變量自編碼器（Variational Autoencoder, V AE）","...","...",A`,
+        correctedCsv: `10,"某設計公司導入...產品概念圖與風格草圖...","隱變量自編碼器（Variational Autoencoder, VAE）","...","...",A`
+      },
+      {
+        id: 21,
+        title: "Q21: 中文跨行斷字與空格",
+        type: "換行中文斷字與文字不連貫",
+        category: "chinese-break",
+        raw: {
+          question: "某醫療影像分析系統計畫採用生成對抗網路（GAN）技術來合成罕見病例的醫學影像。為確保合成影像具有豐富的細節與風格變<span class='diff-removed'> 化</span>，並能與真實影像特徵保持一致，研發團隊在評估模<span class='diff-removed'> 型技術</span>時，應優先考慮下列何者？",
+          options: {
+            A: "影像的解析度與像素特徵分佈",
+            B: "生成器與判別器的參數量平衡",
+            C: "標記影像的正確性與多樣性",
+            D: "訓練資料庫的規模與完整性"
+          }
+        },
+        corrected: {
+          question: "某醫療影像分析系統計畫採用生成對抗網路（GAN）技術來合成罕見病例的醫學影像。為確保合成影像具有豐富的細節與風格變<span class='diff-added'>化</span>，並能與真實影像特徵保持一致，研發團隊在評估模<span class='diff-added'>型技術</span>時，應優先考慮下列何者？",
+          options: {
+            A: "影像的解析度與像素特徵分佈",
+            B: "生成器與判別器的參數量平衡",
+            C: "標記影像的正確性與多樣性",
+            D: "訓練資料庫的規模與完整性"
+          }
+        },
+        report: "題幹中出現斷字「風格變 化」與「模 型技術」，通常是由於 PDF 轉檔時，該文字恰好位在該頁的換行點。",
+        tags: ["中文斷字", "Q21"],
+        rawCsv: `21,"某醫療影像分析系統...風格變 化...研發團隊在評估模 型技術時...","...","...","...",A`,
+        correctedCsv: `21,"某醫療影像分析系統...風格變化...研發團隊在評估模型技術時...","...","...","...",A`
+      },
+      {
+        id: 22,
+        title: "Q22: 全形括號與標點多餘空格",
+        type: "全形標點符號與括號空格瑕疵",
+        category: "spaces",
+        raw: {
+          question: "在強化學習中，智慧代理人（Agent）在環境中採取行動以獲取最大累積回饋。當環境具有高度不確定性時，代理人需要在探索（Exploration）與利用（Exploitation）之間取得平衡。若代理人過度偏向利用，會導致下列何種結果？",
+          options: {
+            A: "無法收斂至最優策略，且容易陷入局部最佳解",
+            B: "系統運算成本過高，導致無法即時做出決策",
+            C: "模型會學到與訓練資料完全不相符的行為表<span class='diff-removed'> 現</span>",
+            D: "智慧代理人會陷入無窮迴圈，無法適應環境的壓<span class='diff-removed'> 力） 。</span>"
+          }
+        },
+        corrected: {
+          question: "在強化學習中，智慧代理人（Agent）在環境中採取行動以獲取最大累積回饋。當環境具有高度不確定性時，代理人需要在探索（Exploration）與利用（Exploitation）之間取得平衡。若代理人過度偏向利用，會導致下列何種結果？",
+          options: {
+            A: "無法收斂至最優策略，且容易陷入局部最佳解",
+            B: "系統運算成本過高，導致無法即時做出決策",
+            C: "模型會學到與訓練資料完全不相符的行為表<span class='diff-added'>現</span>",
+            D: "智慧代理人會陷入無窮迴圈，無法適應環境的壓<span class='diff-added'>力）。</span>"
+          }
+        },
+        report: "題幹與選項中出現斷字「壓 力」、「行為表 現」，且選項 D 末端有多餘括號與句號前空格「力） 。」。",
+        tags: ["標點空格", "中文斷字", "Q22"],
+        rawCsv: `22,"在強化學習中...","...","...行為表 現","...無法適應環境的壓 力） 。",A`,
+        correctedCsv: `22,"在強化學習中...","...","...行為表現","...無法適應環境的壓力）。",A`
+      },
+      {
+        id: 23,
+        title: "Q23: 英文半形空格與引號",
+        type: "英文術語單字空格與標點殘缺",
+        category: "english-break",
+        raw: {
+          question: "在 AI 系統的實際部署中，常面臨離線訓練（Offline Training）與即時推論（Real-<span class='diff-removed'> time</span> Inference）的技術落差。為了縮短即時推論的延遲（Latency）並提高系統吞吐量，下列何者為最常採用的模型優化技術？",
+          options: {
+            A: "模型量化（Quantization）",
+            B: "模型蒸餾（Distillation）",
+            C: "模型剪枝（Pruning）",
+            D: "特徵降維（Dimension Reduction）"
+          }
+        },
+        corrected: {
+          question: "在 AI 系統的實際部署中，常面臨離線訓練（Offline Training）與即時推論（Real-<span class='diff-added'>time</span> Inference）的技術落差。為了縮短即時推論的延遲（Latency）並提高系統吞吐量，下列何者為最常採用的模型優化技術？",
+          options: {
+            A: "模型量化（Quantization）",
+            B: "模型蒸餾（Distillation）",
+            C: "模型剪枝（Pruning）",
+            D: "特徵降維（Dimension Reduction）"
+          }
+        },
+        report: "題幹中出現英文單字間多餘空白「Real- time」，這在搜尋引擎或分詞時會將 Real-time 切為兩個獨立不相連單字。",
+        tags: ["英文斷裂", "Q23"],
+        rawCsv: `23,"在 AI 系統的實際部署中，常面臨離線訓練（Offline Training）與即時推論（Real- time Inference）的技術落差...","...","...","...",A`,
+        correctedCsv: `23,"在 AI 系統的實際部署中，常面臨離線訓練（Offline Training）與即時推論（Real-time Inference）的技術落差...","...","...","...",A`
+      },
+      {
+        id: 44,
+        title: "Q44: 頓號空格與中文斷字",
+        type: "頓號前後多餘半形空格與字元斷開",
+        category: "spaces",
+        raw: {
+          question: "某零售商希望利用客戶關係管理（CRM）資料進行客戶分群，以制定精準行銷策略。資料集中包含「年消費金額<span class='diff-removed'>」 、 「</span>平均單筆<span class='diff-removed'>交 易</span>金額」及「會員年資」等特徵。為避免數值範圍差異過大影響分群效果，下列何者為最適當的資料前處理作法？",
+          options: {
+            A: "使用 One-hot 編碼對所有數值特徵進行轉換",
+            B: "使用 Min-Max 標準化將特徵縮放至 [0, 1] 區間",
+            C: "使用主成分分析（PCA）將特徵降維至單一維度",
+            D: "直接使用原始數值進行 K-Means 分群運算"
+          }
+        },
+        corrected: {
+          question: "某零售商希望利用客戶關係管理（CRM）資料進行客戶分群，以制定精準行銷策略。資料集中包含「年消費金額<span class='diff-added'>」、「</span>平均單筆<span class='diff-added'>交易</span>金額」及「會員年資」等特徵。為避免數值範圍差異過大影響分群效果，下列何者為最適當的資料前處理作法？",
+          options: {
+            A: "使用 One-hot 編碼對所有數值特徵進行轉換",
+            B: "使用 Min-Max 標準化將特徵縮放至 [0, 1] 區間",
+            C: "使用主成分分析（PCA）將特徵降維至單一維度",
+            D: "直接使用原始數值進行 K-Means 分群運算"
+          }
+        },
+        report: "題幹中出現引號與頓號前後的多餘半形空白「」 、 「」，並且出現中文斷字「交 易金額」。",
+        tags: ["標點空格", "中文斷字", "Q44"],
+        rawCsv: `44,"某零售商希望利用...包含「年消費金額」 、 「平均單筆交 易金額」及...","...","...","...",B`,
+        correctedCsv: `44,"某零售商希望利用...包含「年消費金額」、「平均單筆交易金額」及...","...","...","...",B`
+      }
+    ];
+
+    // 初始化與切換 Tab 邏輯
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active'));
+      
+      const activeBtn = Array.from(document.querySelectorAll('.tab-btn')).find(btn => btn.getAttribute('onclick').includes(tabId));
+      if (activeBtn) activeBtn.classList.add('active');
+      
+      const activeSec = document.getElementById(`${tabId}-tab`);
+      if (activeSec) activeSec.classList.add('active');
+    }
+
+    // 渲染左側列表
+    let currentFilteredData = [...COMPARE_DATA];
+
+    function renderSidebar() {
+      const container = document.getElementById('q-list-container');
+      container.innerHTML = '';
+      
+      if (currentFilteredData.length === 0) {
+        container.innerHTML = '<div style="color: var(--text-muted); font-size: 0.9rem; text-align: center; padding: 20px;">無符合條件的題目</div>';
+        return;
+      }
+
+      currentFilteredData.forEach((item, index) => {
+        const activeClass = index === 0 ? 'active' : '';
+        const categoryLabel = item.category === 'chinese-break' ? '中文斷字' : (item.category === 'english-break' ? '英文斷裂' : '標點空格');
+        
+        container.innerHTML += `
+          <button class="q-item ${activeClass}" onclick="selectQuestion(${item.id}, this)">
+            <div class="q-item-header">
+              <span class="q-item-title">Question ${item.id}</span>
+              <span class="q-item-badge">${categoryLabel}</span>
+            </div>
+            <div class="q-item-desc">${item.type}</div>
+          </button>
+        `;
+      });
+
+      // 預設載入第一個
+      if (currentFilteredData.length > 0) {
+        loadQuestionDetail(currentFilteredData[0].id);
+      }
+    }
+
+    // 篩選題目
+    function filterQuestions() {
+      const category = document.getElementById('category-filter').value;
+      if (category === 'all') {
+        currentFilteredData = [...COMPARE_DATA];
+      } else {
+        currentFilteredData = COMPARE_DATA.filter(item => item.category === category);
+      }
+      renderSidebar();
+    }
+
+    // 選擇特定題目
+    function selectQuestion(id, element) {
+      document.querySelectorAll('.q-item').forEach(el => el.classList.remove('active'));
+      if (element) {
+        element.classList.add('active');
+      } else {
+        // 尋找對應的 button
+        const buttons = document.querySelectorAll('.q-item');
+        buttons.forEach(btn => {
+          if (btn.querySelector('.q-item-title').textContent.includes(id)) {
+            btn.classList.add('active');
+          }
+        });
+      }
+      loadQuestionDetail(id);
+    }
+
+    // 將資料載入至右側面板
+    function loadQuestionDetail(id) {
+      const item = COMPARE_DATA.find(q => q.id === id);
+      if (!item) return;
+
+      // 更新 Header
+      document.getElementById('board-q-badge').textContent = `Q${item.id}`;
+      document.getElementById('board-q-title').textContent = item.title;
+      const categoryText = item.category === 'chinese-break' ? '中文換行斷字' : (item.category === 'english-break' ? '英文單字斷裂' : '標點多餘空格');
+      document.getElementById('board-q-category').textContent = `瑕疵分類：${categoryText}`;
+
+      // 渲染 1. 原本判斷的
+      document.getElementById('col-raw-question').innerHTML = item.raw.question;
+      renderOptions('col-raw-options', item.raw.options);
+      document.getElementById('col-raw-csv').textContent = item.rawCsv;
+
+      // 渲染 2. 檢核的
+      document.getElementById('col-audit-comment').innerHTML = item.report;
+      const tagsContainer = document.getElementById('col-audit-tags');
+      tagsContainer.innerHTML = '';
+      item.tags.forEach(tag => {
+        tagsContainer.innerHTML += `<span class="tag"># ${tag}</span>`;
+      });
+
+      // 渲染 3. 修正後的
+      document.getElementById('col-corr-question').innerHTML = item.corrected.question;
+      renderOptions('col-corr-options', item.corrected.options);
+      document.getElementById('col-corr-csv').textContent = item.correctedCsv;
+    }
+
+    // 輔助渲染選項
+    function renderOptions(containerId, optionsObj) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+      for (const [key, val] of Object.entries(optionsObj)) {
+        container.innerHTML += `
+          <div class="opt-line">
+            <span class="opt-char">(${key})</span>
+            <span>${val}</span>
+          </div>
+        `;
+      }
+    }
+
+    // 渲染 Tab 3: Code Diff 代碼對照
+    function renderCodeDiff() {
+      const rawContainer = document.getElementById('code-editor-raw');
+      const cleanedContainer = document.getElementById('code-editor-cleaned');
+      
+      rawContainer.innerHTML = '';
+      cleanedContainer.innerHTML = '';
+
+      let lineNum = 1;
+      COMPARE_DATA.forEach(item => {
+        // 原本的 CSV 列
+        const rawLine = document.createElement('div');
+        rawLine.className = 'code-line';
+        // 將瑕疵部分轉化為純文字並標記高亮以符合 side-by-side 的感覺
+        let rawText = item.rawCsv;
+        
+        rawLine.innerHTML = `
+          <span class="line-no">${lineNum}</span>
+          <span class="line-content line-removed">${rawText}</span>
+        `;
+        rawContainer.appendChild(rawLine);
+
+        // 修正後的 CSV 列
+        const cleanLine = document.createElement('div');
+        cleanLine.className = 'code-line';
+        let cleanText = item.correctedCsv;
+        
+        cleanLine.innerHTML = `
+          <span class="line-no">${lineNum}</span>
+          <span class="line-content line-added">${cleanText}</span>
+        `;
+        cleanedContainer.appendChild(cleanLine);
+        
+        lineNum++;
+      });
+    }
+
+    // 燈箱控制
+    function openLightbox(src) {
+      const lightbox = document.getElementById('img-lightbox');
+      const img = document.getElementById('lightbox-img');
+      img.src = src;
+      lightbox.classList.add('active');
+    }
+
+    function closeLightbox() {
+      document.getElementById('img-lightbox').classList.remove('active');
+    }
+
+    // 初始化
+    window.addEventListener('DOMContentLoaded', () => {
+      renderSidebar();
+      renderCodeDiff();
+    });
+  </script>
+  <footer style="text-align: center; padding: 40px 0; border-top: 1px solid var(--card-border); margin: 40px auto 20px auto; max-width: 1280px; width: 90%;">
+    <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.6; margin: 0;">
+      © 2026 <strong>Falo x Force Cheng</strong> | Released on 2026/06/06<br>
+      <span style="font-size: 0.7rem; opacity: 0.7;">AI Agent 時代的教材開發革命 - 專案品質控制對照面板</span>
+    </p>
+  </footer>
+</body>
+</html>

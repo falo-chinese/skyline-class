@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkyLine class2 實戰專案與門戶 | 核心教學主軸</title>
+    <!-- Outfit & Noto Sans TC Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Dark Mode (Default Premium Violet Theme) */
+            --bg-gradient: radial-gradient(circle at 50% 50%, #0b071e 0%, #020108 100%);
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --card-bg: rgba(25, 18, 50, 0.45);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --card-hover-border: rgba(192, 132, 252, 0.45);
+            --primary: #8b5cf6; /* Purple */
+            --primary-glow: rgba(139, 92, 246, 0.15);
+            --accent: #c084fc; /* Violet Light */
+            --accent-glow: rgba(192, 132, 252, 0.15);
+            --sidebar-bg: rgba(15, 10, 35, 0.85);
+            --sidebar-border: rgba(255, 255, 255, 0.08);
+            --toggle-bg: rgba(255, 255, 255, 0.05);
+            --toggle-border: rgba(255, 255, 255, 0.1);
+            --toggle-color: #f3f4f6;
+            --btn-bg: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            --btn-shadow: rgba(139, 92, 246, 0.25);
+            --badge-bg: rgba(192, 132, 252, 0.12);
+            --badge-color: #d8b4fe;
+            --badge-border: rgba(192, 132, 252, 0.25);
+            --h1-gradient: linear-gradient(135deg, #ffffff 40%, #c084fc 100%);
+        }
+
+        body.theme-light {
+            /* Fresh White Mode */
+            --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%);
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --card-bg: rgba(255, 255, 255, 0.75);
+            --card-border: rgba(99, 102, 241, 0.12);
+            --card-hover-border: rgba(99, 102, 241, 0.45);
+            --primary: #4f46e5;
+            --primary-glow: rgba(79, 70, 229, 0.1);
+            --accent: #0891b2;
+            --accent-glow: rgba(8, 145, 178, 0.1);
+            --sidebar-bg: rgba(255, 255, 255, 0.9);
+            --sidebar-border: rgba(99, 102, 241, 0.15);
+            --toggle-bg: rgba(0, 0, 0, 0.05);
+            --toggle-border: rgba(0, 0, 0, 0.08);
+            --toggle-color: #4f46e5;
+            --btn-bg: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
+            --btn-shadow: rgba(79, 70, 229, 0.2);
+            --badge-bg: rgba(8, 145, 178, 0.08);
+            --badge-color: #0891b2;
+            --badge-border: rgba(8, 145, 178, 0.15);
+            --h1-gradient: linear-gradient(135deg, #1e293b 30%, #4f46e5 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            color: var(--text-main);
+            font-family: 'Outfit', 'Noto Sans TC', sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            transition: background 0.4s ease, color 0.3s ease;
+        }
+
+        .layout-wrapper {
+            display: flex;
+            max-width: 1280px;
+            width: 100%;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* Top Unified Navigation bar to match Class 02 */
+        .top-nav {
+            position: absolute;
+            top: 2rem;
+            left: 320px;
+            right: 2.5rem;
+            display: flex;
+            justify-content: flex-start;
+            gap: 1rem;
+            z-index: 90;
+        }
+
+        .nav-link-btn {
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            border: 1px solid var(--card-border);
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.25s ease;
+        }
+
+        .nav-link-btn:hover {
+            background: var(--primary-glow);
+            color: var(--text-main);
+            border-color: var(--primary);
+        }
+
+        .nav-link-btn.active {
+            background: var(--primary);
+            color: #ffffff;
+            border-color: var(--primary);
+        }
+
+        /* Sidebar Navigation */
+        aside {
+            width: 300px;
+            flex-shrink: 0;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            background: var(--sidebar-bg);
+            border-right: 1px solid var(--sidebar-border);
+            padding: 2.5rem 1.5rem;
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+            transition: background 0.4s ease, border-color 0.4s ease;
+        }
+
+        .brand h2 {
+            font-size: 1.35rem;
+            font-weight: 900;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.25rem;
+        }
+
+        .brand .eyebrow {
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+        }
+
+        .brand .sub-brand {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--sidebar-border);
+            padding-bottom: 0.75rem;
+        }
+
+        .toc {
+            list-style: none;
+            flex-grow: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .toc-link {
+            display: block;
+            padding: 0.6rem 0.8rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .toc-link:hover, .toc-link.active {
+            color: var(--text-main);
+            background: var(--primary-glow);
+            padding-left: 1.2rem;
+        }
+
+        .sidebar-footer {
+            border-top: 1px solid var(--sidebar-border);
+            padding-top: 1.5rem;
+            margin-top: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .sidebar-btn {
+            display: block;
+            text-align: center;
+            padding: 0.6rem 0.8rem;
+            background: var(--toggle-bg);
+            border: 1px solid var(--toggle-border);
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-btn:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #ffffff;
+        }
+
+        /* Main Content */
+        main {
+            margin-left: 300px;
+            flex-grow: 1;
+            padding: 6.5rem 2.5rem 3.5rem 2.5rem; /* added top padding to accommodate top-nav */
+            width: calc(100% - 300px);
+            box-sizing: border-box;
+        }
+
+        header {
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: var(--h1-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            font-weight: 300;
+        }
+
+        .section-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            margin-bottom: 2.5rem;
+            scroll-margin-top: 6rem;
+            transition: all 0.3s ease;
+        }
+
+        .section-card:hover {
+            border-color: var(--card-hover-border);
+            box-shadow: 0 15px 35px rgba(139, 92, 246, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .section-header {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-header::before {
+            content: '';
+            display: inline-block;
+            width: 5px;
+            height: 20px;
+            background: var(--primary);
+            border-radius: 3px;
+        }
+
+        .section-subtitle {
+            font-size: 0.95rem;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 1.25rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        p {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        /* Resource Links / Cards */
+        .resource-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .resource-link {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            text-decoration: none;
+            color: var(--text-main);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .resource-link:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: var(--badge-bg);
+            border: 1px solid var(--badge-border);
+            color: var(--badge-color);
+            font-size: 0.75rem;
+            font-weight: 700;
+            border-radius: 6px;
+            margin-right: 1.25rem;
+            flex-shrink: 0;
+            text-transform: uppercase;
+        }
+
+        .link-text {
+            font-size: 0.95rem;
+            font-weight: 600;
+            flex-grow: 1;
+        }
+
+        .link-arrow {
+            color: var(--primary);
+            font-weight: bold;
+            transition: transform 0.2s ease;
+        }
+
+        .resource-link:hover .link-arrow {
+            transform: translateX(3px);
+        }
+
+        /* Accessibility Floating Toolbar */
+        .accessibility-toolbar {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            align-items: center;
+            background: var(--sidebar-bg);
+            border: 1px solid var(--sidebar-border);
+            padding: 0.5rem;
+            border-radius: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+            z-index: 1000;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+        }
+
+        .toolbar-btn {
+            background: none;
+            border: none;
+            color: var(--toggle-color);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .toolbar-btn:hover {
+            background: var(--primary-glow);
+            color: var(--primary);
+        }
+
+        .toolbar-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .divider {
+            width: 1px;
+            height: 20px;
+            background: var(--sidebar-border);
+            margin: 0 0.5rem;
+        }
+
+        /* Show/Hide Sun/Moon Icons */
+        .sun-icon { display: block; }
+        .moon-icon { display: none; }
+
+        body.theme-light .sun-icon { display: none; }
+        body.theme-light .moon-icon { display: block; }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            body {
+                flex-direction: column;
+            }
+            aside {
+                width: 100%;
+                position: relative;
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid var(--sidebar-border);
+                padding: 1.5rem;
+            }
+            main {
+                width: 100%;
+                margin-left: 0;
+                padding: 1.5rem;
+            }
+            .top-nav {
+                position: relative;
+                top: 0;
+                left: 0;
+                right: 0;
+                margin-bottom: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Accessibility Toolbar -->
+    <div class="accessibility-toolbar">
+        <button id="theme-toggle" class="toolbar-btn" aria-label="切換配色" title="切換深淺配色">
+            <!-- Sun icon -->
+            <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <!-- Moon icon -->
+            <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+        </button>
+        <div class="divider"></div>
+        <button id="font-increase" class="toolbar-btn" title="放大字體 (A+)" aria-label="放大字體">
+            <span style="font-size: 1.1rem; font-weight: bold; position: relative; top: -1px;">A⁺</span>
+        </button>
+        <button id="font-decrease" class="toolbar-btn" title="縮小字體 (A-)" aria-label="縮小字體">
+            <span style="font-size: 0.9rem; font-weight: bold; position: relative; top: -1px;">A⁻</span>
+        </button>
+        <div class="divider"></div>
+        <button id="layout-increase" class="toolbar-btn" title="加寬版面 (W+)" aria-label="加寬版面">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16M4 12l4-4m-4 4l4 4m12-8l4 4-4 4"/></svg>
+        </button>
+        <button id="layout-decrease" class="toolbar-btn" title="收窄版面 (W-)" aria-label="收窄版面">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 12h8M12 8l-4 4 4 4m0-8l4 4-4 4"/></svg>
+        </button>
+    </div>
+
+    <div class="layout-wrapper">
+        <!-- Top Nav matching Class 02 layout -->
+        <nav class="top-nav">
+            <a href="../notebooklm_master_guide.html" class="nav-link-btn">📘 企業 NotebookLM 治理指南</a>
+            <a href="../skyline_set_menu.html" class="nav-link-btn">🍱 Skyline 模型菜組合包</a>
+            <a href="../prompt_hub_guide.html" class="nav-link-btn">💬 Prompt Hub 導入指引</a>
+            <a href="index.html" class="nav-link-btn active">🚀 SkyLine class2 實戰專案</a>
+            <a href="../workbench/index.html" class="nav-link-btn">🛠️ 教材控制台</a>
+        </nav>
+
+        <!-- Left Sidebar Navigation -->
+        <aside>
+            <div class="brand">
+                <div class="eyebrow">FALO Taiwan Academy</div>
+                <h2>銀河 ERP 內訓</h2>
+                <div class="sub-brand">SkyLine class2 課程主軸導航</div>
+            </div>
+            
+            <ul class="toc">
+                <li class="toc-item"><a href="#history-review" class="toc-link">歷史課程回顧</a></li>
+                <li class="toc-item"><a href="#practical-resources" class="toc-link active">實戰專案與進階手冊</a></li>
+                <li class="toc-item"><a href="#qas-section" class="toc-link">學員提問與技術解答</a></li>
+                <li class="toc-item"><a href="#other-resources" class="toc-link">其他資源</a></li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <a href="class02_qas.html" class="sidebar-btn">學員課前提問解答 (QA)</a>
+            </div>
+        </aside>
+
+        <!-- Right Main Content -->
+        <main>
+            <!-- 實戰專案與進階手冊 -->
+            <section id="practical-resources" class="section-card">
+                <h2 class="section-header">實戰專案與進階手冊</h2>
+                <div class="section-subtitle">延伸學習：高階實務指南與開源專案</div>
+                <p>
+                    以下為本培訓主題之實務應用專案與技術手冊，協助同仁深入掌握 AI Agent、Chrome 外掛、GAS 與 ETL 等進階技術：
+                </p>
+                <div class="resource-links" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+                    <a href="cases/antigravity/index.html" class="resource-link" style="margin-top: 0;">
+                        <span class="badge">Antigravity</span>
+                        <span class="link-text">Antigravity 實戰開發與協作教學手冊</span>
+                        <span class="link-arrow">➔</span>
+                    </a>
+                    <a href="cases/chrome_extension/index.html" class="resource-link" style="margin-top: 0;">
+                        <span class="badge">Chrome Ext</span>
+                        <span class="link-text">Chrome Extension 填單助手實戰</span>
+                        <span class="link-arrow">➔</span>
+                    </a>
+                    <a href="cases/ipas-etl/index.html" class="resource-link" style="margin-top: 0;">
+                        <span class="badge">ETL 實務</span>
+                        <span class="link-text">教材開發革命：從 PDF 到互動網站</span>
+                        <span class="link-arrow">➔</span>
+                    </a>
+                    <a href="cases/gas-demo/index.html" class="resource-link" style="margin-top: 0;">
+                        <span class="badge">GAS 自動化</span>
+                        <span class="link-text">GAS 開發架構與部署實戰手冊</span>
+                        <span class="link-arrow">➔</span>
+                    </a>
+                    <a href="class02_qas.html" class="resource-link" style="margin-top: 0;">
+                        <span class="badge">學員 QA</span>
+                        <span class="link-text">學員課前提問解答 (QA)</span>
+                        <span class="link-arrow">➔</span>
+                    </a>
+                </div>
+            </section>
+
+            <!-- History Review -->
+            <section id="history-review" class="section-card">
+                <h2 class="section-header">歷史課程回顧</h2>
+                <div class="section-subtitle">Class 01 & Class 02 培訓教材存檔</div>
+                <p>
+                    此專區提供本培訓系列先前課程之完整簡報與實戰教材連結，協助同仁進行知識複習與技術對齊。目前採用簡易密碼保護，未來將升級為基於 Google Apps Script (GAS) 驗證的高強度保密安全版本。
+                </p>
+                <div class="resource-links" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+                    <a href="https://drive.google.com/file/d/1lcTQQ4ceWf8-I-qxifTIbkTq8gwW0Pp7/view?usp=sharing" class="resource-link protected-link" style="margin-top: 0;">
+                        <span class="badge">Class 01</span>
+                        <span class="link-text">Class 01 課程簡報 (🔒 密碼保護)</span>
+                        <span class="link-arrow">➔</span>
+                    </a>
+                    <a href="https://drive.google.com/file/d/1FV_SEjwf68vgd_CH28ScJSjz1FiwxxTw/view?usp=sharing" class="resource-link protected-link" style="margin-top: 0;">
+                        <span class="badge">Class 02</span>
+                        <span class="link-text">Class 02 課程簡報 (🔒 密碼保護)</span>
+                        <span class="link-arrow">➔</span>
+                    </a>
+                </div>
+            </section>
+
+            <!-- Q&A & Technical Answers -->
+            <section id="qas-section" class="section-card">
+                <h2 class="section-header">學員提問與技術解答</h2>
+                <div class="section-subtitle">Vibe Coding 實戰常見問題解答</div>
+                <p>
+                    在 Vibe Coding 實戰開發與 AI Agent 協作過程中，學員針對專案開發與安全防禦等提問的深度解答清單：
+                </p>
+                <div class="resource-links">
+                    <a href="class02_qas.html" class="resource-link">
+                        <span class="badge">Q&A 解答</span>
+                        <span class="link-text">瀏覽全部 Class 02 / SkyLine class2 學員課前與課後提問答覆頁面</span>
+                        <span class="link-arrow">➔</span>
+                    </a>
+                </div>
+            </section>
+
+            <!-- Other Resources -->
+            <section id="other-resources" class="section-card">
+                <h2 class="section-header">其他資源</h2>
+                <div class="section-subtitle">Vibe Coding 實戰武器庫與地雲工具</div>
+                <p>
+                    包含地端架設、GAS 容器串接與 OCR 自動辨識等核心技術參考指引手冊：
+                </p>
+                <div class="resource-links" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+                    <a href="class02_tools.html" class="resource-link" style="margin-top: 0;">
+                        <span class="badge">工具庫</span>
+                        <span class="link-text">Vibe Coding 實戰武器庫與地雲工具清單</span>
+                        <span class="link-arrow">➔</span>
+                    </a>
+                    <a href="class02_ocr_hitl.html" class="resource-link" style="margin-top: 0;">
+                        <span class="badge">OCR & HITL</span>
+                        <span class="link-text">OCR 辨識策略與 HITL 人機協作實務 (分揀案例)</span>
+                        <span class="link-arrow">➔</span>
+                    </a>
+                    <a href="class02_rpa_to_agent.html" class="resource-link" style="margin-top: 0;">
+                        <span class="badge">自動化演進</span>
+                        <span class="link-text">從 ERP 外掛到 AI Agent 演進與自動化治理</span>
+                        <span class="link-arrow">➔</span>
+                    </a>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- JS for theme toggle and Scroll spy -->
+    <script>
+        // Theme switcher
+        const toggleBtn = document.getElementById('theme-toggle');
+        const currentTheme = localStorage.getItem('theme') || 'dark';
+
+        if (currentTheme === 'light') {
+            document.body.classList.add('theme-light');
+        }
+
+        toggleBtn.addEventListener('click', () => {
+            document.body.classList.toggle('theme-light');
+            let theme = 'dark';
+            if (document.body.classList.contains('theme-light')) {
+                theme = 'light';
+            }
+            localStorage.setItem('theme', theme);
+        });
+
+        // Listen for changes from other tabs
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                if (e.newValue === 'light') {
+                    document.body.classList.add('theme-light');
+                } else {
+                    document.body.classList.remove('theme-light');
+                }
+            }
+        });
+
+        // Scroll spy active links
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.toc-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= (sectionTop - 180)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').substring(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Protected links password check
+        document.querySelectorAll('.protected-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const pwd = prompt('請輸入歷史教材存取密碼：');
+                if (pwd === 'attn') {
+                    window.open(link.getAttribute('href'), '_blank');
+                } else if (pwd !== null) {
+                    alert('密碼錯誤，拒絕存取！');
+                }
+            });
+        });
+
+        // Font size adjustment
+        let fontScale = 1.0;
+        const btnFontIncrease = document.getElementById('font-increase');
+        const btnFontDecrease = document.getElementById('font-decrease');
+
+        btnFontIncrease.addEventListener('click', () => {
+            if (fontScale < 1.4) {
+                fontScale += 0.1;
+                document.documentElement.style.fontSize = (fontScale * 100) + '%';
+            }
+        });
+
+        btnFontDecrease.addEventListener('click', () => {
+            if (fontScale > 0.8) {
+                fontScale -= 0.1;
+                document.documentElement.style.fontSize = (fontScale * 100) + '%';
+            }
+        });
+
+        // Layout width adjustment
+        let layoutWidth = 1280;
+        const btnLayoutIncrease = document.getElementById('layout-increase');
+        const btnLayoutDecrease = document.getElementById('layout-decrease');
+        const layoutWrapper = document.querySelector('.layout-wrapper');
+
+        btnLayoutIncrease.addEventListener('click', () => {
+            if (layoutWidth < 1680) {
+                layoutWidth += 100;
+                layoutWrapper.style.maxWidth = layoutWidth + 'px';
+            }
+        });
+
+        btnLayoutDecrease.addEventListener('click', () => {
+            if (layoutWidth > 980) {
+                layoutWidth -= 100;
+                layoutWrapper.style.maxWidth = layoutWidth + 'px';
+            }
+        });
+    </script>
+</body>
+</html>

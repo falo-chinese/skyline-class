@@ -1,0 +1,1342 @@
+<!--
+  Project: Chrome Extension DOM Control and Form Automation
+  Author: Falo x Force Cheng
+  Date: 2026/06/10
+  License: Copyright (c) 2026 Falo x Force Cheng. All rights reserved.
+-->
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <!-- WATERMARK: Falo x Force Cheng 2026/6/10 -->
+  <meta name="author" content="Falo x Force Cheng">
+  <meta name="copyright" content="Falo x Force Cheng 2026/6/10">
+  <meta name="robots" content="index, follow">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "AI 時代的外掛控制實戰：Chrome Extension 填單助手",
+    "description": "本課程帶領學員開發出一個完整的 Chrome 側邊欄外掛，實現網頁 DOM 節點的讀取與自動填寫，理解瀏覽器擴充功能與網頁之間的雙向通訊與控制機制。",
+    "author": {
+      "@type": "Person",
+      "name": "Falo x Force Cheng"
+    },
+    "datePublished": "2026-06-08",
+    "dateModified": "2026-06-10",
+    "copyrightYear": "2026",
+    "copyrightHolder": {
+      "@type": "Organization",
+      "name": "Falo x Force Cheng"
+    }
+  }
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SkyLine Class 02 AI 時代的外掛控制實戰：Chrome Extension 填單助手</title>
+  <meta name="description" content="深入學習 Chrome 側邊欄外掛開發，掌握 DOM 節點雙向控制、Vue/React 狀態事件同步、與 CSV 資料備份還原等核心技術。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-color: #0b0f19;
+      --card-bg: rgba(23, 28, 41, 0.75);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --primary: #6366f1; /* Indigo */
+      --primary-glow: rgba(99, 102, 241, 0.15);
+      --accent: #10b981; /* Emerald */
+      --accent-glow: rgba(16, 185, 129, 0.15);
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --font-outfit: 'Outfit', 'Noto Sans TC', sans-serif;
+      --font-sans: 'Noto Sans TC', sans-serif;
+      
+      --accent-pink: #ec4899;
+      --accent-pink-glow: rgba(236, 72, 153, 0.15);
+      --code-bg: #0b0f19;
+      --shadow-main: 0 15px 35px rgba(0, 0, 0, 0.3);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0b0f19;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1f2937;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--primary);
+    }
+
+    body {
+      background-color: var(--bg-color);
+      background-image: 
+        radial-gradient(circle at 10% 10%, rgba(99, 102, 241, 0.08) 0%, transparent 45%),
+        radial-gradient(circle at 90% 90%, rgba(16, 185, 129, 0.06) 0%, transparent 45%);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      line-height: 1.8;
+      min-height: 100vh;
+      padding: 2rem 0;
+    }
+
+    /* Layout Structure */
+    .layout-wrapper {
+      display: flex;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      gap: 2.5rem;
+    }
+
+    /* Sidebar Navigation */
+    aside {
+      width: 280px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 2rem;
+      height: fit-content;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 1.5rem;
+      backdrop-filter: blur(12px);
+      box-shadow: var(--shadow-main);
+      animation: fadeInLeft 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .brand {
+      margin-bottom: 1.5rem;
+    }
+
+    .brand h2 {
+      font-family: var(--font-outfit);
+      font-size: 1.25rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #ffffff 40%, #c7d2fe 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 0.75rem;
+    }
+
+    .eyebrow {
+      font-family: var(--font-outfit);
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 6px;
+    }
+
+    .nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .nav-item a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.92rem;
+      padding: 0.6rem 0.8rem;
+      border-radius: 8px;
+      display: block;
+      transition: all 0.2s ease;
+    }
+
+    .nav-item a:hover, .nav-item a.active {
+      color: #ffffff;
+      background: rgba(99, 102, 241, 0.1);
+      padding-left: 1.2rem;
+    }
+
+    .nav-item a.active {
+      border-left: 3px solid var(--primary);
+      border-radius: 0 8px 8px 0;
+    }
+
+    /* Content Area */
+    main {
+      flex-grow: 1;
+      width: 0; /* Prevents overflow */
+      animation: fadeInRight 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    header {
+      margin-bottom: 2.5rem;
+      text-align: left;
+    }
+
+    h1 {
+      font-family: var(--font-outfit);
+      font-size: 2.2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #ffffff 30%, #a5b4fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.5px;
+      margin-bottom: 0.5rem;
+      line-height: 1.3;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    .section-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 2.5rem;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+      margin-bottom: 2.5rem;
+      scroll-margin-top: 2rem;
+    }
+
+    h2.section-header {
+      font-size: 1.45rem;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    h2.section-header::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 20px;
+      background: var(--primary);
+      border-radius: 3px;
+      box-shadow: 0 0 10px var(--primary-glow);
+    }
+
+    p {
+      margin-bottom: 1.25rem;
+      color: var(--text-muted);
+      font-size: 0.98rem;
+    }
+
+    p strong {
+      color: #ffffff;
+    }
+
+    .lead-text {
+      font-size: 1.1rem;
+      color: var(--text-main);
+      font-weight: 400;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Role/觀念卡片樣式 */
+    .role-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.25rem;
+      margin: 1.5rem 0;
+    }
+
+    .role-card {
+      background: rgba(255, 255, 255, 0.015);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      border-radius: 16px;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .role-card:hover {
+      background: rgba(255, 255, 255, 0.03);
+      transform: translateY(-2px);
+    }
+
+    .role-name {
+      font-family: var(--font-outfit);
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .role-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .rule-list {
+      list-style: none;
+      margin: 1.5rem 0;
+    }
+
+    .rule-item {
+      position: relative;
+      padding-left: 2rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .rule-item::before {
+      content: "✦";
+      position: absolute;
+      left: 0.5rem;
+      top: 0;
+      color: var(--accent);
+      font-weight: bold;
+    }
+
+    .rule-title {
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 0.25rem;
+    }
+
+    .rule-detail {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* Table styling */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.9rem;
+      margin: 1.5rem 0;
+    }
+
+    tr {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    tr:last-child {
+      border-bottom: none;
+    }
+
+    th {
+      padding: 12px 10px;
+      font-weight: 700;
+      color: #ffffff;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    }
+
+    td {
+      padding: 12px 10px;
+      color: var(--text-muted);
+    }
+
+    code {
+      font-family: 'Outfit', 'Courier New', Courier, monospace;
+      font-size: 0.9rem;
+      color: var(--primary);
+      background: rgba(99, 102, 241, 0.08);
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid rgba(99, 102, 241, 0.15);
+    }
+
+    /* Prompt Box & Cards */
+    .prompt-card {
+      background: rgba(255, 255, 255, 0.015);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      border-radius: 18px;
+      padding: 1.75rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow-main);
+      position: relative;
+    }
+
+    .prompt-copy-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .prompt-copy-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-copy {
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid var(--primary);
+      color: #a5b4fc;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-copy:hover {
+      background: var(--primary);
+      color: white;
+      transform: translateY(-1px);
+    }
+
+    .prompt-box {
+      background: var(--code-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      margin: 1rem 0 0 0;
+      overflow: hidden;
+    }
+
+    .prompt-header {
+      background: rgba(255, 255, 255, 0.02);
+      padding: 8px 14px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .prompt-textarea {
+      width: 100%;
+      height: 180px;
+      background: #070a13;
+      border: none;
+      color: #a5b4fc;
+      font-family: Consolas, Monaco, monospace;
+      font-size: 0.88rem;
+      padding: 12px;
+      border-radius: 0 0 12px 12px;
+      resize: none;
+      outline: none;
+      line-height: 1.6;
+    }
+
+    /* Details Accordion */
+    details {
+      margin-top: 0.75rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.01);
+      overflow: hidden;
+      transition: all 0.2s ease;
+    }
+    
+    details[open] {
+      background: rgba(255, 255, 255, 0.02);
+      border-color: rgba(99, 102, 241, 0.3);
+    }
+    
+    details summary {
+      padding: 10px 14px;
+      font-weight: 600;
+      font-size: 0.88rem;
+      color: var(--primary);
+      cursor: pointer;
+      user-select: none;
+      outline: none;
+      background: rgba(255, 255, 255, 0.01);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    details summary::-webkit-details-marker {
+      display: none;
+    }
+    
+    details summary::after {
+      content: '✦';
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      transition: transform 0.2s;
+    }
+    
+    details[open] summary::after {
+      content: '－';
+      color: var(--accent);
+    }
+    
+    .details-content {
+      padding: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    /* Action Call to Arena Button */
+    .arena-cta {
+      display: block;
+      background: linear-gradient(135deg, #6366f1 0%, #10b981 100%);
+      color: white;
+      text-align: center;
+      padding: 18px;
+      border-radius: 16px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      text-decoration: none;
+      margin: 1.5rem 0;
+      box-shadow: 0 10px 25px rgba(99, 102, 241, 0.25);
+      transition: all 0.25s ease;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .arena-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 35px rgba(99, 102, 241, 0.4);
+    }
+
+    /* File Taxonomy Grid */
+    .file-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    @media (min-width: 768px) {
+      .file-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    .file-card {
+      background: rgba(255, 255, 255, 0.012);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      transition: transform 0.2s ease;
+    }
+    .file-card:hover {
+      transform: translateY(-2px);
+    }
+    .file-card-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .file-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .file-item {
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
+      padding-bottom: 0.75rem;
+    }
+    .file-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    .file-name {
+      font-family: Consolas, Monaco, monospace;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--primary);
+      display: inline-block;
+      margin-bottom: 4px;
+    }
+
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--card-border);
+      padding: 1.25rem;
+      border-radius: 12px;
+      overflow-x: auto;
+      margin: 1.25rem 0;
+    }
+
+    pre code {
+      color: #818cf8;
+      background: none;
+      border: none;
+      padding: 0;
+      font-size: 0.88rem;
+    }
+
+    /* Toast notification */
+    .toast-notification {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: rgba(16, 185, 129, 0.95);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.92rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      z-index: 9999;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toast-notification.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Animations */
+    @keyframes fadeInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes fadeInRight {
+      from {
+        opacity: 0;
+        transform: translateX(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 900px) {
+      .layout-wrapper {
+        flex-direction: column;
+      }
+      aside {
+        width: 100%;
+        position: static;
+        margin-bottom: 1.5rem;
+      }
+      main {
+        width: 100%;
+      }
+    }
+
+    /* Timeline style */
+    .timeline {
+      position: relative;
+      padding-left: 2rem;
+      border-left: 2px solid rgba(255, 255, 255, 0.05);
+      margin: 2rem 0;
+    }
+
+    .timeline-step {
+      position: relative;
+      margin-bottom: 3rem;
+    }
+
+    .timeline-step:last-child {
+      margin-bottom: 0;
+    }
+
+    .step-num {
+      position: absolute;
+      left: calc(-2rem - 17px);
+      top: 0;
+      background: #0b0f19;
+      border: 3px solid var(--primary);
+      color: #ffffff;
+      font-family: var(--font-outfit);
+      font-size: 1rem;
+      font-weight: 700;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 0 10px var(--primary-glow);
+      transition: all 0.3s ease;
+      z-index: 2;
+    }
+
+    .timeline-step:hover .step-num {
+      border-color: var(--accent);
+      transform: scale(1.1);
+    }
+
+    .step-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 0.75rem;
+    }
+
+    .step-title span {
+      color: var(--primary);
+      font-family: var(--font-outfit);
+      font-weight: 700;
+      margin-right: 0.5rem;
+    }
+  </style>
+<style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: rgba(23, 28, 41, 0.75);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --primary: #6366f1; /* Indigo */
+            --primary-glow: rgba(99, 102, 241, 0.15);
+            --accent: #10b981; /* Emerald */
+            --accent-glow: rgba(16, 185, 129, 0.15);
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --font-outfit: 'Outfit', 'Noto Sans TC', sans-serif;
+            --font-sans: 'Noto Sans TC', sans-serif;
+        }
+        body.theme-light {
+            --bg-color: #f8fafc;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(99, 102, 241, 0.12);
+            --primary: #4f46e5;
+            --primary-glow: rgba(79, 70, 229, 0.1);
+            --accent: #0891b2;
+            --accent-glow: rgba(8, 145, 178, 0.1);
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+        }
+</style></head>
+<body>
+    <!-- Floating Accessibility Toolbar -->
+    <div style="position: fixed; top: 1.5rem; right: 1.5rem; z-index: 1000; display: flex; gap: 0.5rem; background: var(--card-bg); border: 1px solid var(--card-border); padding: 0.5rem; border-radius: 30px; backdrop-filter: blur(10px);">
+        <button id="theme-toggle" style="background: none; border: none; color: var(--text-main); cursor: pointer; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; transition: all 0.2s;" title="切換深淺配色">
+            <svg id="sun-icon" style="display: none; width: 18px; height: 18px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <svg id="moon-icon" style="width: 18px; height: 18px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+        </button>
+    </div>
+
+
+  <!-- Watermarks & Metadata -->
+  <div style="display: none; speak: none;" data-author="Falo x Force Cheng" data-date="2026/06/10" data-version="1.02">
+    Copyright © 2026 Falo x Force Cheng. Version 1.02. Educational use only.
+  </div>
+
+  <div class="layout-wrapper">
+    <!-- Sidebar Navigation -->
+    <aside>
+      <div class="brand">
+        <div class="eyebrow">FALO Taiwan Academy</div>
+        <h2>AI 外掛控制革命</h2>
+      </div>
+      <ul class="nav-list">
+        <li class="nav-item"><a href="#evolution-philosophy" class="nav-link active">1. 專案定位與核心觀念</a></li>
+        <li class="nav-item"><a href="#load-deploy" class="nav-link">2. 外掛加載與部署步驟</a></li>
+        <li class="nav-item"><a href="#v1-extension" class="nav-link">3. V1 網頁操作輔助器</a></li>
+        <li class="nav-item"><a href="#ai-agent-prompt" class="nav-link">4. AI Agent 實戰 Prompt</a></li>
+        <li class="nav-item"><a href="#tech-appendix" class="nav-link">5. 附錄：V1 核心源碼</a></li>
+      </ul>
+
+      <div style="border-top: 1px solid var(--card-border); margin: 1.5rem 0; padding-top: 1.5rem;">
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-bottom: 10px; letter-spacing: 1.5px;">🎯 實作與測試連結</div>
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px;">
+          <li><a href="erp.html" target="_blank" style="font-size: 0.9rem; text-decoration: none; color: var(--primary); display: flex; align-items: center; gap: 6px; font-weight: 600;">🧪 實體外掛測試頁 ➔</a></li>
+        </ul>
+      </div>
+
+      <div style="border-top: 1px solid var(--card-border); padding-top: 1rem; text-align: center;">
+        <p style="font-size: 0.72rem; color: var(--text-muted); line-height: 1.5; margin: 0;">
+          © 2026 <strong>Falo x Force Cheng</strong><br>
+          <span style="font-size: 0.68rem; opacity: 0.8;">Released: 2026/06/10</span>
+        </p>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main>
+      <header>
+        <div class="eyebrow">Chrome Extension DOM Automation</div>
+        <h1>AI 時代的外掛控制實戰：<br>Chrome Extension 填單助手</h1>
+        <div class="subtitle" style="margin-top: 0.5rem;">本實戰專案專為初學者設計。您將學習如何開發一個輕量級的 Chrome 側邊欄外掛，實現網頁 DOM 節點的讀取與自動填寫，直觀掌握擴充功能與網頁之間的通訊與控制機制。</div>
+      </header>
+
+      <!-- Section 1 -->
+      <section id="evolution-philosophy" class="section-card">
+        <h2 class="section-header">1. 專案定位與核心觀念</h2>
+        <p class="lead-text">
+          傳統的網頁自動化或表單填寫常需依賴複雜的大型 RPA 工具。但現在，透過開發一個輕量級的 Chrome 外掛，即可利用簡單的 JS DOM 操作與通訊協定，實現靈活且強大的網頁填單助手。
+        </p>
+        <p>
+          在進入外掛控制前，我們在課堂開頭先下載並安裝了 <a href="https://falo-taiwan.github.io/ig/" target="_blank" style="color: var(--primary); font-weight: 700; text-decoration: underline;">FALO Instagram Video Enhancer (v1.0.1)</a> 擴充功能，體驗了外掛如何注入程式碼。接著，我們將延伸此概念：如果我們是要「控制網頁、幫忙進行 ERP 表單自動化」呢？本案將帶您透過實作，直觀理解 Chrome 外掛與網頁 DOM 的通訊控制。
+        </p>
+
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--primary); text-align: center; margin-top: 2rem; margin-bottom: 1rem;">外掛雙向控制核心觀念剖析</h3>
+        <div class="role-grid">
+          <div class="role-card" style="border-top: 3px solid var(--accent); background: var(--accent-glow);">
+            <div class="role-name" style="color: var(--accent);">寫入網頁 (Write)</div>
+            <div class="role-desc">
+              外掛側邊欄的 JavaScript 向 active tab 發送指令與數據，網頁端的 <code>content.js</code> 接收到後，透過尋找 CSS Selector 將數值填入對應的 DOM 輸入框中。
+            </div>
+          </div>
+          
+          <div class="role-card" style="border-top: 3px solid var(--primary); background: var(--primary-glow);">
+            <div class="role-name" style="color: var(--primary);">擷取資料 (Read)</div>
+            <div class="role-desc">
+              當需要讀取網頁狀態時，外掛發送擷取訊息，注入網頁的 <code>content.js</code> 讀取指定 DOM 欄位的 value，並透過 sendResponse 跨視窗回傳填入外掛控制項。
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2 -->
+      <section id="load-deploy" class="section-card">
+        <h2 class="section-header">2. Chrome 外掛加載與部署步驟</h2>
+        <p class="lead-text">
+          下載並解壓縮外掛資源包後，您可以透過 Chrome 的開發者模式，將外掛加載至瀏覽器中運行。以下是手把手的部署指南：
+        </p>
+
+        <div class="timeline">
+          <!-- Step 1 -->
+          <div class="timeline-step">
+            <div class="step-num">1</div>
+            <div class="step-title"><span>Step 01</span>開啟開發者模式與載入未封裝項目</div>
+            <p style="margin-bottom: 1rem;">
+              在 Chrome 瀏覽器中開啟新分頁，在網址列輸入 <code>chrome://extensions/</code> 進入擴充功能管理頁面。開啟右上角的<strong>「開發者模式 (Developer mode)」</strong>開關，接著點擊左上角的<strong>「載入未封裝項目 (Load unpacked)」</strong>按鈕。
+            </p>
+            <div style="background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 8px; overflow: hidden; margin-bottom: 2rem; max-width: 1000px;">
+              <img src="./images/deploy_step1.png" alt="開啟開發者模式與載入按鈕" style="width: 100%; height: auto; border-radius: 8px; display: block;">
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="timeline-step">
+            <div class="step-num">2</div>
+            <div class="step-title"><span>Step 02</span>選取外掛專案資料夾</div>
+            <p style="margin-bottom: 1rem;">
+              在彈出的檔案選擇對話框中，定位並選取解壓後的 <strong><code>chrome-extension</code></strong> 資料夾（此目錄必須直接包含 <code>manifest.json</code> 核心設定檔），然後點擊右下角的<strong>「選擇 (Select)」</strong>按鈕載入。
+            </p>
+            <div style="background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 8px; overflow: hidden; margin-bottom: 2rem; max-width: 1000px;">
+              <img src="./images/deploy_step2.png" alt="選擇專案目錄" style="width: 100%; height: auto; border-radius: 8px; display: block;">
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="timeline-step">
+            <div class="step-num">3</div>
+            <div class="step-title"><span>Step 03</span>釘選/固定外掛圖示</div>
+            <p style="margin-bottom: 1rem;">
+              點擊 Chrome 瀏覽器工具列右上角拼圖形狀的<strong>「擴充功能」</strong>選單圖示，在選單中找到<strong>「銀河 ERP 填單助手」</strong>，點擊其右側的<strong>「固定 (Pin)」</strong>圖示，使外掛常駐在工具列上。
+            </p>
+            <div style="background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 8px; overflow: hidden; margin-bottom: 2rem; max-width: 1000px;">
+              <img src="./images/deploy_step3.png" alt="固定外掛" style="width: 100%; height: auto; border-radius: 8px; display: block;">
+            </div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="timeline-step">
+            <div class="step-num">4</div>
+            <div class="step-title"><span>Step 04</span>開啟側邊欄並進行遙控填單</div>
+            <p style="margin-bottom: 1rem;">
+              打開實作的測試網頁（例如 <code>erp.html</code>），點擊工具列上的「銀河 ERP 填單助手」圖示，即可在右側滑出功能完整的<strong>「銀河 ERP 填單助手」側邊欄 (Side Panel)</strong>。您此時即可點擊「隨機產生資料」、「一鍵全填入」等遙控按鈕，進行自動化填表測試！
+            </p>
+            <div style="background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 8px; overflow: hidden; max-width: 1000px;">
+              <img src="./images/deploy_step4.png" alt="開啟側邊欄測試" style="width: 100%; height: auto; border-radius: 8px; display: block;">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3 -->
+      <section id="v1-extension" class="section-card">
+        <h2 class="section-header">3. V1 網頁操作輔助器 (ERP 表單輔助器)</h2>
+        <p>
+          我們實作的第一個階段是 **ERP 表單輔助器**。當我們載入一個 Chrome Extension 到網頁時，外掛主要進行雙向資料控制：
+        </p>
+        <ul class="rule-list">
+          <li class="rule-item">
+            <div class="rule-title">讀取網頁 (Read DOM)</div>
+            <div class="rule-detail">檢測頁面上的輸入欄位與系統狀態，並讀取 DOM 節點的 value 值回傳至側邊欄中。</div>
+          </li>
+          <li class="rule-item">
+            <div class="rule-title">修改網頁 (Write DOM)</div>
+            <div class="rule-detail">在外掛側邊欄發送寫入指令，將數值填寫進對應的網頁 DOM 輸入框中，填值成功後伴隨亮黃色的填值閃爍視覺反饋。</div>
+          </li>
+        </ul>
+        <p>
+          這代表 Extension 可以完全控制網頁，但是它有一個<strong>技術特性與維護要點 (需注意事項)</strong>：<strong>外掛高度依賴網頁的 DOM 結構。只要前端代碼重構、CSS Selector 改變，外掛對應的定位邏輯就需要同步維護與更新，否則將會找不到目標元素而失效。</strong>
+        </p>
+
+        <!-- Advanced Showcase Card -->
+        <div style="background: rgba(99, 102, 241, 0.05); border: 1px solid rgba(99, 102, 241, 0.2); border-left: 4px solid var(--primary); padding: 18px 20px; border-radius: 12px; margin: 25px 0; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);">
+          💡 <strong>進階二創與模仿學習 (課外高手專區)：</strong><br>
+          如果您已經掌握了主線的 ERP 填單助手開發，並想學習如何觀察市面上的產品、利用 AI Agent 進行「模仿、改良、與二創」來開發更具互動性的外掛，我們非常推薦您課後參考延伸案例：
+          <a href="https://falo-taiwan.github.io/ig/" target="_blank" style="color: var(--primary); font-weight: 700; text-decoration: underline; margin-left: 5px;">
+            👉 模仿高手的外掛案例：FALO Instagram Video Enhancer v1.0.1 ➔
+          </a>
+          <div style="font-size: 0.88rem; color: var(--text-muted); margin-top: 8px; line-height: 1.5;">
+            該案例包含了「懸浮遙控器、OLED 狀態顯示、畫面上 HUD 操作回饋、自訂音量控制」等進階 DOM 注入與事件控制黑科技，是極佳的 Vibe Coding 延伸教材。
+          </div>
+        </div>
+
+        <div style="background: rgba(16, 185, 129, 0.02); border: 1px solid rgba(16, 185, 129, 0.15); border-radius: 14px; padding: 20px; margin: 24px 0; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);">
+          <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--accent); margin: 0 0 12px 0;">📡 實體測試網頁 DOM 欄位規格對齊 (DOM Selector Specifications)</h3>
+          <p style="font-size: 0.92rem; margin-bottom: 15px; color: var(--text-muted); line-height: 1.6;">
+            外掛之所以能精準控制網頁填單，是因為外掛開發與網頁結構之間遵守同一個 **DOM 規範契約**。當外掛被載入至我們的 <a href="erp.html" target="_blank" style="color: var(--primary); font-weight: 700; text-decoration: underline;">實體外掛測試頁 (erp.html)</a> 後，對齊的 DOM 規格定義如下：
+          </p>
+          
+          <div style="overflow-x: auto;">
+            <table>
+              <thead>
+                <tr>
+                  <th>元件名稱</th>
+                  <th>CSS Selector (ID)</th>
+                  <th>資料型態與說明</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="font-weight: 700; color: #ffffff;">採購單號輸入框</td>
+                  <td><code>#po-number</code></td>
+                  <td>String 類型的文字輸入框</td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 700; color: #ffffff;">產品代碼輸入框</td>
+                  <td><code>#product-code</code></td>
+                  <td>String 類型的文字輸入框</td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 700; color: #ffffff;">進貨部門選單</td>
+                  <td><code>#dept-code</code></td>
+                  <td>select 元素，選項包含 PUR, WH, QC, RD</td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 700; color: #ffffff;">進貨數量輸入框</td>
+                  <td><code>#received-qty</code></td>
+                  <td>Number 類型的數值輸入框</td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 700; color: #ffffff;">產品效期輸入框</td>
+                  <td><code>#expiry-date</code></td>
+                  <td>Date 類型的日期選擇輸入框</td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 700; color: #ffffff;">系統流水序號</td>
+                  <td><code>#system-serial-no</code></td>
+                  <td>入庫成功後動態生成的序號標記元件</td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 700; color: #ffffff;">檢核表單按鈕</td>
+                  <td><code>#btn-check-form</code></td>
+                  <td>主網頁上驗證欄位格式的按鈕</td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 700; color: #ffffff;">確認入庫按鈕</td>
+                  <td><code>#btn-submit-entry</code></td>
+                  <td>主網頁上正式寫入資料的入庫按鈕</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--accent); margin: 25px 0 12px 0; border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 20px; text-align: center;">🔌 Chrome 擴充功能元件劃分與架構剖析</h3>
+          <div class="file-grid">
+            <div class="file-card" style="border-top: 4px solid var(--accent); background: rgba(16, 185, 129, 0.02);">
+              <div class="file-card-title" style="color: var(--accent);">🛡️ Chrome 外掛必備三劍客（必備黨）</div>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px; line-height: 1.5;">
+                這是 Chrome 外掛得以加載並運行的**最基本身分與核心權限檔案**。
+              </p>
+              <ul class="file-list">
+                <li class="file-item">
+                  <span class="file-name" style="color: var(--accent);">manifest.json</span>
+                  <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">
+                    外掛的主設定檔。聲明外掛名稱、版本、權限（如 activeTab、sidePanel）、背景 Service Worker 以及要注入的內容腳本。
+                  </div>
+                </li>
+                <li class="file-item">
+                  <span class="file-name" style="color: var(--accent);">background.js</span>
+                  <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">
+                    背景 Service Worker 腳本。負責調度，例如點擊外掛 Icon 的事件時開啟右側 Side Panel 面板。
+                  </div>
+                </li>
+                <li class="file-item">
+                  <span class="file-name" style="color: var(--accent);">content.js</span>
+                  <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">
+                    直接注入到目標網頁中執行的 JavaScript。擁有直接讀寫網頁 DOM 節點的權力，負責填值與派發事件。
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+            <div class="file-card" style="border-top: 4px solid var(--primary); background: rgba(99, 102, 241, 0.02);">
+              <div class="file-card-title" style="color: var(--primary);">🔌 本專案專屬補充說明（額外組件）</div>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px; line-height: 1.5;">
+                負責呈現介面與實作高級輔助功能。
+              </p>
+              <ul class="file-list">
+                <li class="file-item">
+                  <span class="file-name">sidepanel.html & sidepanel.js</span>
+                  <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">
+                    外掛側邊欄的面板頁面與控制腳本。運行在獨立的 Extension 宇宙中，負責 UI 互動與數據備份，並與 content.js 進行通訊。
+                  </div>
+                </li>
+                <li class="file-item">
+                  <span class="file-name">content.css</span>
+                  <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">
+                    隨 content.js 一起注入到目標網頁的 CSS 樣式。專門用來宣告閃爍的 CSS 動畫。
+                  </div>
+                </li>
+                <li class="file-item">
+                  <span class="file-name">erp.html (外掛演練靶機)</span>
+                  <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">
+                    **本次課程的實體測試網頁**。模擬企業 ERP 表單，外掛即在此網頁上進行讀寫控制演練。
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div style="background: rgba(99, 102, 241, 0.03); border: 1px solid rgba(99, 102, 241, 0.15); border-radius: 16px; padding: 24px; margin-top: 20px;">
+            <h4 style="font-size: 1.05rem; font-weight: 700; color: #a5b4fc; margin-bottom: 20px; text-align: center;">📡 跨宇宙雙向通訊 (Message Passing) 架構</h4>
+            
+            <div style="display: flex; flex-direction: column; gap: 20px; align-items: center; width: 100%;">
+              
+              <!-- Upper Blocks (Side Panel & Content Script) -->
+              <div style="display: flex; justify-content: space-between; width: 100%; gap: 15px; flex-wrap: wrap;">
+                
+                <!-- Side Panel Card -->
+                <div style="flex: 1; min-width: 250px; background: rgba(99, 102, 241, 0.05); border: 1px solid rgba(99, 102, 241, 0.2); border-radius: 12px; padding: 15px; text-align: center;">
+                  <div style="font-weight: 700; color: #ffffff; margin-bottom: 6px;">外掛側邊欄 (Side Panel 宇宙)</div>
+                  <div style="font-family: monospace; font-size: 0.8rem; color: #a5b4fc; margin-bottom: 8px;">[sidepanel.html / sidepanel.js]</div>
+                  <div style="font-size: 0.85rem; color: var(--text-muted);">負責管理外掛 UI、隨機生成資料與 CSV 匯出匯入。</div>
+                </div>
+
+                <!-- Content Script Card -->
+                <div style="flex: 1; min-width: 250px; background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 12px; padding: 15px; text-align: center;">
+                  <div style="font-weight: 700; color: #ffffff; margin-bottom: 6px;">目標網頁注入 (Content 宇宙)</div>
+                  <div style="font-family: monospace; font-size: 0.8rem; color: #10b981; margin-bottom: 8px;">[content.js]</div>
+                  <div style="font-size: 0.85rem; color: var(--text-muted);">直接注入網頁內，有權讀寫 DOM 並派發 input/change 事件。</div>
+                </div>
+
+              </div>
+
+              <!-- Communication Arrow (Middle) -->
+              <div style="width: 100%; text-align: center; background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,255,255,0.1); padding: 10px; border-radius: 8px;">
+                <div style="font-size: 0.85rem; font-weight: 700; color: #ffffff; margin-bottom: 4px;">📡 雙向 Message Passing 通訊機制</div>
+                <div style="font-family: monospace; font-size: 0.82rem; color: #a5b4fc; margin-bottom: 2px;">
+                  ❶ 發送指令：chrome.tabs.sendMessage() ➔
+                </div>
+                <div style="font-family: monospace; font-size: 0.82rem; color: #10b981;">
+                  ◄ ❷ 回傳結果：sendResponse() (回傳流水號/欄位值)
+                </div>
+              </div>
+
+              <!-- Lower Block (ERP Web Page Target) -->
+              <div style="width: 100%; max-width: 500px; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 12px; padding: 15px; text-align: center;">
+                <div style="font-weight: 700; color: #ffffff; margin-bottom: 4px;">🎯 實體 ERP 測試網頁 (erp.html)</div>
+                <div style="font-size: 0.85rem; color: var(--text-muted);">
+                  包含 <code>#po-number</code>, <code>#btn-check-form</code> 等 DOM 輸入框與按鈕，是外掛最終操作與讀寫的對象。
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4 -->
+      <section id="ai-agent-prompt" class="section-card">
+        <h2 class="section-header">4. AI Agent 實戰 Prompt 指南</h2>
+        <p>
+          本實戰引導學員從最簡單的「單欄讀寫」開始，逐步擴展至「全表單批次操作與清空」，最終躍升至具備「CSV 備份與遠端遙控」的完整自動化外掛。
+        </p>
+
+        <!-- Step 1 Card -->
+        <div class="prompt-card">
+          <div class="prompt-copy-header">
+            <div class="prompt-copy-title">
+              <span style="color: var(--accent);">🎯 Step 1：單欄雙向讀寫控制 (小白入門)</span>
+            </div>
+          </div>
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 12px;">
+            <strong>功能目標</strong>：最簡單的一進一出，側邊欄僅包含一個「採購單號」輸入欄位以及對應的填入與擷取按鈕。
+          </p>
+          
+          <div style="background: rgba(255,255,255,0.01); border: 1px solid rgba(255, 255, 255, 0.04); padding: 12px 16px; border-radius: 8px; margin-bottom: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <div style="font-size: 0.82rem; font-weight: 700; color: #a78bfa;">💬 一般小白簡單版 Prompt (直接發送給 AI)</div>
+              <button class="btn-copy" id="copySimpleBtn1">
+                <svg width="10" height="10" fill="currentColor" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                複製
+              </button>
+            </div>
+            <div style="font-size: 0.88rem; color: var(--text-main); font-family: 'Noto Sans TC'; line-height: 1.6;" id="simpleText1">我有一個線上 ERP 測試網頁：../chrome_extension/index.htmlerp.html。我想寫一個 Chrome 瀏覽器外掛，外掛打開後在右側滑出側邊欄，側邊欄有一個填「採購單號」的格子。點一下格子旁邊的「填入」按鈕，網頁上的採購單號欄位（它的 ID 是 #po-number）就會自動填好；如果網頁上已經有寫字，我點「擷取」按鈕，Chrome 外掛就能把我網頁上寫的字抓回來外掛顯示。請幫我寫出外掛程式碼。</div>
+          </div>
+
+          <details>
+            <summary>⚡ 點此展開 ── 專家指點版完整 Prompt (精確代碼生成)</summary>
+            <div class="details-content" style="padding: 10px 0 0 0;">
+              <div class="prompt-box">
+                <div class="prompt-header">
+                  <span>💬 複製以下結構化提示詞貼給 AI</span>
+                  <button class="btn-copy" id="copyPromptBtn1">
+                    <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                    複製 Prompt
+                  </button>
+                </div>
+                <textarea class="prompt-textarea" readonly id="promptText1">我有一個線上 ERP 測試網頁：
+../chrome_extension/index.htmlerp.html
+
+請幫我開發一個 Chrome 瀏覽器擴充功能。功能需求與技術規範如下：
+1. 使用 Manifest V3 規格，點擊外掛 Icon 時在右側開啟側邊欄（Side Panel）介面。
+2. 側邊欄內提供一個「採購單號」的文字輸入框，旁邊配有獨立的「填入」與「擷取」按鈕。
+3. 尋找與定位網頁中「採購單號」輸入框的 CSS Selector（對應元素為 id="po-number"）。
+4. 當點擊「填入」時，側邊欄發送指令將值寫入網頁對應的輸入框。為了相容 Vue/React 等前端框架，填值後必須主動派發原生的 input 與 change 事件以同步框架狀態。
+5. 當點擊「擷取」時，讀取網頁中採購單號輸入框的當前值，並將其回傳填入外掛側邊欄的輸入框中。
+
+請為我規劃合適的檔案結構並生成完整程式碼，附上繁體中文逐行註解。</textarea>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <!-- Step 2 Card -->
+        <div class="prompt-card">
+          <div class="prompt-copy-header">
+            <div class="prompt-copy-title">
+              <span style="color: var(--accent);">🎯 Step 2：全部欄位單獨讀寫 ＋ 一鍵全填與清空 (多點控制)</span>
+            </div>
+          </div>
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 12px;">
+            <strong>功能目標</strong>：直接對齊真實 ERP 網頁五個欄位（含下拉選單），各欄具備獨立讀寫，並有全局一鍵寫入、擷取與清空重置。
+          </p>
+          
+          <div style="background: rgba(255,255,255,0.01); border: 1px solid rgba(255, 255, 255, 0.04); padding: 12px 16px; border-radius: 8px; margin-bottom: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <div style="font-size: 0.82rem; font-weight: 700; color: #a78bfa;">💬 一般小白簡單版 Prompt (直接發送給 AI)</div>
+              <button class="btn-copy" id="copySimpleBtn2">
+                <svg width="10" height="10" fill="currentColor" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                複製
+              </button>
+            </div>
+            <div style="font-size: 0.88rem; color: var(--text-main); font-family: 'Noto Sans TC'; line-height: 1.6;" id="simpleText2">我有一個線上 ERP 測試網頁：../chrome_extension/index.htmlerp.html。我想開發一個 Chrome 瀏覽器側邊欄外掛，外掛打開後有 5 個輸入欄位，分別是「採購單號」（#po-number）、「產品代碼」（#product-code）、「進貨數量」（#received-qty）、「產品效期」（#expiry-date）和「進貨部門」下拉選單（#dept-code，部門選項包含 PUR, WH, QC, RD）。每個欄位旁邊都要有獨立的「填入」與「擷取」按鈕。另外，側邊欄底部要提供「一鍵全填入」與「清空表單」（將網頁與外掛的 5 個欄位值全部清空）按鈕。請幫我寫出完整的 Chrome 外掛程式碼與檔案結構。</div>
+          </div>
+
+          <details>
+            <summary>⚡ 點此展開 ── 專家指點版完整 Prompt (精確代碼生成)</summary>
+            <div class="details-content" style="padding: 10px 0 0 0;">
+              <div class="prompt-box">
+                <div class="prompt-header">
+                  <span>💬 複製以下結構化提示詞貼給 AI</span>
+                  <button class="btn-copy" id="copyPromptBtn2">
+                    <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                    複製 Prompt
+                  </button>
+                </div>
+                <textarea class="prompt-textarea" readonly id="promptText2">我有一個線上 ERP 測試網頁：
+../chrome_extension/index.htmlerp.html
+
+請幫我開發一個 Chrome 瀏覽器外掛。功能需求與技術規範如下：
+1. 使用 Manifest V3 規格，點擊外掛 Icon 時在右側開啟側邊欄（Side Panel）介面。
+2. 側邊欄內提供 5 個輸入控制項（採購單號：#po-number、產品代碼：#product-code、進貨數量：#received-qty、產品效期：#expiry-date、進貨部門下拉選單：#dept-code），每個控制項旁邊配有獨立的「填入」與「擷取」按鈕。
+3. 側邊欄底部提供三個全局按鈕：「一鍵全填入」、「一鍵全擷取」與「清空表單」。
+4. 填值與清空規範：向網頁填值時，必須派遣 input/change 事件以相容 React/Vue 框架，並對被填入的網頁元素進行短暫黃色背景閃爍反饋（CSS 動畫需於 content.css 處理）。點擊「清空表單」時，同步清空網頁與側邊欄的 5 個欄位值。
+5. 跨空間通訊：使用 Message Passing 在 sidepanel.js 與注入網頁的 content.js 之間進行訊息傳遞。
+
+請生成完整程式碼與檔案結構，並附上繁體中文逐行註解。</textarea>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <!-- Step 3 Card -->
+        <div class="prompt-card">
+          <div class="prompt-copy-header">
+            <div class="prompt-copy-title">
+              <span style="color: var(--accent);">🎯 Step 3：完整自動化與資料備份 (V1.5 完整版)</span>
+            </div>
+          </div>
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 12px;">
+            <strong>功能目標</strong>：加入隨機產生資料（配合台北時間）、CSV 資料匯出/匯入備份還原，以及遠端遙控檢核、入庫、流水號捕捉與自動下載報告。
+          </p>
+          
+          <div style="background: rgba(255,255,255,0.01); border: 1px solid rgba(255, 255, 255, 0.04); padding: 12px 16px; border-radius: 8px; margin-bottom: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <div style="font-size: 0.82rem; font-weight: 700; color: #a78bfa;">💬 一般小白簡單版 Prompt (直接發送給 AI)</div>
+              <button class="btn-copy" id="copySimpleBtn3">
+                <svg width="10" height="10" fill="currentColor" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                複製
+              </button>
+            </div>
+            <div style="font-size: 0.88rem; color: var(--text-main); font-family: 'Noto Sans TC'; line-height: 1.6;" id="simpleText3">我有一個線上 ERP 測試網頁：../chrome_extension/index.htmlerp.html。我想開發一個功能完整的 Chrome 瀏覽器外掛，外掛打開後在右側滑出側邊欄。側邊欄上包含 5 個 ERP 欄位（採購單號：#po-number、產品代碼：#product-code、進貨數量：#received-qty、產品效期：#expiry-date、進貨部門下拉選單：#dept-code）。此外，請為外掛加入以下功能：1. 點「隨機產生資料」按鈕，能在外掛欄位產生測試值（單號為 PO-2026-開頭，效期為今天台北時間）。2. 點「匯出 CSV」和「匯入 CSV」按鈕，可備份或還原 5 欄資料。3. 點「檢核表單」與「確認入庫」按鈕，可遙控點擊網頁對應按鈕（#btn-check-form, #btn-submit-entry）。4. 網頁入庫成功後，抓取網頁產生的流水號（#system-serial-no），自動幫我下載一個 txt 的入庫報告（檔名含時間戳記）。請幫我寫出完整的 Chrome 外掛程式碼。</div>
+          </div>
+
+          <details>
+            <summary>⚡ 點此展開 ── 專家指點版完整 Prompt (精確代碼生成)</summary>
+            <div class="details-content" style="padding: 10px 0 0 0;">
+              <div class="prompt-box">
+                <div class="prompt-header">
+                  <span>💬 複製以下結構化提示詞貼給 AI</span>
+                  <button class="btn-copy" id="copyPromptBtn3">
+                    <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                    複製 Prompt
+                  </button>
+                </div>
+                <textarea class="prompt-textarea" readonly id="promptText3">我有一個線上 ERP 測試網頁：
+../chrome_extension/index.htmlerp.html
+
+請幫我開發一個 Chrome 瀏覽器外掛。功能需求與技術規範如下：
+1. 使用 Manifest V3 規格，點擊外掛 Icon 時在右側開啟側邊欄（Side Panel）介面。
+2. 側邊欄內提供 5 個輸入控制項（採購單號：#po-number、產品代碼：#product-code、進貨數量：#received-qty、產品效期：#expiry-date、進貨部門下拉選單：#dept-code），每個控制項旁配有獨立的「填入」與「擷取」按鈕，底部有一鍵全填、一鍵全擷與清空表單按鈕。
+3. 新增「隨機產生資料」按鈕：於側邊欄本地生成測試數值（採購單號以 PO-2026- 開頭，數量在 10-500，效期設為台北時間今天），僅填入側邊欄不自動寫入網頁。
+4. 新增「匯出 CSV」與「匯入 CSV」按鈕：支持將外掛資料下載備份（加入 UTF-8 BOM \uFEFF）或上傳 CSV 還原至外掛控制項。
+5. 新增「檢核表單」與「確認入庫」按鈕：通知 content.js 遠端遙控點擊網頁上的檢核與入庫按鈕（#btn-check-form 與 #btn-submit-entry）。
+6. 實作流水號捕捉與報告下載：主網頁入庫成功後，content.js 讀取網頁生成的系統流水序號（#system-serial-no）回傳側邊欄，側邊欄接收後，自動生成含台北時間戳記的入庫報告 (.txt) 供瀏覽器自動下載。
+
+請為我生成完整的專案程式碼與檔案結構，附上繁體中文逐行註解。</textarea>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <!-- Action Buttons to Test Form and Zip Download -->
+        <div style="display: grid; grid-template-columns: 1fr; gap: 20px; margin-top: 30px;">
+          <a href="erp.html" target="_blank" class="arena-cta" style="margin: 0; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); box-shadow: 0 10px 30px rgba(2, 132, 199, 0.25);">
+            🧪 進入 ── 實體外掛測試網頁 (erp.html) ➔
+            <div style="font-size:0.82rem; font-weight:400; margin-top:6px; opacity:0.85;">
+              極簡乾淨的 ERP 採購單表單，學員安裝實體外掛後在此進行真實的 DOM 填單互動
+            </div>
+          </a>
+
+          <a href="chrome_extension.zip" class="arena-cta" style="margin: 0; background: linear-gradient(135deg, #ec4899 0%, #be185d 100%); box-shadow: 0 10px 30px rgba(236, 72, 153, 0.25);">
+            📦 下載 ── Chrome 實體外掛資源包 (chrome_extension.zip) ➔
+            <div style="font-size:0.82rem; font-weight:400; margin-top:6px; opacity:0.85;">
+              下載 SkyLine Class 02 專屬開發的外掛 V1.5 實體包，解壓縮後即可在 Chrome 中透過開發者模式載入
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <!-- Section 5 -->
+      <section id="tech-appendix" class="section-card">
+        <h2 class="section-header">5. 附錄：V1 網頁外掛核心程式碼剖析</h2>
+        <p>
+          此處列出 V1 階段注入網頁的 Content Script 核心邏輯。學習者可以從代碼中看出「外掛如何透過遍歷 DOM 來理解網頁結構」：
+        </p>
+        <pre><code>// 遍歷 DOM，篩選頁面上所有的可輸入元素
+function getFormFields() {
+  return Array.from(
+    document.querySelectorAll(
+      'input:not([type="submit"]):not([type="hidden"]), select, textarea'
+    )
+  );
+}
+
+// 根據 DOM 階層與 ID/Name 屬性，計算出唯一的 CSS Selector 路徑
+function getCSSSelector(el) {
+  if (el.id) return `#${el.id}`;
+  if (el.name) return `${el.tagName.toLowerCase()}[name="${el.name}"]`;
+  
+  // 向上遞歸父層
+  const parent = el.parentElement;
+  if (parent && parent.id) {
+    return `#${parent.id} > ${el.tagName.toLowerCase()}`;
+  }
+  return el.tagName.toLowerCase();
+}</code></pre>
+      </section>
+    </main>
+  </div>
+
+  <!-- Toast Notification element -->
+  <div class="toast-notification" id="toast">✓ 已複製到剪貼簿！</div>
+
+  <script>
+    // TOC Active Scroll Spy
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('section');
+
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        if (window.scrollY >= sectionTop - 120) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${current}`) {
+          link.classList.add('active');
+        }
+      });
+    });
+
+    // Copy Prompt Logic Helper
+    const toast = document.getElementById('toast');
+    function setupCopyBtn(btnId, targetId) {
+      const btn = document.getElementById(btnId);
+      const target = document.getElementById(targetId);
+      if (btn && target) {
+        btn.addEventListener('click', () => {
+          let text = '';
+          if (target.tagName === 'TEXTAREA' || target.tagName === 'INPUT') {
+            target.select();
+            text = target.value;
+          } else {
+            text = target.innerText || target.textContent;
+          }
+          navigator.clipboard.writeText(text).then(() => {
+            toast.classList.add('show');
+            setTimeout(() => {
+              toast.classList.remove('show');
+            }, 2500);
+          }).catch(err => {
+            console.error('無法複製文字: ', err);
+          });
+        });
+      }
+    }
+    setupCopyBtn('copyPromptBtn1', 'promptText1');
+    setupCopyBtn('copyPromptBtn2', 'promptText2');
+    setupCopyBtn('copyPromptBtn3', 'promptText3');
+    setupCopyBtn('copySimpleBtn1', 'simpleText1');
+    setupCopyBtn('copySimpleBtn2', 'simpleText2');
+    setupCopyBtn('copySimpleBtn3', 'simpleText3');
+  </script>
+</body>
+</html>
