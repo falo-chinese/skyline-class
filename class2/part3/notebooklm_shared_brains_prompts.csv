@@ -16,19 +16,13 @@ notebooklm-vendor-compliance,Project2_協力商資歷與合規庫,篩選完全�
 請參閱知識庫《01_協力廠商合規矩陣與評估表.md》與《03_專案經理證照規範與備降機制.md》：
 1. 篩選出哪幾家協力商符合「單案實績 300 萬以上」的合規門檻？
 2. 在符合門檻的廠商中，他們的 SLA 響應時間分別是多少？是否符合 2 小時限制？如果不符，有何升級 or 調整方案？
-3. 請為我推薦最優的協力商組合，並列出推薦的具體數據依據（實績金額、SLA 承諾、合作評分狀態）。","採購, 廠商篩選, SLA",stable,符合門檻的外協廠商與最佳組裝推薦方案,"篩選金額是否符合300萬門檻
+3. 請為我推薦最優的協力商組合，並列出推薦的具體數據依據（實績金額、SLA 承諾、合作評分狀態）。","採購, 廠商篩选, SLA",stable,符合門檻的外協廠商與最佳組裝推薦方案,"篩選金額是否符合300萬門檻
 SLA是否完全符合2小時以內",NotebookLM,採購合規經理,Class 02,v1.0,Skyline Master Guide
 notebooklm-vendor-compliance,Project2_協力商資歷與合規庫,篩選完全合規的外協廠商與綠色建材公式加分試算，適用於 NotebookLM 合規大腦。,green-material-calculation,綠色建材佔比與環保加分試算,根據綠色建材指南，試算木作搭建工程以爭取技術標的額外評審加分。,"你現在是Skyline (Skyline) 綠建材評估專家。我想針對本次搭建工程進行綠建材佔比與加分試算。
 請參閱《02_綠色環保建材認證與計算標準.md》，找出大同空間工程的綠色建材認證資料。
 1. 大同空間工程擁有哪項綠建材認證？其宣告的環保材料比例是多少？
 2. 請寫出綠色建材百分比的計算公式，並說明如何利用大同的數據在建議書中呈現，以爭取大於 30% 以上的環保加分。","綠建材, 加分試算, 環保認證",stable,綠建材佔比計算過程與加分撰寫建議,"公式套用是否正確無誤
 試算比例是否大於30%加分門檻",NotebookLM,綠建材評估專家,Class 02,v1.0,Skyline Master Guide
-notebooklm-lessons-learned,Project3_專案執行經驗對策大腦,彙整歷史 lessons learned 意外事件與應急排障 SOP，適用於 NotebookLM 經驗大腦。,pet-event-exploratory-check,寵物嘉年華現場意外防坑檢索,以探索式問法引導大腦主動挖掘寵物活動的歷史安全與秩序缺失。,我們即將舉辦大型的寵物嘉年華，請幫我檢索歷史專案經驗，在寵物的安全、現場衛生或秩序管理上，曾經出過哪些意外狀況？強烈建議條列說明當時分別是如何處置的？,"現場安全, 寵物活動, 防坑檢索",stable,寵物現場歷史安全與秩序意外及當時處置紀錄,"提問是否為口語探索式
-是否包含安全/衛生/秩序三大面向",NotebookLM,專案經理,Class 02,v1.0,Skyline Master Guide
-notebooklm-lessons-learned,Project3_專案執行經驗對策大腦,彙整歷史 lessons learned 意外事件與應急排障 SOP，適用於 NotebookLM 經驗大腦。,vendor-quick-audit,特定廠商履約缺失快速查核,秒查特定外協廠商在專案中的歷史表現。,請檢索所有 PM 經驗回報，列出與【名音】（或特定外協廠商）相關的缺失紀錄與當時 PM 的解決對策。,"廠商稽核, 歷史缺失, 名音音響",stable,名音音響歷史履約缺失紀錄與PM解決對策,"是否篩選特定外協廠商
-是否附帶PM當時的對策",NotebookLM,專案經理,Class 02,v1.0,Skyline Master Guide
-notebooklm-lessons-learned,Project3_專案執行經驗對策大腦,彙整歷史 lessons learned 意外事件與應急排障 SOP，適用於 NotebookLM 經驗大腦。,admin-pitfall-avoidance,財務核銷與行政防坑點檢,在專案啟動前快速稽核常見的核銷與行政文宣痛點。,請檢索歷史回報，歸納所有與「財務核銷」與「文宣印刷」相關的常見痛點與預防措施。,"財務核銷, 文宣印刷, 行政防坑",stable,財務核銷與文宣印刷常見痛點及預防措施,"是否明確歸納財務痛點
-是否包含行政文宣印刷痛點",NotebookLM,專案經理,Class 02,v1.0,Skyline Master Guide
 notebooklm-lessons-learned,Project3_專案執行經驗對策大腦,彙整歷史 lessons learned 意外事件與應急排障 SOP，適用於 NotebookLM 經驗大腦。,complex-vendor-contract-enhancement,外協信用交叉比對與合約合規條款升級,深度稽核歷史履約缺失並自動輸出可寫入合約的 SLA KPI 考核細則。,"你現在是 Skyline 採購合規與法務總監。請全面檢索歷史 Lessons Learned 數據，針對【名音】這家協力廠商在過去專案中的履約缺失進行深度比對：
 1. 統計其最常發生的缺失類別（如設備跳電、工程遲到、配合度差）與發生頻率。
 2. 提取出過去 PM 曾使用的補救方案，並評估其成效。
@@ -48,7 +42,19 @@ notebooklm-brain-navigation-index,Skyline 企業知識大腦分布索引與標�
 A. 協力廠商的實績與 SLA 響應時間
 B. 寫作投標書時，SLA 故障排障時間的合規限制與 HITL 語法
 C. 專案經理 (PM) 證照過期時的降容備用機制","知識治理, 資料定位, 合規庫",stable,各項關鍵業務知識的存放位置與檔案名稱列表,定位是否符合 SSOT 知識分佈目錄,NotebookLM,知識庫治理專家,Class 02,v1.0,Skyline Master Guide
-notebooklm-brain-navigation-qa,SkyLine 專案執行經驗與改善對策庫,最原始去敏前的歷史備份專案與 QA 經驗對策庫。,raw-qa-backup-query,原始備份庫歷史缺失與對策檢索,全面檢索去敏前的原始歷史備份專案與 QA 經驗，比對特定外協廠商的原始缺失記錄以進行安全審查。,"你現在是 Skyline 知識稽核專家。請全面檢索去敏前的原始歷史備份數據《SkyLine 專案執行經驗與改善對策庫》：
-1. 查詢與外協廠商【在此輸入廠商名稱，例如：名音】相關的原始缺失回報紀錄與當時 PM 的處置對策。
-2. 比對此原始數據與去敏版（大腦三）的數據差異，分析是否有遺漏的關鍵細節或未去敏的敏感資訊。","原始備份, QA檢索, 敏感數據",stable,原始缺失回報與PM處置對策比對結果,"查詢關鍵字是否正確
-比對結果是否符合原始資料庫內容",NotebookLM,知識稽核專家,Class 02,v1.0,Skyline Master Guide
+notebooklm-brain-navigation-qa,SkyLine 專案執行經驗與改善對策庫,最原始去敏前的歷史備份專案與 QA 經驗對策庫。,pet-event-exploratory-check,寵物嘉年華現場意外防坑檢索,以探索式問法引導大腦主動挖掘寵物活動的歷史安全與秩序缺失。,我們即將舉辦大型的寵物嘉年華，請幫我檢索歷史專案經驗，在寵物的安全、現場衛生或秩序管理上，曾經出過哪些意外狀況？強烈建議條列說明當時分別是如何處置的？,"現場安全, 寵物活動, 防坑檢索",stable,寵物現場歷史安全與秩序意外及當時處置紀錄,"提問是否為口語探索式
+是否包含安全/衛生/秩序三大面向",NotebookLM,專案經理,Class 02,v1.0,Skyline Master Guide
+notebooklm-brain-navigation-qa,SkyLine 專案執行經驗與改善對策庫,最原始去敏前的歷史備份專案與 QA 經驗對策庫。,vendor-quick-audit,特定廠商履約缺失快速查核,秒查特定外協廠商在專案中的歷史表現。,請檢索所有 PM 經驗回報，列出與【名音】（或特定外協廠商）相關的缺失紀錄與當時 PM 的解決對策。,"廠商稽核, 歷史缺失, 名音音響",stable,名音音響歷史履約缺失紀錄與PM解決對策,"是否篩選特定外協廠商
+是否附帶PM當時的對策",NotebookLM,專案經理,Class 02,v1.0,Skyline Master Guide
+notebooklm-brain-navigation-qa,SkyLine 專案執行經驗與改善對策庫,最原始去敏前的歷史備份專案與 QA 經驗對策庫。,admin-pitfall-avoidance,財務核銷與行政防坑點檢,在專案啟動前快速稽核常見的核銷與行政文宣痛點。,請檢索歷史回報，歸納所有與「財務核銷」與「文宣印刷」相關的常見痛點與預防措施。,"財務核銷, 文宣印刷, 行政防坑",stable,財務核銷與文宣印刷常見痛點及預防措施,"是否明確歸納財務痛點
+是否包含行政文宣印刷痛點",NotebookLM,專案經理,Class 02,v1.0,Skyline Master Guide
+notebooklm-brain-navigation-qa,SkyLine 專案執行經驗與改善對策庫,最原始去敏前的歷史備份專案與 QA 經驗對策庫。,complex-vendor-contract-enhancement,外協信用交叉比對與合約合規條款升級,深度稽核歷史履約缺失並自動輸出可寫入合約的 SLA KPI 考核細則。,"你現在是 Skyline 採購合規與法務總監。請全面檢索歷史 Lessons Learned 數據，針對【名音】這家協力廠商在過去專案中的履約缺失進行深度比對：
+1. 統計其最常發生的缺失類別（如設備跳電、工程遲到、配合度差）與發生頻率。
+2. 提取出過去 PM 曾使用的補救方案，並評估其成效。
+3. 為了防範未來標案重複踩坑，請為我擬定 3 條具備法律約束力、且與 SLA 掛鉤的合約考核指標（KPI）及罰扣細則。","法務合規, 合約升級, SLA KPI",stable,協力廠商履約缺失統計與具備 SLA 罰扣之合約 KPI 條文,"合約考核指標是否具備法律約束力
+罰扣細則是否與SLA緊密掛鉤",NotebookLM,採購合規與法務總監,Class 02,v1.0,Skyline Master Guide
+notebooklm-brain-navigation-qa,SkyLine 專案執行經驗與改善對策庫,最原始去敏前的歷史備份專案與 QA 經驗對策庫。,complex-pitfalls-summarization-training-guide,年度活動現場防禦系統與 PM 培訓防坑點檢表,系統性歸納 36 筆原始反饋並轉譯為 PM 培訓現場避坑指南。,"你現在是 Skyline 企業品質保證 (QA) 總監。請通讀所有專案回報紀錄，為新進 PM 團隊建立一套專案安全防禦與培訓系統：
+1. 歸納出歷史專案中最常發生的前 3 大現場缺失，並分析其具體成因。
+2. 對於每一類缺失，從歷史檔案中提取出已驗證有效的「最佳實踐解決對策」。
+3. 整合 these 經驗，為新進 PM 製作一份條列式的「活動現場安全與行政防坑檢核表 (Lessons Learned Checklist)」。","QA總監, PM培訓, 安全檢核",stable,前三大現場缺失成因分析、最佳實踐對策與PM安全防坑檢核表,"現場缺失歸納是否準確（電力/動線/協力商）
+防坑檢核表是否具備操作指引性",NotebookLM,企業品質保證 (QA) 總監,Class 02,v1.0,Skyline Master Guide
