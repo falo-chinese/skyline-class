@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🧭 Skyline NotebookLM 企業共享大腦導覽與使用索引</title>
+  <style>
+    :root {
+      --color-bg: #0b0f19;
+      --color-card: rgba(22, 30, 49, 0.7);
+      --color-primary: #38bdf8;
+      --color-secondary: #0ea5e9;
+      --color-accent: #2dd4bf;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --border-glow: rgba(56, 189, 248, 0.15);
+      --border-normal: rgba(255, 255, 255, 0.05);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: var(--color-bg);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding: 2.5rem 1.5rem;
+      background-image: 
+        radial-gradient(at 10% 20%, rgba(14, 165, 233, 0.08) 0px, transparent 50%),
+        radial-gradient(at 90% 80%, rgba(45, 212, 191, 0.08) 0px, transparent 50%);
+      background-attachment: fixed;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      color: #fff;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(to right, #fff, var(--color-primary), var(--color-accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    header p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      font-weight: 500;
+    }
+
+    .nav-bar {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-link {
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 30px;
+      border: 1px solid var(--border-normal);
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: all 0.25s ease;
+    }
+
+    .nav-link:hover {
+      background: rgba(56, 189, 248, 0.1);
+      color: var(--color-primary);
+      border-color: var(--color-primary);
+    }
+
+    .version-switch {
+      display: inline-block;
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      color: var(--color-accent);
+      text-decoration: none;
+      border-bottom: 1px dashed var(--color-accent);
+      transition: opacity 0.2s;
+    }
+    
+    .version-switch:hover {
+      opacity: 0.8;
+    }
+
+    /* Cards Grid */
+    .index-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+      margin-bottom: 4rem;
+    }
+
+    .brain-card {
+      background: var(--color-card);
+      border-radius: 12px;
+      border: 1px solid var(--border-normal);
+      padding: 2rem;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brain-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--color-primary);
+      box-shadow: 0 10px 25px rgba(56, 189, 248, 0.15);
+    }
+
+    .brain-num {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--color-accent);
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+    }
+
+    .brain-name {
+      font-size: 1.35rem;
+      color: #fff;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      line-height: 1.3;
+    }
+
+    .brain-files {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 6px;
+      padding: 0.75rem 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .brain-files h4 {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+    }
+
+    .brain-files ul {
+      list-style-type: none;
+      font-size: 0.85rem;
+      color: #cbd5e1;
+    }
+
+    .brain-files li {
+      position: relative;
+      padding-left: 1rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .brain-files li::before {
+      content: "•";
+      color: var(--color-primary);
+      position: absolute;
+      left: 0;
+      font-weight: bold;
+    }
+
+    .scenario-box {
+      margin-top: auto;
+      border-top: 1px solid var(--border-normal);
+      padding-top: 1.25rem;
+    }
+
+    .scenario-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .scenario-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* Prompt Section */
+    .prompt-section {
+      background: var(--color-card);
+      border-radius: 12px;
+      border: 1px solid var(--border-normal);
+      padding: 2.5rem;
+      margin-bottom: 3rem;
+      backdrop-filter: blur(12px);
+    }
+
+    .section-title {
+      font-size: 1.6rem;
+      color: #fff;
+      font-weight: 700;
+      margin-bottom: 2rem;
+      border-left: 4px solid var(--color-accent);
+      padding-left: 0.75rem;
+    }
+
+    .prompt-block {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+      border: 1px solid var(--border-normal);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    .prompt-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+
+    .prompt-scenario {
+      font-size: 0.95rem;
+      color: var(--color-primary);
+      font-weight: 700;
+    }
+
+    .copy-btn {
+      background: rgba(56, 189, 248, 0.1);
+      color: var(--color-primary);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      padding: 0.3rem 0.75rem;
+      font-size: 0.75rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .copy-btn:hover {
+      background: var(--color-primary);
+      color: var(--color-bg);
+    }
+
+    pre {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.85rem;
+      color: #cbd5e1;
+      white-space: pre-wrap;
+      word-break: break-all;
+      background: #0f172a;
+      padding: 1rem;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.03);
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 4rem;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      border-top: 1px solid var(--border-normal);
+      padding-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>🧭 Skyline NotebookLM 企業共享大腦導覽與使用索引</h1>
+      <p>SSOT (Single Source of Truth) Navigation & Prompt Index Map</p>
+      <a href="notebooklm_index_map.md" class="version-switch">📄 檢視 Markdown 版本</a>
+    </header>
+
+    <div class="nav-bar">
+      <a href="notebooklm_master_guide.html" class="nav-link">📘 企業 NotebookLM 治理指南</a>
+      <a href="skyline_set_menu.html" class="nav-link">🍱 Skyline 模型菜組合包</a>
+      <a href="workbench/index.html" class="nav-link">🛠️ 教材控制台</a>
+    </div>
+
+    <!-- 3 Cards Grid -->
+    <div class="index-grid">
+      
+      <!-- Card 1 -->
+      <div class="brain-card">
+        <div class="brain-num">Brain 01</div>
+        <div class="brain-name">標案黃金範本大腦</div>
+        <div class="brain-files">
+          <h4>📂 資料庫內含檔案</h4>
+          <ul>
+            <li>01_2023_高雄動漫節_技術建議書_Scrubbed.md</li>
+            <li>02_2026_台南玩具博覽會_黃金建議書範本.md</li>
+            <li>03_投標建議書寫作合規指南.md</li>
+          </ul>
+        </div>
+        <div class="scenario-box">
+          <div class="scenario-title">🎯 適用情境 (什麼時候用？)</div>
+          <div class="scenario-desc">準備起草一份全新標案的建議書技術大綱、想要稽核草稿段落合規度、或需要配置人類審查點 (HITL) 時。</div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="brain-card">
+        <div class="brain-num">Brain 02</div>
+        <div class="brain-name">協力商資歷與合規庫</div>
+        <div class="brain-files">
+          <h4>📂 資料庫內含檔案</h4>
+          <ul>
+            <li>01_協力廠商合規矩陣與評估表.md</li>
+            <li>02_綠色環保建材認證與計算標準.md</li>
+            <li>03_專案經理證照規範與備降機制.md</li>
+          </ul>
+        </div>
+        <div class="scenario-box">
+          <div class="scenario-title">🎯 適用情境 (什麼時候用？)</div>
+          <div class="scenario-desc">需要從合格名單中挑選符合實績的協力廠商、核對特定硬體商的 SLA 與備用方案、或試算綠建材加分比例時。</div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="brain-card">
+        <div class="brain-num">Brain 03</div>
+        <div class="brain-name">專案執行經驗大腦 (去敏版)</div>
+        <div class="brain-files">
+          <h4>📂 資料庫內含檔案</h4>
+          <ul>
+            <li>01_台西市寵物嘉年華_經驗與對策彙整.md</li>
+            <li>02_活動現場突發狀況緊急處理手冊.md</li>
+          </ul>
+        </div>
+        <div class="scenario-box">
+          <div class="scenario-title">🎯 適用情境 (什麼時候用？)</div>
+          <div class="scenario-desc">活動現場突發跳電/跌倒受傷急需處理 SOP、新人 PM 學習培訓、或想總結歷史專案 Lessons Learned 製作防坑表時。</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Prompts Section -->
+    <div class="prompt-section">
+      <div class="section-title">💬 針對三大專案的黃金提示詞 (Prompts)</div>
+
+      <!-- Brain 1 Prompts -->
+      <div style="margin-bottom: 3rem;">
+        <h3 style="color: var(--color-accent); font-size: 1.15rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border-normal); padding-bottom: 0.5rem;">🧠 標案黃金範本大腦 ➔ 推薦提問</h3>
+        
+        <div class="prompt-block">
+          <div class="prompt-header">
+            <div class="prompt-scenario">情境一：起草全新服務建議書技術大綱</div>
+            <button class="copy-btn" onclick="copyPrompt('prompt1-1')">複製 Prompt</button>
+          </div>
+          <pre id="prompt1-1">你現在是Skyline (Skyline) 智慧投標顧問。我想針對一個全新的「2026年台中電競嘉年華 (預算 300 萬元)」標案起草服務建議書的技術大綱與章節架構。請參閱知識庫中的《02_2026_台南玩具博覽會_黃金建議書範本_Sophia.md》與《03_投標建議書寫作合規指南.md》，分析其黃金寫作框架。
+
+輸出要求：
+1. 提供完整的建議書大綱章節（包含一級與二級目錄）。
+2. 指出在「團隊經歷」與「技術方案」中，必須包含哪些關鍵要素以符合合規指標。
+3. 在大綱中標註「人類審查點 (HITL)」的建議位置，以防範合規與財務風險。</pre>
+        </div>
+
+        <div class="prompt-block">
+          <div class="prompt-header">
+            <div class="prompt-scenario">情境二：重寫與稽核建議書草稿段落</div>
+            <button class="copy-btn" onclick="copyPrompt('prompt1-2')">複製 Prompt</button>
+          </div>
+          <pre id="prompt1-2">你現在是Skyline (Skyline) 標案合規稽核專家。請閱讀知識庫中的《03_投標建議書寫作合規指南.md》。
+我寫了以下建議書草稿段落：「本專案預計委託外協廠商名音負責現場音響與燈光控台，名音承諾於 4 小時內提供現場故障排障服務。」
+請依據合規寫作指南進行審查：
+1. 該段落是否符合合規寫作規範？有何潛在的廢標風險？
+2. 請幫我重寫該段落，使其語意更專業，並在適當位置自動插入 `[人類審查點: 確證變更已獲主管批准]` 或適當的稽核標籤，以防範 SLA 違規。</pre>
+        </div>
+      </div>
+
+      <!-- Brain 2 Prompts -->
+      <div style="margin-bottom: 3rem;">
+        <h3 style="color: var(--color-accent); font-size: 1.15rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border-normal); padding-bottom: 0.5rem;">🧠 協力商資歷與合規庫 ➔ 推薦提問</h3>
+        
+        <div class="prompt-block">
+          <div class="prompt-header">
+            <div class="prompt-scenario">情境一：依招標合規門檻評選最優廠商組合</div>
+            <button class="copy-btn" onclick="copyPrompt('prompt2-1')">複製 Prompt</button>
+          </div>
+          <pre id="prompt2-1">你現在是Skyline (Skyline) 採購合規經理。我們準備投標一個全新的展會，RFP 硬性規定：「協力商類似案件之單一合約實績金額須達 300 萬以上，且現場故障響應 SLA 須小於或等於 2 小時」。
+請參閱知識庫《01_協力廠商合規矩陣與評估表.md》與《03_專案經理證照規範與備降機制.md》：
+1. 篩選出哪幾家協力商符合「單案實績 300 萬以上」的合規門檻？
+2. 在符合門檻的廠商中，他們的 SLA 響應時間分別是多少？是否符合 2 小時限制？如果不符，有何升級或調整方案？
+3. 請為我推薦最優的協力商組合，並列出推薦的具體數據依據（實績金額、SLA 承諾、合作評分狀態）。</pre>
+        </div>
+
+        <div class="prompt-block">
+          <div class="prompt-header">
+            <div class="prompt-scenario">情境二：環保建材認證與百分比試算</div>
+            <button class="copy-btn" onclick="copyPrompt('prompt2-2')">複製 Prompt</button>
+          </div>
+          <pre id="prompt2-2">你現在是Skyline (Skyline) 綠建材評估專家。我想針對本次搭建工程進行綠建材佔比與加分試算。
+請參閱《02_綠色環保建材認證與計算標準.md》，找出大同空間工程的綠色建材認證資料。
+1. 大同空間工程擁有哪項綠建材認證？其宣告的環保材料比例是多少？
+2. 請寫出綠色建材百分比的計算公式，並說明如何利用大同的數據在建議書中呈現，以爭取大於 30% 以上的環保加分。</pre>
+        </div>
+      </div>
+
+      <!-- Brain 3 Prompts -->
+      <div>
+        <h3 style="color: var(--color-accent); font-size: 1.15rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border-normal); padding-bottom: 0.5rem;">🧠 專案執行經驗大腦 (去敏版) ➔ 推薦提問</h3>
+        
+        <div class="prompt-block">
+          <div class="prompt-header">
+            <div class="prompt-scenario">情境一：活動現場跳電與現場跌倒受傷緊急處理</div>
+            <button class="copy-btn" onclick="copyPrompt('prompt3-1')">複製 Prompt</button>
+          </div>
+          <pre id="prompt3-1">你現在是Skyline (Skyline) 展會現場安全指揮官。目前在博覽會現場發生了「配電箱超載臨時跳電，且現場有觀眾在混亂中被電線絆倒輕微擦傷」的緊急狀況！
+請立即檢索《02_活動現場突發狀況緊急處理手冊.md》與《01_台西市寵物嘉年華_專案執行經驗與改善對策彙整.md》中的歷史教訓：
+1. 提供現場跳電排障的 SOP 處理步驟（包含與機電組協調、備用發電機切換）。
+2. 提供受傷觀眾應急處置與現場紀錄流程（包含醫護站聯絡、主管匯報要點）。
+3. 根據寵物嘉年華的歷史教訓，指出我們在現場佈線與電力規劃上犯過什麼錯誤，此時該如何立刻進行現場補救？</pre>
+        </div>
+
+        <div class="prompt-block">
+          <div class="prompt-header">
+            <div class="prompt-scenario">情境二：為新進 PM 製作防坑檢核表 (Lessons Learned)</div>
+            <button class="copy-btn" onclick="copyPrompt('prompt3-2')">複製 Prompt</button>
+          </div>
+          <pre id="prompt3-2">你現在是Skyline (Skyline) 企業品質保證 (QA) 總監。我們即將帶領新進 PM 團隊執行年度展會。
+請通讀《01_台西市寵物嘉年華_專案執行經驗與改善對策彙整.md》中所有 PM 的回報紀錄，歸納整理：
+1. 統計出最常發生的前 3 大類別問題（例如：電力載量、動線設計、協力商遲到等）。
+2. 對於每一類常犯錯誤，從歷史檔案中提取出最有效的「改善對策」。
+3. 為新進 PM 製作一份條列式的「展會執行防坑檢核表 (Lessons Learned Checklist)」。</pre>
+        </div>
+      </div>
+
+    </div>
+
+    <footer>
+      <p>Skyline AIDE 智慧審計與治理平台 - NotebookLM 專案導覽系統</p>
+    </footer>
+  </div>
+
+  <script>
+    function copyPrompt(id) {
+      const text = document.getElementById(id).innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        alert("已成功複製 Prompt 範本到剪貼簿！");
+      }).catch(err => {
+        console.error("無法複製文字: ", err);
+      });
+    }
+  </script>
+</body>
+</html>

@@ -30,7 +30,9 @@ files_to_copy = [
     ("agent_tools_guide.md", "agent_tools_guide.md"),
     ("agent_tools_guide.html", "agent_tools_guide.html"),
     ("bidding_control_tower.md", "bidding_control_tower.md"),
-    ("bidding_control_tower.html", "bidding_control_tower.html")
+    ("bidding_control_tower.html", "bidding_control_tower.html"),
+    ("notebooklm_index_map.md", "notebooklm_index_map.md"),
+    ("notebooklm_index_map.html", "notebooklm_index_map.html")
 ]
 
 sheets_url = "https://docs.google.com/spreadsheets/d/1z5MlDimJl7sO0JuD5LKVPqJkRzldPUt51nqoSM3rt3Q/edit?usp=sharing"
