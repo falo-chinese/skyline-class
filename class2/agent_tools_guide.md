@@ -44,7 +44,6 @@
   ```text
   你現在是系統稽核特工。針對剛剛的「檔案複製至暫存區」動作，請掃描「原始標案資源」目錄與「標案工作暫存區」目錄。請自動生成一份名為「copy_manifest.html」的網頁清單，以簡潔的表格列出「來源路徑」、「複製後路徑」、「檔案大小（Bytes）」與「複製狀態（成功/跳過）」，以便使用者一目了然核對複製的完整性。
   ```
-  *CLI 執行指令*：`python3 scripts/generate_copy_report.py --src 原始標案資源 --dst 標案工作暫存區`
 
 ### 1.2 智慧語意檔名重置 (Rename Files)
 * **✍️ 簡單規則版 Prompt**：
@@ -61,7 +60,6 @@
   ```text
   你現在是系統稽核特工。針對剛剛的「檔名智慧重命名」動作，請對比「原始標案資源」中的原始檔案名稱與「標案工作暫存區」中重命名後的檔案名稱。請自動生成一份名為「rename_report.html」的網頁報告，以表格呈現「原舊檔名」、「變更後新檔名」、「修改時間」以及「提取真實年份與廠商名稱的命名原因」，以利主管視覺化審查與追溯檔案改動。
   ```
-  *CLI 執行指令*：`python3 scripts/generate_rename_report.py --dir 標案工作暫存區`
 
 ### 1.3 內容分析與類別歸類 (Content Analysis & PII Scrubbing)
 * **✍️ 簡單規則版 Prompt**：
@@ -81,7 +79,6 @@
   ```text
   你現在是資安合規特工。針對剛剛的「檔案分類與 PII 去敏」動作，請分析「標案工作暫存區」中的檔案。請將分類結果與 PII 去敏處理前後之對照數據，自動生成一份 HTML 報告檔「scrub_report.html」，以表格展示各檔案的「商業分類」與「敏感個資遮蔽前後比對（例如：去敏前後之身分證字號與聯絡電話對照狀態）」，以供資安審計人員檢驗合規性。
   ```
-  *CLI 執行指令*：`python3 scripts/generate_scrub_report.py --dir 標案工作暫存區`
 
 ### 1.4.A 地端 Excel 試算表資料庫建置 (首次無範本自規劃建置)
 * **✍️ 簡單規則版 Prompt**：
@@ -99,7 +96,6 @@
   ```text
   你現在是地端資料庫稽核特工。針對剛剛無範本建置的 標案工作記錄表.xlsx Excel 資料庫，請依據該資料表 Schema 結構，自動生成一份 HTML 報告檔「db_init_report.html」，詳細展示「資料表 Schema 規劃欄位」、「主外鍵關係」與「首批寫入檔案之 Metadata 資料預覽」，方便開發同仁快速掌握資料庫架構。
   ```
-  *CLI 執行指令*：`python3 scripts/generate_db_init_report.py --db 標案工作暫存區/標案工作記錄表.xlsx`
 
 ### 1.4.B 地端 Excel 試算表資料庫建置 (依據參考範本對齊建置)
 * **✍️ 簡單規則版 Prompt**：
@@ -115,7 +111,6 @@
   ```text
   你現在是地端資料庫稽核特工。針對剛剛依範本對齊建置的 標案工作記錄表.xlsx Excel 資料庫，請針對本次同步寫入動作自動生成一份 HTML 對齊驗證報告「db_sync_report.html」，列出「已成功對齊寫入欄位數」、「對齊範本 Schema 驗證狀態（成功/失敗）」與「主外鍵 file_id 關聯檢驗結果」，以確保資料庫未發生欄位錯位或主外鍵斷裂。
   ```
-  *CLI 執行指令*：`python3 scripts/generate_db_sync_report.py --db 標案工作暫存區/標案工作記錄表.xlsx --template 參考範例/標案工作記錄表_範本.xlsx`
 
 ### 1.5 實務 ETL 與網頁資料爬取展示 (ETL & Web Crawler Demo)
 除了處理地端檔案外，AI Agent 也廣泛用於擷取政府網站或公開觀測站等網頁數據。此時，可利用瀏覽器自動化進行 ETL 流程。
@@ -138,7 +133,6 @@
 > **📂 本章實作學員下載包 (Part 2 Start Pack)**：
 > 學員可下載並解壓縮 **[part2.zip (Step 1 完工狀態 Staging 目錄)](part2/part2.zip)**，直接獲取包含 Step 1 清洗與 Excel 資料庫建置完成後的 Staging 狀態工作目錄，即可直接進行第二步實作。
 > 
-> *您也可以直接下載 **[class2_workspace.zip (Class 2 完整實作資源包)](class2_workspace.zip)**，包含原始資源、範本與預建暫存資料庫，一包即可暢通所有實作步驟。*
 
 * **輸入檔案**：`標案工作暫存區/2026_招標需求_台南玩具展_RFP.txt`、Excel 試算表資料庫 `標案工作暫存區/標案工作記錄表.xlsx`。
 
@@ -155,7 +149,6 @@
   ```text
   你現在是系統稽核特工。針對剛剛的「廢標條款自動提取」動作，請將新標案 RFP 中提取出的「專案經理持證資格」、「協力商實績金額門檻」、「運維故障響應時間 (SLA)」等合規要求，自動生成一份 HTML 檢核表「clause_checklist.html」。表格應包含「合規稽核項目」、「RFP 硬性規定說明」、「對應權責單位」與「是否為關鍵廢標紅線」，以利投標小組作為後續審查之基準。
   ```
-  *CLI 執行指令*：`python3 scripts/generate_clause_checklist_report.py --rfp 標案工作暫存區/2026_招標需求_台南玩具展_RFP.txt`
 
 ### 2.2 志明證照過期稽核 (PM Certificate Audit)
 * **✍️ 簡單規則版 Prompt**：
@@ -170,7 +163,6 @@
   ```text
   你現在是系統稽核特工。針對剛剛的「專案經理證照合規性稽核」動作，請對比 Excel 標案工作記錄表.xlsx 中志明的證照到期狀態。請自動生成一份 HTML 稽核報告「pm_audit_report.html」，以醒目樣式展示「擬任 PM 姓名」、「證照到期日」、「投標日前是否有效」、「合規判定（RED_DISQUALIFY）」以及「備降調撥人員姓名與其證照狀態」，並以警示色彩標記不合規狀態，供決策主管快速核閱。
   ```
-  *CLI 執行指令*：`python3 scripts/generate_pm_audit_report.py --db 標案工作暫存區/標案工作記錄表.xlsx`
 
 ### 2.3 SLA 技術對帳比對 (SLA Alignment Audit)
 * **✍️ 簡單規則版 Prompt**：
@@ -185,13 +177,16 @@
   ```text
   你現在是系統稽核特工。針對剛剛的「運維 SLA 技術對帳」動作，請比對 RFP 要求的「2小時內抵達響應」與名音燈光商承諾之「4小時內抵達響應」。請自動生成一份 HTML 差距分析報告「sla_gap_report.html」，以對比表呈現「項目」、「RFP 規格要求」、「名音燈光商承諾值」、「差距 (Gap)」、「合規判定 (YELLOW_WARNING)」，並提供備註欄說明可能需要之溢價成本或調整建議，以便投標小組評估。
   ```
-  *CLI 執行指令*：`python3 scripts/generate_sla_gap_report.py --db 標案工作暫存區/標案工作記錄表.xlsx`
 
 ---
 
 ## 📊 3. SLA 成本溢價與利潤決策 (SLA Surcharge & Costing)
 
 評估協力廠商改為 2h SLA 增加的人工與保證金支出，對總利潤紅線 (15%) 的衝擊，進行壓力測試。
+
+> [!TIP]
+> **📂 本章實作學員下載包 (Part 3 Start Pack)**：
+> 學員可下載並解壓縮 **[part3.zip (Step 2 完工狀態 Staging 目錄)](part3/part3.zip)**，直接獲取包含 Step 2 差距對帳完成後的 Staging 工作目錄，即可直接進行第三步實作。
 
 * **輸入檔案**：Excel 試算表資料庫 `標案工作暫存區/標案工作記錄表.xlsx`。
 
@@ -208,7 +203,6 @@
   ```text
   你現在是系統稽核特工。針對剛剛的「物料費率調校」動作，請對比 Excel 標案工作記錄表.xlsx 中南部物料在調漲 5% 前後的價格差異。請自動生成一份 HTML 調整報告「material_adjust_report.html」，以表格呈現「項目」、「原單價」、「調整後新單價」、「漲幅比例（5%）」與「預計影響之總成本增幅」，方便主管審查物料調整金額。
   ```
-  *CLI 執行指令*：`python3 scripts/generate_material_adjust_report.py --db 標案工作暫存區/標案工作記錄表.xlsx`
 
 ### 3.2 2h SLA 加急成本計算 (SLA Cost Escalation)
 * **✍️ 簡單規則版 Prompt**：
@@ -223,7 +217,6 @@
   ```text
   你現在是系統稽核特工。針對剛剛名音燈光提出的 30 萬 SLA 排班溢價與合約準備金，請自動生成一份 HTML 溢價評估報告「sla_cost_report.html」。表格應包含「項目說明」、「加急 SLA 規格要求 (2h)」、「名音溢價報價 (NT$ 300,000)」、「資金分攤與風險撥備比例」以及「建議核准狀態」，以利投標小組提報利潤壓力測試。
   ```
-  *CLI 執行指令*：`python3 scripts/generate_sla_cost_report.py --db 標案工作暫存區/標案工作記錄表.xlsx`
 
 ### 3.3 毛利率與決策核算 (Profit Margin Analysis)
 * **✍️ 簡單規則版 Prompt**：
@@ -238,13 +231,16 @@
   ```text
   你現在是系統稽核特工。針對剛剛對玩具展標案 450 萬進行的毛利壓力測試，請自動生成一份 HTML 獲利核算報告「profit_analysis_report.html」。請以視覺化樣式展示「專案總預算」、「基礎物料成本 (加計5%)」、「SLA 溢價支出 (30萬)」、「預估純利潤」、「最終毛利率」與「獲利紅線判定 (高於15% / GREEN_APPROVE)」，以供決策主管簽核。
   ```
-  *CLI 執行指令*：`python3 scripts/generate_profit_analysis_report.py --db 標案工作暫存區/標案工作記錄表.xlsx`
 
 ---
 
 ## 📘 4. 技術建議書草稿 RAG 組裝 (RAG Draft Compiling)
 
 結合 Google NotebookLM 知識大腦與地端資料庫，編譯最終技術建議書草稿，並標記人類審核點。
+
+> [!TIP]
+> **📂 本章實作學員下載包 (Part 4 Start Pack)**：
+> 學員可下載並解壓縮 **[part4.zip (Step 3 完工狀態 Staging 目錄)](part4/part4.zip)**，直接獲取包含 Step 3 成本調試與決策完成後的 Staging 工作目錄，即可直接進行第四步實作。
 
 * **輸入檔案**：Google NotebookLM 知識庫、草稿模板 `templates/tech_bid.md`、Excel 試算表資料庫。
 
@@ -261,7 +257,6 @@
   ```text
   你現在是系統稽核特工。針對剛剛向 Google NotebookLM 進行的知識大腦檢索動作，請自動生成一份 HTML 檢檢索清單「retrieval_manifest.html」。以表格展示「檢索主題」、「擷取來源（如 Sophia 證照、繁星專案）」、「核心內容摘要」與「資料可信度驗證（真實/失效）」，以確保引用的實績與證照數據 100% 準確無誤。
   ```
-  *CLI 執行指令*：`python3 scripts/generate_retrieval_manifest_report.py`
 
 ### 4.2 PM 備降人員替換 (Sophia Replaces Zhiming)
 * **✍️ 簡單規則版 Prompt**：
@@ -276,7 +271,6 @@
   ```text
   你現在是系統稽核特工。針對剛剛在投標書草稿中將 PM 志明替換為 Sophia 的人員異動動作，請自動生成一份 HTML 人員變更日誌「pm_replacement_log.html」。表格應詳列「原擬任 PM 志明 (過期)」、「新任 PM Sophia (有效)」、「證照到期日對照」、「經歷強化要點（大規模展會管理能力）」與「異動原因」，以便主管與合規同仁快速把關。
   ```
-  *CLI 執行指令*：`python3 scripts/generate_pm_replacement_log.py --output 標案工作暫存區/pm_replacement_log.html`
 
 ### 4.3 標註人類審查點 (Mark Human Review Points)
 * **✍️ 簡單規則版 Prompt**：
@@ -291,13 +285,16 @@
   ```text
   你現在是系統稽核特工。針對技術建議書草稿中標註的 `[人類審查點]` 標籤，請掃描「標案工作暫存區/draft_assembled.md」中所有標記處，自動生成一份 HTML 人工審核檢核表「hitl_review_checklist.html」。以表格列出「段落行號」、「審查點上下文」、「審查類型（財務變更/人員調配）」以及「主管簽章確認欄」，供主管進行實體上傳前的最終核決。
   ```
-  *CLI 執行指令*：`python3 scripts/generate_hitl_review_report.py --draft 標案工作暫存區/draft_assembled.md`
 
 ---
 
 ## 🖥️ 5. 實機跑測與收割發佈 (Sandbox Run & Harvest)
 
 模擬沙盒上傳並同步本地 Excel SSOT 黃金得標庫，打通最後一哩路。
+
+> [!TIP]
+> **📂 本章實作學員下載包 (Part 5 Start Pack)**：
+> 學員可下載並解壓縮 **[part5.zip (Step 4 完工狀態 Staging 目錄)](part5/part5.zip)**，直接獲取包含 Step 4 建議書草稿編譯與安全標註完成後的 Staging 工作目錄，即可直接進行第五步實作。
 
 * **輸入檔案**：`標案工作暫存區/draft_assembled.md`、Excel 本地真理庫。
 
@@ -314,7 +311,6 @@
   ```text
   你現在是系統稽核特工。針對剛剛 Computer Use 模擬網頁投標文件上傳動作，請自動生成一份 HTML 上傳電子憑證「upload_receipt.html」。憑證應包含「上傳時間」、「目標平台 (電子採購網測試區)」、「投標檔案 (draft_assembled.md)」、「MD5 校校驗碼」與「模擬瀏覽器操作軌跡紀錄 (Success)」，供團隊留底稽核。
   ```
-  *CLI 執行指令*：`python3 scripts/generate_upload_receipt.py --draft 標案工作暫存區/draft_assembled.md`
 
 ### 5.2 Excel SSOT 資料庫寫入 (SSOT Database Commit)
 * **✍️ 簡單規則版 Prompt**：
@@ -329,7 +325,6 @@
   ```text
   你現在是系統稽核特工。針對剛剛寫入 Excel 地端真理庫 (SSOT) 的投標紀錄動作，請對比寫入前後的檔案，自動生成一份 HTML 寫入審計報告「db_sync_audit.html」。表格展示「異動工作表」、「寫入欄位（總額4.5M、PM Sophia、主管Force簽章）」、「寫入狀態 (Success)」與「資料庫雜湊校驗碼」，供審計同仁檢驗資料誠信度。
   ```
-  *CLI 執行指令*：`python3 scripts/generate_db_sync_audit.py --db 標案工作暫存區/標案工作記錄表.xlsx`
 
 ### 5.3 知識大腦同步發布 (NotebookLM Knowledge Sync)
 * **✍️ 簡單規則版 Prompt**：
@@ -344,13 +339,16 @@
   ```text
   你現在是系統稽核特工。針對將去敏感標書發布回 Google NotebookLM 脈絡大腦的動作，請自動生成一份 HTML 知識同步分析報告「brain_sync_report.html」。列出「發布檔案名稱」、「去敏處理狀態 (100% Scrubbed)」、「大腦同步時間」以及「新黃金投標範本索引建立狀態」，證明團隊已完成閉環學習並更新知識庫。
   ```
-  *CLI 執行指令*：`python3 scripts/generate_brain_sync_report.py`
 
 ---
 
 ## 📅 6. AI PM 排程與進度協調 (Progress & AI PM Orchestration)
 
 AI PM 定期分析員（Scheduled Analyst）負責背景監控 7 天關鍵路徑，管理協力商交付，實施主動協調。
+
+> [!TIP]
+> **📂 本章實作學員下載包 (Part 6 Start Pack)**：
+> 學員可下載並解壓縮 **[part6.zip (Step 5 完工狀態 Staging 目錄)](part6/part6.zip)**，直接獲取包含 Step 5 跑測上傳與資料庫寫回完成後的 Staging 工作目錄，即可直接進行第六步實作。
 
 * **輸入檔案**：Excel 專案排程表、Staging 執行日誌。
 
@@ -369,7 +367,6 @@ AI PM 定期分析員（Scheduled Analyst）負責背景監控 7 天關鍵路徑
   ```text
   你現在是系統稽核特工。針對 AI PM 排程監控到的 DELAY_RISK 風險，請定時抓取專案日誌與關鍵路徑，自動生成一份 HTML 進度風險日誌「pm_schedule_report.html」。內容包含「當前執行步驟」、「計畫截止時間」、「實際進度落後時數 (12h)」、「關鍵路徑阻礙點」與「建議調配資源方案」，以便團隊即時調整排程。
   ```
-  *CLI 執行指令*：`python3 scripts/generate_pm_schedule_report.py`
 
 ### 6.2 協力商缺件語意催辦 (Missing Document Semantic Alert)
 * **✍️ 簡單規則版 Prompt**：
@@ -386,7 +383,6 @@ AI PM 定期分析員（Scheduled Analyst）負責背景監控 7 天關鍵路徑
   ```text
   你現在是系統稽核特工。針對檢測到的大同搭建商實績證明缺件與催辦信草稿，請自動生成一份 HTML 缺件催辦報告「missing_doc_alert.html」。表格列出「缺失文件名稱」、「受影響協力商」、「預估廢標風險級別」、「催辦郵件窗口」與「郵件草稿預覽」，方便外協同仁審查信件發送。
   ```
-  *CLI 執行指令*：`python3 scripts/generate_missing_doc_alert.py`
 
 ### 6.3 證照失效主動調配 (Cert Expiry Recovery Alert)
 * **✍️ 簡單規則版 Prompt**：
@@ -403,7 +399,6 @@ AI PM 定期分析員（Scheduled Analyst）負責背景監控 7 天關鍵路徑
   ```text
   你現在是系統稽核特工。針對 PMP 證照過期觸發 of PM Fallback 替換事件，請自動生成一份 HTML 證照修復調配報告「cert_recovery_report.html」。以醒目色彩對比展示「過期 PM 志明」、「備降 PM Sophia」、「證照比對結果」、「調配寫入日誌狀態 (Success)」與「主管核准狀態」，供 HR 與投標組查閱存檔。
   ```
-  *CLI 執行指令*：`python3 scripts/generate_cert_recovery_report.py`
 
 ---
 

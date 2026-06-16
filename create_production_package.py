@@ -50,19 +50,15 @@ if os.path.exists(demo_dst):
     shutil.rmtree(demo_dst)
 shutil.copytree(demo_src, demo_dst)
 
-# Copy the part1 folder recursively
-part1_src = os.path.join(source_root, "part1")
-part1_dst = os.path.join(dest_root, "part1")
-if os.path.exists(part1_dst):
-    shutil.rmtree(part1_dst)
-shutil.copytree(part1_src, part1_dst)
-
-# Copy the part2 folder recursively
-part2_src = os.path.join(source_root, "part2")
-part2_dst = os.path.join(dest_root, "part2")
-if os.path.exists(part2_dst):
-    shutil.rmtree(part2_dst)
-shutil.copytree(part2_src, part2_dst)
+# Copy the part1 ~ part6 folders recursively
+for i in range(1, 7):
+    part_name = f"part{i}"
+    part_src = os.path.join(source_root, part_name)
+    part_dst = os.path.join(dest_root, part_name)
+    if os.path.exists(part_dst):
+        shutil.rmtree(part_dst)
+    if os.path.exists(part_src):
+        shutil.copytree(part_src, part_dst)
 
 # Copy the unified workspace zip if exists
 workspace_zip_src = os.path.join(source_root, "class2_workspace.zip")

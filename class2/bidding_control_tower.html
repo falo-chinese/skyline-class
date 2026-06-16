@@ -511,6 +511,18 @@
             <button class="mode-btn" id="btn-prompt-simple" onclick="setPromptLevel('simple')" style="padding: 0.25rem 0.75rem; font-size: 0.75rem; border-radius: 99px;">✍️ 簡單 Prompt</button>
             <button class="mode-btn active" id="btn-prompt-advanced" onclick="setPromptLevel('advanced')" style="padding: 0.25rem 0.75rem; font-size: 0.75rem; border-radius: 99px;">🧠 強 Agent</button>
           </div>
+          
+          <!-- 📄 加選獨立 HTML 報告 Prompt -->
+          <div id="html-report-section" style="margin-top: 1rem; display: none;">
+            <h4 style="font-size: 0.85rem; text-transform: uppercase; color: #a78bfa; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.25rem; justify-content: space-between;">
+              <span>📄 獨立 HTML 稽核報告 Prompt (加選)</span>
+              <button onclick="triggerHtmlReportSimulation()" style="background: rgba(167, 139, 250, 0.2); border: 1px solid rgba(167, 139, 250, 0.4); color: #c084fc; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.7rem; cursor: pointer; font-weight: bold; border: none; transition: opacity 0.2s;">▶️ 執行此報表跑測</button>
+            </h4>
+            <div style="position: relative;">
+              <pre id="html-prompts-content" style="background: #0d091a; border: 1px solid rgba(167,139,250,0.15); padding: 0.75rem; border-radius: 6px; font-family: monospace; font-size: 0.72rem; color: #c084fc; height: 120px; overflow-y: auto; white-space: pre-wrap;"></pre>
+              <button onclick="copyHtmlReportPrompt()" style="position: absolute; top: 0.5rem; right: 0.5rem; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.7rem; cursor: pointer; transition: all 0.2s; border: none;">一鍵複製</button>
+            </div>
+          </div>
         </div>
       </div>
       
@@ -1425,26 +1437,36 @@
       const inputsDiv = document.getElementById('inputs-content');
       inputsDiv.innerHTML = '';
 
+      const partDescriptions = [
+        "包含本步驟所需的 11 個 PDF 原始檔案及 Excel 範本對帳表。",
+        "包含 Step 1 清洗建庫完成後的 Staging 狀態目錄（可單獨直接運作）。",
+        "包含 Step 2 合規差距對帳完成後的 Staging 狀態目錄（可單獨直接運作）。",
+        "包含 Step 3 成本調試與決策完成後的 Staging 狀態目錄（可單獨直接運作）。",
+        "包含 Step 4 草稿編譯與安全標註完成後的 Staging 狀態目錄（可單獨直接運作）。",
+        "包含 Step 5 跑測上傳與資料庫寫回完成後的 Staging 狀態目錄（可單獨直接運作）。"
+      ];
+      
+      const partNum = currentStepIndex + 1;
+      inputsDiv.innerHTML += `
+        <div class="file-card" style="background: rgba(111, 91, 216, 0.15); border: 1px dashed var(--color-primary-light);">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-weight: 700; font-size: 0.8rem; color: #a78bfa;">📥 學員實作下載包 (Part ${partNum} Pack)</span>
+            <span class="file-badge file-badge-ext" style="background: var(--color-secondary); color: black; font-weight: bold;">ZIP</span>
+          </div>
+          <p style="font-size: 0.7rem; color: var(--text-muted); margin-top: 0.25rem; margin-bottom: 0.5rem;">${partDescriptions[currentStepIndex]}</p>
+          <a href="part${partNum}/part${partNum}.zip" download style="display: inline-flex; align-items: center; justify-content: center; background: var(--color-secondary); color: black; font-weight: bold; border-radius: 4px; padding: 0.25rem 0.5rem; font-size: 0.7rem; text-decoration: none; width: 100%; text-align: center; border: none; cursor: pointer; transition: opacity 0.2s;">⚡ 下載 part${partNum}.zip</a>
+        </div>
+      `;
+
       if (currentStepIndex === 0) {
         inputsDiv.innerHTML += `
-          <div class="file-card" style="background: rgba(111, 91, 216, 0.15); border: 1px dashed var(--color-primary-light);">
+          <div class="file-card" style="background: rgba(111, 91, 216, 0.15); border: 1px dashed var(--color-primary-light); margin-top: 0.5rem;">
             <div style="display: flex; justify-content: space-between; align-items: center;">
-              <span style="font-weight: 700; font-size: 0.8rem; color: #a78bfa;">📥 學員實作下載包 (Part 1 Pack)</span>
+              <span style="font-weight: 700; font-size: 0.8rem; color: #a78bfa;">📦 統一完整實作資源包</span>
               <span class="file-badge file-badge-ext" style="background: var(--color-secondary); color: black; font-weight: bold;">ZIP</span>
             </div>
-            <p style="font-size: 0.7rem; color: var(--text-muted); margin-top: 0.25rem; margin-bottom: 0.5rem;">包含本步驟所需的 11 個 PDF 原始檔案及 Excel 範本對帳表。</p>
-            <a href="part1/part1.zip" download style="display: inline-flex; align-items: center; justify-content: center; background: var(--color-secondary); color: black; font-weight: bold; border-radius: 4px; padding: 0.25rem 0.5rem; font-size: 0.7rem; text-decoration: none; width: 100%; text-align: center; border: none; cursor: pointer; transition: opacity 0.2s;">⚡ 下載 part1.zip</a>
-          </div>
-        `;
-      } else if (currentStepIndex === 1) {
-        inputsDiv.innerHTML += `
-          <div class="file-card" style="background: rgba(111, 91, 216, 0.15); border: 1px dashed var(--color-primary-light);">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <span style="font-weight: 700; font-size: 0.8rem; color: #a78bfa;">📥 學員實作下載包 (Part 2 Pack)</span>
-              <span class="file-badge file-badge-ext" style="background: var(--color-secondary); color: black; font-weight: bold;">ZIP</span>
-            </div>
-            <p style="font-size: 0.7rem; color: var(--text-muted); margin-top: 0.25rem; margin-bottom: 0.5rem;">包含 Step 1 清洗建庫完成後的 Staging 狀態目錄（可單獨直接運作）。</p>
-            <a href="part2/part2.zip" download style="display: inline-flex; align-items: center; justify-content: center; background: var(--color-secondary); color: black; font-weight: bold; border-radius: 4px; padding: 0.25rem 0.5rem; font-size: 0.7rem; text-decoration: none; width: 100%; text-align: center; border: none; cursor: pointer; transition: opacity 0.2s;">⚡ 下載 part2.zip</a>
+            <p style="font-size: 0.7rem; color: var(--text-muted); margin-top: 0.25rem; margin-bottom: 0.5rem;">包含原始資源、範本與 Step 1 完工狀態的暫存資料庫，一包即可暢通所有實作步驟。</p>
+            <a href="class2_workspace.zip" download style="display: inline-flex; align-items: center; justify-content: center; background: #a78bfa; color: black; font-weight: bold; border-radius: 4px; padding: 0.25rem 0.5rem; font-size: 0.7rem; text-decoration: none; width: 100%; text-align: center; border: none; cursor: pointer; transition: opacity 0.2s;">📦 下載完整包 (class2_workspace.zip)</a>
           </div>
         `;
       }

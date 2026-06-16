@@ -475,47 +475,17 @@
       </div>
 
       <!-- 📥 Part 2 學員資源下載區 -->
-      <div style="background: rgba(111, 91, 216, 0.08); border: 1px dashed var(--color-primary-light); border-radius: 8px; padding: 1.25rem; margin-top: 1rem; margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem;">
-        <div style="display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
-          <div style="flex: 1;">
-            <strong style="color: white; font-size: 0.9rem; display: block; margin-bottom: 0.25rem;">📥 本章實作學員下載包 (Part 2 Start Pack)</strong>
-            <span style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.4; display: block;">包含 Step 1 清洗與 Excel 資料庫建置完成後的 Staging 狀態工作目錄。適合直接開始第二步對帳實作的學員。</span>
-          </div>
-          <a href="part2/part2.zip" download style="background: var(--color-secondary); color: black; font-weight: bold; padding: 0.5rem 1rem; text-decoration: none; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; min-height: 36px; border: none; cursor: pointer; transition: opacity 0.2s; white-space: nowrap;">
-            ⚡ 下載 part2.zip
-          </a>
+      <div style="background: rgba(111, 91, 216, 0.08); border: 1px dashed var(--color-primary-light); border-radius: 8px; padding: 1.25rem; margin-top: 1rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
+        <div style="flex: 1;">
+          <strong style="color: white; font-size: 0.9rem; display: block; margin-bottom: 0.25rem;">📥 本章實作學員下載包 (Part 2 Start Pack)</strong>
+          <span style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.4; display: block;">包含 Step 1 清洗與 Excel 資料庫建置完成後的 Staging 狀態工作目錄。適合直接開始第二步對帳實作的學員。</span>
         </div>
-        <div style="border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 0.75rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
-          <div style="flex: 1;">
-            <strong style="color: #a78bfa; font-size: 0.85rem; display: block; margin-bottom: 0.15rem;">📦 統一完整實作資源包 (Class 2 Complete Workspace)</strong>
-            <span style="font-size: 0.75rem; color: var(--text-muted);">包含原始資源、範本與 Step 1 完工狀態的暫存資料庫，一包即可暢通所有實作步驟。</span>
-          </div>
-          <a href="class2_workspace.zip" download style="background: #a78bfa; color: black; font-weight: bold; padding: 0.4rem 0.8rem; text-decoration: none; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem; border: none; cursor: pointer; transition: opacity 0.2s; white-space: nowrap;">
-            📦 下載完整包
-          </a>
-        </div>
+        <a href="part2/part2.zip" download style="background: var(--color-secondary); color: black; font-weight: bold; padding: 0.5rem 1rem; text-decoration: none; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; min-height: 36px; border: none; cursor: pointer; transition: opacity 0.2s; white-space: nowrap;">
+          ⚡ 下載 part2.zip
+        </a>
       </div>
 
-      <div style="margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1rem;">
-        <strong style="font-size: 0.85rem; color: var(--color-primary-light); display: block; margin-bottom: 0.25rem;">📋 JSON 輸出結構 (gap_report.json)</strong>
-        <pre class="prompt-content" style="color: #a78bfa; max-height: 120px; overflow-y: auto;">{
-  "audit_status": "fail",
-  "gaps_found": [
-    {
-      "clause": "PM Certification Requirements",
-      "rfp_requirement": "專案經理必須持有效 PMP 證照",
-      "our_status": "志明 (PMP 已過期 2026-02-15)",
-      "risk_level": "RED_DISQUALIFY"
-    },
-    {
-      "clause": "SLA Response Time",
-      "rfp_requirement": "2小時現場響應",
-      "our_status": "名音燈光商原始承諾 4h",
-      "risk_level": "YELLOW_WARNING"
-    }
-  ]
-}</pre>
-      </div>
+      
 
       <!-- Sub-step 2.1 -->
       <div style="margin-bottom: 2rem;">
@@ -633,23 +603,18 @@
       <div style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
         <strong>輸入檔案：</strong> Excel 試算表資料庫 <code>標案工作暫存區/標案工作記錄表.xlsx</code>
       </div>
-
-      <div style="margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1rem;">
-        <strong style="font-size: 0.85rem; color: var(--color-primary-light); display: block; margin-bottom: 0.25rem;">📋 JSON 輸出結構 (cost_analysis.json)</strong>
-        <pre class="prompt-content" style="color: #a78bfa; max-height: 120px; overflow-y: auto;">{
-  "budget_limit": 4500000,
-  "estimated_cost": 3800000,
-  "breakdown": {
-    "base_light_cost": 800000,
-    "sla_2h_surcharge": 150000,
-    "risk_reserve": 150000,
-    "other_materials": 2700000
-  },
-  "projected_profit": 700000,
-  "profit_margin_pct": 15.55,
-  "decision_recommendation": "green_approve"
-}</pre>
+      <!-- 📥 Part 3 學員資源下載區 -->
+      <div style="background: rgba(111, 91, 216, 0.08); border: 1px dashed var(--color-primary-light); border-radius: 8px; padding: 1.25rem; margin-top: 1rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
+        <div style="flex: 1;">
+          <strong style="color: white; font-size: 0.9rem; display: block; margin-bottom: 0.25rem;">📥 本章實作學員下載包 (Part 3 Start Pack)</strong>
+          <span style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.4; display: block;">包含 Step 2 差距對帳完成後的 Staging 狀態工作目錄。適合直接開始第三步成本調校的學員。</span>
+        </div>
+        <a href="part3/part3.zip" download style="background: var(--color-secondary); color: black; font-weight: bold; padding: 0.5rem 1rem; text-decoration: none; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; min-height: 36px; border: none; cursor: pointer; transition: opacity 0.2s; white-space: nowrap;">
+          ⚡ 下載 part3.zip
+        </a>
       </div>
+
+      
 
       <!-- Sub-step 3.1 -->
       <div style="margin-bottom: 2rem;">
@@ -767,21 +732,18 @@
       <div style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
         <strong>輸入檔案：</strong> Google NotebookLM 知識庫、草稿模板 <code>templates/tech_bid.md</code>、Excel 試算表資料庫
       </div>
-
-      <div style="margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1rem;">
-        <strong style="font-size: 0.85rem; color: var(--color-primary-light); display: block; margin-bottom: 0.25rem;">📋 JSON 輸出結構 (draft_status.json)</strong>
-        <pre class="prompt-content" style="color: #a78bfa; max-height: 120px; overflow-y: auto;">{
-  "draft_path": "標案工作暫存區/draft_assembled.md",
-  "pm_assigned": "Sophia (林淑芬)",
-  "pm_cert_id": "#PMP-246801",
-  "human_review_points": [
-    {
-      "line": 142,
-      "context": "[人類審查點: 確證 SLA 溢價補償金 NT$ 300,000 已於財務核算核准。]"
-    }
-  ]
-}</pre>
+      <!-- 📥 Part 4 學員資源下載區 -->
+      <div style="background: rgba(111, 91, 216, 0.08); border: 1px dashed var(--color-primary-light); border-radius: 8px; padding: 1.25rem; margin-top: 1rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
+        <div style="flex: 1;">
+          <strong style="color: white; font-size: 0.9rem; display: block; margin-bottom: 0.25rem;">📥 本章實作學員下載包 (Part 4 Start Pack)</strong>
+          <span style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.4; display: block;">包含 Step 3 成本調試與決策完成後的 Staging 狀態工作目錄。適合直接開始第四步草稿組裝的學員。</span>
+        </div>
+        <a href="part4/part4.zip" download style="background: var(--color-secondary); color: black; font-weight: bold; padding: 0.5rem 1rem; text-decoration: none; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; min-height: 36px; border: none; cursor: pointer; transition: opacity 0.2s; white-space: nowrap;">
+          ⚡ 下載 part4.zip
+        </a>
       </div>
+
+      
 
       <!-- Sub-step 4.1 -->
       <div style="margin-bottom: 2rem;">
@@ -899,16 +861,18 @@
       <div style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
         <strong>輸入檔案：</strong> <code>標案工作暫存區/draft_assembled.md</code>、Excel 本地真理庫
       </div>
-
-      <div style="margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1rem;">
-        <strong style="font-size: 0.85rem; color: var(--color-primary-light); display: block; margin-bottom: 0.25rem;">📋 JSON 輸出結構 (harvest_log.json)</strong>
-        <pre class="prompt-content" style="color: #a78bfa; max-height: 120px; overflow-y: auto;">{
-  "harvest_status": "success",
-  "excel_write": true,
-  "notebooklm_sync": true,
-  "audit_log_id": "AUDIT_20260616_164210_FF"
-}</pre>
+      <!-- 📥 Part 5 學員資源下載區 -->
+      <div style="background: rgba(111, 91, 216, 0.08); border: 1px dashed var(--color-primary-light); border-radius: 8px; padding: 1.25rem; margin-top: 1rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
+        <div style="flex: 1;">
+          <strong style="color: white; font-size: 0.9rem; display: block; margin-bottom: 0.25rem;">📥 本章實作學員下載包 (Part 5 Start Pack)</strong>
+          <span style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.4; display: block;">包含 Step 4 草稿編譯與安全標註完成後的 Staging 狀態工作目錄。適合直接開始第五步上傳寫回的學員。</span>
+        </div>
+        <a href="part5/part5.zip" download style="background: var(--color-secondary); color: black; font-weight: bold; padding: 0.5rem 1rem; text-decoration: none; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; min-height: 36px; border: none; cursor: pointer; transition: opacity 0.2s; white-space: nowrap;">
+          ⚡ 下載 part5.zip
+        </a>
       </div>
+
+      
 
       <!-- Sub-step 5.1 -->
       <div style="margin-bottom: 2rem;">
