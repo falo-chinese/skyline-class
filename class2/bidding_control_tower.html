@@ -287,73 +287,7 @@
       margin-bottom: 0.25rem;
     }
 
-    /* 📅 7天甘特圖樣式 */
-    .gantt-container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(15, 23, 42, 0.4);
-      padding: 1rem 0.75rem;
-      border-radius: 8px;
-      margin-bottom: 1.25rem;
-      position: relative;
-    }
-    .gantt-line {
-      position: absolute;
-      top: 38%;
-      left: 8%;
-      right: 8%;
-      height: 2px;
-      background: rgba(255, 255, 255, 0.1);
-      z-index: 1;
-    }
-    .gantt-progress {
-      position: absolute;
-      top: 38%;
-      left: 8%;
-      width: 50%; /* D-Day 4 */
-      height: 2px;
-      background: var(--color-primary-light);
-      z-index: 2;
-      transition: width 0.5s ease;
-    }
-    .gantt-step {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      z-index: 3;
-      position: relative;
-      flex: 1;
-    }
-    .gantt-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: #475569;
-      border: 2px solid var(--bg-primary);
-      margin-bottom: 0.35rem;
-      transition: all 0.3s;
-    }
-    .gantt-step.done .gantt-dot {
-      background: var(--color-secondary);
-      box-shadow: 0 0 8px var(--color-secondary);
-    }
-    .gantt-step.active .gantt-dot {
-      background: var(--color-primary-light);
-      box-shadow: 0 0 10px var(--color-primary-light);
-      transform: scale(1.25);
-    }
-    .gantt-label {
-      font-size: 0.65rem;
-      color: var(--text-muted);
-      font-weight: bold;
-    }
-    .gantt-step.active .gantt-label {
-      color: var(--color-primary-light);
-    }
-    .gantt-step.done .gantt-label {
-      color: var(--color-secondary);
-    }
+    /* 📅 Gantt CSS Removed */
     
     /* 15個子環節 Timeline 樣式 */
     .subtask-badge {
@@ -606,57 +540,68 @@
 [WARNING] 檢測到員工試圖寫入 staging 區，寫入操作已攔截（權限不足）。</div>
         </div>
 
-        <!-- 📅 專案進度與 AI PM 控制台 (Progress & AI PM Orchestrator) -->
+        <!-- 🤖 AI PM 專案決策顧問 (AI PM Advisor POC) -->
         <div class="panel-card">
           <div class="panel-header">
-            <div class="panel-title">📅 專案進度與 AI PM 控制台</div>
-            <span class="panel-badge badge-supervisor" style="background: rgba(20, 184, 166, 0.2); color: var(--color-secondary); border: 1px solid var(--color-secondary); animation: pulse 2s infinite;">AI PM 監控中</span>
+            <div class="panel-title">🤖 AI PM 專案決策顧問</div>
+            <span class="panel-badge badge-supervisor" style="background: rgba(20, 184, 166, 0.2); color: var(--color-secondary); border: 1px solid var(--color-secondary); animation: pulse 2s infinite;">AI PM Advisor POC</span>
           </div>
-          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">AI 定期分析員監控專案關鍵路徑。下圖為 7 天競標生命週期與關鍵節點進度：</p>
+          <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.85rem;">
+            本模組模擬 AI 擔任專案顧問。透過分析地端 Staging 區最新成果物，協助主管掌握現狀、預警風險、並自動規劃下一步行動。
+          </p>
 
-          <!-- 7天甘特圖 -->
-          <div class="gantt-container">
-            <div class="gantt-line"></div>
-            <div class="gantt-progress" id="gantt-bar"></div>
-            
-            <div class="gantt-step done" id="gantt-d7">
-              <div class="gantt-dot"></div>
-              <span class="gantt-label">D-7 整理</span>
+          <!-- 專案資訊 -->
+          <div style="background: rgba(15, 23, 42, 0.4); border: 1px solid rgba(255,255,255,0.05); padding: 0.75rem; border-radius: 8px; margin-bottom: 0.85rem;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem; font-size: 0.78rem;">
+              <div><span style="color: var(--text-muted);">專案名稱：</span><strong style="color: white;">台南玩具展總包標案 (450M)</strong></div>
+              <div><span style="color: var(--text-muted);">負責人：</span><strong style="color: white;" id="ai-pm-owner">王志明 (Jimmy)</strong></div>
+              <div><span style="color: var(--text-muted);">專案狀態：</span><span class="badge" style="background: #1e3a8a; color: #93c5fd; padding: 0.1rem 0.3rem; border-radius: 4px; font-weight: bold; font-size: 0.7rem;">進行中</span></div>
+              <div><span style="color: var(--text-muted);">完成度：</span><strong style="color: var(--color-secondary);" id="ai-pm-progress-text">15%</strong></div>
             </div>
-            <div class="gantt-step done" id="gantt-d6">
-              <div class="gantt-dot"></div>
-              <span class="gantt-label">D-6 對帳</span>
+            <!-- 進度條 -->
+            <div style="background: rgba(255,255,255,0.08); height: 6px; border-radius: 99px; margin-top: 0.5rem; overflow: hidden;">
+              <div id="ai-pm-progress-bar" style="background: var(--color-secondary); height: 100%; width: 15%; transition: width 0.4s ease;"></div>
             </div>
-            <div class="gantt-step done" id="gantt-d5">
-              <div class="gantt-dot"></div>
-              <span class="gantt-label">D-5 決策</span>
+          </div>
+
+          <!-- AI 現況分析 -->
+          <div style="border-left: 3px solid var(--color-primary-light); padding-left: 0.65rem; margin-bottom: 0.85rem;">
+            <div style="font-size: 0.8rem; font-weight: bold; color: var(--color-primary-light); margin-bottom: 0.2rem;">🔍 AI 專案現況分析</div>
+            <div id="ai-pm-status-analysis" style="font-size: 0.76rem; color: #cbd5e1; line-height: 1.4;">
+              正在進行標案前期資料整理，已建立「原始標案資源/」工作目錄，準備進行地端掃描與檔案複製。
             </div>
-            <div class="gantt-step active" id="gantt-d4">
-              <div class="gantt-dot"></div>
-              <span class="gantt-label">D-4 草稿</span>
+          </div>
+
+          <!-- AI 風險提示 -->
+          <div style="border-left: 3px solid #f87171; padding-left: 0.65rem; margin-bottom: 0.85rem;">
+            <div style="font-size: 0.8rem; font-weight: bold; color: #f87171; margin-bottom: 0.2rem;">⚠️ AI 風險預警提示</div>
+            <div id="ai-pm-risk-alerts" style="font-size: 0.76rem; color: #cbd5e1; line-height: 1.4;">
+              • 地端隨意放置的歷史得標檔案與資格證明格式混亂，尚未進行語意重命名與結構化。<br>
+              • 關鍵協力商「大同空間搭建」之實績證明 PDF 中包含大量敏感個資（身分證字號與電話），直接同步大腦將存在 PII 外洩風險。
             </div>
-            <div class="gantt-step todo" id="gantt-d3">
-              <div class="gantt-dot"></div>
-              <span class="gantt-label">D-3 評審</span>
+          </div>
+
+          <!-- AI 下一步建議 -->
+          <div style="border-left: 3px solid #fbbf24; padding-left: 0.65rem; margin-bottom: 0.85rem;">
+            <div style="font-size: 0.8rem; font-weight: bold; color: #fbbf24; margin-bottom: 0.2rem;">💡 AI 下一步行動建議</div>
+            <div id="ai-pm-next-steps" style="font-size: 0.76rem; color: #cbd5e1; line-height: 1.4;">
+              1. 執行地端掃描，將 PDF 原始資源複製到隔離的安全「標案工作暫存區」中。<br>
+              2. 呼叫語意分析特工，從內文中提取真實年份以重新智慧命名檔名，便於語意歸類。
             </div>
-            <div class="gantt-step todo" id="gantt-d2">
-              <div class="gantt-dot"></div>
-              <span class="gantt-label">D-2 跑測</span>
-            </div>
-            <div class="gantt-step todo" id="gantt-d1">
-              <div class="gantt-dot"></div>
-              <span class="gantt-label">D-1 遞件</span>
+          </div>
+
+          <!-- 最近成果物 -->
+          <div style="margin-bottom: 0.85rem;">
+            <div style="font-size: 0.8rem; font-weight: bold; color: white; margin-bottom: 0.3rem;">📦 最近完成成果物</div>
+            <div id="ai-pm-deliverables" style="display: flex; gap: 0.35rem; flex-wrap: wrap;">
+              <span style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); padding: 0.15rem 0.35rem; border-radius: 4px; font-size: 0.68rem; color: var(--text-muted);">無</span>
             </div>
           </div>
 
           <!-- AI PM 主動催辦與調度日誌 -->
-          <h4 style="color: white; font-size: 0.9rem; margin-bottom: 0.5rem;">🔔 AI PM 主動調度與催辦日誌</h4>
-          <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.05); padding: 0.75rem; border-radius: 8px; height: 160px; overflow-y: auto; font-family: monospace; font-size: 0.75rem; color: #a78bfa; line-height: 1.5;" id="pm-alert-console">
+          <h4 style="color: white; font-size: 0.8rem; margin-bottom: 0.3rem;">📅 專案執行時間線 (Timeline)</h4>
+          <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.05); padding: 0.6rem; border-radius: 8px; height: 110px; overflow-y: auto; font-family: monospace; font-size: 0.7rem; color: #a78bfa; line-height: 1.4;" id="pm-alert-console">
 [D-Day 7 09:00] 🔍 AI PM 檢測到政府採購網玩具展公告，自動初始化地端專案 Staging 資料夾。
-[D-Day 6 10:15] 🔍 AI PM 稽核發現大同搭建商實績證明缺漏，已自動發送補件催辦郵件草稿。
-[D-Day 6 14:30] 🚨 AI PM 偵測到預定 PM 志明 PMP 證照過期，自動啟動備降方案，在 Staging 區將 PM 人選重置為 Sophia。
-[D-Day 5 09:00] 💰 名音燈光 SLA 時間縮短淨增成本 30 萬，AI PM 運算毛利率為 15.5%，提示主管進行決策批准。
-[D-Day 4 10:00] ⏳ [Scheduled Analyst] 警告：第四章技術草稿落後預期 12 小時，建議主管調撥 Codex 特工資源。
           </div>
         </div>
 
@@ -1574,6 +1519,8 @@
       } else {
         triggerBtn.innerText = '▶️ 執行此子步驟跑測';
       }
+      
+      updateAIPMAdvisor();
     }
 
     function switchMode(mode) {
@@ -1730,38 +1677,27 @@
             if (currentStepIndex === 0) {
               document.getElementById('node-status-1').innerText = 'Intake 已完成';
               document.getElementById('node-status-1').className = 'flow-node-status status-done';
-              document.getElementById('gantt-d7').className = 'gantt-step done';
-              document.getElementById('gantt-d6').className = 'gantt-step active';
-              document.getElementById('gantt-bar').style.width = '16.6%';
+              
               logPMEvent("[D-Day 7 15:45] 📅 [AI PM] 標前整理完成，一條龍子環節 1.1~1.4.B 全數通過。");
             } else if (currentStepIndex === 1) {
               document.getElementById('node-status-2').innerText = 'Gap 已比對';
               document.getElementById('node-status-2').className = 'flow-node-status status-done';
-              document.getElementById('gantt-d6').className = 'gantt-step done';
-              document.getElementById('gantt-d5').className = 'gantt-step active';
-              document.getElementById('gantt-bar').style.width = '33.3%';
+              
               logPMEvent("[D-Day 6 16:00] 📅 [AI PM] 合規差距核對完成。志明證照過期警報已被防禦備降。");
             } else if (currentStepIndex === 2) {
               document.getElementById('node-status-3').innerText = 'SLA 已計算';
               document.getElementById('node-status-3').className = 'flow-node-status status-done';
-              document.getElementById('gantt-d5').className = 'gantt-step done';
-              document.getElementById('gantt-d4').className = 'gantt-step active';
-              document.getElementById('gantt-bar').style.width = '50%';
+              
               logPMEvent("[D-Day 5 11:30] 📅 [AI PM] 主管已授權 SLA 加急預算 30 萬。SLA 對帳合規。");
             } else if (currentStepIndex === 3) {
               document.getElementById('node-status-4').innerText = '已完成組裝';
               document.getElementById('node-status-4').className = 'flow-node-status status-done';
-              document.getElementById('gantt-d4').className = 'gantt-step done';
-              document.getElementById('gantt-d3').className = 'gantt-step active';
-              document.getElementById('gantt-bar').style.width = '66.6%';
+              
               logPMEvent("[D-Day 4 15:45] 📅 [AI PM] 建議書草稿自動編譯完成，PM 成功替換為 Sophia。等待評審與跑測。");
             } else if (currentStepIndex === 4) {
               document.getElementById('node-status-5').innerText = '已完成收割';
               document.getElementById('node-status-5').className = 'flow-node-status status-done';
-              document.getElementById('gantt-d3').className = 'gantt-step done';
-              document.getElementById('gantt-d2').className = 'gantt-step done';
-              document.getElementById('gantt-d1').className = 'gantt-step done';
-              document.getElementById('gantt-bar').style.width = '100%';
+              
               logPMEvent("[D-Day 1 15:50] 📅 [AI PM] 全專案正式收割，得標數據同步寫入 Excel 與 NotebookLM，工作流安全解鎖。");
             } else if (currentStepIndex === 5) {
               document.getElementById('node-status-6').innerText = '監控中';
@@ -1890,15 +1826,170 @@
             nodeStatus5.className = 'flow-node-status status-done';
           }
           
-          document.getElementById('gantt-d3').className = 'gantt-step done';
-          document.getElementById('gantt-d2').className = 'gantt-step done';
-          document.getElementById('gantt-d1').className = 'gantt-step done';
-          document.getElementById('gantt-bar').style.width = '100%';
+          
           
           selectSubtask(currentSubtaskIndex);
           consoleLog.scrollTop = consoleLog.scrollHeight;
           logPMEvent("[D-Day 1 15:50] 📅 [AI PM] 收割發布成功！正式得標封存於 Excel/NotebookLM，專案圓滿關閉。");
         }, 1500);
+      }
+    }
+
+    function updateAIPMAdvisor() {
+      const ownerEl = document.getElementById('ai-pm-owner');
+      const progressTextEl = document.getElementById('ai-pm-progress-text');
+      const progressBarEl = document.getElementById('ai-pm-progress-bar');
+      const statusAnalysisEl = document.getElementById('ai-pm-status-analysis');
+      const riskAlertsEl = document.getElementById('ai-pm-risk-alerts');
+      const nextStepsEl = document.getElementById('ai-pm-next-steps');
+      const deliverablesEl = document.getElementById('ai-pm-deliverables');
+      
+      if (!ownerEl) return;
+      
+      const step = stepsData[currentStepIndex];
+      const isStepFullyDone = step.subtasks.every(t => t.status === 'done');
+      
+      let owner = "王志明 (Jimmy)";
+      let progress = 15;
+      let statusHtml = "";
+      let riskHtml = "";
+      let nextHtml = "";
+      let deliverables = [];
+      
+      if (currentStepIndex === 0) {
+        owner = "王志明 (Jimmy) <span style='color: #fbbf24; font-size: 0.72rem; font-weight: bold;'> (PMP 證照過期警報)</span>";
+        progress = isStepFullyDone ? 20 : 15;
+        statusHtml = isStepFullyDone 
+          ? "已完成標案原始檔案整理與複製。地端首版 Excel 試算表暫存庫建置完成，成功寫入首批 Metadata。"
+          : "正在進行標案前期資料整理，已建立「原始標案資源/」工作目錄，準備進行地端掃描與檔案複製。";
+        riskHtml = isStepFullyDone
+          ? "• 大同搭建商實績證明 PDF 中包含大量敏感個資（身分證與電話），地端分類時雖完成遮蔽，但隨後續對帳啟動，仍需持續追蹤合規漏洞。"
+          : "• 原始標案檔案與資格證明散落，且大同搭建商實績證明 PDF 中存在敏感個資（身分證字號與電話），直接使用存在外洩風險。";
+        nextHtml = isStepFullyDone
+          ? "1. 啟動合規條款對帳，提取 RFP 廢標條件。<br>2. 對比 Jimmy 的 PMP 證照到期狀態與名音 SLA 現場響應承諾。"
+          : "1. 將 PDF 原始資源複製到安全隔離的「標案工作暫存區」中。<br>2. 執行檔名語意智慧重命名與個資去敏感化。";
+        
+        deliverables = ["2026_招標需求_台南玩具展_RFP.pdf", "大同搭建商_實績證明.pdf"];
+        if (isStepFullyDone) {
+          deliverables.push("2026_招標需求_台南玩具展_RFP.txt", "標案工作記錄表.xlsx");
+        }
+      }
+      else if (currentStepIndex === 1) {
+        owner = "王志明 (Jimmy) <span style='color: #ef4444; font-size: 0.72rem; font-weight: bold;'> (備降防禦觸發)</span>";
+        progress = isStepFullyDone ? 40 : 35;
+        statusHtml = isStepFullyDone
+          ? "已完成條款、證照、SLA 差距稽核。確證 Jimmy 證照過期且名音 SLA 違規。已在證照庫尋得備用 PM Sophia (有效至 2028-12-31)。"
+          : "已建置首版 Excel 暫存庫。正在提取 RFP 廢標條款並進行 PMP 證照與協力商 SLA 合規差距對帳。";
+        riskHtml = isStepFullyDone
+          ? "• 擬任專案經理 Jimmy 的 PMP 證照過期，面臨直接廢標紅線！大同搭建實績雖然合規，但名音現場 SLA 承諾僅 4h 存在嚴重差距。"
+          : "• 擬任專案經理 Jimmy 的 PMP 證照過期，面臨直接廢標紅線！協力商名音 SLA 現場響應為 4h，不符 RFP 2h 的規定。";
+        nextHtml = isStepFullyDone
+          ? "1. 啟動成本費率調校，計算 +5% 木作搭建通膨費率。<br>2. 評估名音 2h SLA 溢價報價 30 萬並提報毛利壓力測試報告以取得主管決策核准。"
+          : "1. 在公司證照庫中檢索備用 PMP 專案經理（如 Sophia）。<br>2. 協商名音燈光 2h SLA 溢價預算或評估更換為極光音響。";
+        
+        deliverables = ["2026_招標需求_台南玩具展_RFP.txt", "標案工作記錄表.xlsx"];
+        if (isStepFullyDone) {
+          deliverables.push("clause_checklist.html", "pm_audit_report.html", "sla_gap_report.html");
+        }
+      }
+      else if (currentStepIndex === 2) {
+        owner = "王志明 (Jimmy) <span style='color: #fbbf24; font-size: 0.72rem; font-weight: bold;'> (備降流程執行中)</span>";
+        if (slaApproved) owner = "林淑芬 (Sophia) <span style='color: #10b981; font-size: 0.72rem; font-weight: bold;'> (有效 PMP 🟢)</span>";
+        progress = isStepFullyDone ? 55 : 50;
+        statusHtml = isStepFullyDone
+          ? "已完成財務利潤壓力測試與物料費率調校。主管已核准名音燈光 2h SLA 溢價 30 萬元支出，實質毛利率 15.55% 達毛利紅線以上。"
+          : "已完成合規差距稽核（發現 Jimmy 證照過期與名音 4h SLA 差距）。正在調校材料費率 5% 與評估名音 2h SLA 溢價成本壓力。";
+        riskHtml = isStepFullyDone
+          ? "• 大同搭建材料通膨 5% (+17.5萬) 且名音加急 SLA 溢價增至 30 萬，使專案淨利潤壓縮至 525,000 元，毛利率面臨極限考驗。"
+          : "• 大同搭建材料通膨 5% 且名音加急 SLA 溢價增至 30 萬，專案淨利潤面臨被壓縮風險，需進行毛利防禦審查。";
+        nextHtml = isStepFullyDone
+          ? "1. 向 Google NotebookLM 檢索 Sophia 證照資訊與高雄動漫節實績案例。<br>2. 進行服務建議書草稿組裝並標註人類審查安全標籤。"
+          : "1. 進行木作材料 +5% 通膨費率調校。<br>2. 向決策主管提交預算壓力測試報告以取得 SLA 溢價批准。";
+          
+        deliverables = ["clause_checklist.html", "pm_audit_report.html", "sla_gap_report.html"];
+        if (isStepFullyDone) {
+          deliverables.push("material_adjust_report.html", "sla_cost_report.html", "profit_analysis_report.html");
+        }
+      }
+      else if (currentStepIndex === 3) {
+        owner = "林淑芬 (Sophia) <span style='color: #10b981; font-size: 0.72rem; font-weight: bold;'> (有效 PMP 🟢)</span>";
+        progress = isStepFullyDone ? 75 : 70;
+        statusHtml = isStepFullyDone
+          ? "已完成技術建議書草稿組裝。成功將 PM 替換為 Sophia，並從 NotebookLM 知識大腦檢索填入 350 萬實績，已在變更段落標註 [人類審查點]。"
+          : "已完成利潤壓力測試（SLA 溢價 30 萬已批准，毛利率 15.55% ）。正在檢索 NotebookLM 實績，編譯服務建議書草稿。";
+        riskHtml = isStepFullyDone
+          ? "• 改任 PM Sophia 雖證照有效，但若投標書未展現其大規模展會管理能力，可能降低評分。建議書草稿涉及財務變更，需防止未授權發布。"
+          : "• 改任 PM Sophia 雖證照有效，但若投標書未展現其大規模展會管理能力，可能降低評分。建議書草稿存在財務變更與 PM 變更，存在合規發布風險。";
+        nextHtml = isStepFullyDone
+          ? "1. 啟動 Computer Use 沙盒模擬網頁上傳與簽章驗證。<br>2. 主管核准後將得標總額與 Force 簽章寫回 Excel 真理庫。"
+          : "1. 自 NotebookLM 脈絡大腦檢索 Sophia 證照與繁星實績。<br>2. 在建議書草稿中標註人類審查點以確保安全審核。";
+        
+        deliverables = ["material_adjust_report.html", "sla_cost_report.html", "profit_analysis_report.html"];
+        if (isStepFullyDone) {
+          deliverables.push("draft_assembled.md", "retrieval_manifest.html", "pm_replacement_log.html", "hitl_review_checklist.html");
+        }
+      }
+      else if (currentStepIndex === 4) {
+        owner = "林淑芬 (Sophia) <span style='color: #10b981; font-size: 0.72rem; font-weight: bold;'> (有效 PMP 🟢)</span>";
+        progress = isStepFullyDone ? 95 : 90;
+        statusHtml = isStepFullyDone
+          ? "已完成實機跑測上傳與資料庫寫回。建議書已成功上傳政府採購網，投標總額 4.5M、PM Sophia 與 Force 簽章軌跡已寫回 Excel 真理庫。"
+          : "已完成技術建議書 RAG 編譯，更替 PM 為 Sophia 並標註人類審查點。正在調用 Computer Use 模擬網頁上傳並準備寫回 Excel SSOT。";
+        riskHtml = isStepFullyDone
+          ? "• 本次投標流程雖完成，但大同搭建商的實績證明文件有缺件延誤風險，可能影響最終實體採購審查，需啟動 AI PM 排程定時監控。"
+          : "• 服務建議書草稿涉及財務變更與 PM 替換，若未經主管在環（HITL）人工核決審章，直接遞交存在合規漏洞。";
+        nextHtml = isStepFullyDone
+          ? "1. 啟動 AI PM 背景定時排程進度監控。<br>2. 對大同缺件發送語意催辦郵件，並為 Jimmy 證照過期進行調配修復存檔。"
+          : "1. 啟動 Computer Use 沙盒上傳服務建議書。<br>2. 主管核准後將得標總額與 Force 簽章寫回 Excel 真理庫。";
+        
+        deliverables = ["draft_assembled.md", "retrieval_manifest.html", "pm_replacement_log.html", "hitl_review_checklist.html"];
+        if (isStepFullyDone) {
+          deliverables.push("upload_receipt.html", "db_sync_audit.html", "brain_sync_report.html");
+        }
+      }
+      else if (currentStepIndex === 5) {
+        owner = "林淑芬 (Sophia) <span style='color: #10b981; font-size: 0.72rem; font-weight: bold;'> (有效 PMP 🟢)</span>";
+        progress = isStepFullyDone ? 100 : 98;
+        statusHtml = isStepFullyDone
+          ? "已完成 AI PM 背景排程監控。偵測到大同搭設證明延誤 12h 並自動生成催辦信草稿；偵測到 Jimmy 證照過期並執行 HR PM 調配存檔，流程安全閉環。"
+          : "已完成採購網上傳跑測與 Excel/NotebookLM 雙向同步。目前啟動背景定時排程，監控協調協力商缺件與證照修復進度。";
+        riskHtml = isStepFullyDone
+          ? "• 專案成功閉環。但大同搭建商實績證明附件仍處於「已催辦、待交付」狀態，需持續跟進以防止實體廢標風險。"
+          : "• 背景排程監控到大同搭建商實績證明附件缺失，延誤 12h，有廢標風險；另外 Jimmy 證照過期需要 HR 調配修復存檔。";
+        nextHtml = isStepFullyDone
+          ? "1. 本競標專案已全面關閉並安全封存。<br>2. 專案得標成果已安全閉環寫回 NotebookLM 脈絡大腦以備未來標案使用。"
+          : "1. 背景定時排程持續檢查寫作日誌。<br>2. 自動起草並發送大同催辦郵件；3. 執行 Sophia 備降調配存檔。";
+        
+        deliverables = ["upload_receipt.html", "db_sync_audit.html", "brain_sync_report.html"];
+        if (isStepFullyDone) {
+          deliverables.push("pm_schedule_report.html", "missing_doc_alert.html", "cert_recovery_report.html");
+        }
+      }
+      
+      ownerEl.innerHTML = owner;
+      progressTextEl.innerText = `${progress}%`;
+      progressBarEl.style.width = `${progress}%`;
+      statusAnalysisEl.innerText = statusHtml;
+      riskAlertsEl.innerHTML = riskHtml;
+      nextStepsEl.innerHTML = nextHtml;
+      
+      deliverablesEl.innerHTML = "";
+      if (deliverables.length === 0) {
+        deliverablesEl.innerHTML = `<span style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); padding: 0.15rem 0.35rem; border-radius: 4px; font-size: 0.68rem; color: var(--text-muted);">無</span>`;
+      } else {
+        deliverables.forEach(d => {
+          let badgeColor = "var(--text-muted)";
+          let bg = "rgba(255,255,255,0.06)";
+          let border = "rgba(255,255,255,0.1)";
+          if (d.endsWith(".xlsx")) { badgeColor = "#34d399"; bg = "rgba(52, 211, 153, 0.1)"; border = "rgba(52, 211, 153, 0.2)"; }
+          else if (d.endsWith(".html")) { badgeColor = "#38bdf8"; bg = "rgba(56, 189, 248, 0.1)"; border = "rgba(56, 189, 248, 0.2)"; }
+          else if (d.endsWith(".md")) { badgeColor = "#a78bfa"; bg = "rgba(167, 139, 250, 0.1)"; border = "rgba(167, 139, 250, 0.2)"; }
+          else if (d.endsWith(".txt") || d.endsWith(".pdf")) { badgeColor = "#fbbf24"; bg = "rgba(251, 191, 36, 0.1)"; border = "rgba(251, 191, 36, 0.2)"; }
+          
+          deliverablesEl.innerHTML += `
+            <span style="background: ${bg}; border: 1px solid ${border}; padding: 0.15rem 0.35rem; border-radius: 4px; font-size: 0.68rem; color: ${badgeColor}; font-family: monospace; white-space: nowrap;">${d}</span>
+          `;
+        });
       }
     }
 
