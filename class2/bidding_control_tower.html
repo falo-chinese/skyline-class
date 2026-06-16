@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>展會標案 AIDE 智慧控制塔 (POC) - Skyline Class02</title>
+  <link rel="stylesheet" href="docs/style.css">
+  <style>
+    .version-switch {
+      position: absolute;
+      top: 2rem;
+      right: 4rem;
+      background: rgba(20, 184, 166, 0.2);
+      border: 1px solid var(--color-secondary);
+      padding: 0.5rem 1rem;
+      border-radius: 99px;
+      color: var(--color-secondary);
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s;
+      z-index: 10;
+    }
+    .version-switch:hover {
+      background: var(--color-secondary);
+      color: white;
+      text-decoration: none;
+      box-shadow: 0 0 15px rgba(20, 184, 166, 0.4);
+    }
+    /* 雙模切換器樣式 */
+    .mode-container {
+      display: flex;
+      align-items: center;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 99px;
+      padding: 0.25rem;
+      margin-bottom: 2rem;
+      width: fit-content;
+      gap: 0.25rem;
+    }
+    .mode-btn {
+      padding: 0.5rem 1.25rem;
+      border-radius: 99px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .mode-btn.active {
+      background: var(--color-primary);
+      color: white;
+      box-shadow: 0 0 12px rgba(99, 102, 241, 0.4);
+    }
+    .mode-btn.api-active {
+      background: var(--color-secondary) !important;
+      color: var(--bg-primary) !important;
+      box-shadow: 0 0 12px rgba(20, 184, 166, 0.4) !important;
+    }
+    /* 控制塔流程圖 */
+    .control-flow {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .flow-node {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 1rem;
+      text-align: center;
+      position: relative;
+      transition: all 0.3s;
+    }
+    .flow-node.active {
+      border-color: var(--color-primary-light);
+      box-shadow: 0 0 15px rgba(99, 102, 241, 0.2);
+    }
+    .flow-node-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 0.5rem;
+    }
+    .flow-node-status {
+      font-size: 0.75rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      display: inline-block;
+    }
+    .status-todo { background: rgba(255, 255, 255, 0.08); color: var(--text-muted); }
+    .status-running { background: rgba(99, 102, 241, 0.2); color: var(--color-primary-light); border: 1px solid var(--color-primary); }
+    .status-done { background: rgba(20, 184, 166, 0.2); color: var(--color-secondary); border: 1px solid var(--color-secondary); }
+    .status-warn { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #ef4444; }
+
+    /* 雙軌左右面板佈局 */
+    .dual-panels {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    .panel-card {
+      background: rgba(30, 41, 59, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      padding: 1.75rem;
+      backdrop-filter: blur(10px);
+    }
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+    .panel-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .panel-badge {
+      font-size: 0.75rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 99px;
+      font-weight: 700;
+    }
+    .badge-staff { background: rgba(99, 102, 241, 0.2); color: var(--color-primary-light); border: 1px solid var(--color-primary); }
+    .badge-supervisor { background: rgba(236, 72, 153, 0.2); color: var(--color-accent); border: 1px solid var(--color-accent); }
+
+    /* 互動操作與主控台 */
+    .action-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(15, 23, 42, 0.4);
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      margin-bottom: 1rem;
+    }
+    .action-text {
+      font-size: 0.85rem;
+      color: var(--text-main);
+    }
+    .action-btn {
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+      border: 1px solid var(--color-secondary);
+      background: rgba(20, 184, 166, 0.1);
+      color: var(--color-secondary);
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 700;
+      transition: all 0.2s;
+    }
+    .action-btn:hover {
+      background: var(--color-secondary);
+      color: var(--bg-primary);
+    }
+    .console-box {
+      background: #090d16;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 1rem;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.8rem;
+      color: #38bdf8;
+      height: 180px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      line-height: 1.4;
+    }
+    /* 資源庫區塊 */
+    .asset-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+    .asset-item {
+      background: rgba(15, 23, 42, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 1rem;
+    }
+    .asset-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .asset-img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      margin-top: 0.5rem;
+    }
+    /* AI 顧問面板 */
+    .advisor-alert {
+      background: rgba(245, 158, 11, 0.1);
+      border-left: 4px solid #f59e0b;
+      padding: 1rem;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 1rem;
+      font-size: 0.85rem;
+    }
+    .advisor-alert-title {
+      color: #fbbf24;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 側邊欄導覽 -->
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      Skyline Class <span>class2</span>
+    </div>
+    
+    <div class="sidebar-menu-title">引導總覽</div>
+    <ul class="sidebar-menu">
+      <li><a href="README.html" class="sidebar-link">🚀 專案啟動說明</a></li>
+      <li><a href="workbench/index.html" class="sidebar-link">🧭 教材工作台</a></li>
+      <li><a href="falo_set_menu.html" class="sidebar-link">🍱 FALO 模型菜組合包範例</a></li>
+      <li><a href="agent_tools_guide.html" class="sidebar-link">🤖 Agent 工具使用指南</a></li>
+      <li><a href="bidding_control_tower.html" class="sidebar-link active">🤖 智慧投標控制塔 (POC)</a></li>
+    </ul>
+
+    <div class="sidebar-menu-title">核心教材</div>
+    <ul class="sidebar-menu">
+      <li><a href="docs/01_course_map.html" class="sidebar-link">🗺️ 01 課程地圖</a></li>
+      <li><a href="docs/02_tender_workflow.html" class="sidebar-link">⚙️ 02 投標工作流</a></li>
+      <li><a href="docs/03_multi_ai_collaboration.html" class="sidebar-link">👥 03 Multi-AI 協作</a></li>
+      <li><a href="docs/04_artifact_management.html" class="sidebar-link">🛡️ 04 Artifact 管理</a></li>
+    </ul>
+
+    <div class="sidebar-menu-title">輔助工具</div>
+    <ul class="sidebar-menu">
+      <li><a href="memo.html" class="sidebar-link">📝 未來規劃備忘錄</a></li>
+      <li><a href="reference/class02-antigravity/index.html" class="sidebar-link">📚 歷史版本參考</a></li>
+    </ul>
+
+    <div class="sidebar-menu-title">架構共識</div>
+    <ul class="sidebar-menu">
+      <li><a href="local_ai_pm_architecture.html" class="sidebar-link">🖥️ 地端 AI PM 人機架構</a></li>
+      <li><a href="notebooklm_master_guide.html" class="sidebar-link">📘 NotebookLM 企業導讀</a></li>
+    </ul>
+
+    <div class="sidebar-menu-title">相關專案</div>
+    <ul class="sidebar-menu">
+      <li><a href="https://falo-taiwan.github.io/video-analysis-optimization/" target="_blank" class="sidebar-link">🎥 影音分析與優化專案</a></li>
+      <li><a href="ai_finance_demo.html" class="sidebar-link">📊 AI 財會與稅務自動化專案</a></li>
+      <li><a href="https://falo-taiwan.github.io/prompt-demo/" target="_blank" class="sidebar-link">💬 FALO Prompt 提示詞管理專案</a></li>
+    </ul>
+  </nav>
+
+  <!-- 主內容區 -->
+  <main class="main-content">
+    <a href="bidding_control_tower.md" class="version-switch">📄 檢視 Markdown 版本</a>
+    
+    <div class="card">
+      <h1>🤖 展會投標 AIDE 控制塔 (Bidding Control Tower POC)</h1>
+      <p style="color: var(--color-secondary); font-weight: 600;">展覽總包工程標案之雙軌人機協調控制台 (台南玩具展案例)</p>
+      <p style="margin-top: 1rem;">本控制塔展示了在「台南玩具總包標案 (450萬元)」中，AI 如何協助高階主管與基層同仁進行安全的雙軌對帳、SLA 響應、爬蟲分析與 3D 展位圖自動組裝。提供手動與 API 雙模加速操作。</p>
+    </div>
+
+    <!-- 雙模操作切換開關 -->
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <div class="mode-container">
+        <button class="mode-btn active" id="btn-manual-mode" onclick="switchMode('manual')">✍️ 人工手動 (Prompt複製)</button>
+        <button class="mode-btn" id="btn-api-mode" onclick="switchMode('api')">⚡ API 自動加速 (Gemini/Nano)</button>
+      </div>
+      <div style="font-size: 0.85rem; color: var(--color-secondary); font-weight: bold;" id="mode-status-text">當前狀態：手動 Prompt 複製模式（離線防護/輕 Token）</div>
+    </div>
+
+    <!-- 5個核心步驟流程圖 -->
+    <div class="control-flow">
+      <div class="flow-node active" id="node-1">
+        <div class="flow-node-title">1. 標前文件整理</div>
+        <span class="flow-node-status status-done" id="node-status-1">Intake 已完成</span>
+      </div>
+      <div class="flow-node active" id="node-2">
+        <div class="flow-node-title">2. 合規差距比對</div>
+        <span class="flow-node-status status-done" id="node-status-2">Gap 已比對</span>
+      </div>
+      <div class="flow-node active" id="node-3">
+        <div class="flow-node-title">3. SLA 成本試算</div>
+        <span class="flow-node-status status-warn" id="node-status-3">⚠️ 成本超限</span>
+      </div>
+      <div class="flow-node" id="node-4">
+        <div class="flow-node-title">4. Delta 草稿組裝</div>
+        <span class="flow-node-status status-running" id="node-status-4">組裝中...</span>
+      </div>
+      <div class="flow-node" id="node-5">
+        <div class="flow-node-title">5. 實機跑測與收割</div>
+        <span class="flow-node-status status-todo" id="node-status-5">等待收割</span>
+      </div>
+    </div>
+
+    <!-- 雙軌左右面板 -->
+    <div class="dual-panels">
+      
+      <!-- 員工端：HITL 人類在環面板 -->
+      <div class="panel-card">
+        <div class="panel-header">
+          <div class="panel-title">👥 團隊協作 (員工端)</div>
+          <span class="panel-badge badge-staff">HITL 限制模式</span>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;">此處由基層同仁操作。員工沒有 SSOT 寫入權限，且限制調用輕量 AI（或 Chrome built-in Nano 本地沙盒），以嚴防 Token 費用暴增與真理庫污染。</p>
+
+        <!-- 外部搭建商與店家協作檢核 -->
+        <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+          <h4 style="color: white; font-size: 0.95rem; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.25rem;">🛡️ 外部協力廠商合規檢核</h4>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem;">審查「大同搭建商」與「名音燈光商」的投標資歷：</p>
+          <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.5rem;">
+            <span>大同搭建：歷年展會實績 (350萬總包)</span>
+            <span style="color: var(--color-secondary);">🟢 驗收公文齊備</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 0.8rem;">
+            <span>名音燈光：技術響應承諾 (4h SLA)</span>
+            <span style="color: #f87171;">⚠️ 需手動修正為 2h</span>
+          </div>
+        </div>
+
+        <!-- 員工端操作日誌 console -->
+        <h4 style="color: white; font-size: 0.9rem; margin-bottom: 0.5rem;">💻 員工操作日誌 (輕 Token 網關)</h4>
+        <div class="console-box" id="staff-console">[SYSTEM] 員工端 HITL 介面啟動。
+[INFO] 已從 Google NotebookLM 中載入脫敏去識別化後的展會合規標準。
+[INFO] 員工對「台南玩具總包案」提問：「此標案是否接受共同承攬？」
+[AI NANO] 根據來源資料，本標案不接受共同承攬，投標商須為單一總包法人。
+[WARNING] 檢測到員工試圖寫入 staging 區，寫入操作已攔截（權限不足）。</div>
+      </div>
+
+      <!-- 主管端：Pro Agent-First 控制塔 -->
+      <div class="panel-card">
+        <div class="panel-header">
+          <div class="panel-title">🛡️ 決策中控 (主管端)</div>
+          <span class="panel-badge badge-supervisor">Pro Agent-First</span>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;">此處由高階決策者操作。主管擁有完整 API 調用權限、代碼規劃，並可調用 Pro Agent (Codex) 進行 **Computer Use** 的動態模擬測試與最終一鍵收割。</p>
+
+        <!-- 主管操作列 -->
+        <div class="action-row">
+          <span class="action-text">1. 執行 Codex 實機測試與對帳 (SLA)</span>
+          <button class="action-btn" id="btn-action-test" onclick="runAgentTest()">點擊複製 Prompt</button>
+        </div>
+        
+        <div class="action-row">
+          <span class="action-text">2. 審查並一鍵收割 (Sync & Commit to SSOT)</span>
+          <button class="action-btn" id="btn-action-commit" onclick="runHarvest()" style="border-color: var(--color-accent); color: var(--color-accent); background: rgba(236, 72, 153, 0.1);">一鍵收割</button>
+        </div>
+
+        <!-- 主管端 Pro Console -->
+        <h4 style="color: white; font-size: 0.9rem; margin-bottom: 0.5rem;">⚙️ Pro Agent-First 主控台 (含 Computer Use)</h4>
+        <div class="console-box" id="supervisor-console" style="color: #a855f7;">[SYSTEM] 主管端 Pro 控制塔就緒。
+[INFO] 等待主管下達測試或收割指令...</div>
+      </div>
+
+    </div>
+
+    <!-- 底部：定向爬蟲與圖片資源庫 -->
+    <div class="card">
+      <h2>🌐 定向爬蟲與多源圖片資源庫 (Asset Library)</h2>
+      <p style="font-size: 0.85rem; color: var(--text-muted);">本單元展示如何從 Google 搜索、歷史庫以及多模態 AI 工具獲取寫標書所需的數據與 3D 展場圖：</p>
+      
+      <div class="asset-grid">
+        <!-- 爬蟲數據 -->
+        <div class="asset-item">
+          <div class="asset-title">🔍 Google & 特定展會官網定向關鍵字爬取</div>
+          <div style="font-size: 0.8rem; background: rgba(0,0,0,0.2); padding: 0.75rem; border-radius: 6px; line-height: 1.5;">
+            <div style="color: var(--color-secondary); font-weight: bold; margin-bottom: 0.25rem;">[爬蟲關鍵字: "台南玩具節 施政重點" / "競標對手歷年總包底價"]</div>
+            • <strong>施政重點</strong>：台南市政府今年強調「IP在地授權、ESG綠色環保材質、AI虛擬導覽」。<br>
+            • <strong>競標底價</strong>：歷史數據顯示，競爭對手對此類 200 攤玩具展的報價約落在 420萬 ~ 460萬之間。<br>
+            • <strong>物料費率</strong>：目前南部展板、隔間木作價格上漲 5%，已更新至費率庫。
+          </div>
+        </div>
+
+        <!-- 圖片管理 -->
+        <div class="asset-item">
+          <div class="asset-title">🖼️ 多源展會圖片資源庫 (歷史實績與 AI 生成)</div>
+          <div style="display: flex; gap: 0.5rem;">
+            <div style="flex: 1; text-align: center;">
+              <span style="font-size: 0.7rem; color: var(--text-muted);">[歷史實績 3D 圖]</span>
+              <div style="background: #1e293b; height: 90px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 1px solid rgba(255,255,255,0.08);">📐</div>
+            </div>
+            <div style="flex: 1; text-align: center;">
+              <span style="font-size: 0.7rem; color: var(--color-secondary);">[AI 動態模擬新生成 3D 展位]</span>
+              <div style="background: #0f172a; height: 90px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 1px solid var(--color-secondary); color: var(--color-secondary); box-shadow: 0 0 10px rgba(20,184,166,0.2);">🤖🎨</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI 審計與優化建議面板 -->
+    <div class="card" style="margin-top: 2rem; border-color: rgba(245, 158, 11, 0.3);">
+      <h3 style="color: #fbbf24; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+        <span>🎯</span> AI 審計與優化顧問面板 (Audit & Advisory Console)
+      </h3>
+      
+      <div class="advisor-alert">
+        <div class="advisor-alert-title">💰 Token 費率與效能建議 (FinOps Warning)</div>
+        系統發現有員工頻繁使用 Pro-Grade Agent 進行重複性的招標文件格式對齊。AI 建議：<strong>「此類高頻、低風險的格式比對任務，建議改用本地 built-in 的 Chrome Nano 本地沙盒執行，預期可省下 85% 的雲端 API Token 成本。」</strong>
+      </div>
+
+      <div class="advisor-alert" style="background: rgba(239, 68, 68, 0.1); border-left-color: #ef4444;">
+        <div class="advisor-alert-title" style="color: #f87171;">⚠️ 敏感性資料外洩警告 (Data Leak Risk)</div>
+        檢測到「外部大同搭建商」提供的資歷證明原件中，含有未去識別化的人員真實身分證字號。<strong>AI 已自動執行遮蔽（去識別化），並向主管發送安全警告，防止敏感個資寫入地端真理庫 (SSOT)。</strong>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    let currentMode = 'manual';
+
+    const prompts = {
+      test: `你現在是具備 Computer Use 能力的 Dev (Codex) 技術特工。請幫我執行台南玩具展總包標案的整合跑測：
+1. 本地啟動伺服器，用 Computer Use 打開測試控制台。
+2. 稽核大同搭建商實績、名音燈光 2h SLA 加班成本。
+3. 自動替換 PM 為 Sophia 以補正過期證照，並輸出對帳查核表。`,
+      commit: `你現在是決策審批 Agent。主管已批准「台南玩具總包標案」投標書。
+1. 請將 Staging 區的繁星展覽實績、Sophia 的 PM 資歷公文，一鍵寫入 SQLite 地端真理庫。
+2. 同步更新至 Google NotebookLM，完成最終的知識收割與發佈。`
+    };
+
+    function switchMode(mode) {
+      currentMode = mode;
+      const btnManual = document.getElementById('btn-manual-mode');
+      const btnApi = document.getElementById('btn-api-mode');
+      const statusText = document.getElementById('mode-status-text');
+      const btnActionTest = document.getElementById('btn-action-test');
+      const btnActionCommit = document.getElementById('btn-action-commit');
+
+      if (mode === 'manual') {
+        btnManual.classList.add('active');
+        btnApi.classList.remove('active', 'api-active');
+        statusText.innerText = '當前狀態：手動 Prompt 複製模式（離線防護/輕 Token）';
+        btnActionTest.innerText = '點擊複製 Prompt';
+        btnActionCommit.innerText = '點擊複製 Prompt';
+      } else {
+        btnManual.classList.remove('active');
+        btnApi.classList.add('active', 'api-active');
+        statusText.innerText = '當前狀態：API 自動加速模式（已啟用 Gemini & Nano 連線）';
+        btnActionTest.innerText = '一鍵啟動 API 跑測';
+        btnActionCommit.innerText = '一鍵執行收割 Sync';
+      }
+    }
+
+    function runAgentTest() {
+      const consoleLog = document.getElementById('supervisor-console');
+      if (currentMode === 'manual') {
+        navigator.clipboard.writeText(prompts.test).then(() => {
+          alert('技術特工跑測 Prompt 已成功複製到剪貼簿！可直接貼給您的外部 Agent 執行。');
+          consoleLog.innerText += '\n\n[INFO] 主管複製了「技術特工整合跑測 Prompt」。';
+        });
+      } else {
+        consoleLog.innerText = '[SYSTEM] 啟動 API 全自動整合跑測...\n';
+        setTimeout(() => {
+          consoleLog.innerText += '[INFO] 正在檢測本地 8080 端口... OK\n';
+        }, 300);
+        setTimeout(() => {
+          consoleLog.innerText += '[INFO] 啟動本機 Chrome Built-in AI (Gemini Nano) 掃描名音燈光 2h SLA 響應時間...\n';
+        }, 800);
+        setTimeout(() => {
+          consoleLog.innerText += '[INFO] 調用 Gemini 2.5 Flash API 比對大同搭建商實績驗收公文... 綠燈🟢\n';
+        }, 1300);
+        setTimeout(() => {
+          consoleLog.innerText += '[INFO] [Computer Use] 模擬操作：自動將 PM 志明 (過期) 變更為備降人員 Sophia (有效) PMP 證照。\n';
+          document.getElementById('node-status-3').innerText = '🟢 SLA 已對齊';
+          document.getElementById('node-status-3').className = 'flow-node-status status-done';
+        }, 1800);
+        setTimeout(() => {
+          consoleLog.innerText += '[SUCCESS] 整合跑測與差距比對全數通過！已產出最終合規對帳表，等待主管一鍵收割。\n';
+          document.getElementById('node-4').classList.add('active');
+          document.getElementById('node-status-4').innerText = '已組裝';
+          document.getElementById('node-status-4').className = 'flow-node-status status-done';
+        }, 2300);
+      }
+    }
+
+    function runHarvest() {
+      const consoleLog = document.getElementById('supervisor-console');
+      if (currentMode === 'manual') {
+        navigator.clipboard.writeText(prompts.commit).then(() => {
+          alert('一鍵收割 Sync Prompt 已複製到剪貼簿！');
+          consoleLog.innerText += '\n\n[INFO] 主管複製了「一鍵收割與寫回 SSOT Prompt」。';
+        });
+      } else {
+        consoleLog.innerText = '[SYSTEM] 觸發一鍵收割與 Sync & Commit 流程...\n';
+        setTimeout(() => {
+          consoleLog.innerText += '[INFO] 正在將 Staging 區的台南玩具展總包投標書草稿寫入本地 SQLite 庫...\n';
+        }, 400);
+        setTimeout(() => {
+          consoleLog.innerText += '[INFO] [RAG Anti-Pollution] 執行防污染稽核... 安全無衝突\n';
+        }, 900);
+        setTimeout(() => {
+          consoleLog.innerText += '[INFO] 更新 Google NotebookLM 的歷年得標黃金知識庫 (Sources) \n';
+        }, 1400);
+        setTimeout(() => {
+          consoleLog.innerText += '[SUCCESS] 最終招標書已發佈並寫入 SSOT！\n';
+          document.getElementById('node-5').classList.add('active');
+          document.getElementById('node-status-5').innerText = '已收割';
+          document.getElementById('node-status-5').className = 'flow-node-status status-done';
+        }, 1900);
+      }
+    }
+  </script>
+</body>
+</html>
