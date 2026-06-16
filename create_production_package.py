@@ -35,6 +35,7 @@ files_to_copy = [
     ("notebooklm_index_map.html", "notebooklm_index_map.html"),
     ("prompt_hub_guide.html", "prompt_hub_guide.html"),
     ("prompt_hub_guide.md", "prompt_hub_guide.md"),
+    ("course_overview.html", "course_overview.html"),
     ("notebooklm_shared_brains_prompts.csv", "notebooklm_shared_brains_prompts.csv"),
     ("reference/skyline-prompt-manager/docs/ai_unified_gateway_notebooklm.png", "reference/skyline-prompt-manager/docs/ai_unified_gateway_notebooklm.png")
 ]

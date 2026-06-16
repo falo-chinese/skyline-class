@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🚀 本次課程說明 - Skyline Class02</title>
+  <link rel="stylesheet" href="docs/style.css">
+  <style>
+    .overview-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    .overview-section {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 2rem;
+      transition: all 0.3s;
+    }
+    .overview-section:hover {
+      border-color: var(--color-primary-light);
+      background: rgba(99, 102, 241, 0.05);
+    }
+    .overview-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    .overview-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+    .overview-desc {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      margin-bottom: 1.25rem;
+    }
+    .overview-features {
+      list-style: none;
+      padding-left: 0;
+      margin-bottom: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .overview-features li {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .overview-features li::before {
+      content: "✦";
+      color: var(--color-secondary);
+    }
+    .overview-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.2rem;
+      background: var(--color-primary);
+      color: white !important;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+    .overview-btn:hover {
+      background: var(--color-primary-light);
+      transform: translateX(4px);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 側邊欄導覽 -->
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      Skyline Class <span>class2</span>
+    </div>
+    <div class="sidebar-menu-title">引導總覽</div>
+    <ul class="sidebar-menu">
+      <li><a href="course_overview.html" class="sidebar-link active">🚀 本次課程說明</a></li>
+      <li><a href="practical/index.html" class="sidebar-link">🚀 Google產品實戰</a></li>
+      <li><a href="agent_tools_guide.html" class="sidebar-link">🤖 Agent 工具使用指南</a></li>
+      <li><a href="notebooklm_master_guide.html" class="sidebar-link">📘 AI Notebooklm 使用指南</a></li>
+    </ul>
+    <div class="sidebar-menu-title">參考資源</div>
+    <ul class="sidebar-menu">
+      <li><a href="demo/ai-parser-demo1/index.html" class="sidebar-link">🥗 ETL 轉運站 (爬蟲展示)</a></li>
+      <li><a href="https://__Skyline_TAIWAN_IO__/video-analysis-optimization/" target="_blank" class="sidebar-link">🎥 影音分析與優化專案</a></li>
+      <li><a href="ai_finance_demo.html" class="sidebar-link">📊 AI 財會與稅務自動化專案</a></li>
+      <li><a href="https://__Skyline_TAIWAN_IO__/prompt-demo/" target="_blank" class="sidebar-link">💬 Skyline Prompt 提示詞管理專案</a></li>
+    </ul>
+    <div class="sidebar-menu-title">其他</div>
+    <ul class="sidebar-menu">
+      <li><a href="README.html" class="sidebar-link">🚀 專案啟動說明</a></li>
+      <li><a href="workbench/index.html" class="sidebar-link">🧭 教材工作台</a></li>
+      <li><a href="skyline_set_menu.html" class="sidebar-link">🍱 Skyline 模型菜組合包範例</a></li>
+      <li><a href="bidding_control_tower.html" class="sidebar-link">🤖 智慧投標控制塔 (POC)</a></li>
+      <li><a href="docs/01_course_map.html" class="sidebar-link">🗺️ 01 課程地圖</a></li>
+      <li><a href="docs/02_tender_workflow.html" class="sidebar-link">⚙️ 02 投標工作流</a></li>
+      <li><a href="docs/03_multi_ai_collaboration.html" class="sidebar-link">👥 03 Multi-AI 協作</a></li>
+      <li><a href="docs/04_artifact_management.html" class="sidebar-link">🛡️ 04 Artifact 管理</a></li>
+      <li><a href="memo.html" class="sidebar-link">📝 未來規劃備忘錄</a></li>
+      <li><a href="reference/class02-antigravity/index.html" class="sidebar-link">📚 歷史版本參考</a></li>
+      <li><a href="local_ai_pm_architecture.html" class="sidebar-link">🖥️ 地端 AI PM 人機架構</a></li>
+      <li><a href="prompt_hub_guide.html" class="sidebar-link">💬 Prompt Hub 導入指引</a></li>
+    </ul>
+  </nav>
+
+  <!-- 主內容區 -->
+  <main class="main-content">
+    <div class="card">
+      <h1>🚀 Skyline Class02 課程導覽與引導說明</h1>
+      <p style="color: var(--color-secondary); font-weight: 600;">Course Overview & Navigation Guide</p>
+      <p style="margin-top: 1rem;">
+        歡迎來到 <strong>Skyline Class02 企業數位轉型實務課程</strong>。本階段課程的核心目標是引導主管與同仁建立「端到端一條龍工作流」與「AI 指揮官思維」。
+        我們將整體學習脈絡收斂為以下三大核心主題，請點選對應的主題按鈕或側邊欄連結開始探索：
+      </p>
+
+      <div class="overview-grid">
+        <!-- Theme 1: Google產品實戰 -->
+        <div class="overview-section">
+          <div class="overview-header">
+            <span style="font-size: 1.75rem;">🚀</span>
+            <div class="overview-title">Google 產品實戰</div>
+          </div>
+          <p class="overview-desc">
+            探索 Google 生態系的進階實務應用。從 Chrome 擴充功能開發、Google Apps Script (GAS) 雲端安全部署，到 ETL 資料清洗管道與 Google DeepMind 開發的 Antigravity 自主 Agent 協作，助您快速上手前沿的開發與自動化技術。
+          </p>
+          <ul class="overview-features">
+            <li>Manifest V3 Chrome 外掛開發與自動化填單</li>
+            <li>GAS Web App 安全防禦部署實踐</li>
+            <li>Python + CLI 自主 Agent 授權執行與 CoT 引導</li>
+          </ul>
+          <a href="practical/index.html" class="overview-btn">
+            進入實戰手冊 ➔
+          </a>
+        </div>
+
+        <!-- Theme 2: Agent 工具使用指南 -->
+        <div class="overview-section">
+          <div class="overview-header">
+            <span style="font-size: 1.75rem;">🤖</span>
+            <div class="overview-title">Agent 工具使用指南</div>
+          </div>
+          <p class="overview-desc">
+            地端 AI PM 人機架構的實操指南。本單元詳細記錄了如何配合地端 AIDE/Codex 指令特工進行「一條龍」招標合規比對、財務毛利試算、SLA 響應落差分析與建議書草稿自動組裝。
+          </p>
+          <ul class="overview-features">
+            <li>FinOps Token 費用監控與 Google Sheet 自動寫入</li>
+            <li>行政與人工審查欄位精簡/完整雙模式切換</li>
+            <li>提示詞黃金雙軌與智慧投標控制塔 POC 動態連動</li>
+          </ul>
+          <a href="agent_tools_guide.html" class="overview-btn">
+            進入工具指南 ➔
+          </a>
+        </div>
+
+        <!-- Theme 3: AI Notebooklm 使用指南 -->
+        <div class="overview-section">
+          <div class="overview-header">
+            <span style="font-size: 1.75rem;">📘</span>
+            <div class="overview-title">AI NotebookLM 使用指南</div>
+          </div>
+          <p class="overview-desc">
+            建立企業級的「地端真理中心 (SSOT)」。了解如何使用去識別化的 CSV 專案日誌與歷史得標標案庫，將多模態知識庫安全導入 NotebookLM，並設計高效率的安全問答網關。
+          </p>
+          <ul class="overview-features">
+            <li>去識別化歷史大腦庫與安全性沙盒比對</li>
+            <li>Master Router 大腦智慧分流與導航索引地圖</li>
+            <li>真理核對清單與企業知識庫安全治理原則</li>
+          </ul>
+          <a href="notebooklm_master_guide.html" class="overview-btn">
+            進入 NotebookLM 指南 ➔
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
