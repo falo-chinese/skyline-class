@@ -20,6 +20,9 @@
    - 負責後台的 Google 帳號池維護、定時更新排程、以及將資料庫/Google Sheet 檔案自動上傳與刷新。
    - 管理程式的維護與升級不會影響前台查詢網關的運作，確保服務不中斷。
 
+* **🖥️ AI Unified Gateway ─ NotebookLM 專區門戶平台介面**：
+  ![AI Unified Gateway NotebookLM 介面](reference/falo-prompt-manager/docs/ai_unified_gateway_notebooklm.png)
+
 ---
 
 ## 🔒 1. 帳號無密碼共用安全機制 (No-Password Shared Access)
