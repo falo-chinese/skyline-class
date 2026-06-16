@@ -72,6 +72,28 @@ workspace_zip_dst = os.path.join(dest_root, "class2_workspace.zip")
 if os.path.exists(workspace_zip_src):
     shutil.copy(workspace_zip_src, workspace_zip_dst)
 
+# Copy notebooklm_shared_brains recursively
+shared_brains_src = os.path.join(source_root, "notebooklm_shared_brains")
+shared_brains_dst = os.path.join(dest_root, "notebooklm_shared_brains")
+if os.path.exists(shared_brains_dst):
+    shutil.rmtree(shared_brains_dst)
+if os.path.exists(shared_brains_src):
+    shutil.copytree(shared_brains_src, shared_brains_dst)
+
+# Copy notebooklm_shared_brains.zip
+shared_brains_zip_src = os.path.join(source_root, "notebooklm_shared_brains.zip")
+shared_brains_zip_dst = os.path.join(dest_root, "notebooklm_shared_brains.zip")
+if os.path.exists(shared_brains_zip_src):
+    shutil.copy(shared_brains_zip_src, shared_brains_zip_dst)
+
+# Copy class3 recursively
+class3_src = os.path.join(source_root, "class3")
+class3_dst = os.path.join(dest_root, "class3")
+if os.path.exists(class3_dst):
+    shutil.rmtree(class3_dst)
+if os.path.exists(class3_src):
+    shutil.copytree(class3_src, class3_dst)
+
 # Revert placeholders to production data
 for root, dirs, filenames in os.walk(dest_root):
     for filename in filenames:
