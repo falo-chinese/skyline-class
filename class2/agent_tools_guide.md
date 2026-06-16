@@ -8,7 +8,7 @@
 
 本指南與 **[🤖 智慧投標控制塔 (POC)](bidding_control_tower.html)** 是完全對齊的：
 * **本指南 (靜態手冊)**：提供底層 CLI 腳本與 Prompt 的黃金範本，是 NotebookLM 知識庫的參考源，適合工程師或主管在終端機 (CLI) 離線操作時參考。
-* **控制塔 (動態面板)**：將本指南的 5 大步驟與進度監控整合為可點擊切換、手動/API 雙模式的一條龍展示平台，供 G總和 C董 快速理解與決策收割。
+* **控制塔 (動態面板)**：將本指南 of 5 大步驟與進度監控整合為可點擊切換、手動/API 雙模式的一條龍展示平台，供 G總和 C董 快速理解與決策收割。
 
 ---
 
@@ -18,14 +18,38 @@
 
 * **輸入檔案**：`台南玩具展_RFP.pdf`、`大同搭建商_實績證明.docx`、`名音燈光商_SLA承諾.txt`。
 * **分環節**：1.1 採購網公告爬取 ➔ 1.2 地端檔案目錄掃描 ➔ 1.3 個資去識別化隔離。
-* **CLI 指令**：`python3 scripts/prep_intake.py --source ./raw_tenders --output ./staging`
+* **CLI 指令**：`python3 scripts/prep_intake.py --source ./raw_tenders --output ./staging --clean-pii --verbose`
 
-### 💬 執行 Prompt：檔案整理與結構化工具調用
-```text
-你現在是 Dev (Codex) 技術特工。請幫我整理本地專案目錄下的所有原始招標相關檔案（包括 pdf, docx, xlsx, txt 等）：
-1. 掃描目錄並將所有檔案依據「日期_大類_原檔名」進行重新命名。
-2. 自動提取出每個檔案的 Metadata（包括文件頁數、建立日期、所屬子模組）。
-3. 撰寫一個 Python 腳本，將檔案以 UTF-8 編碼轉存為純文字（txt）或 JSON 結構，存放在 staging/ 目錄中，並輸出一個 file_manifest.json 索引檔以利後續的 AI 檢索。
+### 📋 JSON 輸出結構 (`staging/file_manifest.json`)
+```json
+{
+  "timestamp": "2026-06-16T16:40:00Z",
+  "total_files_processed": 3,
+  "manifest": [
+    {
+      "original_name": "台南玩具展_RFP.pdf",
+      "staged_path": "staging/20260616_RFP_Tainan_ToyExpo.txt",
+      "pii_scrubbed": true,
+      "metadata": { "pages": 42, "category": "RFP", "file_size_bytes": 1048576 }
+    }
+  ]
+}
+```
+
+### 💬 執行 Prompt：檔案整理與結構化 (XML 格式)
+```xml
+<instruction>
+  你現在是 Dev (Codex) 技術特工。請掃描地端目錄下的原始招標文件，進行清洗與去敏感化。
+</instruction>
+<inputs>
+  <path>./raw_tenders</path>
+  <target_dir>./staging</target_dir>
+</inputs>
+<rules>
+  1. 檔案重新命名格式：[YYYYMMDD]_[大類]_[原檔名]
+  2. 使用 PII_Scrubber 自動屏蔽身份證字號、姓名與行動電話，並儲存至隔離 Staging 目錄。
+  3. 輸出包含檔案大小、頁數及處理狀態的 JSON 清單。
+</rules>
 ```
 
 ---
@@ -36,14 +60,43 @@
 
 * **輸入檔案**：`staging/20260616_RFP_Tainan_ToyExpo.txt`、SQLite 歷史得標庫 `ssot_historical_tenders.db`。
 * **分環節**：2.1 廢標條款自動提取 ➔ 2.2 PM 證照過期稽核 ➔ 2.3 SLA 技術對帳比對。
-* **CLI 指令**：`python3 scripts/gap_audit.py --rfp ./staging/20260616_RFP_Tainan_ToyExpo.txt --db ./backup/ssot_historical_tenders.db`
+* **CLI 指令**：`python3 scripts/gap_audit.py --rfp ./staging/20260616_RFP_Tainan_ToyExpo.txt --db ./backup/ssot_historical_tenders.db --rules-schema ./config/disq_rules.json`
 
-### 💬 執行 Prompt：RFP 與歷史得標文件差距稽核
-```text
-你現在是負責合規性審查的技術特工。請幫我比對剛收到的新標案需求書 20260616_RFP_Tainan_ToyExpo.txt 與我們先前得標的歷史標案 SQLite 庫資料：
-1. 分析新招標書中所有「硬性廢標條款」（如：SLA 響應時間、實績金額要求、團隊持證規範、技術架構標準）。
-2. 與歷史得標投標書進行 Delta 比對，指出我們在技術、資歷與財務上有哪些缺失（Gaps）。
-3. 輸出一個差距比對報告，以「合規燈號（紅、黃、綠）」標示每個項目的合規風險。
+### 📋 JSON 輸出結構 (`gap_report.json`)
+```json
+{
+  "audit_status": "fail",
+  "gaps_found": [
+    {
+      "clause": "PM Certification Requirements",
+      "rfp_requirement": "專案經理必須持有效 PMP 證照",
+      "our_status": "志明 (PMP 已過期 2026-02-15)",
+      "risk_level": "RED_DISQUALIFY"
+    },
+    {
+      "clause": "SLA Response Time",
+      "rfp_requirement": "2小時現場響應",
+      "our_status": "名音燈光商原始承諾 4h",
+      "risk_level": "YELLOW_WARNING"
+    }
+  ]
+}
+```
+
+### 💬 執行 Prompt：RFP 與歷史對帳差距稽核 (XML 格式)
+```xml
+<instruction>
+  你現在是負責合規性審查的合規特工。請比對新招標書 txt 與 SQLite 歷史得標庫，找出硬性廢標與不合規缺口。
+</instruction>
+<inputs>
+  <rfp_text>staging/20260616_RFP_Tainan_ToyExpo.txt</rfp_text>
+  <historical_db>ssot_historical_tenders.db</historical_db>
+</inputs>
+<rules>
+  1. 提取所有包含「應、須、持、保證、罰則、SLA」的段落。
+  2. 自動比對 SQLite 資料庫中的員工資歷證照、協力廠商服務規格。
+  3. 輸出含 RED_DISQUALIFY, YELLOW_WARNING, GREEN_PASS 等風險燈號的 JSON 對帳單。
+</rules>
 ```
 
 ---
@@ -54,14 +107,40 @@
 
 * **輸入檔案**：SQLite 費率庫 `ssot_material_rates.db`、`20260616_SLA_Mingyin_Light.txt`。
 * **分環節**：3.1 物料上漲費率調校 ➔ 3.2 2h SLA 加急成本計算 ➔ 3.3 毛利率與決策核算。
-* **CLI 指令**：`python3 scripts/sla_cost_sim.py --tender-value 4500000 --light-base 800000 --wood-surcharge 0.05`
+* **CLI 指令**：`python3 scripts/sla_cost_sim.py --tender-value 4500000 --light-base 800000 --wood-surcharge 0.05 --target-margin-pct 15.0`
 
-### 💬 執行 Prompt：SLA 成本溢價決策分析
-```text
-你現在是負責財務成本核算的分析 Agent。名音燈光商因應 RFP 要求由 4h SLA 改為 2h SLA 響應，產生溢價成本，請進行試算：
-1. 查詢 SQLite 中南部燈光音響工程的加急人工費率（目前木作上漲 5%）。
-2. 計算 2h SLA 下燈光商增加的排班與保證金成本。
-3. 比對本案預算上限 450 萬，推算我方合理利潤空間，產出決策建議。
+### 📋 JSON 輸出結構 (`cost_analysis.json`)
+```json
+{
+  "budget_limit": 4500000,
+  "estimated_cost": 3800000,
+  "breakdown": {
+    "base_light_cost": 800000,
+    "sla_2h_surcharge": 150000,
+    "risk_reserve": 150000,
+    "other_materials": 2700000
+  },
+  "projected_profit": 700000,
+  "profit_margin_pct": 15.55,
+  "decision_recommendation": "green_approve"
+}
+```
+
+### 💬 執行 Prompt：SLA 成本溢價決策分析 (XML 格式)
+```xml
+<instruction>
+  你現在是財務成本核算分析 Agent。因應 2h SLA 響應要求，請計算協力廠商溢價對標案整體利潤紅線的影響。
+</instruction>
+<variables>
+  <tender_value>4500000</tender_value>
+  <target_margin_pct>15.0</target_margin_pct>
+  <sla_escalation_surcharge>150000</sla_escalation_surcharge>
+  <risk_reserve>150000</risk_reserve>
+</variables>
+<rules>
+  1. 從 SQLite 查詢物料上漲 5% 費率，並累加 2h SLA 維運加急排班溢價與合約違約準備金。
+  2. 計算最終毛利率，並判斷是否低於 target_margin_pct 獲利紅線。
+</rules>
 ```
 
 ---
@@ -72,15 +151,37 @@
 
 * **輸入檔案**：Google NotebookLM 脈絡庫、草稿模板 `templates/tech_bid.md`。
 * **分環節**：4.1 NotebookLM 真理檢索 ➔ 4.2 PM 備降人員替換（Sophia 取代志明） ➔ 4.3 標註人類審查點。
-* **CLI 指令**：`python3 scripts/draft_assemble.py --template ./templates/tech_bid.md --output ./staging/draft_assembled.md`
+* **CLI 指令**：`python3 scripts/draft_assemble.py --template ./templates/tech_bid.md --output ./staging/draft_assembled.md --replace-pm "Sophia"`
 
-### 💬 執行 Prompt：投標書草稿組裝與合規起草
-```text
-你現在是 Content (主力產線) 寫作專家。請幫我結合 NotebookLM 的真理脈絡，開始起草並自動組裝招標書草稿：
-1. 讀取新招標案的大綱結構，針對「技術服務與 SLA 承諾」章節進行草稿起草。
-2. 主動從 NotebookLM 中檢索「林淑芬 (Sophia) 的有效持證證明」以及「繁星智慧檔案專案 (350萬實績)」的精確文字，並將其填入對應的招標表格中。
-3. 自動生成「系統故障 2 小時響應 (2h SLA)」的技術承諾與內部成本調撥說明。
-4. 輸出最終的投標書草稿段落，並標記「[人類審核點]」以便主管進行最後的一鍵收割。
+### 📋 JSON 輸出結構 (`draft_status.json`)
+```json
+{
+  "draft_path": "staging/draft_assembled.md",
+  "pm_assigned": "Sophia (林淑芬)",
+  "pm_cert_id": "#PMP-246801",
+  "human_review_points": [
+    {
+      "line": 142,
+      "context": "[人類審查點: 確證 SLA 溢價補償金 NT$ 300,000 已於財務核算核准。]"
+    }
+  ]
+}
+```
+
+### 💬 執行 Prompt：投標書草稿組裝與合規起草 (XML 格式)
+```xml
+<instruction>
+  你現在是 Content (主力產線) 寫作專家。請結合 NotebookLM 知識庫資料，起草技術建議書草稿並標記人工審核點。
+</instruction>
+<rag_context>
+  <source>NotebookLM: Sophia 有效 PMP 證照檔案</source>
+  <source>NotebookLM: 繁星智慧檔案實績</source>
+</rag_context>
+<rules>
+  1. 針對「技術服務與 SLA 承諾」章節進行起草，自動用有效的 Sophia 替換過期 PM 志明。
+  2. 置入「繁星智慧檔案專案」實績。
+  3. 凡涉及手動批准或財務異動（如 30 萬 SLA 溢價），必須插入 `[人類審查點]` 標籤。
+</rules>
 ```
 
 ---
@@ -91,13 +192,28 @@
 
 * **輸入檔案**：`staging/draft_assembled.md`、SQLite 本地真理庫。
 * **分環節**：5.1 Computer Use 網頁上傳模擬 ➔ 5.2 SQLite SSOT 資料庫寫入 ➔ 5.3 知識大腦同步發布。
-* **CLI 指令**：`python3 scripts/system_harvest.py --draft ./staging/draft_assembled.md --commit-to-db --sync-notebooklm`
+* **CLI 指令**：`python3 scripts/system_harvest.py --draft ./staging/draft_assembled.md --commit-to-db --sync-notebooklm --operator "Force(ff)"`
 
-### 💬 執行 Prompt：一鍵收割與地端真理庫同步
-```text
-你現在是決策審批 Agent。主管已批准「台南玩具總包標案」投標書。
-1. 請將 Staging 區的繁星展覽實績、Sophia 的 PM 資歷公文，一鍵寫入 SQLite 地端真理庫。
-2. 同步更新至 Google NotebookLM，完成最終的知識收割與發佈。
+### 📋 JSON 輸出結構 (`harvest_log.json`)
+```json
+{
+  "harvest_status": "success",
+  "sqlite_write": true,
+  "notebooklm_sync": true,
+  "audit_log_id": "AUDIT_20260616_164210_FF"
+}
+```
+
+### 💬 執行 Prompt：一鍵收割與地端真理庫同步 (XML 格式)
+```xml
+<instruction>
+  你現在是決策收割 Agent。請模擬 Computer Use 跑測上傳，並正式寫入地端 SQLite 黃金資料庫與發佈知識。
+</instruction>
+<actions>
+  1. 調用 Computer Use 特工模擬打開瀏覽器，登入招標網測試區並自動點選上傳 draft_assembled.md.
+  2. 將專案得標金額、PM Sophia 及主管批准紀錄寫入 SQLite 真理庫 (SSOT)。
+  3. 去除敏感資料後，發布至 NotebookLM Sources 完成知識閉環。
+</actions>
 ```
 
 ---
@@ -107,12 +223,31 @@
 定期分析員 (Scheduled Analyst) 負責在背景運作，主動監控 7 天甘特圖關鍵路徑、排班進度與協力廠通訊狀態，防範專案延誤。
 
 * **輸入檔案**：SQLite 排程配置表、Staging 寫作日誌。
-* **CLI 指令**：`python3 scripts/ai_pm_scheduler.py --config ./config/scheduler_config.json --run-monitor`
+* **CLI 指令**：`python3 scripts/ai_pm_scheduler.py --config ./config/scheduler_config.json --run-monitor --alert-webhook "https://discord.gg/webhook"`
 
-### 💬 執行 Prompt：AI PM 排程監控與主動協調
-```text
-你現在是負責排程與進度協調的 AI PM 大腦。請幫我設定背景定期分析員 (Scheduled Analyst) 運作邏輯：
-1. 定時監控 Staging 區與 SQLite 資料庫，檢查是否面臨專案進度延誤風險（例如撰寫落後預期時間 12 小時以上），若有延誤，自動產出警告日誌並提示主管調撥 AI 資源。
-2. 自動掃描協力廠商的檔案，若發現缺漏大同搭建商實績證明或名音燈光承諾書，自動起草催辦郵件，存入待發送區。
-3. 監控人員證書到期狀態，若發現 PM 證照失效，自動檢索備降名冊將其改為 Sophia (林淑芬) 並更新 RAG 來源。
+### 📋 JSON 輸出結構 (`scheduler_alerts.json`)
+```json
+{
+  "alert_timestamp": "2026-06-16T16:40:00Z",
+  "critical_path_node": "D-4 Draft",
+  "anomalies_detected": [
+    {
+      "type": "DELAY_WARNING",
+      "description": "第四章技術草稿落後預期 12 小時",
+      "suggested_action": "調撥 Codex 特工資源"
+    }
+  ]
+}
+```
+
+### 💬 執行 Prompt：AI PM 排程監控與主動協調 (XML 格式)
+```xml
+<instruction>
+  你現在是 AI PM 大腦。請幫我設定 Scheduled Analyst 運作邏輯以監控 7天關鍵路徑及廠商缺件。
+</instruction>
+<monitoring>
+  1. 自動監控 Staging 寫作日誌，若落後時數 > 12h，產出警告。
+  2. 稽核證書有效期，若發現 PM 失效自動執行備用降級 Sophia。
+  3. 掃描 Staging 目錄，若大同搭建商缺件，自動起草催辦郵件草稿。
+</monitoring>
 ```
