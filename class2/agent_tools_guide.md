@@ -244,22 +244,26 @@
 
 ## 📘 4. 技術建議書草稿 RAG 組裝 (RAG Draft Compiling)
 
-結合 Google NotebookLM 知識大腦與地端資料庫，編譯最終技術建議書草稿，並標記人類審核點。
+結合地端實績與證照資料夾（如 `歷史得標庫.xlsx` 本地 Excel 與本地 PMP 證照 PDF 影本），編譯最終技術建議書草稿。
 
-* **輸入檔案**：Google NotebookLM 知識庫、草稿模板 `templates/tech_bid.md`、Excel 試算表資料庫。
+> 📌 **雙軌人機分權架構設計**：
+> * **高階主管與特許同仁**：擁有地端真實檔案與資料庫的存取權，可調用 RAG 編譯特工，直接讀取並掃描地端機密資料庫以編譯建議書草稿，確保核心資產安全性。
+> * **全體一般同仁**：則以 **Google NotebookLM** 為主（手動對話查詢去敏後的標案合規條款），並搭配地端由特工自動生成的 HTML 協作輔助系統核對實績。
 
-### 4.1 NotebookLM 真理檢索 (NotebookLM RAG Retrieval)
+* **輸入檔案**：地端實績與證照庫（Excel / PDF 影本）、草稿模板 `templates/tech_bid.md`、地端標案工作暫存資料庫。
+
+### 4.1 地端實績與證照檢索 (Local Achievements & Credentials Retrieval)
 * **✍️ 簡單規則版 Prompt**：
   ```text
   請讀取我們的得標實績和 Sophia 的證照資料。
   ```
 * **🧠 強 Agent 認知版 Prompt**：
   ```text
-  你現在是知識檢索特工。請向 Google NotebookLM 檢索去識別化後的知識庫，確證「林淑芬 (Sophia) 的有效 PMP 證照編號與截止日期」以及「歷年繁星智慧檔案專案 (350萬)」的得標摘要與技術描述。
+  你現在是知識檢索特工。請讀取地端實績與證照資料夾（包含本地 Excel 歷史得標庫.xlsx 與證照 PMP 影本），確證「林淑芬 (Sophia) 的有效 PMP 證照編號與截止日期」以及「歷年繁星智慧檔案專案 (350萬)」的得標摘要與技術描述。
   ```
 * **📄 獨立 HTML 稽核報告 Prompt (加選)**：
   ```text
-  你現在是系統稽核特工。針對剛剛向 Google NotebookLM 進行的知識大腦檢索動作，請自動生成一份 HTML 檢檢索清單「retrieval_manifest.html」。以表格展示「檢索主題」、「擷取來源（如 Sophia 證照、繁星專案）」、「核心內容摘要」與「資料可信度驗證（真實/失效）」，以確保引用的實績與證照數據 100% 準確無誤。
+  你現在是系統稽核特工。針對剛剛向地端實績與證照庫進行的檢索動作，請自動生成一份 HTML 檢索清單「retrieval_manifest.html」。以表格展示「檢索主題」、「擷取來源（如 Sophia 證照、繁星專案）」、「核心內容摘要」與「資料可信度驗證（真實/失效）」，以確保引用的實績與證照數據 100% 準確無誤。
   ```
   *CLI 執行指令*：`python3 scripts/generate_retrieval_manifest_report.py`
 
@@ -299,7 +303,11 @@
 
 模擬沙盒上傳並同步本地 Excel SSOT 黃金得標庫，打通最後一哩路。
 
-* **輸入檔案**：`標案工作暫存區/draft_assembled.md`、Excel 本地真理庫。
+> 📌 **雙軌人機分權架構設計**：
+> * **高階主管**：在完成合規審查後，可啟動地端一鍵收割，引導 Pro Agent 將真實得標資訊寫回地端絕對真理源（`歷史得標庫.xlsx`）中封存，並將建議書發佈至地端公司知識庫（`參考範例/`）。
+> * **全體一般同仁**：地端更新完成後，可將去敏建議書同步上傳至 **Google NotebookLM 共享大腦** 中作為未來的「黃金投標範本」，並搭配特工自動生成的 HTML 知識同步報告（`brain_sync_report.html`）進行高效傳承。
+
+* **輸入檔案**：`標案工作暫存區/draft_assembled.md`、地端 Excel 歷史真理庫。
 
 ### 5.1 Computer Use 網頁上傳模擬 (Computer Use Simulation)
 * **✍️ 簡單規則版 Prompt**：
@@ -331,18 +339,18 @@
   ```
   *CLI 執行指令*：`python3 scripts/generate_db_sync_audit.py --db 標案工作暫存區/標案工作記錄表.xlsx`
 
-### 5.3 知識大腦同步發布 (NotebookLM Knowledge Sync)
+### 5.3 地端公司知識庫同步與 Excel 寫回 (Local Knowledge Base & Excel Sync)
 * **✍️ 簡單規則版 Prompt**：
   ```text
   請幫我把這次寫好的標書傳回我們的知識庫裡。
   ```
 * **🧠 強 Agent 認知版 Prompt**：
   ```text
-  你現在是知識閉環特工。請將本次最終得標並去敏感化後的技術建議書草稿，發布回 Google NotebookLM 脈絡大腦中，使其作為未來的黃金投標範本，完成團隊知識閉環。
+  你現在是知識閉環特工。請將本次最終得標並去敏感化後的技術建議書草稿，發布回地端公司知識庫（`參考範例/` 資料夾）中，並將得標紀錄寫回地端 `歷史得標庫.xlsx` 本地 Excel 表格中，完成團隊知識閉環。*(備註：完成後同仁可手動將地端最新資料同步至 NotebookLM 供全體同仁手動共享查詢)*
   ```
 * **📄 獨立 HTML 稽核報告 Prompt (加選)**：
   ```text
-  你現在是系統稽核特工。針對將去敏感標書發布回 Google NotebookLM 脈絡大腦的動作，請自動生成一份 HTML 知識同步分析報告「brain_sync_report.html」。列出「發布檔案名稱」、「去敏處理狀態 (100% Scrubbed)」、「大腦同步時間」以及「新黃金投標範本索引建立狀態」，證明團隊已完成閉環學習並更新知識庫。
+  你現在是系統稽核特工.針對將去敏感標書同步至地端公司知識庫與 Excel 歷史庫的動作，請自動生成一份 HTML 知識同步分析報告「brain_sync_report.html」。列出「發布檔案名稱」、「去敏處理狀態 (100% Scrubbed)」、「地端資料庫寫入狀態」、「大腦同步準備時間」以及「新黃金投標範本備份狀態」，證明團隊已完成閉環學習並更新地端知識庫。
   ```
   *CLI 執行指令*：`python3 scripts/generate_brain_sync_report.py`
 
@@ -352,7 +360,11 @@
 
 AI PM 定期分析員（Scheduled Analyst）負責背景監控 7 天關鍵路徑，管理協力商交付，實施主動協調。
 
-* **輸入檔案**：Excel 專案排程表、Staging 執行日誌。
+> 📌 **雙軌人機分權架構設計**：
+> * **高階主管與專案經理 (PM)**：在後台運行地端定時監控排程，負責監控 7 天關鍵路徑，並直接進行地端的人力調配與證照替換（如 PM Jimmy 證照過期時由地端自動遞補 Sophia）。
+> * **全體一般同仁**：主要依賴 AI PM 背景監控自動生成並輸出的 **HTML 協作輔助系統**（如 `missing_doc_alert.html` 缺件催辦報告、`pm_schedule_report.html` 進度異常日誌）以及 **NotebookLM 對話查閱**，第一時間跟進協辦與通知外協窗口。
+
+* **輸入檔案**：Excel 本地專案排程表、地端 Staging 執行日誌。
 
 ### 6.1 AI PM 進度與風險監控 (Progress & Risk Monitoring)
 * **✍️ 簡單規則版 Prompt**：
