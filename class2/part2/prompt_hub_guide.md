@@ -21,7 +21,7 @@
 
 *   👉 **線上 PWA 體驗入口**：[https://falo-taiwan.github.io/prompt-demo/](https://falo-taiwan.github.io/prompt-demo/) (一鍵加入主畫面)
 *   👉 **GitHub 專案原始碼**：[https://github.com/falo-taiwan/prompt-demo](https://github.com/falo-taiwan/prompt-demo) (包含 Extension 原始碼)
-*   💾 **下載 NotebookLM 黃金 Prompt 資源包 (CSV)**：[notebooklm_shared_brains_prompts.csv](notebooklm_shared_brains_prompts.csv) (相容 Prompt Hub，含 11 組大腦範本)
+*   💾 **下載 NotebookLM 黃金 Prompt 資源包 (CSV)**：[notebooklm_shared_brains_prompts.csv](notebooklm_shared_brains_prompts.csv) (相容 Prompt Hub，含 12 組大腦範本)
 
 ---
 
@@ -32,7 +32,7 @@
 ```mermaid
 flowchart TD
     A[主瀏覽器分頁: Google NotebookLM] <-->|1. 免切換視窗雙向協作| B[Chrome 右側邊欄: Prompt Hub 外掛]
-    B -->|2. 載入本機 CSV 資源包| C[11 組 NotebookLM 黃金提示詞]
+    B -->|2. 載入本機 CSV 資源包| C[12 組 NotebookLM 黃金提示詞]
     C -->|3. 套入變數一鍵複製| D[📋 複製到剪貼簿]
     D -->|4. 直接貼上並進行深度 RAG| A
     
@@ -50,4 +50,4 @@ flowchart TD
 1. 下載上方的 `notebooklm_shared_brains_prompts.csv` 資源包。
 2. 開啟您的 Prompt Hub (PWA)。
 3. 點擊右上角 **「⚙️ 管理」** 面板，選擇 **「📥 匯入 CSV」** 並選取該 CSV 檔案。
-4. 匯入完成後，側邊欄會即時渲染出 `Project1_標案黃金範本大腦`、`Project2_協力商資歷與合規庫`、`Project3_專案執行經驗對策大腦`、`Skyline 企業知識大腦分布索引與標案指南`、`SkyLine 專案執行經驗與改善對策庫` 五個新分組，共 11 組黃金範本！
+4. 匯入完成後，側邊欄會即時渲染出 `Project1_標案黃金範本大腦`、`Project2_協力商資歷與合規庫`、`Project3_專案執行經驗對策大腦`、`Skyline 企業知識大腦分布索引與標案指南`、`SkyLine 專案執行經驗與改善對策庫` 五個新分組，共 12 組黃金範本！
