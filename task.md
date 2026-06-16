@@ -6,7 +6,7 @@
 - `[x]` 重新編譯與驗證
   - `[x]` 執行 `create_production_package.py` 重新生成去識別化與地端真正資料包
   - `[x]` 執行 `verify_pwa.mjs` 確保 PWA 結構完整
-- `[/]` 雙遠端推送部署與備份
-  - `[/]` 執行 `git commit` 與 `git push` 同步至雙 GitHub Pages 遠端 (falo-taiwan & falo-chinese)
-  - `[ ]` 執行 `create_backup.py` 生成 v1.1 備份 zip
-  - `[ ]` 更新成果說明書 `walkthrough.md`
+- `[x]` 雙遠端推送部署與備份
+  - `[x]` 執行 `git commit` 與 `git push` 同步至雙 GitHub Pages 遠端 (falo-taiwan & falo-chinese)
+  - `[x]` 執行 `create_backup.py` 生成 v1.1 備份 zip
+  - `[x]` 更新成果說明書 `walkthrough.md`
