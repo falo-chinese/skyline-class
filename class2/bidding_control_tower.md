@@ -39,14 +39,6 @@
 
 ---
 
-## 📋 4. 手動與 API 加速雙模操作 (Manual vs. API)
-
-為適應企業不同的金鑰與安全網路限制，控制塔提供了一鍵切換功能：
-* **✍️ 人工手動 (Prompt 複製)**：在無 API Key 的離線環境下，主管與同仁可以點擊卡片一鍵複製「編譯後帶變數的 Prompt」，貼到外部 ChatGPT/Claude 直接執行，作為 Fallback 方案。
-* **⚡ API 自動加速 (API-Accelerated)**：當配置了 API Key，點擊按鈕即可直接調用 Gemini 2.5 Flash / Chrome built-in Nano / 定向 Search API，在幾秒內全自動完成整合跑測與一鍵收割。
-
----
-
 ## 🔄 5. 一條龍步驟詳細內容 (End-to-End Steps)
 
 本控制塔細化了六大核心節點與其底層 18 個子環節的運作細節：

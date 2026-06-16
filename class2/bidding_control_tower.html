@@ -394,14 +394,7 @@
       </div>
     </div>
 
-    <!-- 雙模操作切換開關 -->
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-      <div class="mode-container" style="margin-bottom: 0;">
-        <button class="mode-btn active" id="btn-manual-mode" onclick="switchMode('manual')">✍️ 人工手動 (Prompt複製)</button>
-        <button class="mode-btn" id="btn-api-mode" onclick="switchMode('api')">⚡ API 自動加速 (Gemini/Nano)</button>
-      </div>
-      <div style="font-size: 0.85rem; color: var(--color-secondary); font-weight: bold;" id="mode-status-text">當前狀態：手動 Prompt 複製模式（離線防護/輕 Token）</div>
-    </div>
+
 
     <!-- 雙軌左右面板 -->
     <div class="dual-panels">
@@ -597,7 +590,7 @@
     let currentWorkflowState = 0; // 0: Intake, 1: Audited & Approved, 2: Harvested
     let slaApproved = false;
     let promptLevel = 'advanced'; // 'simple' vs 'advanced'
-    let currentMode = 'manual';   // 'manual' vs 'api'
+    let currentMode = 'api';      // 'manual' vs 'api'
 
     const supervisorPrompts = {
       audit: {
