@@ -745,12 +745,12 @@
             status: "done",
             inputs: [
               { name: "原始標案資源/招標需求/台南玩具展_RFP.pdf", size: "1.2 MB", type: "RFP需求書", source: "local", desc: "主辦單位發布的原始招標需求說明書" },
-              { name: "原始標案資源/協力商大同/大同搭建商_實績證明.docx", size: "850 KB", type: "協力商資歷", source: "local", desc: "大同搭建商歷年工程搭建實績與合規公文" },
-              { name: "原始標案資源/協力商名音/名音燈光商_SLA承諾.txt", size: "24 KB", type: "協力商合約", source: "local", desc: "名音燈光工程商針對運維故障的原始響應承諾書" },
+              { name: "原始標案資源/協力商大同/大同搭建商_實績證明.pdf", size: "850 KB", type: "協力商資歷", source: "local", desc: "大同搭建商歷年工程搭建實績與合規公文" },
+              { name: "原始標案資源/協力商名音/名音燈光商_SLA承諾.pdf", size: "24 KB", type: "協力商合約", source: "local", desc: "名音燈光工程商針對運維故障的原始響應承諾書" },
               { name: "原始標案資源/公司證照庫/林淑芬_Sophia_PMP_2028.pdf", size: "120 KB", type: "員工證書", source: "local", desc: "備降專案經理 Sophia 的有效 PMP 證照" }
             ],
             prompt_simple: "請幫我把「原始標案資源」資料夾裡的所有檔案複製到「標案工作暫存區」中。",
-            prompt_advanced: "你現在是檔案整理特工。請掃描「原始標案資源」目錄（包含裡面的所有子資料夾，如招標需求、協力商大同、協力商名音、公司證照庫），找出所有的 PDF、Word 以及 TXT 檔案，並將它們複製到「標案工作暫存區」資料夾中，準備進行後續處理。",
+            prompt_advanced: "你現在是檔案整理特工。請掃描「原始標案資源」目錄（包含裡面的所有子資料夾，如招標需求、協力商大同、協力商名音、公司證照庫），找出所有的 PDF 檔案，並將它們複製到「標案工作暫存區」資料夾中，準備進行後續處理。",
             cli_simple: "mkdir -p 標案工作暫存區 && cp -r 原始標案資源/* 標案工作暫存區/",
             cli_advanced: "mkdir -p 標案工作暫存區 && cp -r 原始標案資源/* 標案工作暫存區/",
             outputsHtml_simple: `
@@ -765,22 +765,22 @@
               <div style="background: rgba(0,0,0,0.2); padding: 0.5rem; border-radius: 6px; font-size: 0.75rem;">
                 <span style="color: var(--color-secondary); font-weight: bold;">[Staging 安全隔離區初始化成功]</span>
                 <div style="font-size: 0.7rem; margin-top: 0.25rem;">
-                  已備份 4 個原始檔案（含 PDF/Word/TXT），檔案完整度 Checksum 校驗通過，準備進行語意分析與去敏感化。
+                  已備份 4 個原始檔案（皆為 PDF），檔案完整度 Checksum 校驗通過，準備進行語意分析與去敏感化。
                 </div>
               </div>
             `,
             log_simple: `[SYSTEM] 建立資料夾 標案工作暫存區... OK\n[INFO] 複製 4 個檔案到 標案工作暫存區...\n[SUCCESS] 檔案複製完成。`,
-            log_advanced: `[SYSTEM] 啟動檔案備份整理特工...\n[CoT] 正在建立安全暫存隔離區「標案工作暫存區」... OK\n[CoT] 掃描「原始標案資源」目錄... 發現 4 個目標檔案\n[INFO] 正在複製 原始標案資源/招標需求/台南玩具展_RFP.pdf ➔ 標案工作暫存區/台南玩具展_RFP.pdf\n[INFO] 正在複製 原始標案資源/協力商大同/大同搭建商_實績證明.docx ➔ 標案工作暫存區/大同搭建商_實績證明.docx\n[INFO] 正在複製 原始標案資源/協力商名音/名音燈光商_SLA承諾.txt ➔ 標案工作暫存區/名音燈光商_SLA承諾.txt\n[INFO] 正在複製 原始標案資源/公司證照庫/林淑芬_Sophia_PMP_2028.pdf ➔ 標案工作暫存區/林淑芬_Sophia_PMP_2028.pdf\n[SUCCESS] 暫存隔離區資源就緒，共計 4 個檔案。`,
+            log_advanced: `[SYSTEM] 啟動檔案備份整理特工...\n[CoT] 正在建立安全暫存隔離區「標案工作暫存區」... OK\n[CoT] 掃描「原始標案資源」目錄... 發現 4 個目標檔案\n[INFO] 正在複製 原始標案資源/招標需求/台南玩具展_RFP.pdf ➔ 標案工作暫存區/台南玩具展_RFP.pdf\n[INFO] 正在複製 原始標案資源/協力商大同/大同搭建商_實績證明.pdf ➔ 標案工作暫存區/大同搭建商_實績證明.pdf\n[INFO] 正在複製 原始標案資源/協力商名音/名音燈光商_SLA承諾.pdf ➔ 標案工作暫存區/名音燈光商_SLA承諾.pdf\n[INFO] 正在複製 原始標案資源/公司證照庫/林淑芬_Sophia_PMP_2028.pdf ➔ 標案工作暫存區/林淑芬_Sophia_PMP_2028.pdf\n[SUCCESS] 暫存隔離區資源就緒，共計 4 個檔案。`,
             actionDesc_simple: "建立「標案工作暫存區」並複製所有原始檔案，做為後續對帳的安全隔離環境。",
-            actionDesc_advanced: "地端特工掃描原始資源目錄，將所有符合資格的 PDF/Word/TXT 檔案複製至暫存區。"
+            actionDesc_advanced: "地端特工掃描原始資源目錄，將所有符合資格的 PDF 檔案複製至暫存區。"
           },
           {
             name: "1.2 智慧語意檔名重置 (Rename Files)",
             status: "done",
             inputs: [
-              { name: "標案工作暫存區/台南玩具展_RFP.pdf", size: "1.2 MB", type: "RFP需求書", source: "local", desc: "主辦單位發布的原始招標需求說明書" },
-              { name: "標案工作暫存區/大同搭建商_實績證明.docx", size: "850 KB", type: "協力商資歷", source: "local", desc: "大同搭建商歷年工程搭建實績與合規公文" },
-              { name: "標案工作暫存區/名音燈光商_SLA承諾.txt", size: "24 KB", type: "協力商合約", source: "local", desc: "名音燈光工程商針對運維故障的原始響應承諾書" },
+              { name: "標案工作暫存區/台南玩具展_RFP.pdf", size: "1.2 MB", type: "RFP需求書", source: "local", desc: "主辦單位發布 of 原始招標需求說明書" },
+              { name: "標案工作暫存區/大同搭建商_實績證明.pdf", size: "850 KB", type: "協力商資歷", source: "local", desc: "大同搭建商歷年工程搭建實績與合規公文" },
+              { name: "標案工作暫存區/名音燈光商_SLA承諾.pdf", size: "24 KB", type: "協力商合約", source: "local", desc: "名音燈光工程商針對運維故障的原始響應承諾書" },
               { name: "標案工作暫存區/林淑芬_Sophia_PMP_2028.pdf", size: "120 KB", type: "員工證書", source: "local", desc: "備降專案經理 Sophia 的有效 PMP 證照" }
             ],
             prompt_simple: "請幫我把「標案工作暫存區」裡的檔案檔名，前面都加上今天的日期。",
@@ -790,21 +790,21 @@
             outputsHtml_simple: `
               <div style="font-size: 0.7rem; color: #fbbf24; line-height: 1.3;">
                 • 20260616_台南玩具展_RFP.pdf<br>
-                • 20260616_大同搭建商_實績證明.docx<br>
-                • 20260616_名音燈光商_SLA承諾.txt<br>
+                • 20260616_大同搭建商_實績證明.pdf<br>
+                • 20260616_名音燈光商_SLA承諾.pdf<br>
                 • 20260616_林淑芬_Sophia_PMP_2028.pdf
               </div>
             `,
             outputsHtml_advanced: `
               <div style="font-size: 0.7rem; color: var(--color-secondary); line-height: 1.3;">
                 • 2026_招標需求_台南玩具展_RFP.pdf<br>
-                • 2023_大同搭建_大同搭建商_實績證明.docx<br>
-                • 2026_名音燈光_名音燈光商_SLA承諾.txt<br>
+                • 2023_大同搭建_大同搭建商_實績證明.pdf<br>
+                • 2026_名音燈光_名音燈光商_SLA承諾.pdf<br>
                 • 2028_林淑芬_Sophia_PMP_2028.pdf
               </div>
             `,
             log_simple: `[SYSTEM] 啟動批量檔名重命名...\n[INFO] 更名完成。`,
-            log_advanced: `[SYSTEM] 啟動智慧語意命名特工...\n[CoT] 正在讀取「台南玩具展_RFP.pdf」... 提取得標年份「2026年」、招標專案「台南玩具展」。更名為：2026_招標需求_台南玩具展_RFP.pdf\n[CoT] 正在讀取「大同搭建商_實績證明.docx」... 提取實績年份「2023年」、廠商「大同搭建」。更名為：2023_大同搭建_大同搭建商_實績證明.docx\n[SUCCESS] 語意命名解析完成，所有檔案重命名成功。`,
+            log_advanced: `[SYSTEM] 啟動智慧語意命名特工...\n[CoT] 正在讀取「台南玩具展_RFP.pdf」... 提取得標年份「2026年」、招標專案「台南玩具展」。更名為：2026_招標需求_台南玩具展_RFP.pdf\n[CoT] 正在讀取「大同搭建商_實績證明.pdf」... 提取實績年份「2023年」、廠商「大同搭建」。更名為：2023_大同搭建_大同搭建商_實績證明.pdf\n[SUCCESS] 語意命名解析完成，所有檔案重命名成功。`,
             actionDesc_simple: "簡單在檔名前方加上當天日期做為識別。",
             actionDesc_advanced: "強 Agent 語意理解檔案內容，重命名加註年份與真實廠商資訊。"
           },
@@ -812,7 +812,7 @@
             name: "1.3 內容分析與類別歸類 (Content Analysis & PII Scrubbing)",
             status: "done",
             inputs: [
-              { name: "標案工作暫存區/*.pdf/docx/txt", size: "多個檔案", type: "Staging檔案", source: "local", desc: "剛重命名後的 Staging 檔案列表" }
+              { name: "標案工作暫存區/*.pdf", size: "多個檔案", type: "Staging檔案", source: "local", desc: "剛重命名後的 Staging 檔案列表" }
             ],
             prompt_simple: "請幫我看看「標案工作暫存區」裡的檔案，各是什麼種類的檔案，用簡單的文字告訴我。",
             prompt_advanced: "你現在是語意分析與歸類特工。請通讀「標案工作暫存區」中重命名後的各個檔案，理解其商業語意，自動將其歸類為招標需求 (RFP)、協力商資格證明 (Credentials)、服務承諾 (SLA) 或員工資歷證書 (Certs)。特別注意：如果是大同搭建商的實績證明，請自動掃描是否有包含身分證字號或聯絡電話等敏感個資，並執行去識別化遮蔽（PII Scrubbing），將去敏後的文字儲存。",
