@@ -36,7 +36,7 @@
     }
 
     .container {
-      max-width: 1100px;
+      max-width: 1000px;
       margin: 0 auto;
     }
 
@@ -102,139 +102,47 @@
       opacity: 0.8;
     }
 
-    /* Cards Grid */
-    .index-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 2rem;
-      margin-bottom: 4rem;
-    }
-
-    .brain-card {
-      background: var(--color-card);
-      border-radius: 12px;
-      border: 1px solid var(--border-normal);
-      padding: 2rem;
-      backdrop-filter: blur(12px);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .brain-card:hover {
-      transform: translateY(-5px);
-      border-color: var(--color-primary);
-      box-shadow: 0 10px 25px rgba(56, 189, 248, 0.15);
-    }
-
-    .brain-num {
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      color: var(--color-accent);
-      font-weight: 800;
-      margin-bottom: 0.5rem;
-    }
-
-    .brain-name {
-      font-size: 1.35rem;
-      color: #fff;
-      font-weight: 700;
-      margin-bottom: 1rem;
-      line-height: 1.3;
-    }
-
-    .brain-files {
-      background: rgba(0, 0, 0, 0.2);
-      border-radius: 6px;
-      padding: 0.75rem 1rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .brain-files h4 {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      margin-bottom: 0.5rem;
-      text-transform: uppercase;
-    }
-
-    .brain-files ul {
-      list-style-type: none;
-      font-size: 0.85rem;
-      color: #cbd5e1;
-    }
-
-    .brain-files li {
-      position: relative;
-      padding-left: 1rem;
-      margin-bottom: 0.25rem;
-    }
-
-    .brain-files li::before {
-      content: "•";
-      color: var(--color-primary);
-      position: absolute;
-      left: 0;
-      font-weight: bold;
-    }
-
-    .scenario-box {
-      margin-top: auto;
-      border-top: 1px solid var(--border-normal);
-      padding-top: 1.25rem;
-    }
-
-    .scenario-title {
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--color-primary);
-      margin-bottom: 0.5rem;
-    }
-
-    .scenario-desc {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
-
-    /* Prompt Section */
-    .prompt-section {
+    /* Steps and Cards */
+    .step-card {
       background: var(--color-card);
       border-radius: 12px;
       border: 1px solid var(--border-normal);
       padding: 2.5rem;
-      margin-bottom: 3rem;
+      margin-bottom: 2.5rem;
       backdrop-filter: blur(12px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     }
 
-    .section-title {
-      font-size: 1.6rem;
+    .step-num {
+      display: inline-block;
+      background: rgba(56, 189, 248, 0.1);
+      color: var(--color-primary);
+      padding: 0.2rem 0.75rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      border: 1px solid rgba(56, 189, 248, 0.2);
+    }
+
+    .step-title {
+      font-size: 1.5rem;
       color: #fff;
       font-weight: 700;
-      margin-bottom: 2rem;
-      border-left: 4px solid var(--color-accent);
-      padding-left: 0.75rem;
+      margin-bottom: 1rem;
     }
 
-    .prompt-block {
-      background: rgba(0, 0, 0, 0.2);
-      border-radius: 8px;
-      border: 1px solid var(--border-normal);
-      padding: 1.5rem;
-      margin-bottom: 2rem;
-      position: relative;
-    }
-
-    .prompt-header {
+    .copy-block-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 0.75rem;
+      margin-top: 1.5rem;
     }
 
-    .prompt-scenario {
+    .copy-title {
       font-size: 0.95rem;
-      color: var(--color-primary);
+      color: var(--color-accent);
       font-weight: 700;
     }
 
@@ -242,17 +150,21 @@
       background: rgba(56, 189, 248, 0.1);
       color: var(--color-primary);
       border: 1px solid rgba(56, 189, 248, 0.2);
-      padding: 0.3rem 0.75rem;
-      font-size: 0.75rem;
+      padding: 0.4rem 0.9rem;
+      font-size: 0.8rem;
       border-radius: 4px;
       cursor: pointer;
       font-weight: 600;
       transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
     }
 
     .copy-btn:hover {
       background: var(--color-primary);
       color: var(--color-bg);
+      border-color: var(--color-primary);
     }
 
     pre {
@@ -262,9 +174,45 @@
       white-space: pre-wrap;
       word-break: break-all;
       background: #0f172a;
-      padding: 1rem;
+      padding: 1.25rem;
       border-radius: 6px;
       border: 1px solid rgba(255, 255, 255, 0.03);
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    /* Toast Notification */
+    #toast {
+      visibility: hidden;
+      min-width: 250px;
+      background-color: var(--color-accent);
+      color: var(--color-bg);
+      text-align: center;
+      border-radius: 8px;
+      padding: 1rem;
+      position: fixed;
+      z-index: 1000;
+      left: 50%;
+      bottom: 30px;
+      transform: translateX(-50%);
+      font-weight: bold;
+      font-size: 0.95rem;
+      box-shadow: 0 4px 12px rgba(45, 212, 191, 0.3);
+    }
+
+    #toast.show {
+      visibility: visible;
+      animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    }
+
+    @keyframes fadein {
+      from {bottom: 0; opacity: 0;}
+      to {bottom: 30px; opacity: 1;}
+    }
+
+    @keyframes fadeout {
+      from {bottom: 30px; opacity: 1;}
+      to {bottom: 0; opacity: 0;}
     }
 
     footer {
@@ -283,7 +231,7 @@
     <header>
       <h1>🧭 Skyline NotebookLM 企業共享大腦導覽與使用索引</h1>
       <p>SSOT (Single Source of Truth) Navigation & Prompt Index Map</p>
-      <a href="notebooklm_index_map.md" class="version-switch">📄 檢視 Markdown 版本</a>
+      <a href="notebooklm_index_map.md" class="version-switch">📄 檢視 Markdown 知識底稿</a>
     </header>
 
     <div class="nav-bar">
@@ -292,167 +240,103 @@
       <a href="workbench/index.html" class="nav-link">🛠️ 教材控制台</a>
     </div>
 
-    <!-- 3 Cards Grid -->
-    <div class="index-grid">
-      
-      <!-- Card 1 -->
-      <div class="brain-card">
-        <div class="brain-num">Brain 01</div>
-        <div class="brain-name">標案黃金範本大腦</div>
-        <div class="brain-files">
-          <h4>📂 資料庫內含檔案</h4>
-          <ul>
-            <li>01_2023_高雄動漫節_技術建議書_Scrubbed.md</li>
-            <li>02_2026_台南玩具博覽會_黃金建議書範本.md</li>
-            <li>03_投標建議書寫作合規指南.md</li>
-          </ul>
-        </div>
-        <div class="scenario-box">
-          <div class="scenario-title">🎯 適用情境 (什麼時候用？)</div>
-          <div class="scenario-desc">準備起草一份全新標案的建議書技術大綱、想要稽核草稿段落合規度、或需要配置人類審查點 (HITL) 時。</div>
-        </div>
-      </div>
+    <!-- Step 1: Build the Index Brain -->
+    <div class="step-card">
+      <div class="step-num">步驟一 (Step 1)</div>
+      <div class="step-title">建立「大腦導航索引」專案與上傳知識底稿</div>
+      <p style="margin-bottom: 1rem; color: var(--text-muted);">
+        為了方便同仁能以自然語言隨時查詢「某個問題應該去調用哪本大腦專案」，請先在 NotebookLM 中建立一個名為 <strong>「Skyline 大腦導覽索引」</strong> 的新專案。
+        接著，請點擊下方按鈕複製知識底稿（Markdown 格式），並在該 NotebookLM 專案中新增一份「拷貝文字」來源貼上。
+      </p>
 
-      <!-- Card 2 -->
-      <div class="brain-card">
-        <div class="brain-num">Brain 02</div>
-        <div class="brain-name">協力商資歷與合規庫</div>
-        <div class="brain-files">
-          <h4>📂 資料庫內含檔案</h4>
-          <ul>
-            <li>01_協力廠商合規矩陣與評估表.md</li>
-            <li>02_綠色環保建材認證與計算標準.md</li>
-            <li>03_專案經理證照規範與備降機制.md</li>
-          </ul>
-        </div>
-        <div class="scenario-box">
-          <div class="scenario-title">🎯 適用情境 (什麼時候用？)</div>
-          <div class="scenario-desc">需要從合格名單中挑選符合實績的協力廠商、核對特定硬體商的 SLA 與備用方案、或試算綠建材加分比例時。</div>
-        </div>
+      <div class="copy-block-header">
+        <div class="copy-title">📂 大腦目錄與知識分布底稿 (SSOT Catalog Markdown)</div>
+        <button class="copy-btn" onclick="copyText('catalog-source')">📋 複製知識底稿</button>
       </div>
+      <pre id="catalog-source"># 🧭 Skyline 企業共享大腦目錄清冊與知識分布索引 (SSOT Catalog)
 
-      <!-- Card 3 -->
-      <div class="brain-card">
-        <div class="brain-num">Brain 03</div>
-        <div class="brain-name">專案執行經驗大腦 (去敏版)</div>
-        <div class="brain-files">
-          <h4>📂 資料庫內含檔案</h4>
-          <ul>
-            <li>01_台西市寵物嘉年華_經驗與對策彙整.md</li>
-            <li>02_活動現場突發狀況緊急處理手冊.md</li>
-          </ul>
-        </div>
-        <div class="scenario-box">
-          <div class="scenario-title">🎯 適用情境 (什麼時候用？)</div>
-          <div class="scenario-desc">活動現場突發跳電/跌倒受傷急需處理 SOP、新人 PM 學習培訓、或想總結歷史專案 Lessons Learned 製作防坑表時。</div>
-        </div>
-      </div>
+本文件為 Skyline 企業內部 NotebookLM 知識大腦的分布指南，詳細記錄各共享大腦的檔案清冊與可解答之關鍵問題範疇。
 
+---
+
+## 🧠 大腦一：標案黃金範本大腦 (Skyline_Bidding_Golden_Templates)
+*   **大腦定位**：提供標案寫作大綱、技術方案架構、寫作合規指標、SLA 違規與人類審查點 (HITL) 置放位置。
+*   **內含檔案**：
+    1. `01_2023_高雄動漫節_技術建議書_Scrubbed.md`
+    2. `02_2026_台南玩具博覽會_黃金建議書範本_Sophia.md`
+    3. `03_投標建議書寫作合規指南.md`
+*   **可解答之關鍵主題與問題範圍**：建議書技術大綱、投標書章節架構、寫作合規指標、SLA 違規補償金、人類審查點 (HITL) 建議位置。
+
+---
+
+## 🧠 大腦二：協力商資歷與合規庫 (Skyline_Vendor_Compliance_Catalog)
+*   **大腦定位**：提供合格協力商名單、單一實績金額評審、廠商 SLA 響應時間、綠建材試算百分比公式與 PM 備用降容機制。
+*   **內含檔案**：
+    1. `01_協力廠商合規矩陣與評估表.md`
+    2. `02_綠色環保建材認證與計算標準.md`
+    3. `03_專案經理證照規範與備降機制.md`
+*   **可解答之關鍵主題與問題範圍**：合格協力商篩選、協力商單一實績金額、廠商 SLA 響應時間、SLA 抵達時間、大同空間工程實績、綠建材百分比計算公式、PMP 證照效期、PM 備降/降容方案。
+
+---
+
+## 🧠 大腦三：專案執行經驗大腦 (去敏版) (Skyline_Corporate_PM_Lessons_Learned)
+*   **大腦定位**：提供歷史去敏 PM 痛點記錄（36 筆）、活動現場危機處理 SOP。
+*   **內含檔案**：
+    1. `01_台西市寵物嘉年華_專案經驗與改善對策.md`
+    2. `02_活動現場突發狀況緊急處理手冊.md`
+*   **可解答之關鍵主題與問題範圍**：活動現場跳電排障步驟、配電箱超載、觀眾擦傷/跌倒應急處置、人員中暑處置、攤位招牌號碼、對外文宣發布與變更獎品規格問題、廠商發包檔期漏洞、PM 防坑檢核表 (Lessons Learned)。</pre>
     </div>
 
-    <!-- Prompts Section -->
-    <div class="prompt-section">
-      <div class="section-title">💬 針對三大專案的黃金提示詞 (Prompts)</div>
+    <!-- Step 2: Use Navigation Prompts -->
+    <div class="step-card">
+      <div class="step-num">步驟二 (Step 2)</div>
+      <div class="step-title">在「導航大腦」中提問 ➔ 引導至正確的大腦</div>
+      <p style="margin-bottom: 1.5rem; color: var(--text-muted);">
+        底稿上傳成功後，同仁與學員即可直接在對話框中使用以下黃金提示詞（Prompts）進行諮詢，導航大腦會精確指引您該去哪一本大腦、調閱哪份檔案，並提醒您提問心智：
+      </p>
 
-      <!-- Brain 1 Prompts -->
-      <div style="margin-bottom: 3rem;">
-        <h3 style="color: var(--color-accent); font-size: 1.15rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border-normal); padding-bottom: 0.5rem;">🧠 標案黃金範本大腦 ➔ 推薦提問</h3>
-        
-        <div class="prompt-block">
-          <div class="prompt-header">
-            <div class="prompt-scenario">情境一：起草全新服務建議書技術大綱</div>
-            <button class="copy-btn" onclick="copyPrompt('prompt1-1')">複製 Prompt</button>
-          </div>
-          <pre id="prompt1-1">你現在是Skyline (Skyline) 智慧投標顧問。我想針對一個全新的「2026年台中電競嘉年華 (預算 300 萬元)」標案起草服務建議書的技術大綱與章節架構。請參閱知識庫中的《02_2026_台南玩具博覽會_黃金建議書範本_Sophia.md》與《03_投標建議書寫作合規指南.md》，分析其黃金寫作框架。
-
-輸出要求：
-1. 提供完整的建議書大綱章節（包含一級與二級目錄）。
-2. 指出在「團隊經歷」與「技術方案」中，必須包含哪些關鍵要素以符合合規指標。
-3. 在大綱中標註「人類審查點 (HITL)」的建議位置，以防範合規與財務風險。</pre>
+      <!-- Prompt 1 -->
+      <div style="margin-bottom: 2rem;">
+        <div class="copy-block-header">
+          <div class="copy-title">💬 提示詞一：工作痛點實務導航 (Scenario Router)</div>
+          <button class="copy-btn" onclick="copyText('prompt-1')">📋 複製提示詞</button>
         </div>
-
-        <div class="prompt-block">
-          <div class="prompt-header">
-            <div class="prompt-scenario">情境二：重寫與稽核建議書草稿段落</div>
-            <button class="copy-btn" onclick="copyPrompt('prompt1-2')">複製 Prompt</button>
-          </div>
-          <pre id="prompt1-2">你現在是Skyline (Skyline) 標案合規稽核專家。請閱讀知識庫中的《03_投標建議書寫作合規指南.md》。
-我寫了以下建議書草稿段落：「本專案預計委託外協廠商名音負責現場音響與燈光控台，名音承諾於 4 小時內提供現場故障排障服務。」
-請依據合規寫作指南進行審查：
-1. 該段落是否符合合規寫作規範？有何潛在的廢標風險？
-2. 請幫我重寫該段落，使其語意更專業，並在適當位置自動插入 `[人類審查點: 確證變更已獲主管批准]` 或適當的稽核標籤，以防範 SLA 違規。</pre>
-        </div>
+        <pre id="prompt-1">你現在是 Skyline 企業大腦導航助手。我目前在工作上面臨以下具體痛點：【在此輸入您的痛點，例如：活動現場突然跳電了，有觀眾跌倒受傷】。請檢索《Skyline 企業共享大腦目錄清冊與知識分布索引》，為我提供以下引導：
+1. 我應該開啟並使用哪一本 NotebookLM 共享大腦專案？
+2. 該大腦專案中，哪一個檔案包含了解決此痛點的答案或 SOP？
+3. 請為我列出我可以在該大腦專案中提問的推薦關鍵字。</pre>
       </div>
 
-      <!-- Brain 2 Prompts -->
-      <div style="margin-bottom: 3rem;">
-        <h3 style="color: var(--color-accent); font-size: 1.15rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border-normal); padding-bottom: 0.5rem;">🧠 協力商資歷與合規庫 ➔ 推薦提問</h3>
-        
-        <div class="prompt-block">
-          <div class="prompt-header">
-            <div class="prompt-scenario">情境一：依招標合規門檻評選最優廠商組合</div>
-            <button class="copy-btn" onclick="copyPrompt('prompt2-1')">複製 Prompt</button>
-          </div>
-          <pre id="prompt2-1">你現在是Skyline (Skyline) 採購合規經理。我們準備投標一個全新的展會，RFP 硬性規定：「協力商類似案件之單一合約實績金額須達 300 萬以上，且現場故障響應 SLA 須小於或等於 2 小時」。
-請參閱知識庫《01_協力廠商合規矩陣與評估表.md》與《03_專案經理證照規範與備降機制.md》：
-1. 篩選出哪幾家協力商符合「單案實績 300 萬以上」的合規門檻？
-2. 在符合門檻的廠商中，他們的 SLA 響應時間分別是多少？是否符合 2 小時限制？如果不符，有何升級或調整方案？
-3. 請為我推薦最優的協力商組合，並列出推薦的具體數據依據（實績金額、SLA 承諾、合作評分狀態）。</pre>
-        </div>
-
-        <div class="prompt-block">
-          <div class="prompt-header">
-            <div class="prompt-scenario">情境二：環保建材認證與百分比試算</div>
-            <button class="copy-btn" onclick="copyPrompt('prompt2-2')">複製 Prompt</button>
-          </div>
-          <pre id="prompt2-2">你現在是Skyline (Skyline) 綠建材評估專家。我想針對本次搭建工程進行綠建材佔比與加分試算。
-請參閱《02_綠色環保建材認證與計算標準.md》，找出大同空間工程的綠色建材認證資料。
-1. 大同空間工程擁有哪項綠建材認證？其宣告的環保材料比例是多少？
-2. 請寫出綠色建材百分比的計算公式，並說明如何利用大同的數據在建議書中呈現，以爭取大於 30% 以上的環保加分。</pre>
-        </div>
-      </div>
-
-      <!-- Brain 3 Prompts -->
+      <!-- Prompt 2 -->
       <div>
-        <h3 style="color: var(--color-accent); font-size: 1.15rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border-normal); padding-bottom: 0.5rem;">🧠 專案執行經驗大腦 (去敏版) ➔ 推薦提問</h3>
-        
-        <div class="prompt-block">
-          <div class="prompt-header">
-            <div class="prompt-scenario">情境一：活動現場跳電與現場跌倒受傷緊急處理</div>
-            <button class="copy-btn" onclick="copyPrompt('prompt3-1')">複製 Prompt</button>
-          </div>
-          <pre id="prompt3-1">你現在是Skyline (Skyline) 展會現場安全指揮官。目前在博覽會現場發生了「配電箱超載臨時跳電，且現場有觀眾在混亂中被電線絆倒輕微擦傷」的緊急狀況！
-請立即檢索《02_活動現場突發狀況緊急處理手冊.md》與《01_台西市寵物嘉年華_專案執行經驗與改善對策彙整.md》中的歷史教訓：
-1. 提供現場跳電排障的 SOP 處理步驟（包含與機電組協調、備用發電機切換）。
-2. 提供受傷觀眾應急處置與現場紀錄流程（包含醫護站聯絡、主管匯報要點）。
-3. 根據寵物嘉年華的歷史教訓，指出我們在現場佈線與電力規劃上犯過什麼錯誤，此時該如何立刻進行現場補救？</pre>
+        <div class="copy-block-header">
+          <div class="copy-title">💬 提示詞二：黃金知識分布定位 (Knowledge Locator)</div>
+          <button class="copy-btn" onclick="copyText('prompt-2')">📋 複製提示詞</button>
         </div>
-
-        <div class="prompt-block">
-          <div class="prompt-header">
-            <div class="prompt-scenario">情境二：為新進 PM 製作防坑檢核表 (Lessons Learned)</div>
-            <button class="copy-btn" onclick="copyPrompt('prompt3-2')">複製 Prompt</button>
-          </div>
-          <pre id="prompt3-2">你現在是Skyline (Skyline) 企業品質保證 (QA) 總監。我們即將帶領新進 PM 團隊執行年度展會。
-請通讀《01_台西市寵物嘉年華_專案執行經驗與改善對策彙整.md》中所有 PM 的回報紀錄，歸納整理：
-1. 統計出最常發生的前 3 大類別問題（例如：電力載量、動線設計、協力商遲到等）。
-2. 對於每一類常犯錯誤，從歷史檔案中提取出最有效的「改善對策」。
-3. 為新進 PM 製作一份條列式的「展會執行防坑檢核表 (Lessons Learned Checklist)」。</pre>
-        </div>
+        <pre id="prompt-2">你現在是 Skyline 知識庫治理專家。請幫我定位以下業務知識分別储存在哪一本大腦專案、以及具體的檔案名稱是什麼：
+A. 協力廠商的實績與 SLA 響應時間
+B. 寫作投標書時，SLA 故障排障時間的合規限制與 HITL 語法
+C. 專案經理 (PM) 證照過期時的降容備用機制</pre>
       </div>
-
     </div>
 
     <footer>
-      <p>Skyline AIDE 智慧審計與治理平台 - NotebookLM 專案導覽系統</p>
+      <p>Skyline AIDE 智慧審計與治理平台 - NotebookLM 導覽索引系統</p>
     </footer>
   </div>
 
+  <!-- Toast Notification element -->
+  <div id="toast">📋 已成功複製到剪貼簿！</div>
+
   <script>
-    function copyPrompt(id) {
+    function copyText(id) {
       const text = document.getElementById(id).innerText;
       navigator.clipboard.writeText(text).then(() => {
-        alert("已成功複製 Prompt 範本到剪貼簿！");
+        const toast = document.getElementById("toast");
+        toast.className = "show";
+        setTimeout(() => {
+          toast.className = toast.className.replace("show", "");
+        }, 3000);
       }).catch(err => {
         console.error("無法複製文字: ", err);
       });
