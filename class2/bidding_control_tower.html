@@ -750,7 +750,7 @@
               { name: "原始標案資源/公司證照庫/林淑芬_Sophia_PMP_2028.pdf", size: "120 KB", type: "員工證書", source: "local", desc: "備降專案經理 Sophia 的有效 PMP 證照" }
             ],
             prompt_simple: "請幫我把「原始標案資源」資料夾裡的所有檔案複製到「標案工作暫存區」中。",
-            prompt_advanced: "你現在是檔案整理特工。請掃描「原始標案資源」目錄（包含裡面的所有子資料夾，如招標需求、協力商大同、協力商名音、公司證照庫），找出所有的 PDF 檔案，並將它們複製到「標案工作暫存區」資料夾中，準備進行後續處理。",
+            prompt_advanced: "你現在是檔案整理特工。請掃描「原始標案資源」目錄（包含裡面的所有子資料夾，如招標需求、協力商大同、協力商名音、公司證照庫），找出所有的 PDF 檔案，並將它們複製到「標案工作暫存區」資料夾中，準備進行後續處理。\n複製完成後，請自動生成一份名為「copy_manifest.html」的網頁清單，以簡潔的表格列出「來源路徑」、「複製後路徑」、「檔案大小（Bytes）」與「複製狀態（成功/跳過）」，以便使用者一目了然核對複製的完整性。",
             cli_simple: "mkdir -p 標案工作暫存區 && cp -r 原始標案資源/* 標案工作暫存區/",
             cli_advanced: "mkdir -p 標案工作暫存區 && cp -r 原始標案資源/* 標案工作暫存區/",
             outputsHtml_simple: `
@@ -770,7 +770,7 @@
               </div>
             `,
             log_simple: `[SYSTEM] 建立資料夾 標案工作暫存區... OK\n[INFO] 複製 4 個檔案到 標案工作暫存區...\n[SUCCESS] 檔案複製完成。`,
-            log_advanced: `[SYSTEM] 啟動檔案備份整理特工...\n[CoT] 正在建立安全暫存隔離區「標案工作暫存區」... OK\n[CoT] 掃描「原始標案資源」目錄... 發現 4 個目標檔案\n[INFO] 正在複製 原始標案資源/招標需求/台南玩具展_RFP.pdf ➔ 標案工作暫存區/台南玩具展_RFP.pdf\n[INFO] 正在複製 原始標案資源/協力商大同/大同搭建商_實績證明.pdf ➔ 標案工作暫存區/大同搭建商_實績證明.pdf\n[INFO] 正在複製 原始標案資源/協力商名音/名音燈光商_SLA承諾.pdf ➔ 標案工作暫存區/名音燈光商_SLA承諾.pdf\n[INFO] 正在複製 原始標案資源/公司證照庫/林淑芬_Sophia_PMP_2028.pdf ➔ 標案工作暫存區/林淑芬_Sophia_PMP_2028.pdf\n[SUCCESS] 暫存隔離區資源就緒，共計 4 個檔案。`,
+            log_advanced: `[SYSTEM] 啟動檔案備份整理特工...\n[CoT] 正在建立安全暫存隔離區「標案工作暫存區」... OK\n[CoT] 掃描「原始標案資源」目錄... 發現 4 個目標檔案\n[INFO] 正在複製 原始標案資源/招標需求/台南玩具展_RFP.pdf ➔ 標案工作暫存區/台南玩具展_RFP.pdf\n[INFO] 正在複製 原始標案資源/協力商大同/大同搭建商_實績證明.pdf ➔ 標案工作暫存區/大同搭建商_實績證明.pdf\n[INFO] 正在複製 原始標案資源/協力商名音/名音燈光商_SLA承諾.pdf ➔ 標案工作暫存區/名音燈光商_SLA承諾.pdf\n[INFO] 正在複製 原始標案資源/公司證照庫/林淑芬_Sophia_PMP_2028.pdf ➔ 標案工作暫存區/林淑芬_Sophia_PMP_2028.pdf\n[SUCCESS] 暫存隔離區資源就緒，共計 4 個檔案。\n[HTML] 成功自動生成複製對照報告：copy_manifest.html`,
             actionDesc_simple: "建立「標案工作暫存區」並複製所有原始檔案，做為後續對帳的安全隔離環境。",
             actionDesc_advanced: "地端特工掃描原始資源目錄，將所有符合資格的 PDF 檔案複製至暫存區。"
           },
@@ -784,7 +784,7 @@
               { name: "標案工作暫存區/林淑芬_Sophia_PMP_2028.pdf", size: "120 KB", type: "員工證書", source: "local", desc: "備降專案經理 Sophia 的有效 PMP 證照" }
             ],
             prompt_simple: "請幫我把「標案工作暫存區」裡的檔案檔名，前面都加上今天的日期。",
-            prompt_advanced: "你現在是智慧命名特工。請閱讀「標案工作暫存區」中每一個剛複製過來的檔案內容：\n1. 從內文中尋找該檔案提及的「真實年份」（例如招標公告年份或合約發布年份）與「廠商或專案名稱」。\n2. 依據你理解的資訊，將檔名修改為「[年份]_[項目或廠商]_[原檔名]」的格式。",
+            prompt_advanced: "你現在是智慧命名特工。請閱讀「標案工作暫存區」中每一個剛複製過來的檔案內容：\n1. 從內文中尋找該檔案提及的「真實年份」（例如招標公告年份或合約發布年份）與「廠商或專案名稱」。\n2. 依據你理解的資訊，將檔名修改為「[年份]_[項目或廠商]_[原檔名]」的格式。\n3. 執行完重命名後，請自動生成一份名為「rename_report.html」的網頁報告，以表格呈現「原舊檔名」、「變更後新檔名」、「修改時間」以及「提取真實年份與廠商名稱的命名原因」，以利主管視覺化審查與追溯檔案改動。",
             cli_simple: "python3 scripts/rename_files.py --dir 標案工作暫存區 --date-prefix",
             cli_advanced: "python3 scripts/rename_files.py --dir 標案工作暫存區",
             outputsHtml_simple: `
@@ -804,7 +804,7 @@
               </div>
             `,
             log_simple: `[SYSTEM] 啟動批量檔名重命名...\n[INFO] 更名完成。`,
-            log_advanced: `[SYSTEM] 啟動智慧語意命名特工...\n[CoT] 正在讀取「台南玩具展_RFP.pdf」... 提取得標年份「2026年」、招標專案「台南玩具展」。更名為：2026_招標需求_台南玩具展_RFP.pdf\n[CoT] 正在讀取「大同搭建商_實績證明.pdf」... 提取實績年份「2023年」、廠商「大同搭建」。更名為：2023_大同搭建_大同搭建商_實績證明.pdf\n[SUCCESS] 語意命名解析完成，所有檔案重命名成功。`,
+            log_advanced: `[SYSTEM] 啟動智慧語意命名特工...\n[CoT] 正在讀取「台南玩具展_RFP.pdf」... 提取得標年份「2026年」、招標專案「台南玩具展」。更名為：2026_招標需求_台南玩具展_RFP.pdf\n[CoT] 正在讀取「大同搭建商_實績證明.pdf」... 提取實績年份「2023年」、廠商「大同搭建」。更名為：2023_大同搭建_大同搭建商_實績證明.pdf\n[SUCCESS] 語意命名解析完成，所有檔案重命名成功。\n[HTML] 成功自動生成重命名對照報告：rename_report.html`,
             actionDesc_simple: "簡單在檔名前方加上當天日期做為識別。",
             actionDesc_advanced: "強 Agent 語意理解檔案內容，重命名加註年份與真實廠商資訊。"
           },
@@ -815,7 +815,7 @@
               { name: "標案工作暫存區/*.pdf", size: "多個檔案", type: "Staging檔案", source: "local", desc: "剛重命名後的 Staging 檔案列表" }
             ],
             prompt_simple: "請幫我看看「標案工作暫存區」裡的檔案，各是什麼種類的檔案，用簡單的文字告訴我。",
-            prompt_advanced: "你現在是語意分析與歸類特工。請通讀「標案工作暫存區」中重命名後的各個檔案，理解其商業語意，自動將其歸類為招標需求 (RFP)、協力商資格證明 (Credentials)、服務承諾 (SLA) 或員工資歷證書 (Certs)。特別注意：如果是大同搭建商的實績證明，請自動掃描是否有包含身分證字號或聯絡電話等敏感個資，並執行去識別化遮蔽（PII Scrubbing），將去敏後的文字儲存。",
+            prompt_advanced: "你現在是語意分析與歸類特工。請通讀「標案工作暫存區」中重命名後的各個檔案，理解其商業語意，自動將其歸類為招標需求 (RFP)、協力商資格證明 (Credentials)、服務承諾 (SLA) 或員工資歷證書 (Certs)。特別注意：如果是大同搭建商的實績證明，請自動掃描是否有包含身分證字號或聯絡電話等敏感個資，並執行去識別化遮蔽（PII Scrubbing），將去敏後的文字儲存。\n最後，請將分類結果與 PII 去敏處理前後之對照數據，自動生成一份 HTML 報告檔「scrub_report.html」，以表格展示各檔案的「商業分類」與「敏感個資遮蔽前後比對（例如：去敏前後之身分證字號與聯絡電話對照狀態）」，以供資安審計人員檢驗合規性。",
             cli_simple: "python3 scripts/classify_contents.py --dir 標案工作暫存區 --basic",
             cli_advanced: "python3 scripts/classify_contents.py --dir 標案工作暫存區",
             outputsHtml_simple: `
@@ -833,7 +833,7 @@
               </div>
             `,
             log_simple: `[SYSTEM] 檔案分類判定...\n[SUCCESS] 分類完成。`,
-            log_advanced: `[SYSTEM] 啟動語意分析與安全去識別化特工...\n[CoT] 🚨 檢測到大同搭建商實績證明中含有敏感個資：身分證字號 A123***789、聯絡電話 0912***456\n[CoT] 執行去識別化處理... PII Scrubbing OK!\n[SUCCESS] 語意歸類與 PII 去敏感隔離完成。`,
+            log_advanced: `[SYSTEM] 啟動語意分析與安全去識別化特工...\n[CoT] 🚨 檢測到大同搭建商實績證明中含有敏感個資：身分證字號 A123***789、聯絡電話 0912***456\n[CoT] 執行去識別化處理... PII Scrubbing OK!\n[SUCCESS] 語意歸類與 PII 去敏感隔離完成。\n[HTML] 成功自動生成個資去敏與分類報告：scrub_report.html`,
             actionDesc_simple: "分析檔案的名稱與後綴，完成初步的檔案大類歸檔。",
             actionDesc_advanced: "分析商業語意進行大類歸檔，並自動將敏感個資進行去識別化遮蔽。"
           },
@@ -844,7 +844,7 @@
               { name: "標案工作暫存區/*.txt", size: "多個檔案", type: "Staging純文字", source: "local", desc: "去敏語意分類後的檔案資料" }
             ],
             prompt_simple: "請幫我做一個 檔案清冊 Excel，把「標案工作暫存區」裡的檔名、大小、種類，還有從裡面看出的公司名稱寫進去。",
-            prompt_advanced: "你現在是地端Excel/HTML 資料庫建置特工。請在「標案工作暫存區」建立一個 Excel 試算表資料庫 標案工作記錄表.xlsx。因為這是首次建置且無範本，你需要自己設計兩個工作表：\n- 「檔案清冊」工作表欄位：file_id (PK), original_name, staged_name, staged_path, file_size_bytes, category\n- 「欄位萃取 metadata」工作表欄位：meta_id (PK), file_id (FK), year_extracted, company_name, amount_extracted, cert_expiry_date, sla_response_hours\n建立完成後，將前面步驟中分析、歸類、重命名後的檔案資訊，以及從檔案內文抽取出的關鍵欄位值（如金額、過期日、SLA時數），寫入對應的資料表中。",
+            prompt_advanced: "你現在是地端Excel/HTML 資料庫建置特工。請在「標案工作暫存區」建立一個 Excel 試算表資料庫 標案工作記錄表.xlsx。因為這是首次建置且無範本，你需要自己設計兩個工作表：\n- 「檔案清冊」工作表欄位：file_id (PK), original_name, staged_name, staged_path, file_size_bytes, category\n- 「欄位萃取 metadata」工作表欄位：meta_id (PK), file_id (FK), year_extracted, company_name, amount_extracted, cert_expiry_date, sla_response_hours\n建立完成後，將前面步驟中分析、歸類、重命名後的檔案資訊，以及從檔案內文抽取出的關鍵欄位值（如金額、過期日、SLA時數），寫入對應的資料表中。\n最後，請依據您所設計的資料表 Schema 結構，自動生成一份 HTML 報告檔「db_init_report.html」，詳細展示「資料表 Schema 規劃欄位」、「主外鍵關係」與「首批寫入檔案之 Metadata 資料預覽」，方便開發同仁快速掌握資料庫架構。",
             cli_simple: "python3 scripts/build_records_db.py --dir 標案工作暫存區 --json-only",
             cli_advanced: "python3 scripts/build_records_db.py --db 標案工作暫存區/標案工作記錄表.xlsx --dir 標案工作暫存區",
             outputsHtml_simple: `
@@ -861,7 +861,7 @@
               </div>
             `,
             log_simple: `[SYSTEM] 建立簡易版 Excel 檔案... OK`,
-            log_advanced: `[SYSTEM] 建立 Excel 標案工作記錄表.xlsx 資料庫 (無範本模式)...\n[CoT] 規劃並建立 檔案清冊 與 欄位萃取 metadata 資料表... OK\n[CoT] 寫入大同搭建實績金額 NT$ 3,500,000\n[CoT] 寫入名音燈光 SLA 4h 響應\n[SUCCESS] 標案工作記錄表.xlsx 地端結構化規劃建置完成。`,
+            log_advanced: `[SYSTEM] 建立 Excel 標案工作記錄表.xlsx 資料庫 (無範本模式)...\n[CoT] 規劃並建立 檔案清冊 與 欄位萃取 metadata 資料表... OK\n[CoT] 寫入大同搭建實績金額 NT$ 3,500,000\n[CoT] 寫入名音燈光 SLA 4h 響應\n[SUCCESS] 標案工作記錄表.xlsx 地端結構化規劃建置完成。\n[HTML] 成功自動生成資料庫建置規格報告：db_init_report.html`,
             actionDesc_simple: "首次無範本，由 AI 規劃並產生一個包含基本檔案大小、種類與公司名稱的 Excel 檔案。",
             actionDesc_advanced: "首次無範本，由強 Agent 自行設計資料表結構，將分析歸類好的屬性與抽取的關鍵欄位值結構化儲存。"
           },
@@ -873,7 +873,7 @@
               { name: "參考範例/標案工作記錄表_範本.xlsx", size: "48 KB", type: "參考範本", source: "local", desc: "公司標準資料庫 Schema 範本" }
             ],
             prompt_simple: "請參考「參考範例/標案工作記錄表_範本.xlsx」的格式，把「標案工作暫存區」裡的新檔案資訊填加到 Excel 裡面。",
-            prompt_advanced: "你現在是地端Excel/HTML 資料庫建置特工。請在「標案工作暫存區」建立/更新 標案工作記錄表.xlsx。這次建置請務必參考「參考範例/標案工作記錄表_範本.xlsx」的結構與欄位定義。\n請檢查範本中的「檔案清冊」與「欄位萃取 metadata」工作表的 Schema、資料格式與填寫規範，確保新寫入的檔案資料（包含檔名、大小、類別、公司名稱、金額、過期日及SLA時數等萃取欄位）與範本完全一致，保持資料的一致性與關聯性。",
+            prompt_advanced: "你現在是地端Excel/HTML 資料庫建置特工。請在「標案工作暫存區」建立/更新 標案工作記錄表.xlsx。這次建置請務必參考「參考範例/標案工作記錄表_範本.xlsx」的結構與欄位定義。\n請檢查範本中的「檔案清冊」與「欄位萃取 metadata」工作表的 Schema、資料格式與填寫規範，確保新寫入的檔案資料（包含檔名、大小、類別、公司名稱、金額、過期日及SLA時數等萃取欄位）與範本完全一致，保持資料的一致性與關聯性。\n最後，請針對本次同步寫入動作自動生成一份 HTML 對齊驗證報告「db_sync_report.html」，列出「已成功對齊寫入欄位數」、「對齊範本 Schema 驗證狀態（成功/失敗）」與「主外鍵 file_id 關聯檢驗結果」，以確保資料庫未發生欄位錯位或主外鍵斷裂。",
             cli_simple: "python3 scripts/build_records_db.py --dir 標案工作暫存區 --template 參考範例/標案工作記錄表_範本.xlsx --json-only",
             cli_advanced: "python3 scripts/build_records_db.py --db 標案工作暫存區/標案工作記錄表.xlsx --template 參考範例/標案工作記錄表_範本.xlsx --dir 標案工作暫存區",
             outputsHtml_simple: `
@@ -890,7 +890,7 @@
               </div>
             `,
             log_simple: `[SYSTEM] 讀取範本並寫入資料... OK`,
-            log_advanced: `[SYSTEM] 讀取範本 參考範例/標案工作記錄表_範本.xlsx 結構...\n[CoT] 核對 檔案清冊 (file_id, staged_name...) 與 欄位萃取 metadata 欄位規範... 通過\n[CoT] 依範本規格寫入資料並建立外鍵關聯 (SLA 4h, PMP 有效期 2028-12-31)\n[SUCCESS] 標案工作記錄表.xlsx 已依據範本結構對齊建置完成。`,
+            log_advanced: `[SYSTEM] 讀取範本 參考範例/標案工作記錄表_範本.xlsx 結構...\n[CoT] 核對 檔案清冊 (file_id, staged_name...) 與 欄位萃取 metadata 欄位規範... 通過\n[CoT] 依範本規格寫入資料並建立外鍵關聯 (SLA 4h, PMP 有效期 2028-12-31)\n[SUCCESS] 標案工作記錄表.xlsx 已依據範本結構對齊建置完成。\n[HTML] 成功自動生成資料庫對齊檢核報告：db_sync_report.html`,
             actionDesc_simple: "參考範本的格式，將新檔案的基本資訊寫入 Excel 中。",
             actionDesc_advanced: "強 Agent 智慧解析範本 Schema 規格，將去敏檔案與抽取欄位精確對齊並關聯寫入庫。"
           }
