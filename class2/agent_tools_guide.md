@@ -1,6 +1,6 @@
 # 🤖 Agent 工具實戰指南 (Agent Tools Guide)
 
-本指南專為企業主管與開發同仁設計，詳細說明如何操作與調用 Pro 等級 AI Agent (特別是運作在「地端工作站」且動態測試能耐極佳的 **Codex 技術特工**)，配合 Google NotebookLM 脈絡大腦，以一條龍方式完成「台南玩具展總包標案 (450萬元)」的對帳、利潤核算、甘特圖進度監控與草稿組裝。
+本指南專為企業主管與開發同仁設計，詳細說明如何操作與調用 Pro 等級 AI Agent (特別是運作在「地端工作站」且動態測試能耐極佳的 **Codex 技術特工**)，配合 Google NotebookLM 脈絡大腦，以「拆開步驟、逐步教學」的方式完成「台南玩具展總包標案 (450萬元)」的檔案整理、合規差距稽核、成本試算、草稿組裝、實機跑測與 AI PM 排程監控。
 
 ---
 
@@ -8,246 +8,265 @@
 
 本指南與 **[🤖 智慧投標控制塔 (POC)](bidding_control_tower.html)** 是完全對齊的：
 * **本指南 (靜態手冊)**：提供底層 CLI 腳本與 Prompt 的黃金範本，是 NotebookLM 知識庫的參考源，適合工程師或主管在終端機 (CLI) 離線操作時參考。
-* **控制塔 (動態面板)**：將本指南 of 5 大步驟與進度監控整合為可點擊切換、手動/API 雙模式的一條龍展示平台，供 G總和 C董 快速理解與決策收割。
+* **控制塔 (動態面板)**：將本指南之 5 大步驟與 15 個子環節整合為可點擊切換、逐步教學的展示平台，供主管與學員逐步理解與決策收割。
 
 ---
 
-## 📂 1. 用 Agent 整理檔案 (File Prep & Intake)
+## 📂 1. 用 Agent 整理檔案 (File Prep & Excel Build)
 
-在開始任何分析前，必須將地端隨意放置的歷史得標檔案、Excel、PDF 進行清洗與結構化，存入 staging/ 目錄以隔離 SSOT。
+在開始任何分析前，必須將地端隨意放置的歷史得標檔案、Excel、PDF 進行清洗與結構化，存入本地中文暫存區以隔離資料，並自動建置本地 Excel 試算表資料庫。
 
-* **輸入檔案**：`台南玩具展_RFP.pdf`、`大同搭建商_實績證明.docx`、`名音燈光商_SLA承諾.txt`。
-* **分環節**：1.1 採購網公告爬取 ➔ 1.2 地端檔案目錄掃描 ➔ 1.3 個資去識別化隔離。
-* **CLI 指令**：`python3 scripts/prep_intake.py --source ./raw_tenders --output ./staging --clean-pii --verbose`
+* **輸入與目錄設定**：
+  - 來源資料夾：`原始標案資源`
+    - `原始標案資源/招標需求/台南玩具展_RFP.pdf`
+    - `原始標案資源/協力商大同/大同搭建商_實績證明.docx`
+    - `原始標案資源/協力商名音/名音燈光商_SLA承諾.txt`
+    - `原始標案資源/公司證照庫/林淑芬_Sophia_PMP_2028.pdf`
+  - 暫存資料夾：`標案工作暫存區`
+  - 資料庫檔案：`標案工作暫存區/標案工作記錄表.xlsx`
 
-### 📋 JSON 輸出結構 (`staging/file_manifest.json`)
-```json
-{
-  "timestamp": "2026-06-16T16:40:00Z",
-  "total_files_processed": 3,
-  "manifest": [
-    {
-      "original_name": "台南玩具展_RFP.pdf",
-      "staged_path": "staging/20260616_RFP_Tainan_ToyExpo.txt",
-      "pii_scrubbed": true,
-      "metadata": { "pages": 42, "category": "RFP", "file_size_bytes": 1048576 }
-    }
-  ]
-}
-```
+### 1.1 複製資源至暫存區 (Copy Resources)
+* **✍️ 簡單規則版 Prompt**：
+  ```text
+  請幫我把「原始標案資源」資料夾裡的所有檔案複製到「標案工作暫存區」中。
+  ```
+* **🧠 強 Agent 認知版 Prompt**：
+  ```text
+  你現在是檔案整理特工。請掃描「原始標案資源」目錄（包含裡面的所有子資料夾，如招標需求、協力商大同、協力商名音、公司證照庫），找出所有的 PDF、Word 以及 TXT 檔案，並將它們複製到「標案工作暫存區」資料夾中，準備進行後續處理。
+  ```
 
-### 💬 執行 Prompt：檔案整理與結構化 (XML 格式)
-```xml
-<instruction>
-  你現在是 Dev (Codex) 技術特工。請掃描地端目錄下的原始招標文件，進行清洗與去敏感化。
-</instruction>
-<inputs>
-  <path>./raw_tenders</path>
-  <target_dir>./staging</target_dir>
-</inputs>
-<rules>
-  1. 檔案重新命名格式：[YYYYMMDD]_[大類]_[原檔名]
-  2. 使用 PII_Scrubber 自動屏蔽身份證字號、姓名與行動電話，並儲存至隔離 Staging 目錄。
-  3. 輸出包含檔案大小、頁數及處理狀態的 JSON 清單。
-</rules>
-```
+### 1.2 智慧語意檔名重置 (Rename Files)
+* **✍️ 簡單規則版 Prompt**：
+  ```text
+  請幫我把「標案工作暫存區」裡的檔案檔名，前面都加上今天的日期。
+  ```
+* **🧠 強 Agent 認知版 Prompt**：
+  ```text
+  你現在是智慧命名特工。請閱讀「標案工作暫存區」中每一個剛複製過來的檔案內容：
+  1. 從內文中尋找該檔案提及的「真實年份」（例如招標公告年份或合約發布年份）與「廠商或專案名稱」。
+  2. 依據你理解的資訊，將檔名修改為「[年份]_[項目或廠商]_[原檔名]」的格式（例如：將台南玩具展_RFP.pdf 重命名為 2026_招標需求_台南玩具展_RFP.pdf）。
+  ```
 
----
+### 1.3 內容分析與類別歸類 (Content Analysis & PII Scrubbing)
+* **✍️ 簡單規則版 Prompt**：
+  ```text
+  請幫我看看「標案工作暫存區」裡的這些檔案，各是什麼種類的檔案，用簡單的文字告訴我。
+  ```
+* **🧠 強 Agent 認知版 Prompt**：
+  ```text
+  你現在是語意分析與歸類特工。請通讀「標案工作暫存區」中重命名後的各個檔案，理解其商業語意，自動將其歸類為以下四種大類之一：
+  - 「招標需求 (RFP)」
+  - 「協力商資格證明 (Credentials)」
+  - 「服務承諾 (SLA)」
+  - 「員工資歷證書 (Certs)」
+  特別注意：如果是大同搭建商的實績證明，請自動掃描是否有包含身分證字號或聯絡電話等敏感個資，並執行去識別化遮蔽（PII Scrubbing），將去敏後的文字儲存。
+  ```
 
-## 🔍 2. 比對既有招標書 (RFP Comparison & Gap Audit)
-
-比對全新玩具展 RFP 與 SQLite 歷史得標庫，找出硬性廢標條款與合規缺失。
-
-* **輸入檔案**：`staging/20260616_RFP_Tainan_ToyExpo.txt`、SQLite 歷史得標庫 `ssot_historical_tenders.db`。
-* **分環節**：2.1 廢標條款自動提取 ➔ 2.2 PM 證照過期稽核 ➔ 2.3 SLA 技術對帳比對。
-* **CLI 指令**：`python3 scripts/gap_audit.py --rfp ./staging/20260616_RFP_Tainan_ToyExpo.txt --db ./backup/ssot_historical_tenders.db --rules-schema ./config/disq_rules.json`
-
-### 📋 JSON 輸出結構 (`gap_report.json`)
-```json
-{
-  "audit_status": "fail",
-  "gaps_found": [
-    {
-      "clause": "PM Certification Requirements",
-      "rfp_requirement": "專案經理必須持有效 PMP 證照",
-      "our_status": "志明 (PMP 已過期 2026-02-15)",
-      "risk_level": "RED_DISQUALIFY"
-    },
-    {
-      "clause": "SLA Response Time",
-      "rfp_requirement": "2小時現場響應",
-      "our_status": "名音燈光商原始承諾 4h",
-      "risk_level": "YELLOW_WARNING"
-    }
-  ]
-}
-```
-
-### 💬 執行 Prompt：RFP 與歷史對帳差距稽核 (XML 格式)
-```xml
-<instruction>
-  你現在是負責合規性審查的合規特工。請比對新招標書 txt 與 SQLite 歷史得標庫，找出硬性廢標與不合規缺口。
-</instruction>
-<inputs>
-  <rfp_text>staging/20260616_RFP_Tainan_ToyExpo.txt</rfp_text>
-  <historical_db>ssot_historical_tenders.db</historical_db>
-</inputs>
-<rules>
-  1. 提取所有包含「應、須、持、保證、罰則、SLA」的段落。
-  2. 自動比對 SQLite 資料庫中的員工資歷證照、協力廠商服務規格。
-  3. 輸出含 RED_DISQUALIFY, YELLOW_WARNING, GREEN_PASS 等風險燈號的 JSON 對帳單。
-</rules>
-```
+### 1.4 地端 Excel 試算表資料庫建置 (Excel Excel/HTML 資料庫建置)
+* **✍️ 簡單規則版 Prompt**：
+  ```text
+  請幫我做一個 file_manifest.json 檔案，把「標案工作暫存區」裡的檔名和大小寫進去。
+  ```
+* **🧠 強 Agent 認知版 Prompt**：
+  ```text
+  你現在是地端Excel/HTML 資料庫建置特工。請在「標案工作暫存區」建立一個 Excel 試算表資料庫 標案工作記錄表.xlsx，建立 檔案清冊 與 欄位萃取 metadata 兩張資料表：
+  - 「檔案清冊」工作表欄位：file_id (PK), original_name, staged_name, staged_path, file_size_bytes, category
+  - 「欄位萃取 metadata」工作表欄位：meta_id (PK), file_id (FK), year_extracted, company_name, amount_extracted, cert_expiry_date, sla_response_hours
+  建立完成後，將前面步驟中分析、歸類、重命名後的檔案資訊，以及從檔案內文抽取出的關鍵欄位值（如金額、過期日、SLA時數），寫入對應的資料表中。
+  ```
 
 ---
 
-## 📊 3. SLA 成本溢價與決策試算 (SLA Surcharge & Costing)
+## 🔍 2. 招標合規差距對帳 (Compliance Gap Audit)
 
-評估名音燈光商改為 2h SLA 增加的人工與保證金支出，對總利潤紅線 (15%) 的衝擊。
+比對全新玩具展 RFP 與 Excel 試算表資料庫中的歷史資歷，抓出硬性廢標條款與協力廠 SLA 缺口。
 
-* **輸入檔案**：SQLite 費率庫 `ssot_material_rates.db`、`20260616_SLA_Mingyin_Light.txt`。
-* **分環節**：3.1 物料上漲費率調校 ➔ 3.2 2h SLA 加急成本計算 ➔ 3.3 毛利率與決策核算。
-* **CLI 指令**：`python3 scripts/sla_cost_sim.py --tender-value 4500000 --light-base 800000 --wood-surcharge 0.05 --target-margin-pct 15.0`
+* **輸入檔案**：`標案工作暫存區/2026_招標需求_台南玩具展_RFP.txt`、Excel 試算表資料庫 `標案工作暫存區/標案工作記錄表.xlsx`。
 
-### 📋 JSON 輸出結構 (`cost_analysis.json`)
-```json
-{
-  "budget_limit": 4500000,
-  "estimated_cost": 3800000,
-  "breakdown": {
-    "base_light_cost": 800000,
-    "sla_2h_surcharge": 150000,
-    "risk_reserve": 150000,
-    "other_materials": 2700000
-  },
-  "projected_profit": 700000,
-  "profit_margin_pct": 15.55,
-  "decision_recommendation": "green_approve"
-}
-```
+### 2.1 廢標條款自動提取 (Clause Extraction)
+* **✍️ 簡單規則版 Prompt**：
+  ```text
+  請幫我搜尋新標案 RFP 中是否有出現 "PMP"、"SLA" 等關鍵字，列出這些句子。
+  ```
+* **🧠 強 Agent 認知版 Prompt**：
+  ```text
+  你現在是合規條款審查特工。請閱讀「標案工作暫存區/2026_招標需求_台南玩具展_RFP.txt」，自動提取所有關於「專案經理持證資格」、「協力商實績金額門檻」、「運維故障響應時間 (SLA)」等顯性與隱性的硬性廢標條款，並將其整理為檢核點。
+  ```
 
-### 💬 執行 Prompt：SLA 成本溢價決策分析 (XML 格式)
-```xml
-<instruction>
-  你現在是財務成本核算分析 Agent。因應 2h SLA 響應要求，請計算協力廠商溢價對標案整體利潤紅線的影響。
-</instruction>
-<variables>
-  <tender_value>4500000</tender_value>
-  <target_margin_pct>15.0</target_margin_pct>
-  <sla_escalation_surcharge>150000</sla_escalation_surcharge>
-  <risk_reserve>150000</risk_reserve>
-</variables>
-<rules>
-  1. 從 SQLite 查詢物料上漲 5% 費率，並累加 2h SLA 維運加急排班溢價與合約違約準備金。
-  2. 計算最終毛利率，並判斷是否低於 target_margin_pct 獲利紅線。
-</rules>
-```
+### 2.2 志明證照過期稽核 (PM Certificate Audit)
+* **✍️ 簡單規則版 Prompt**：
+  ```text
+  請幫我查詢我們資料庫裡志明的 PMP 證照到期了沒有。
+  ```
+* **🧠 強 Agent 認知版 Prompt**：
+  ```text
+  你現在是證照管理稽核特工。請查詢 Excel 標案工作記錄表.xlsx 中的 「欄位萃取 metadata」工作表，核對當前擬定的專案經理志明的 PMP 證書有效期限。若到期日早於投標日（2026年6月），判定為不合規（RED_DISQUALIFY），並主動在證照庫中尋找是否有符合資格的備用人員。
+  ```
+
+### 2.3 SLA 技術對帳比對 (SLA Alignment Audit)
+* **✍️ 簡單規則版 Prompt**：
+  ```text
+  請幫我查名音燈光商服務承諾書裡的 SLA 時間是幾個小時。
+  ```
+* **🧠 強 Agent 認知版 Prompt**：
+  ```text
+  你現在是運維規格對帳特工。請核對 Excel 標案工作記錄表.xlsx 中名音燈光商的 SLA 響應時間。比對是否滿足 RFP 中「2小時現場抵達響應」的硬性規定。若名音燈光僅承諾 4h，標記為 YELLOW_WARNING 合規差距，並提示需要主管決策上調預算或變更協力商。
+  ```
 
 ---
 
-## 📘 4. Delta 草稿自動組裝 (NotebookLM & Draft Compiling)
+## 📊 3. SLA 成本溢價與利潤決策 (SLA Surcharge & Costing)
 
-結合 Google NotebookLM 去識別化得標實績與有效證照，編譯技術建議書草稿。
+評估協力廠商改為 2h SLA 增加的人工與保證金支出，對總利潤紅線 (15%) 的衝擊，進行壓力測試。
 
-* **輸入檔案**：Google NotebookLM 脈絡庫、草稿模板 `templates/tech_bid.md`。
-* **分環節**：4.1 NotebookLM 真理檢索 ➔ 4.2 PM 備降人員替換（Sophia 取代志明） ➔ 4.3 標註人類審查點。
-* **CLI 指令**：`python3 scripts/draft_assemble.py --template ./templates/tech_bid.md --output ./staging/draft_assembled.md --replace-pm "Sophia"`
+* **輸入檔案**：Excel 試算表資料庫 `標案工作暫存區/標案工作記錄表.xlsx`。
 
-### 📋 JSON 輸出結構 (`draft_status.json`)
-```json
-{
-  "draft_path": "staging/draft_assembled.md",
-  "pm_assigned": "Sophia (林淑芬)",
-  "pm_cert_id": "#PMP-246801",
-  "human_review_points": [
-    {
-      "line": 142,
-      "context": "[人類審查點: 確證 SLA 溢價補償金 NT$ 300,000 已於財務核算核准。]"
-    }
-  ]
-}
-```
+### 3.1 物料上漲費率調校 (Material Rates Adjustment)
+* **✍️ 簡單規則版 Prompt**：
+  ```text
+  請幫我把資料庫裡的木作材料費用全部調漲 5%。
+  ```
+* **🧠 強 Agent 認知版 Prompt**：
+  ```text
+  你現在是物料成本調校特工。請查詢地端 Excel 標案工作記錄表.xlsx 中的南部物料最新費率，並加計當前木作與運輸通膨 5% 的溢價，更新本案的基礎搭建預算。
+  ```
 
-### 💬 執行 Prompt：投標書草稿組裝與合規起草 (XML 格式)
-```xml
-<instruction>
-  你現在是 Content (主力產線) 寫作專家。請結合 NotebookLM 知識庫資料，起草技術建議書草稿並標記人工審核點。
-</instruction>
-<rag_context>
-  <source>NotebookLM: Sophia 有效 PMP 證照檔案</source>
-  <source>NotebookLM: 繁星智慧檔案實績</source>
-</rag_context>
-<rules>
-  1. 針對「技術服務與 SLA 承諾」章節進行起草，自動用有效的 Sophia 替換過期 PM 志明。
-  2. 置入「繁星智慧檔案專案」實績。
-  3. 凡涉及手動批准或財務異動（如 30 萬 SLA 溢價），必須插入 `[人類審查點]` 標籤。
-</rules>
-```
+### 3.2 2h SLA 加急成本計算 (SLA Cost Escalation)
+* **✍️ 簡單規則版 Prompt**：
+  ```text
+  名音燈光商因為要改為 2 小時 SLA，要求增加 30 萬元的預算。請幫我記錄這筆費用。
+  ```
+* **🧠 強 Agent 認知版 Prompt**：
+  ```text
+  你現在是協力商談判特工。因應 RFP 的 2h SLA 現場響應要求，名音燈光提出 NT$ 300,000 的排班溢價與合約準備金需求。請將此增項預算寫入試算表，並預估故障準備金之財務分攤。
+  ```
+
+### 3.3 毛利率與決策核算 (Profit Margin Analysis)
+* **✍️ 簡單規則版 Prompt**：
+  ```text
+  請幫我把總預算 450 萬扣掉其他成本和這 30 萬，算一下我們還剩下多少利潤。
+  ```
+* **🧠 強 Agent 認知版 Prompt**：
+  ```text
+  你現在是財務決策特工。請針對玩具展標案 450 萬元預算進行壓力測試：計算扣除 5% 物料通膨與 30 萬 SLA 溢價後的毛利率，判定是否會低於 15.0% 的獲利紅線。若低於紅線，提出優化搭建成本方案；若高於紅線，生成 green_approve 決策建議書以供主管簽核。
+  ```
+
+---
+
+## 📘 4. 技術建議書草稿 RAG 組裝 (RAG Draft Compiling)
+
+結合 Google NotebookLM 知識大腦與地端資料庫，編譯最終技術建議書草稿，並標記人類審核點。
+
+* **輸入檔案**：Google NotebookLM 知識庫、草稿模板 `templates/tech_bid.md`、Excel 試算表資料庫。
+
+### 4.1 NotebookLM 真理檢索 (NotebookLM RAG Retrieval)
+* **✍️ 簡單規則版 Prompt**：
+  ```text
+  請讀取我們的得標實績和 Sophia 的證照資料。
+  ```
+* **🧠 強 Agent 認知版 Prompt**：
+  ```text
+  你現在是知識檢索特工。請向 Google NotebookLM 檢索去識別化後的知識庫，確證「林淑芬 (Sophia) 的有效 PMP 證照編號與截止日期」以及「歷年繁星智慧檔案專案 (350萬)」的得標摘要與技術描述。
+  ```
+
+### 4.2 PM 備降人員替換 (Sophia Replaces Zhiming)
+* **✍️ 簡單規則版 Prompt**：
+  ```text
+  把 template/tech_bid.md 裡的專案經理名字改成 Sophia，並填入 350 萬的得標案例文字。
+  ```
+* **🧠 強 Agent 認知版 Prompt**：
+  ```text
+  你現在是建議書編譯特工。請讀取投標書草稿模板 `templates/tech_bid.md`。由於志明證照過期，請自動將「團隊資歷與得標實績」章節中的 PM 名字替換為 Sophia，填入檢索到的有效證照資訊與繁星實績，並修飾 Sophia 的經歷，使其更契合「大規模展會管理能力」的評分加分項。
+  ```
+
+### 4.3 標註人類審查點 (Mark Human Review Points)
+* **✍️ 簡單規則版 Prompt**：
+  ```text
+  請幫我在改好的草稿裡有財務變動的地方加個標記。
+  ```
+* **🧠 強 Agent 認知版 Prompt**：
+  ```text
+  你現在是安全稽核特工。凡是在草稿中涉及名音燈光 30 萬 SLA 財務變更、或是備降專案經理人員替換的關鍵段落，自動在行末插入 `[人類審查點: 確證變更已獲主管批准]` 安全標記，確保 HITL 人類在環審核路徑。
+  ```
 
 ---
 
 ## 🖥️ 5. 實機跑測與收割發佈 (Sandbox Run & Harvest)
 
-主管進行最後決策審批，啟動 Pro Agent 自動跑測上傳並同步 SSOT 地端黃金庫。
+模擬沙盒上傳並同步本地 Excel SSOT 黃金得標庫，打通最後一哩路。
 
-* **輸入檔案**：`staging/draft_assembled.md`、SQLite 本地真理庫。
-* **分環節**：5.1 Computer Use 網頁上傳模擬 ➔ 5.2 SQLite SSOT 資料庫寫入 ➔ 5.3 知識大腦同步發布。
-* **CLI 指令**：`python3 scripts/system_harvest.py --draft ./staging/draft_assembled.md --commit-to-db --sync-notebooklm --operator "Force(ff)"`
+* **輸入檔案**：`標案工作暫存區/draft_assembled.md`、Excel 本地真理庫。
 
-### 📋 JSON 輸出結構 (`harvest_log.json`)
-```json
-{
-  "harvest_status": "success",
-  "sqlite_write": true,
-  "notebooklm_sync": true,
-  "audit_log_id": "AUDIT_20260616_164210_FF"
-}
-```
+### 5.1 Computer Use 網頁上傳模擬 (Computer Use Simulation)
+* **✍️ 簡單規則版 Prompt**：
+  ```text
+  請幫我把寫好的建議書草稿上傳到測試系統。
+  ```
+* **🧠 強 Agent 認知版 Prompt**：
+  ```text
+  你現在是沙盒執行特工。請調用 Computer Use 特工在沙盒中啟動虛擬 Chrome 瀏覽器，模擬滑鼠與鍵盤操作，登入政府電子採購網測試區，並自動將「標案工作暫存區/draft_assembled.md」上傳至投標文件欄位。
+  ```
 
-### 💬 執行 Prompt：一鍵收割與地端真理庫同步 (XML 格式)
-```xml
-<instruction>
-  你現在是決策收割 Agent。請模擬 Computer Use 跑測上傳，並正式寫入地端 SQLite 黃金資料庫與發佈知識。
-</instruction>
-<actions>
-  1. 調用 Computer Use 特工模擬打開瀏覽器，登入招標網測試區並自動點選上傳 draft_assembled.md.
-  2. 將專案得標金額、PM Sophia 及主管批准紀錄寫入 SQLite 真理庫 (SSOT)。
-  3. 去除敏感資料後，發布至 NotebookLM Sources 完成知識閉環。
-</actions>
-```
+### 5.2 Excel SSOT 資料庫寫入 (SSOT Database Commit)
+* **✍️ 簡單規則版 Prompt**：
+  ```text
+  在 Excel 的歷史得標庫裡新增一筆台南玩具展 Submitted 的紀錄。
+  ```
+* **🧠 強 Agent 認知版 Prompt**：
+  ```text
+  你現在是資料庫收割特工。請在主管核准後，將最終投標總額 (4.5M)、核准 PM (Sophia) 以及主管 Force(ff) 的數位簽章軌跡，正式寫入本地 Excel 黃金資料庫 (SSOT) 的 「已得標標案」工作表中，並在 審計日誌 生成審計日誌。
+  ```
+
+### 5.3 知識大腦同步發布 (NotebookLM Knowledge Sync)
+* **✍️ 簡單規則版 Prompt**：
+  ```text
+  請幫我把這次寫好的標書傳回我們的知識庫裡。
+  ```
+* **🧠 強 Agent 認知版 Prompt**：
+  ```text
+  你現在是知識閉環特工。請將本次最終得標並去敏感化後的技術建議書草稿，發布回 Google NotebookLM 脈絡大腦中，使其作為未來的黃金投標範本，完成團隊知識閉環。
+  ```
 
 ---
 
-## 📅 6. 進度控制與 AI PM 管理 (Progress Control & AI PM Orchestration)
+## 📅 6. AI PM 排程與進度協調 (Progress & AI PM Orchestration)
 
-定期分析員 (Scheduled Analyst) 負責在背景運作，主動監控 7 天甘特圖關鍵路徑、排班進度與協力廠通訊狀態，防範專案延誤。
+AI PM 定期分析員（Scheduled Analyst）負責背景監控 7 天關鍵路徑，管理協力商交付，實施主動協調。
 
-* **輸入檔案**：SQLite 排程配置表、Staging 寫作日誌。
-* **CLI 指令**：`python3 scripts/ai_pm_scheduler.py --config ./config/scheduler_config.json --run-monitor --alert-webhook "https://discord.gg/webhook"`
+* **輸入檔案**：Excel 專案排程表、Staging 執行日誌。
 
-### 📋 JSON 輸出結構 (`scheduler_alerts.json`)
-```json
-{
-  "alert_timestamp": "2026-06-16T16:40:00Z",
-  "critical_path_node": "D-4 Draft",
-  "anomalies_detected": [
-    {
-      "type": "DELAY_WARNING",
-      "description": "第四章技術草稿落後預期 12 小時",
-      "suggested_action": "調撥 Codex 特工資源"
-    }
-  ]
-}
-```
+### 6.1 AI PM 進度與風險監控 (Progress & Risk Monitoring)
+* **✍️ 簡單規則版 Prompt**：
+  ```text
+  請幫我設定一個定時排程，每小時檢查一次 Staging 區的寫作日誌時間。如果時間落後，就在 Console 印出一個 Warn 警告。
+  ```
+* **🧠 強 Agent 認知版 Prompt**：
+  ```text
+  你現在是專案進度監控特工。請定期分析「標案工作暫存區」中的寫作日誌：
+  1. 追蹤 7 天關鍵路徑進度，若草稿撰寫進度落後預期超過 12 小時，判定為延誤風險（DELAY_RISK）。
+  2. 自動計算對最終遞件截止日的衝擊，並起草一份進度異常分析報告供主管審閱。
+  ```
 
-### 💬 執行 Prompt：AI PM 排程監控與主動協調 (XML 格式)
-```xml
-<instruction>
-  你現在是 AI PM 大腦。請幫我設定 Scheduled Analyst 運作邏輯以監控 7天關鍵路徑及廠商缺件。
-</instruction>
-<monitoring>
-  1. 自動監控 Staging 寫作日誌，若落後時數 > 12h，產出警告。
-  2. 稽核證書有效期，若發現 PM 失效自動執行備用降級 Sophia。
-  3. 掃描 Staging 目錄，若大同搭建商缺件，自動起草催辦郵件草稿。
-</monitoring>
-```
+### 6.2 協力商缺件語意催辦 (Missing Document Semantic Alert)
+* **✍️ 簡單規則版 Prompt**：
+  ```text
+  請幫我看看「標案工作暫存區」裡有沒有少了大同搭建商的實績證明，少了就寫信催他。
+  ```
+* **🧠 強 Agent 認知版 Prompt**：
+  ```text
+  你現在是外協溝通特工。請掃描「標案工作暫存區」的檔案列表與資料庫記錄：
+  1. 若檢測到缺少「大同搭建商實績證明」等必備合規文件，自動分析缺件影響。
+  2. 使用專業且有禮貌的商務口吻，自動起草一封向大同搭建商窗口催辦補件的電子郵件草稿，存入待發送區。
+  ```
+
+### 6.3 證照失效主動調配 (Cert Expiry Recovery Alert)
+* **✍️ 簡單規則版 Prompt**：
+  ```text
+  如果發現資料庫裡志明的證照過期了，請告訴我，並幫我換成 Sophia。
+  ```
+* **🧠 強 Agent 認知版 Prompt**：
+  ```text
+  你現在是人力資源調配特工。請自動監控 Excel 試算表資料庫中專案人員的 PMP 證照有效期：
+  1. 若檢測到預定專案經理（如志明）的證照已失效，主動觸發備降（Fallback）調度機制。
+  2. 從公司證照庫中檢索符合 RFP 資格的有效 PM（如 Sophia），自動替換其履歷資訊並產生調配日誌，即時提報主管批准。
+  ```

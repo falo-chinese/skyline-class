@@ -109,7 +109,7 @@
           <strong>核心引擎 (Backend)</strong>：採用 Python (FastAPI) 運行於 Windows 本地環境，提供高併發、非同步的 API 服務，支援本機高負載請求。
         </li>
         <li style="margin-bottom: 0.5rem;">
-          <strong>共享資料庫 (Local Database)</strong>：採用 <strong>SQLite</strong> 檔案型資料庫。所有員工提問、標案進度與分析日誌皆儲存於本地 <code>.db</code> 檔，極易進行日常備份與移轉。
+          <strong>共享資料庫 (Local Database)</strong>：採用 <strong>Excel</strong> 檔案型資料庫。所有員工提問、標案進度與分析日誌皆儲存於本地 <code>.xlsx</code> 活頁簿，極易進行日常備份與移轉。
         </li>
         <li style="margin-bottom: 0.5rem;">
           <strong>分公司穿透安全 (Ngrok Tunneling)</strong>：
@@ -128,7 +128,7 @@
       <ul style="margin-top: 1rem; padding-left: 1.25rem;">
         <li style="margin-bottom: 0.5rem;">
           <strong>員工端 (General Staff - 平台化 UI)</strong>：
-          透過簡易的網頁介面使用標準模板（如：RFP 快速物料清洗、制式報表生成）。對於知識庫僅有「受限讀取權限」，且無法直接寫入地端真理中心 (SSOT)。每一次操作均寫入本地 SQLite 稽核日誌。
+          透過簡易的網頁介面使用標準模板（如：RFP 快速物料清洗、制式報表生成）。對於知識庫僅有「受限讀取權限」，且無法直接寫入地端真理中心 (SSOT)。每一次操作均寫入本地 Excel 稽核日誌。
         </li>
         <li style="margin-bottom: 0.5rem;">
           <strong>主管端 (Supervisor / Trusted - 決策者主控台)</strong>：
