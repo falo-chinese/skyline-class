@@ -838,35 +838,61 @@
             actionDesc_advanced: "分析商業語意進行大類歸檔，並自動將敏感個資進行去識別化遮蔽。"
           },
           {
-            name: "1.4 地端 Excel 試算表資料庫建置 (Excel Excel/HTML 資料庫建置)",
+            name: "1.4.A 地端 Excel 試算表資料庫建置 (首次無範本自規劃建置)",
             status: "done",
             inputs: [
               { name: "標案工作暫存區/*.txt", size: "多個檔案", type: "Staging純文字", source: "local", desc: "去敏語意分類後的檔案資料" }
             ],
-            prompt_simple: "請幫我做一個 file_manifest.json 檔案，把「標案工作暫存區」裡的檔名和大小寫進去。",
-            prompt_advanced: "你現在是地端Excel/HTML 資料庫建置特工。請在「標案工作暫存區」建立一個 Excel 試算表資料庫 標案工作記錄表.xlsx，建立 檔案清冊 與 欄位萃取 metadata 兩張資料表，寫入檔案資訊以及內文抽取出的關鍵欄位值。",
+            prompt_simple: "請幫我做一個 檔案清冊 Excel，把「標案工作暫存區」裡的檔名、大小、種類，還有從裡面看出的公司名稱寫進去。",
+            prompt_advanced: "你現在是地端Excel/HTML 資料庫建置特工。請在「標案工作暫存區」建立一個 Excel 試算表資料庫 標案工作記錄表.xlsx。因為這是首次建置且無範本，你需要自己設計兩個工作表：\n- 「檔案清冊」工作表欄位：file_id (PK), original_name, staged_name, staged_path, file_size_bytes, category\n- 「欄位萃取 metadata」工作表欄位：meta_id (PK), file_id (FK), year_extracted, company_name, amount_extracted, cert_expiry_date, sla_response_hours\n建立完成後，將前面步驟中分析、歸類、重命名後的檔案資訊，以及從檔案內文抽取出的關鍵欄位值（如金額、過期日、SLA時數），寫入對應的資料表中。",
             cli_simple: "python3 scripts/build_records_db.py --dir 標案工作暫存區 --json-only",
             cli_advanced: "python3 scripts/build_records_db.py --db 標案工作暫存區/標案工作記錄表.xlsx --dir 標案工作暫存區",
             outputsHtml_simple: `
-              <pre style="font-size:0.65rem; color:#fbbf24; background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 4px; margin: 0;">{
-  "timestamp": "2026-06-16T16:40:00Z",
-  "files": [
-    "20260616_台南玩具展_RFP.pdf",
-    "20260616_大同搭建商_實績證明.docx"
-  ]
-}</pre>
+              <div style="font-size: 0.75rem; line-height: 1.4;">
+                <span style="color:#fbbf24; font-weight:bold;">已建立 檔案清冊 簡易版</span><br>
+                包含檔名、大小、種類、公司名稱。
+              </div>
             `,
             outputsHtml_advanced: `
               <div style="font-size: 0.75rem; line-height: 1.4;">
                 <span style="color:var(--color-secondary); font-weight:bold;">檔案清冊 (檔案表) 寫入 4 筆</span><br>
                 <span style="color:var(--color-secondary); font-weight:bold;">欄位萃取 metadata (元數據表) 寫入 4 筆</span><br>
-                已成功抓取 Sophia 的 PMP 證照有效日「2028-12-31」與名音燈光原始 SLA「4 小時」。
+                首次規劃結構建立完成，已成功抓取 PMP 證照有效日與 4 小時 SLA。
               </div>
             `,
-            log_simple: `[SYSTEM] 寫入 file_manifest.json... OK`,
-            log_advanced: `[SYSTEM] 建立 Excel 標案工作記錄表.xlsx 資料庫...\n[CoT] 建立 檔案清冊 與 欄位萃取 metadata 資料表... OK\n[CoT] 寫入大同搭建實績金額 NT$ 3,500,000\n[CoT] 寫入名音燈光 SLA 4h 響應\n[SUCCESS] 標案工作記錄表.xlsx 地端結構化儲存完成。`,
-            actionDesc_simple: "產生一個簡單的 manifest JSON 檔，僅包含基本檔案大小與路徑。",
-            actionDesc_advanced: "建立本地 Excel 試算表資料庫，將分析歸類好的屬性與抽取的關鍵欄位值結構化儲存。"
+            log_simple: `[SYSTEM] 建立簡易版 Excel 檔案... OK`,
+            log_advanced: `[SYSTEM] 建立 Excel 標案工作記錄表.xlsx 資料庫 (無範本模式)...\n[CoT] 規劃並建立 檔案清冊 與 欄位萃取 metadata 資料表... OK\n[CoT] 寫入大同搭建實績金額 NT$ 3,500,000\n[CoT] 寫入名音燈光 SLA 4h 響應\n[SUCCESS] 標案工作記錄表.xlsx 地端結構化規劃建置完成。`,
+            actionDesc_simple: "首次無範本，由 AI 規劃並產生一個包含基本檔案大小、種類與公司名稱的 Excel 檔案。",
+            actionDesc_advanced: "首次無範本，由強 Agent 自行設計資料表結構，將分析歸類好的屬性與抽取的關鍵欄位值結構化儲存。"
+          },
+          {
+            name: "1.4.B 地端 Excel 試算表資料庫建置 (依據參考範本對齊建置)",
+            status: "done",
+            inputs: [
+              { name: "標案工作暫存區/*.txt", size: "多個檔案", type: "Staging純文字", source: "local", desc: "去敏語意分類後的檔案資料" },
+              { name: "參考範例/標案工作記錄表_範本.xlsx", size: "48 KB", type: "參考範本", source: "local", desc: "公司標準資料庫 Schema 範本" }
+            ],
+            prompt_simple: "請參考「參考範例/標案工作記錄表_範本.xlsx」的格式，把「標案工作暫存區」裡的新檔案資訊填加到 Excel 裡面。",
+            prompt_advanced: "你現在是地端Excel/HTML 資料庫建置特工。請在「標案工作暫存區」建立/更新 標案工作記錄表.xlsx。這次建置請務必參考「參考範例/標案工作記錄表_範本.xlsx」的結構與欄位定義。\n請檢查範本中的「檔案清冊」與「欄位萃取 metadata」工作表的 Schema、資料格式與填寫規範，確保新寫入的檔案資料（包含檔名、大小、類別、公司名稱、金額、過期日及SLA時數等萃取欄位）與範本完全一致，保持資料的一致性與關聯性。",
+            cli_simple: "python3 scripts/build_records_db.py --dir 標案工作暫存區 --template 參考範例/標案工作記錄表_範本.xlsx --json-only",
+            cli_advanced: "python3 scripts/build_records_db.py --db 標案工作暫存區/標案工作記錄表.xlsx --template 參考範例/標案工作記錄表_範本.xlsx --dir 標案工作暫存區",
+            outputsHtml_simple: `
+              <div style="font-size: 0.75rem; line-height: 1.4;">
+                <span style="color:#fbbf24; font-weight:bold;">已對齊範本格式寫入資料</span><br>
+                成功參考範本寫入 Excel 欄位。
+              </div>
+            `,
+            outputsHtml_advanced: `
+              <div style="font-size: 0.75rem; line-height: 1.4;">
+                <span style="color:var(--color-secondary); font-weight:bold;">對齊範本 Schema 寫入 4 筆檔案資料</span><br>
+                <span style="color:var(--color-secondary); font-weight:bold;">對齊範本 Schema 寫入 4 筆 metadata</span><br>
+                成功與「參考範例/標案工作記錄表_範本.xlsx」之欄位與主外鍵關係完全對齊。
+              </div>
+            `,
+            log_simple: `[SYSTEM] 讀取範本並寫入資料... OK`,
+            log_advanced: `[SYSTEM] 讀取範本 參考範例/標案工作記錄表_範本.xlsx 結構...\n[CoT] 核對 檔案清冊 (file_id, staged_name...) 與 欄位萃取 metadata 欄位規範... 通過\n[CoT] 依範本規格寫入資料並建立外鍵關聯 (SLA 4h, PMP 有效期 2028-12-31)\n[SUCCESS] 標案工作記錄表.xlsx 已依據範本結構對齊建置完成。`,
+            actionDesc_simple: "參考範本的格式，將新檔案的基本資訊寫入 Excel 中。",
+            actionDesc_advanced: "強 Agent 智慧解析範本 Schema 規格，將去敏檔案與抽取欄位精確對齊並關聯寫入庫。"
           }
         ]
       },
@@ -1550,7 +1576,7 @@
               document.getElementById('gantt-d7').className = 'gantt-step done';
               document.getElementById('gantt-d6').className = 'gantt-step active';
               document.getElementById('gantt-bar').style.width = '16.6%';
-              logPMEvent("[D-Day 7 15:45] 📅 [AI PM] 標前整理完成，一條龍子環節 1.1~1.4 全數通過。");
+              logPMEvent("[D-Day 7 15:45] 📅 [AI PM] 標前整理完成，一條龍子環節 1.1~1.4.B 全數通過。");
             } else if (currentStepIndex === 1) {
               document.getElementById('node-status-2').innerText = 'Gap 已比對';
               document.getElementById('node-status-2').className = 'flow-node-status status-done';

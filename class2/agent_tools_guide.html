@@ -307,29 +307,54 @@
         </div>
       </div>
 
-      <!-- Sub-step 1.4 -->
+      <!-- Sub-step 1.4.A -->
       <div style="margin-bottom: 1rem; border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 1.5rem;">
         <h3 style="font-size: 1.05rem; color: white; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.5rem;">
-          <span style="color: var(--color-secondary);">1.4</span> 地端 Excel 試算表資料庫建置 (Excel Excel/HTML 資料庫建置)
+          <span style="color: var(--color-secondary);">1.4.A</span> 地端 Excel 試算表資料庫建置 (首次無範本自規劃建置)
         </h3>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">建立本地資料庫，將分析歸類好的屬性與抽取的關鍵欄位值結構化儲存。</p>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">首次無範本建置：由 Agent 自行規劃資料表結構（如檔案清冊與元數據表）並寫入資料。</p>
         <div class="prompt-grid">
           <div class="prompt-card simple-card">
             <div class="prompt-header">
               <span class="prompt-title-text">✍️ 簡單規則版 Prompt</span>
-              <button class="btn-copy" onclick="copyPrompt('prompt-1-4-simple')">複製</button>
+              <button class="btn-copy" onclick="copyPrompt('prompt-1-4a-simple')">複製</button>
             </div>
-            <pre class="prompt-content simple-content" id="prompt-1-4-simple">請幫我做一個 file_manifest.json 檔案，把「標案工作暫存區」裡的檔名和大小寫進去。</pre>
+            <pre class="prompt-content simple-content" id="prompt-1-4a-simple">請幫我做一個 檔案清冊 Excel，把「標案工作暫存區」裡的檔名、大小、種類，還有從裡面看出的公司名稱寫進去。</pre>
           </div>
           <div class="prompt-card">
             <div class="prompt-header">
               <span class="prompt-title-text">🧠 強 Agent 認知版 Prompt</span>
-              <button class="btn-copy" onclick="copyPrompt('prompt-1-4-advanced')">複製</button>
+              <button class="btn-copy" onclick="copyPrompt('prompt-1-4a-advanced')">複製</button>
             </div>
-            <pre class="prompt-content" id="prompt-1-4-advanced">你現在是地端Excel/HTML 資料庫建置特工。請在「標案工作暫存區」建立一個 Excel 試算表資料庫 標案工作記錄表.xlsx，建立 檔案清冊 與 欄位萃取 metadata 兩張資料表：
+            <pre class="prompt-content" id="prompt-1-4a-advanced">你現在是地端Excel/HTML 資料庫建置特工。請在「標案工作暫存區」建立一個 Excel 試算表資料庫 標案工作記錄表.xlsx。因為這是首次建置且無範本，你需要自己設計兩個工作表：
 - 「檔案清冊」工作表欄位：file_id (PK), original_name, staged_name, staged_path, file_size_bytes, category
 - 「欄位萃取 metadata」工作表欄位：meta_id (PK), file_id (FK), year_extracted, company_name, amount_extracted, cert_expiry_date, sla_response_hours
 建立完成後，將前面步驟中分析、歸類、重命名後的檔案資訊，以及從檔案內文抽取出的關鍵欄位值（如金額、過期日、SLA時數），寫入對應的資料表中。</pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sub-step 1.4.B -->
+      <div style="margin-bottom: 1rem; border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 1.5rem;">
+        <h3 style="font-size: 1.05rem; color: white; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.5rem;">
+          <span style="color: var(--color-secondary);">1.4.B</span> 地端 Excel 試算表資料庫建置 (依據參考範本對齊建置)
+        </h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">依範本對齊建置：參考既有範本結構，將新資料規範化填寫入庫以保持一致性。</p>
+        <div class="prompt-grid">
+          <div class="prompt-card simple-card">
+            <div class="prompt-header">
+              <span class="prompt-title-text">✍️ 簡單規則版 Prompt</span>
+              <button class="btn-copy" onclick="copyPrompt('prompt-1-4b-simple')">複製</button>
+            </div>
+            <pre class="prompt-content simple-content" id="prompt-1-4b-simple">請參考「參考範例/標案工作記錄表_範本.xlsx」的格式，把「標案工作暫存區」裡的新檔案資訊填加到 Excel 裡面。</pre>
+          </div>
+          <div class="prompt-card">
+            <div class="prompt-header">
+              <span class="prompt-title-text">🧠 強 Agent 認知版 Prompt</span>
+              <button class="btn-copy" onclick="copyPrompt('prompt-1-4b-advanced')">複製</button>
+            </div>
+            <pre class="prompt-content" id="prompt-1-4b-advanced">你現在是地端Excel/HTML 資料庫建置特工。請在「標案工作暫存區」建立/更新 標案工作記錄表.xlsx。這次建置請務必參考「參考範例/標案工作記錄表_範本.xlsx」的結構與欄位定義。
+請檢查範本中的「檔案清冊」與「欄位萃取 metadata」工作表的 Schema、資料格式與填寫規範，確保新寫入的檔案資料（包含檔名、大小、類別、公司名稱、金額、過期日及SLA時數等萃取欄位）與範本完全一致，保持資料的一致性與關聯性。</pre>
           </div>
         </div>
       </div>

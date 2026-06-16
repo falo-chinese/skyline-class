@@ -62,17 +62,28 @@
   特別注意：如果是大同搭建商的實績證明，請自動掃描是否有包含身分證字號或聯絡電話等敏感個資，並執行去識別化遮蔽（PII Scrubbing），將去敏後的文字儲存。
   ```
 
-### 1.4 地端 Excel 試算表資料庫建置 (Excel Excel/HTML 資料庫建置)
+### 1.4.A 地端 Excel 試算表資料庫建置 (首次無範本自規劃建置)
 * **✍️ 簡單規則版 Prompt**：
   ```text
-  請幫我做一個 file_manifest.json 檔案，把「標案工作暫存區」裡的檔名和大小寫進去。
+  請幫我做一個 檔案清冊 Excel，把「標案工作暫存區」裡的檔名、大小、種類，還有從裡面看出的公司名稱寫進去。
   ```
 * **🧠 強 Agent 認知版 Prompt**：
   ```text
-  你現在是地端Excel/HTML 資料庫建置特工。請在「標案工作暫存區」建立一個 Excel 試算表資料庫 標案工作記錄表.xlsx，建立 檔案清冊 與 欄位萃取 metadata 兩張資料表：
-  - 「檔案清冊」工作表欄位：file_id (PK), original_name, staged_name, staged_path, file_size_bytes, category
-  - 「欄位萃取 metadata」工作表欄位：meta_id (PK), file_id (FK), year_extracted, company_name, amount_extracted, cert_expiry_date, sla_response_hours
-  建立完成後，將前面步驟中分析、歸類、重命名後的檔案資訊，以及從檔案內文抽取出的關鍵欄位值（如金額、過期日、SLA時數），寫入對應的資料表中。
+  你現在是地端Excel/HTML 資料庫建置特工。請在「標案工作暫存區」建立一個 Excel 試算表資料庫 標案工作記錄表.xlsx。因為這是首次建置且無範本，你需要自己設計兩個工作表：
+  - 「檔案清冊」：包含 file_id (PK), original_name, staged_name, staged_path, file_size_bytes, category
+  - 「欄位萃取 metadata」：包含 meta_id (PK), file_id (FK), year_extracted, company_name, amount_extracted, cert_expiry_date, sla_response_hours
+  建立完成後，分析歸類重命名後的檔案，並自動從內文中抽取關鍵資訊（如金額、過期日、SLA時數）填入對應欄位。
+  ```
+
+### 1.4.B 地端 Excel 試算表資料庫建置 (依據參考範本對齊建置)
+* **✍️ 簡單規則版 Prompt**：
+  ```text
+  請參考「參考範例/標案工作記錄表_範本.xlsx」的格式，把「標案工作暫存區」裡的新檔案資訊填加到 Excel 裡面。
+  ```
+* **🧠 強 Agent 認知版 Prompt**：
+  ```text
+  你現在是地端Excel/HTML 資料庫建置特工。請在「標案工作暫存區」建立/更新 標案工作記錄表.xlsx。這次建置請務必參考「參考範例/標案工作記錄表_範本.xlsx」的結構與欄位定義。
+  請檢查範本中的「檔案清冊」與「欄位萃取 metadata」工作表的 Schema、資料格式與填寫規範，確保新寫入的檔案資料（包含檔名、大小、類別、公司名稱、金額、過期日及SLA時數等萃取欄位）與範本完全一致，保持資料的一致性與關聯性。
   ```
 
 ---
