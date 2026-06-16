@@ -228,6 +228,9 @@ def generate_workspace(step_num):
     shutil.copy(os.path.join(BASE_DIR, "notebooklm_shared_brains.zip"), os.path.join(part_dir, "notebooklm_shared_brains.zip"))
     shutil.copy(os.path.join(BASE_DIR, "notebooklm_index_map.md"), os.path.join(part_dir, "notebooklm_index_map.md"))
     shutil.copy(os.path.join(BASE_DIR, "notebooklm_index_map.html"), os.path.join(part_dir, "notebooklm_index_map.html"))
+    shutil.copy(os.path.join(BASE_DIR, "notebooklm_shared_brains_prompts.csv"), os.path.join(part_dir, "notebooklm_shared_brains_prompts.csv"))
+    shutil.copy(os.path.join(BASE_DIR, "prompt_hub_guide.md"), os.path.join(part_dir, "prompt_hub_guide.md"))
+    shutil.copy(os.path.join(BASE_DIR, "prompt_hub_guide.html"), os.path.join(part_dir, "prompt_hub_guide.html"))
     
     staging_dir = os.path.join(part_dir, "標案工作暫存區")
     os.makedirs(staging_dir, exist_ok=True)
@@ -416,6 +419,9 @@ def build_unified_workspace():
     shutil.copy(os.path.join(BASE_DIR, "notebooklm_shared_brains.zip"), os.path.join(unified_dir, "notebooklm_shared_brains.zip"))
     shutil.copy(os.path.join(BASE_DIR, "notebooklm_index_map.md"), os.path.join(unified_dir, "notebooklm_index_map.md"))
     shutil.copy(os.path.join(BASE_DIR, "notebooklm_index_map.html"), os.path.join(unified_dir, "notebooklm_index_map.html"))
+    shutil.copy(os.path.join(BASE_DIR, "notebooklm_shared_brains_prompts.csv"), os.path.join(unified_dir, "notebooklm_shared_brains_prompts.csv"))
+    shutil.copy(os.path.join(BASE_DIR, "prompt_hub_guide.md"), os.path.join(unified_dir, "prompt_hub_guide.md"))
+    shutil.copy(os.path.join(BASE_DIR, "prompt_hub_guide.html"), os.path.join(unified_dir, "prompt_hub_guide.html"))
     
     staging_dir = os.path.join(unified_dir, "標案工作暫存區")
     os.makedirs(staging_dir, exist_ok=True)

@@ -159,6 +159,11 @@ NotebookLM 支援將結構化表格或 PDF 轉化為雙人對談的音訊廣播�
 
 為了讓同仁與學員在導入這三本「企業共享大腦」時能即裝即用，以下設計了多組實務高價值、符合人機協同心智的黃金 Prompt 範本，可直接複製並貼入 NotebookLM 中提問：
 
+> [!TIP]
+> **🛰️ 搭配 Prompt Hub & 側邊欄外掛極速操作**
+> 本單元設計的所有黃金 Prompt 範本已為您打包妥當。您可以下載提示詞資源包，並透過 Chrome 衛星外掛側邊欄一鍵複製貼入 NotebookLM。
+> 詳細操作方式與資源包下載請見：[💬 Prompt Hub 導入指引](prompt_hub_guide.md)。
+
 ### 🧠 大腦一：Skyline_Bidding_Golden_Templates (標案黃金範本大腦)
 
 #### 📝 場景一：服務建議書架構與大綱生成 (Bid Outline Generation)

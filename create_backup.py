@@ -25,10 +25,9 @@ for file in files:
             max_major = major
             max_minor = minor
 
-# Set version explicitly for v2.4 release
+# Set version explicitly for v2.5 release
 new_major = 2
-new_minor = 4
-
+new_minor = 5
 new_version = f"v{new_major}.{new_minor}"
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 zip_filename = f"{project_prefix}_{new_version}_{timestamp}.zip"

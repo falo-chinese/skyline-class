@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>💬 Skyline Prompt Hub 導入指引 - Skyline Class02</title>
+  <link rel="stylesheet" href="docs/style.css">
+  <style>
+    .version-switch {
+      position: absolute;
+      top: 2rem;
+      right: 4rem;
+      background: rgba(99, 102, 241, 0.2);
+      border: 1px solid var(--color-primary-light);
+      padding: 0.5rem 1rem;
+      border-radius: 99px;
+      color: var(--color-primary-light);
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    .version-switch:hover {
+      background: var(--color-primary);
+      color: white;
+      text-decoration: none;
+      box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+    }
+    .step-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      list-style-type: none;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .step-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--color-primary-light);
+    }
+    .step-number {
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: var(--color-accent, #2dd4bf);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 0.25rem;
+    }
+    .step-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 0.75rem;
+    }
+    .step-desc {
+      color: var(--text-main);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+    .download-card {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.08) 0%, rgba(45, 212, 191, 0.08) 100%);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: center;
+      margin: 2rem 0;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(4px);
+    }
+    .download-btn {
+      display: inline-block;
+      background: linear-gradient(90deg, var(--color-primary, #38bdf8), var(--color-accent, #2dd4bf));
+      color: #0b0f19;
+      font-weight: 700;
+      text-decoration: none;
+      padding: 0.75rem 2rem;
+      border-radius: 50px;
+      margin-top: 1rem;
+      box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
+      transition: all 0.3s ease;
+    }
+    .download-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(56, 189, 248, 0.5);
+      color: #0b0f19;
+    }
+    .tag-blue {
+      background: rgba(56, 189, 248, 0.1);
+      color: var(--color-primary);
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true, theme: 'dark'});</script>
+</head>
+<body>
+
+  <!-- 側邊欄導覽 -->
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      Skyline Class <span>class2</span>
+    </div>
+    
+    <div class="sidebar-menu-title">引導總覽</div>
+    <ul class="sidebar-menu">
+      <li><a href="README.html" class="sidebar-link">🚀 專案啟動說明</a></li>
+      <li><a href="workbench/index.html" class="sidebar-link">🧭 教材工作台</a></li>
+      <li><a href="skyline_set_menu.html" class="sidebar-link">🍱 Skyline 模型菜組合包範例</a></li>
+      <li><a href="agent_tools_guide.html" class="sidebar-link">🤖 Agent 工具使用指南</a></li>
+      <li><a href="bidding_control_tower.html" class="sidebar-link">🤖 智慧投標控制塔 (POC)</a></li>
+    </ul>
+
+    <div class="sidebar-menu-title">核心教材</div>
+    <ul class="sidebar-menu">
+      <li><a href="docs/01_course_map.html" class="sidebar-link">🗺️ 01 課程地圖</a></li>
+      <li><a href="docs/02_tender_workflow.html" class="sidebar-link">⚙️ 02 投標工作流</a></li>
+      <li><a href="docs/03_multi_ai_collaboration.html" class="sidebar-link">👥 03 Multi-AI 協作</a></li>
+      <li><a href="docs/04_artifact_management.html" class="sidebar-link">🛡️ 04 Artifact 管理</a></li>
+    </ul>
+
+    <div class="sidebar-menu-title">輔助工具</div>
+    <ul class="sidebar-menu">
+      <li><a href="memo.html" class="sidebar-link">📝 未來規劃備忘錄</a></li>
+      <li><a href="reference/class02-antigravity/index.html" class="sidebar-link">📚 歷史版本參考</a></li>
+    </ul>
+
+    <div class="sidebar-menu-title">架構共識</div>
+    <ul class="sidebar-menu">
+      <li><a href="local_ai_pm_architecture.html" class="sidebar-link">🖥️ 地端 AI PM 人機架構</a></li>
+      <li><a href="notebooklm_master_guide.html" class="sidebar-link">📘 NotebookLM 企業導讀</a></li>
+      <li><a href="prompt_hub_guide.html" class="sidebar-link active">💬 Prompt Hub 導入指引</a></li>
+    </ul>
+
+    <div class="sidebar-menu-title">相關專案</div>
+    <ul class="sidebar-menu">
+      <li><a href="https://__Skyline_TAIWAN_IO__/video-analysis-optimization/" target="_blank" class="sidebar-link">🎥 影音分析與優化專案</a></li>
+      <li><a href="ai_finance_demo.html" class="sidebar-link">📊 AI 財會與稅務自動化專案</a></li>
+      <li><a href="https://__Skyline_TAIWAN_IO__/prompt-demo/" target="_blank" class="sidebar-link">💬 Skyline Prompt 提示詞管理專案</a></li>
+    </ul>
+  </nav>
+
+  <!-- 主內容區 -->
+  <main class="main-content">
+    <a href="prompt_hub_guide.md" class="version-switch">📄 檢視 Markdown 版本</a>
+    
+    <div class="card">
+      <h1>💬 Skyline Prompt Hub 導入指引 (PWA + Chrome Extension)</h1>
+      <p>為了幫助同仁與學員快速運用我們精心編寫的 NotebookLM 企業共享大腦黃金 Prompt，我們將這套指令集編譯為完全相容於本機 <strong>Prompt Hub (Prompt Manager PWA)</strong> 的導入資源包。搭配 <strong>Chrome 衛星外掛側邊欄 (Side Panel)</strong>，即可在操作 NotebookLM 時實現一鍵複製貼上的高效率極速工作流！</p>
+    </div>
+
+    <!-- 協作機制流程圖 -->
+    <div class="card" style="margin-top: 1.5rem;">
+      <h3>🛰️ 協同工作流示意圖</h3>
+      <p style="margin-bottom: 1rem; font-size: 0.9rem; color: var(--text-muted);">免切換分頁，利用 Chrome 側邊欄 (Side Panel) 常駐 Prompt Hub 一鍵複製指令至 NotebookLM 分頁：</p>
+      <div class="mermaid-container" style="background: rgba(15, 23, 42, 0.4); padding: 1.5rem; border-radius: 8px;">
+        <pre class="mermaid">
+          flowchart TD
+              A[主瀏覽器頁面: Google NotebookLM] <-->|1. 協同操作| B[Chrome 右側邊欄: Prompt Hub 外掛]
+              B -->|2. 載入 CSV 資源包| C[11 組 NotebookLM 黃金提示詞]
+              C -->|3. 填入變數並複製| D[📋 複製到剪貼簿]
+              D -->|4. 直接貼上並提問| A
+              
+              style A fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#fff
+              style B fill:#0f172a,stroke:#2dd4bf,stroke-width:2px,color:#fff
+              style C fill:#0f172a,stroke:#94a3b8,stroke-dasharray: 5 5,color:#fff
+              style D fill:#172554,stroke:#3b82f6,stroke-width:2px,color:#fff
+        </pre>
+      </div>
+    </div>
+
+    <!-- 下載區 -->
+    <div class="download-card">
+      <h3 style="color: white; font-size: 1.3rem; margin-bottom: 0.5rem;">📥 下載 NotebookLM 黃金 Prompt 資源包</h3>
+      <p style="color: var(--text-muted); font-size: 0.9rem; max-width: 600px; margin: 0 auto 1rem;">本資源包包含標案黃金範本、外協合規、經驗對策以及導航大腦共 11 組高價值 Prompt 指令，相容於 Prompt Hub CSV 規格。</p>
+      <span class="tag-blue">CSV 格式 (UTF-8 BOM 已優化)</span>
+      <br>
+      <a href="notebooklm_shared_brains_prompts.csv" download class="download-btn">💾 下載提示詞資源包 (CSV)</a>
+    </div>
+
+    <!-- 步驟卡片 -->
+    <div class="card" style="margin-top: 1.5rem;">
+      <h3>🛠️ 快速導入與使用步驟</h3>
+      <ul style="padding-left: 0; margin-top: 1rem;">
+        
+        <li class="step-card">
+          <div class="step-number">Step 1</div>
+          <div class="step-title">開啟本地 Prompt Hub 主程式</div>
+          <div class="step-desc">
+            開啟瀏覽器並載入本機部署的 <strong>Prompt Hub (Prompt Manager PWA)</strong> 門戶首頁。
+          </div>
+        </li>
+
+        <li class="step-card">
+          <div class="step-number">Step 2</div>
+          <div class="step-title">匯入 CSV 提示詞資源包</div>
+          <div class="step-desc">
+            點選網頁右上角 <strong>「⚙️ 管理」</strong> 按鈕展開側邊面板，點擊 <strong>「📥 匯入 CSV」</strong>，並選擇剛剛下載的 <code>notebooklm_shared_brains_prompts.csv</code> 檔案。匯入成功後，介面會立刻載入四大專屬分類。
+          </div>
+        </li>
+
+        <li class="step-card">
+          <div class="step-number">Step 3</div>
+          <div class="step-title">搭配 Chrome 衛星外掛側邊欄</div>
+          <div class="step-desc">
+            在 Chrome 中打開我們的 <strong>Prompt Manager 衛星外掛</strong>，並開啟 <strong>側邊欄 (Side Panel)</strong> 模式，將外掛固定於瀏覽器右側。
+          </div>
+        </li>
+
+        <li class="step-card">
+          <div class="step-number">Step 4</div>
+          <div class="step-title">極速調用與 NotebookLM 對答</div>
+          <div class="step-desc">
+            在左側主分頁開啟 Google NotebookLM 專案。當需要對大腦提問時，在右側外掛面板直接代入變數值（如標案預算、協力商名稱），點擊 <strong>「📋 複製提示詞」</strong>，隨後貼上至左側對話框即可提問！
+          </div>
+        </li>
+
+      </ul>
+    </div>
+
+    <!-- 採用效益 -->
+    <div class="card" style="margin-top: 1.5rem; background: rgba(255, 255, 255, 0.01);">
+      <h3>💎 導入效益與優勢</h3>
+      <ul style="margin-top: 0.5rem; padding-left: 1.2rem; font-size: 0.9rem; line-height: 1.7;">
+        <li><strong>無縫協作</strong>：免除在講義網頁、文字檔與 NotebookLM 視窗之間繁瑣的切換。</li>
+        <li><strong>資產化管理</strong>：在 PWA 中可隨時對黃金 Prompt 進行版本微調、擴充或備份，讓提示詞成為企業共享資產。</li>
+        <li><strong>變數化操作</strong>：透過外掛的變數輸入框，不需在文字中手動尋找並替換標記，大幅降低打錯字或漏改欄位的機率。</li>
+      </ul>
+    </div>
+
+  </main>
+</body>
+</html>

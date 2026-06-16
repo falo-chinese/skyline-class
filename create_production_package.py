@@ -33,6 +33,9 @@ files_to_copy = [
     ("bidding_control_tower.html", "bidding_control_tower.html"),
     ("notebooklm_index_map.md", "notebooklm_index_map.md"),
     ("notebooklm_index_map.html", "notebooklm_index_map.html"),
+    ("prompt_hub_guide.html", "prompt_hub_guide.html"),
+    ("prompt_hub_guide.md", "prompt_hub_guide.md"),
+    ("notebooklm_shared_brains_prompts.csv", "notebooklm_shared_brains_prompts.csv"),
     ("reference/skyline-prompt-manager/docs/ai_unified_gateway_notebooklm.png", "reference/skyline-prompt-manager/docs/ai_unified_gateway_notebooklm.png")
 ]
 
