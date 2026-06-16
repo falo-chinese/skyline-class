@@ -25,9 +25,9 @@ for file in files:
             max_major = major
             max_minor = minor
 
-# Set version explicitly for v1.2 release
-new_major = 1
-new_minor = 2
+# Set version explicitly for v2.4 release
+new_major = 2
+new_minor = 4
 
 new_version = f"v{new_major}.{new_minor}"
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
