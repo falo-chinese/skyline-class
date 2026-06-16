@@ -50,6 +50,13 @@ if os.path.exists(demo_dst):
     shutil.rmtree(demo_dst)
 shutil.copytree(demo_src, demo_dst)
 
+# Copy the part1 folder recursively
+part1_src = os.path.join(source_root, "part1")
+part1_dst = os.path.join(dest_root, "part1")
+if os.path.exists(part1_dst):
+    shutil.rmtree(part1_dst)
+shutil.copytree(part1_src, part1_dst)
+
 # Revert placeholders to production data
 for root, dirs, filenames in os.walk(dest_root):
     for filename in filenames:

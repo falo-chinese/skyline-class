@@ -1398,6 +1398,20 @@
       // 2. 輸入檔案
       const inputsDiv = document.getElementById('inputs-content');
       inputsDiv.innerHTML = '';
+
+      if (currentStepIndex === 0) {
+        inputsDiv.innerHTML += `
+          <div class="file-card" style="background: rgba(111, 91, 216, 0.15); border: 1px dashed var(--color-primary-light);">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-weight: 700; font-size: 0.8rem; color: #a78bfa;">📥 學員實作下載包 (Start Pack)</span>
+              <span class="file-badge file-badge-ext" style="background: var(--color-secondary); color: black; font-weight: bold;">ZIP</span>
+            </div>
+            <p style="font-size: 0.7rem; color: var(--text-muted); margin-top: 0.25rem; margin-bottom: 0.5rem;">包含本步驟所需的 11 個 PDF 原始檔案及 Excel 範本對帳表。</p>
+            <a href="part1/part1.zip" download style="display: inline-flex; align-items: center; justify-content: center; background: var(--color-secondary); color: black; font-weight: bold; border-radius: 4px; padding: 0.25rem 0.5rem; font-size: 0.7rem; text-decoration: none; width: 100%; text-align: center; border: none; cursor: pointer; transition: opacity 0.2s;">⚡ 下載 part1.zip</a>
+          </div>
+        `;
+      }
+
       subtask.inputs.forEach(file => {
         let badgeClass = 'file-badge-local';
         let badgeText = '地端';
