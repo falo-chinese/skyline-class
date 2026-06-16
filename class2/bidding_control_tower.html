@@ -65,7 +65,12 @@
       display: grid;
       grid-template-columns: repeat(5, 1fr);
       gap: 1rem;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    @media (max-width: 768px) {
+      .control-flow {
+        grid-template-columns: 1fr;
+      }
     }
     .flow-node {
       background: rgba(30, 41, 59, 0.6);
@@ -75,10 +80,20 @@
       text-align: center;
       position: relative;
       transition: all 0.3s;
+      cursor: pointer;
+    }
+    .flow-node:hover {
+      background: rgba(99, 102, 241, 0.1);
+      border-color: rgba(99, 102, 241, 0.4);
     }
     .flow-node.active {
       border-color: var(--color-primary-light);
       box-shadow: 0 0 15px rgba(99, 102, 241, 0.2);
+    }
+    .flow-node.selected {
+      background: rgba(99, 102, 241, 0.2) !important;
+      border-color: var(--color-primary-light) !important;
+      box-shadow: 0 0 15px rgba(99, 102, 241, 0.5) !important;
     }
     .flow-node-title {
       font-size: 0.9rem;
@@ -97,12 +112,63 @@
     .status-done { background: rgba(20, 184, 166, 0.2); color: var(--color-secondary); border: 1px solid var(--color-secondary); }
     .status-warn { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #ef4444; }
 
+    /* 步驟詳細 Inspector 面板樣式 */
+    .inspector-card {
+      background: rgba(30, 41, 59, 0.65);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      border-radius: 16px;
+      padding: 1.75rem;
+      margin-bottom: 2rem;
+      backdrop-filter: blur(12px);
+      transition: all 0.3s ease;
+    }
+    .inspector-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr 1.8fr;
+      gap: 1.5rem;
+    }
+    @media (max-width: 1024px) {
+      .inspector-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .file-badge {
+      font-size: 0.7rem;
+      padding: 0.1rem 0.4rem;
+      border-radius: 4px;
+      font-weight: bold;
+      width: fit-content;
+    }
+    .file-badge-local { background: rgba(20, 184, 166, 0.2); color: var(--color-secondary); border: 1px solid var(--color-secondary); }
+    .file-badge-ext { background: rgba(99, 102, 241, 0.2); color: var(--color-primary-light); border: 1px solid var(--color-primary); }
+    .file-badge-db { background: rgba(236, 72, 153, 0.2); color: var(--color-accent); border: 1px solid var(--color-accent); }
+    
+    .file-card {
+      background: rgba(15, 23, 42, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      transition: all 0.2s;
+    }
+    .file-card:hover {
+      border-color: rgba(255, 255, 255, 0.15);
+      background: rgba(15, 23, 42, 0.6);
+    }
+
     /* 雙軌左右面板佈局 */
     .dual-panels {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 2rem;
       margin-bottom: 2rem;
+    }
+    @media (max-width: 768px) {
+      .dual-panels {
+        grid-template-columns: 1fr;
+      }
     }
     .panel-card {
       background: rgba(30, 41, 59, 0.5);
@@ -174,7 +240,7 @@
       font-family: 'Courier New', Courier, monospace;
       font-size: 0.8rem;
       color: #38bdf8;
-      height: 180px;
+      height: 220px;
       overflow-y: auto;
       white-space: pre-wrap;
       line-height: 1.4;
@@ -185,6 +251,11 @@
       grid-template-columns: 1fr 1fr;
       gap: 1.5rem;
       margin-top: 1rem;
+    }
+    @media (max-width: 768px) {
+      .asset-grid {
+        grid-template-columns: 1fr;
+      }
     }
     .asset-item {
       background: rgba(15, 23, 42, 0.4);
@@ -200,14 +271,6 @@
       display: flex;
       align-items: center;
       gap: 0.25rem;
-    }
-    .asset-img {
-      width: 100%;
-      height: 120px;
-      object-fit: cover;
-      border-radius: 4px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      margin-top: 0.5rem;
     }
     /* AI 顧問面板 */
     .advisor-alert {
@@ -280,9 +343,21 @@
       <p style="margin-top: 1rem;">本控制塔展示了在「台南玩具總包標案 (450萬元)」中，AI 如何協助高階主管與基層同仁進行安全的雙軌對帳、SLA 響應、爬蟲分析與 3D 展位圖自動組裝。提供手動與 API 雙模加速操作。</p>
     </div>
 
+    <!-- 💡 分工說明橫幅 -->
+    <div style="background: rgba(20, 184, 166, 0.1); border: 1px solid var(--color-secondary); padding: 1.25rem; border-radius: 12px; margin-bottom: 2rem; display: flex; align-items: flex-start; gap: 1rem;">
+      <span style="font-size: 1.5rem; line-height: 1;">💡</span>
+      <div>
+        <strong style="color: var(--color-secondary); font-size: 0.95rem; display: block; margin-bottom: 0.35rem;">系統分工說明：指南 (Reference) vs 控制塔 (Cockpit)</strong>
+        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+          • <strong>📖 Agent 工具使用指南</strong>：屬於靜態說明指引。記錄了地端開發者在專屬主機上進行檔案掃描、RFP 對帳及草稿合併時的「具體 Prompts 與 CLI 指令」，做為知識庫參考手冊。<br>
+          • <strong>🖥️ 智慧投標控制塔 (POC)</strong>：即本網頁，屬於動態操作控制台。它將指南中的 5 大靜態指令，整合為「一條龍」人機協同流程。<strong>您可以在下方點選任一節點，即可展開該步驟的「地端輸入檔案、編譯 Prompts、與對帳數據輸出」所有細節！</strong>
+        </p>
+      </div>
+    </div>
+
     <!-- 雙模操作切換開關 -->
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-      <div class="mode-container">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+      <div class="mode-container" style="margin-bottom: 0;">
         <button class="mode-btn active" id="btn-manual-mode" onclick="switchMode('manual')">✍️ 人工手動 (Prompt複製)</button>
         <button class="mode-btn" id="btn-api-mode" onclick="switchMode('api')">⚡ API 自動加速 (Gemini/Nano)</button>
       </div>
@@ -291,25 +366,73 @@
 
     <!-- 5個核心步驟流程圖 -->
     <div class="control-flow">
-      <div class="flow-node active" id="node-1">
+      <div class="flow-node selected" id="node-1" onclick="showStep(0)">
         <div class="flow-node-title">1. 標前文件整理</div>
         <span class="flow-node-status status-done" id="node-status-1">Intake 已完成</span>
       </div>
-      <div class="flow-node active" id="node-2">
+      <div class="flow-node" id="node-2" onclick="showStep(1)">
         <div class="flow-node-title">2. 合規差距比對</div>
         <span class="flow-node-status status-done" id="node-status-2">Gap 已比對</span>
       </div>
-      <div class="flow-node active" id="node-3">
+      <div class="flow-node" id="node-3" onclick="showStep(2)">
         <div class="flow-node-title">3. SLA 成本試算</div>
         <span class="flow-node-status status-warn" id="node-status-3">⚠️ 成本超限</span>
       </div>
-      <div class="flow-node" id="node-4">
+      <div class="flow-node" id="node-4" onclick="showStep(3)">
         <div class="flow-node-title">4. Delta 草稿組裝</div>
         <span class="flow-node-status status-running" id="node-status-4">組裝中...</span>
       </div>
-      <div class="flow-node" id="node-5">
+      <div class="flow-node" id="node-5" onclick="showStep(4)">
         <div class="flow-node-title">5. 實機跑測與收割</div>
         <span class="flow-node-status status-todo" id="node-status-5">等待收割</span>
+      </div>
+    </div>
+
+    <!-- 🔍 步驟詳細 Inspector 面板 -->
+    <div class="inspector-card" id="inspector-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 0.75rem; margin-bottom: 1.25rem;">
+        <h3 id="inspector-step-title" style="color: white; display: flex; align-items: center; gap: 0.5rem; font-size: 1.1rem;">
+          <!-- 標題 -->
+        </h3>
+        <span id="inspector-step-badge" class="panel-badge">
+          <!-- 權限標籤 -->
+        </span>
+      </div>
+      
+      <div class="inspector-grid">
+        <!-- 欄位 1: 輸入檔案 -->
+        <div class="inspector-col">
+          <h4 style="font-size: 0.85rem; text-transform: uppercase; color: var(--color-secondary); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.25rem;">📂 地端掃描輸入檔案</h4>
+          <div id="inputs-content" style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <!-- 檔案卡片 -->
+          </div>
+        </div>
+        
+        <!-- 欄位 2: 執行 Prompt 與 CLI -->
+        <div class="inspector-col">
+          <h4 style="font-size: 0.85rem; text-transform: uppercase; color: var(--color-primary-light); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.25rem;">💬 執行 Prompt 與 CLI</h4>
+          <div style="position: relative;">
+            <pre id="prompts-content" style="background: #090d16; border: 1px solid rgba(255,255,255,0.05); padding: 0.75rem; border-radius: 6px; font-family: monospace; font-size: 0.75rem; color: #38bdf8; height: 160px; overflow-y: auto; white-space: pre-wrap;"></pre>
+            <button onclick="copyInspectorPrompt()" style="position: absolute; top: 0.5rem; right: 0.5rem; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.7rem; cursor: pointer; transition: all 0.2s;">一鍵複製</button>
+          </div>
+          <div style="margin-top: 0.5rem; font-size: 0.7rem; color: var(--text-muted); line-height: 1.4;">
+            <strong>工作站 CLI 指令:</strong> <code id="cli-cmd" style="background: rgba(0,0,0,0.3); padding: 0.15rem 0.3rem; border-radius: 3px; color: #fbbf24; font-family: monospace;"></code>
+          </div>
+        </div>
+        
+        <!-- 欄位 3: 輸出數據 -->
+        <div class="inspector-col">
+          <h4 style="font-size: 0.85rem; text-transform: uppercase; color: var(--color-accent); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.25rem;">⚡ 輸出對帳數據 / 結構化結果</h4>
+          <div id="outputs-content" style="height: 180px; overflow-y: auto; border: 1px solid rgba(255,255,255,0.03); border-radius: 6px; padding: 0.5rem; background: rgba(0,0,0,0.1);">
+            <!-- 輸出表格或內容 -->
+          </div>
+        </div>
+      </div>
+      
+      <!-- 步驟層級模擬底欄 -->
+      <div style="margin-top: 1.25rem; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 1rem; display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 0.8rem; color: var(--text-muted);" id="step-action-desc"></span>
+        <button class="action-btn" id="btn-step-trigger" onclick="triggerStepSimulation()">▶️ 執行此步驟跑測</button>
       </div>
     </div>
 
@@ -334,7 +457,7 @@
           </div>
           <div style="display: flex; justify-content: space-between; font-size: 0.8rem;">
             <span>名音燈光：技術響應承諾 (4h SLA)</span>
-            <span style="color: #f87171;">⚠️ 需手動修正為 2h</span>
+            <span style="color: #f87171;" id="staff-sla-status">⚠️ 需手動修正為 2h</span>
           </div>
         </div>
 
@@ -428,16 +551,305 @@
 
   <script>
     let currentMode = 'manual';
+    let currentStepIndex = 0;
+    let slaApproved = false;
 
-    const prompts = {
-      test: `你現在是具備 Computer Use 能力的 Dev (Codex) 技術特工。請幫我執行台南玩具展總包標案的整合跑測：
-1. 本地啟動伺服器，用 Computer Use 打開測試控制台。
-2. 稽核大同搭建商實績、名音燈光 2h SLA 加班成本。
-3. 自動替換 PM 為 Sophia 以補正過期證照，並輸出對帳查核表。`,
-      commit: `你現在是決策審批 Agent。主管已批准「台南玩具總包標案」投標書。
-1. 請將 Staging 區的繁星展覽實績、Sophia 的 PM 資歷公文，一鍵寫入 SQLite 地端真理庫。
-2. 同步更新至 Google NotebookLM，完成最終的知識收割與發佈。`
-    };
+    const stepsData = [
+      {
+        title: "第一步：標前文件整理 (Intake & Directory Prep)",
+        badge: "員工/主管 協同",
+        badgeClass: "badge-staff",
+        inputs: [
+          { name: "台南玩具展_RFP.pdf", size: "1.4 MB", type: "RFP 原檔", source: "local" },
+          { name: "大同搭建商_實績證明.docx", size: "450 KB", type: "外部證書", source: "ext" },
+          { name: "名音燈光商_SLA承諾.txt", size: "120 KB", type: "外部維護書", source: "ext" }
+        ],
+        prompt: `你現在是 Dev (Codex) 技術特工。請幫我整理本地專案目錄下的所有原始招標相關檔案（包括 pdf, docx, xlsx, txt 等）：\n1. 掃描目錄並將所有檔案依據「日期_大類_原檔名」進行重新命名。\n2. 自動提取出每個檔案的 Metadata（包括文件頁數、建立日期、所屬子模組）。\n3. 撰寫一個 Python 腳本，將檔案以 UTF-8 編碼轉存為純文字（txt）或 JSON 結構，存放在 staging/ 目錄中，並輸出一個 file_manifest.json 索引檔以利後續的 AI 檢索。`,
+        cli: "python3 scripts/prep_intake.py --source ./raw_tenders --output ./staging",
+        outputsHtml: `
+          <div style="background: rgba(0,0,0,0.2); padding: 0.75rem; border-radius: 6px; font-size: 0.8rem; line-height: 1.4;">
+            <span style="color: var(--color-secondary); font-weight: bold;">[生成 file_manifest.json]</span>
+            <pre style="font-family: monospace; font-size: 0.7rem; color: #fbbf24; margin-top: 0.25rem; margin-bottom: 0.5rem; overflow-x: auto;">
+{
+  "project": "台南玩具展總包標案",
+  "staging_files": [
+    "20260616_RFP_Tainan_ToyExpo.txt",
+    "20260616_Cred_Datong_Con.txt",
+    "20260616_SLA_Mingyin_Light.txt"
+  ],
+  "local_path": "/Users/force/staging/",
+  "status": "Ready for Gap Audit"
+}</pre>
+            <div style="color: var(--color-secondary); font-weight: bold; font-size: 0.75rem;">🟢 地端檔案直接掃描成功，已寫入 staging 隔離區，阻斷大腦污染！</div>
+          </div>
+        `,
+        actionDesc: "模擬地端工作站掃描 `./raw_tenders` 目錄，將文檔清洗並存儲於 staging 隔離區。",
+        log: `[SYSTEM] 啟動地端掃描任務...
+[INFO] 正在載入 /Users/force/Google_Antigravity/horizon_class/skyline-class/raw_tenders...
+[INFO] 偵測到 3 個原始檔案。
+[INFO] 執行 Python 檔案清洗與轉碼任務 (prep_intake.py)...
+[INFO] [PDF Parser] 解析 台南玩具展_RFP.pdf: 12 頁，提取文字成功。
+[INFO] [Docx Parser] 解析 大同搭建商_實績證明.docx: 3 頁。
+[WARNING] 偵測到身分證字號！AI 定期分析員自動遮蔽去識別化，並寫入日誌。
+[INFO] 生成 staging/file_manifest.json 成功。
+[SUCCESS] 步驟一：標前文件整理執行完成。`
+      },
+      {
+        title: "第二步：合規差距比對 (Compliance & Gap Audit)",
+        badge: "主管端 決策",
+        badgeClass: "badge-supervisor",
+        inputs: [
+          { name: "staging/20260616_RFP_Tainan_ToyExpo.txt", size: "120 KB", type: "RFP 乾淨檔", source: "local" },
+          { name: "SQLite: ssot_historical_tenders.db", size: "4.2 MB", type: "SSOT 歷史庫", source: "db" }
+        ],
+        prompt: `你現在是負責合規性審查的技術特工。請幫我比對剛收到的新標案需求書 20260616_RFP_Tainan_ToyExpo.txt 與我們先前得標的歷史標案 SQLite 庫資料：\n1. 分析新招標書中所有「硬性廢標條款」（如：SLA 響應時間、實績金額要求、團隊持證規範、技術架構標準）。\n2. 與歷史得標投標書進行 Delta 比對，指出我們在技術、資歷與財務上有哪些缺失（Gaps）。\n3. 輸出一個差距比對報告，以「合規燈號（紅、黃、綠）」標示每個項目的合規風險。`,
+        cli: "python3 scripts/gap_audit.py --rfp ./staging/20260616_RFP_Tainan_ToyExpo.txt --db ./backup/ssot_historical_tenders.db",
+        outputsHtml: `
+          <table style="width: 100%; border-collapse: collapse; font-size: 0.75rem; text-align: left; background: rgba(0,0,0,0.15);">
+            <thead>
+              <tr style="border-bottom: 1px solid rgba(255,255,255,0.1); color: var(--color-secondary);">
+                <th style="padding: 0.4rem;">核對項目</th>
+                <th style="padding: 0.4rem;">RFP 要求</th>
+                <th style="padding: 0.4rem;">我方狀態</th>
+                <th style="padding: 0.4rem;">審核</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                <td style="padding: 0.4rem; font-weight: bold;">專案經理證照</td>
+                <td style="padding: 0.4rem;">有效 PMP 證照</td>
+                <td style="padding: 0.4rem;">志明 (已過期)</td>
+                <td style="padding: 0.4rem; color: #f87171;">🔴 廢標風險</td>
+              </tr>
+              <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                <td style="padding: 0.4rem; font-weight: bold;">系統故障響應</td>
+                <td style="padding: 0.4rem;">2 小時內現場響應</td>
+                <td style="padding: 0.4rem;">名音承諾 4h</td>
+                <td style="padding: 0.4rem; color: #f87171;">🔴 不合規</td>
+              </tr>
+              <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                <td style="padding: 0.4rem; font-weight: bold;">展位環保材質</td>
+                <td style="padding: 0.4rem;">綠色材質 > 30%</td>
+                <td style="padding: 0.4rem;">大同承諾 40%</td>
+                <td style="padding: 0.4rem; color: var(--color-secondary);">🟢 合規</td>
+              </tr>
+              <tr>
+                <td style="padding: 0.4rem; font-weight: bold;">IP 文創授權</td>
+                <td style="padding: 0.4rem;">台南文創 IP</td>
+                <td style="padding: 0.4rem;">虱目魚小子授權</td>
+                <td style="padding: 0.4rem; color: var(--color-secondary);">🟢 合規</td>
+              </tr>
+            </tbody>
+          </table>
+        `,
+        actionDesc: "調用技術特工比對 RFP 與歷史數據庫，自動對帳技術與證照資格差距，抓出廢標紅線。",
+        log: `[SYSTEM] 啟動合規性自動比對稽核...
+[INFO] 解析 RFP 第八章「技術規範與專案經理資格」...
+[DB QUERY] SELECT exp_date FROM employee_certs WHERE name="志明" AND type="PMP";
+[DB RESULT] 到期日: 2026-02-15。狀態: 已失效！
+[WARNING] 專案經理「志明」資歷失效，將觸發硬性廢標條款！
+[INFO] 解析 RFP 第十二章「售後維運與SLA承諾」...
+[INFO] RFP 要求 2小時緊急現場到達，協力名音燈光商原始報價標示為 4小時。
+[WARNING] SLA 響應時間不合規，存在 Gaps！
+[SUCCESS] 步驟二：合規差距比對完成。產出對帳 Checklist。`
+      },
+      {
+        title: "第三步：SLA 成本溢價與決策試算 (SLA Surcharge & Costing)",
+        badge: "主管 決策專屬",
+        badgeClass: "badge-supervisor",
+        inputs: [
+          { name: "SQLite: ssot_material_rates.db", size: "1.2 MB", type: "物料費率庫", source: "db" },
+          { name: "staging/20260616_SLA_Mingyin_Light.txt", size: "120 KB", type: "SLA承諾書", source: "local" }
+        ],
+        prompt: `你現在是負責財務成本核算的分析 Agent。名音燈光商因應 RFP 要求由 4h SLA 改為 2h SLA 響應，產生溢價成本，請進行試算：\n1. 查詢 SQLite 中南部燈光音響工程的加急人工費率（目前木作上漲 5%）。\n2. 計算 2h SLA 下燈光商增加的排班與保證金成本。\n3. 比對本案預算上限 450 萬，推算我方合理利潤空間，產出決策建議。`,
+        cli: "python3 scripts/sla_cost_sim.py --tender-value 4500000 --light-base 800000 --wood-surcharge 0.05",
+        outputsHtml: `
+          <div style="background: rgba(0,0,0,0.2); padding: 0.75rem; border-radius: 6px; font-size: 0.8rem; line-height: 1.4;">
+            <span style="color: var(--color-accent); font-weight: bold;">[SLA 溢價財務模型試算結果]</span>
+            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-top: 0.25rem;">
+              <span>• 4h SLA 基礎維護成本：</span>
+              <span>NT$ 800,000</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.75rem;">
+              <span>• 2h SLA 加班與備件調撥溢價：</span>
+              <span style="color: #fbbf24;">+ NT$ 150,000</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.75rem;">
+              <span>• 緊急違約提撥保證金 (違約率提撥)：</span>
+              <span style="color: #fbbf24;">+ NT$ 150,000</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: bold; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 0.25rem; margin-top: 0.25rem;">
+              <span>• 總維運成本：</span>
+              <span style="color: #f87171;">NT$ 1,100,000 (淨增 30萬)</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-top: 0.5rem; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 0.25rem;">
+              <span>• 標案總值：NT$ 4,500,000</span>
+              <span>• 預估總成本：NT$ 3,800,000</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: bold; color: var(--color-secondary); margin-top: 0.25rem;" id="sim-profit-text">
+              <span>• 預期毛利：NT$ 700,000 (15.5%)</span>
+              <span>🟢 達標，建議批准</span>
+            </div>
+            <button onclick="approveSLADecision()" id="btn-approve-sla" style="margin-top: 0.5rem; width: 100%; padding: 0.4rem; background: var(--color-secondary); color: var(--bg-primary); border: none; border-radius: 4px; font-weight: bold; cursor: pointer; transition: all 0.2s;">✔️ 批准 SLA 溢價支出 (+30萬)</button>
+          </div>
+        `,
+        actionDesc: "對帳材料與加急費率，分析 2h SLA 增加的人工與違約提撥，評估對總體 15% 利潤紅線的影響。",
+        prompt_override: `你現在是決策分析 Agent。主管已批准「2h SLA」溢價支出：
+1. 批准將名音燈光的維運成本從 800,000 調撥為 1,100,000。
+2. 更新 Staging 區的預算對帳表，標記此項目為 🟢 合規。`,
+        log: `[SYSTEM] 啟動 SLA 成本溢價與利潤分析...
+[DB QUERY] SELECT rate, region FROM material_rates WHERE region="South";
+[INFO] 南部木作費率已上漲 5%，本案工程材料成本核算為 2.7M。
+[INFO] 計算 2h SLA 響應下的燈光工程排班：增加 3 人輪值編配，溢價 150,000。
+[INFO] 緊急故障罰金風險評估：提撥 150,000 準備金。
+[INFO] 毛利試算：4.5M (標值) - 3.8M (成本) = 700,000。
+[INFO] 毛利率為 15.55%，高於利潤紅線 (15%)。建議主管批准。`
+      },
+      {
+        title: "第四步：Delta 草稿自動組裝 (NotebookLM & Draft Compiling)",
+        badge: "員工 協同",
+        badgeClass: "badge-staff",
+        inputs: [
+          { name: "NotebookLM: Tainan_ToyExpo_Sources", size: "知識庫", type: "KM 大腦", source: "ext" },
+          { name: "SQLite: ssot_historical_tenders.db", size: "4.2 MB", type: "SSOT 歷史庫", source: "db" }
+        ],
+        prompt: `你現在是 Content (主力產線) 寫作專家。請幫我結合 NotebookLM 的真理脈絡，開始起草並自動組裝招標書草稿：\n1. 讀取新招標案的大綱結構，針對「技術服務與 SLA 承諾」章節進行草稿起草。\n2. 主動從 NotebookLM 中檢索「林淑芬 (Sophia) 的有效持證證明」以及「繁星智慧檔案專案 (350萬實績)」的精確文字，並將其填入對應的招標表格中。\n3. 自動生成「系統故障 2 小時響應 (2h SLA)」的技術承諾與內部成本調撥說明。\n4. 輸出最終的投標書草稿段落，並標記「[人類審核點]」以便主管進行最後的一鍵收割。`,
+        cli: "python3 scripts/draft_assemble.py --template ./templates/tech_bid.md --output ./staging/draft_assembled.md",
+        outputsHtml: `
+          <div style="background: rgba(0,0,0,0.2); padding: 0.75rem; border-radius: 6px; font-size: 0.8rem; line-height: 1.4;">
+            <span style="color: var(--color-primary-light); font-weight: bold;">[組裝完成之建議書草稿段落]</span>
+            <div style="background: #090d16; border: 1px solid rgba(255,255,255,0.05); padding: 0.5rem; border-radius: 4px; font-family: monospace; font-size: 0.7rem; color: #94a3b8; height: 110px; overflow-y: auto; margin-top: 0.25rem; white-space: pre-wrap;">
+#### 4.2 專案經理與團隊資歷
+本案將指派 <strong>林淑芬 (Sophia)</strong> 擔任總負責專案經理。林經理持有美國專案管理學會 <strong>PMP 證照 (證號：#PMP-246801，有效期至 2028/12/31)</strong>，具備 8 年大型展會管理經驗。
+
+#### 4.3 故障緊急響應與維護承諾 (SLA)
+本團隊承諾提供 <strong>2 小時內現場抵達之加急響應服務</strong>。故障修復調配大同搭建與名音燈光地端備品件。
+<strong>[人類審查點: 確證 SLA 溢價補償金 NT$ 300,000 已於財務核算核准。]</strong></div>
+            <div style="margin-top: 0.5rem; color: var(--color-primary-light); font-weight: bold; font-size: 0.75rem;">📝 已完成草稿組裝，標記為 [人類審核點]，等待一鍵收割！</div>
+          </div>
+        `,
+        actionDesc: "調用 AI PM 自動讀取 NotebookLM 內無敏感個資的歷年得標知識庫，並寫入合規證書，拼裝投標草稿。",
+        log: `[SYSTEM] 啟動建議書草稿組裝...
+[INFO] 從地端真理庫載入範本檔: tech_bid.md
+[RAG QUERY] 讀取 NotebookLM 遠端 API ...
+[RAG RESULT] 載入 林淑芬_Sophia_PMP_2028.pdf 證件資料 (證號 #PMP-246801)。替代志明。
+[RAG RESULT] 載入 2025年繁星智慧展會350萬總包得標公文 資訊。
+[INFO] 自動將 SLA 2h 承諾寫入運維技術大綱。
+[INFO] 寫入財務變更標記 [人類審查點 - SLA成本溢價 NT$ 300K 同意確認]。
+[SUCCESS] 草稿組裝成功。輸出至 staging/draft_assembled.md。`
+      },
+      {
+        title: "第五步：實機跑測與一鍵收割 (Sandbox Run & Harvest to SSOT)",
+        badge: "主管 決策專屬",
+        badgeClass: "badge-supervisor",
+        inputs: [
+          { name: "staging/draft_assembled.md", size: "45 KB", type: "建議書草稿", source: "local" },
+          { name: "SQLite: ssot_historical_tenders.db", size: "4.2 MB", type: "SSOT 歷史庫", source: "db" }
+        ],
+        prompt: `你現在是決策審批 Agent。主管已批准「台南玩具總包標案」投標書。\n1. 請將 Staging 區的繁星展覽實績、Sophia 的 PM 資歷公文，一鍵寫入 SQLite 地端真理庫。\n2. 同步更新至 Google NotebookLM，完成最終的知識收割與發佈。`,
+        cli: "python3 scripts/system_harvest.py --draft ./staging/draft_assembled.md --commit-to-db --sync-notebooklm",
+        outputsHtml: `
+          <div style="background: rgba(20, 184, 166, 0.1); border: 1px solid var(--color-secondary); padding: 0.75rem; border-radius: 6px; font-size: 0.8rem; line-height: 1.4;">
+            <span style="color: var(--color-secondary); font-weight: bold;">[SSOT 地端真理庫收割完成]</span>
+            <div style="font-size: 0.75rem; margin-top: 0.25rem;">
+              • SQLite won_tenders：寫入「台南玩具展覽總包標案 (450萬)」 🟢 成功<br>
+              • NotebookLM 企業知識庫：發布最新去識別化黃金標準 🟢 成功<br>
+              • SQLite 審計日誌 audit_logs：寫入 Operator: Force(ff) 收割 🟢 成功
+            </div>
+            <div style="margin-top: 0.5rem; font-weight: bold; color: var(--color-secondary); font-size: 0.75rem;">🎉 系統收割成功！本次投標一條龍工作流已安全關閉。</div>
+          </div>
+        `,
+        actionDesc: "一鍵點擊後，Agent 自動登入跑測，並將正式得標檔案寫入 SQLite 歷史數據庫 (SSOT) 同步發佈至 NotebookLM。",
+        log: `[SYSTEM] 啟動主管一鍵收割 (Sync & Commit) ...
+[INFO] 正在檢查 [人類審查點] 狀態... 主管已批准 SLA 溢價！
+[INFO] [RAG Anti-Pollution] 執行防污染稽核... 安全無衝突。
+[DB WRITE] INSERT INTO won_tenders (title, price, pm, status) VALUES ("台南玩具展覽總包工程案", 4500000, "Sophia", "Submitted");
+[DB WRITE] INSERT INTO audit_logs (operator, action, timestamp) VALUES ("Force(ff)", "One-Key Harvest: Tainan Toy Expo", "2026-06-16 15:28:44");
+[INFO] 更新地端真理庫 (SSOT) 完成。
+[INFO] 正在上傳去敏感資料至 NotebookLM 組織端來源... OK。
+[SUCCESS] 一鍵收割與 Sync & Commit 成功！`
+      }
+    ];
+
+    function showStep(index) {
+      currentStepIndex = index;
+      
+      // 更新流程圖 Selected 狀態
+      for (let i = 0; i < 5; i++) {
+        const node = document.getElementById(`node-${i+1}`);
+        if (i === index) {
+          node.classList.add('selected');
+        } else {
+          node.classList.remove('selected');
+        }
+      }
+
+      const step = stepsData[index];
+      
+      // 1. 標題與標籤
+      document.getElementById('inspector-step-title').innerText = step.title;
+      const badge = document.getElementById('inspector-step-badge');
+      badge.innerText = step.badge;
+      badge.className = `panel-badge ${step.badgeClass}`;
+
+      // 2. 輸入檔案
+      const inputsDiv = document.getElementById('inputs-content');
+      inputsDiv.innerHTML = '';
+      step.inputs.forEach(file => {
+        let badgeClass = 'file-badge-local';
+        let badgeText = '地端';
+        if (file.source === 'ext') { badgeClass = 'file-badge-ext'; badgeText = '外部'; }
+        else if (file.source === 'db') { badgeClass = 'file-badge-db'; badgeText = 'DB'; }
+
+        inputsDiv.innerHTML += `
+          <div class="file-card">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-weight: 700; font-size: 0.8rem; color: white;">📄 ${file.name}</span>
+              <span class="file-badge ${badgeClass}">${badgeText}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--text-muted);">
+              <span>大小: ${file.size} | 類別: ${file.type}</span>
+            </div>
+            <p style="font-size: 0.7rem; color: var(--text-muted); border-top: 1px solid rgba(255,255,255,0.03); padding-top: 0.2rem; margin-top: 0.2rem;">${file.desc}</p>
+          </div>
+        `;
+      });
+
+      // 3. Prompt & CLI
+      let promptText = step.prompt;
+      if (index === 2 && slaApproved) {
+        promptText = step.prompt_override;
+      }
+      document.getElementById('prompts-content').innerText = promptText;
+      document.getElementById('cli-cmd').innerText = step.cli;
+
+      // 4. 輸出數據
+      document.getElementById('outputs-content').innerHTML = step.outputsHtml;
+      
+      // 如果是第三步且已批准，隱藏按鈕或更新文字
+      if (index === 2 && slaApproved) {
+        const btn = document.getElementById('btn-approve-sla');
+        if (btn) {
+          btn.innerText = '✔️ 已批准 SLA 溢價 (+30萬)';
+          btn.style.background = 'rgba(20, 184, 166, 0.2)';
+          btn.style.color = 'var(--color-secondary)';
+          btn.style.border = '1px solid var(--color-secondary)';
+          btn.disabled = true;
+        }
+        document.getElementById('sim-profit-text').innerHTML = `<span>• 預期毛利：NT$ 700,000 (15.5%)</span><span style="color: var(--color-secondary); font-weight: bold;">🟢 主管已批准</span>`;
+      }
+
+      // 5. 底欄描述
+      document.getElementById('step-action-desc').innerText = step.actionDesc;
+      
+      // 更新按鈕文字
+      const triggerBtn = document.getElementById('btn-step-trigger');
+      if (currentMode === 'manual') {
+        triggerBtn.innerText = '點擊複製 Prompt';
+      } else {
+        triggerBtn.innerText = '▶️ 執行此步驟跑測';
+      }
+    }
 
     function switchMode(mode) {
       currentMode = mode;
@@ -460,65 +872,175 @@
         btnActionTest.innerText = '一鍵啟動 API 跑測';
         btnActionCommit.innerText = '一鍵執行收割 Sync';
       }
+      
+      // 刷新當前步驟按鈕
+      showStep(currentStepIndex);
+    }
+
+    function copyInspectorPrompt() {
+      const promptText = document.getElementById('prompts-content').innerText;
+      navigator.clipboard.writeText(promptText).then(() => {
+        alert('步驟 Prompt 已成功複製到剪貼簿！');
+        const consoleLog = document.getElementById('supervisor-console');
+        consoleLog.innerText += `\n\n[INFO] 複製了第 \${currentStepIndex + 1} 步的 Prompts。`;
+        consoleLog.scrollTop = consoleLog.scrollHeight;
+      });
+    }
+
+    function triggerStepSimulation() {
+      const consoleLog = document.getElementById('supervisor-console');
+      const step = stepsData[currentStepIndex];
+      
+      if (currentMode === 'manual') {
+        navigator.clipboard.writeText(step.prompt).then(() => {
+          alert(`手動 Prompt 已複製到剪貼簿！請手動貼到外部 AI 分頁中執行。\n\nCLI 指令：\${step.cli}`);
+          consoleLog.innerText += `\n\n[MANUAL] 主管複製了第 \${currentStepIndex+1} 步的 Prompt。可手動執行指令：\${step.cli}`;
+          consoleLog.scrollTop = consoleLog.scrollHeight;
+        });
+      } else {
+        consoleLog.innerText = `[SYSTEM] 開始執行第 \${currentStepIndex+1} 步地端 API 模擬跑測...\n`;
+        const logs = step.log.split('\n');
+        let delay = 0;
+        logs.forEach(line => {
+          setTimeout(() => {
+            consoleLog.innerText += line + '\n';
+            consoleLog.scrollTop = consoleLog.scrollHeight;
+          }, delay);
+          delay += 450;
+        });
+
+        // 結束後更新狀態
+        setTimeout(() => {
+          if (currentStepIndex === 0) {
+            document.getElementById('node-status-1').innerText = 'Intake 已完成';
+            document.getElementById('node-status-1').className = 'flow-node-status status-done';
+          } else if (currentStepIndex === 1) {
+            document.getElementById('node-status-2').innerText = 'Gap 已比對';
+            document.getElementById('node-status-2').className = 'flow-node-status status-done';
+          } else if (currentStepIndex === 2) {
+            document.getElementById('node-status-3').innerText = 'SLA 已計算';
+            document.getElementById('node-status-3').className = 'flow-node-status status-done';
+          } else if (currentStepIndex === 3) {
+            document.getElementById('node-status-4').innerText = '已完成組裝';
+            document.getElementById('node-status-4').className = 'flow-node-status status-done';
+          } else if (currentStepIndex === 4) {
+            document.getElementById('node-status-5').innerText = '已完成收割';
+            document.getElementById('node-status-5').className = 'flow-node-status status-done';
+          }
+        }, delay);
+      }
+    }
+
+    function approveSLADecision() {
+      slaApproved = true;
+      alert('主管已批准：SLA 2小時現場響應加急溢價支出 (+NT$ 300,000)！');
+      
+      // 更新第 3 步驟的 Badge 和流程狀態
+      document.getElementById('node-status-3').innerText = '🟢 SLA 已對齊';
+      document.getElementById('node-status-3').className = 'flow-node-status status-done';
+      
+      // 員工端狀態更新
+      document.getElementById('staff-sla-status').innerText = '🟢 已由主管批准為 2h SLA';
+      document.getElementById('staff-sla-status').style.color = 'var(--color-secondary)';
+
+      // 刷新第三步視圖
+      showStep(2);
+      
+      const consoleLog = document.getElementById('supervisor-console');
+      consoleLog.innerText += `\n[DECISION] 主管批准了名音燈光 SLA 2h 溢價預算變更。Staging 狀態標記為合規。`;
+      consoleLog.scrollTop = consoleLog.scrollHeight;
     }
 
     function runAgentTest() {
       const consoleLog = document.getElementById('supervisor-console');
       if (currentMode === 'manual') {
-        navigator.clipboard.writeText(prompts.test).then(() => {
-          alert('技術特工跑測 Prompt 已成功複製到剪貼簿！可直接貼給您的外部 Agent 執行。');
+        const testPrompt = `你現在是具備 Computer Use 能力的 Dev (Codex) 技術特工。請幫我執行台南玩具展總包標案的整合跑測：\n1. 本地啟動伺服器，用 Computer Use 打開測試控制台。\n2. 稽核大同搭建商實績、名音燈光 2h SLA 加班成本。\n3. 自動替換 PM 為 Sophia 以補正過期證照，並輸出對帳查核表。`;
+        navigator.clipboard.writeText(testPrompt).then(() => {
+          alert('技術特工整合跑測 Prompt 已複製！');
           consoleLog.innerText += '\n\n[INFO] 主管複製了「技術特工整合跑測 Prompt」。';
         });
       } else {
-        consoleLog.innerText = '[SYSTEM] 啟動 API 全自動整合跑測...\n';
+        consoleLog.innerText = '[SYSTEM] 啟動 API 一條龍全自動整合跑測 (1~4步連鎖運行)...
+';
+        let delay = 300;
+        
         setTimeout(() => {
-          consoleLog.innerText += '[INFO] 正在檢測本地 8080 端口... OK\n';
-        }, 300);
+          consoleLog.innerText += '[1/4] [Intake] 檔案掃描與去敏感化... OK. 生成 staging/file_manifest.json\n';
+          document.getElementById('node-status-1').innerText = 'Intake 已完成';
+          document.getElementById('node-status-1').className = 'flow-node-status status-done';
+        }, delay);
+        delay += 600;
+
         setTimeout(() => {
-          consoleLog.innerText += '[INFO] 啟動本機 Chrome Built-in AI (Gemini Nano) 掃描名音燈光 2h SLA 響應時間...\n';
-        }, 800);
+          consoleLog.innerText += '[2/4] [Gap Audit] 合規對帳... 發現專案經理志明證照過期！SLA時間不符。🔴 警告\n';
+          document.getElementById('node-status-2').innerText = 'Gap 已比對';
+          document.getElementById('node-status-2').className = 'flow-node-status status-done';
+        }, delay);
+        delay += 600;
+
         setTimeout(() => {
-          consoleLog.innerText += '[INFO] 調用 Gemini 2.5 Flash API 比對大同搭建商實績驗收公文... 綠燈🟢\n';
-        }, 1300);
-        setTimeout(() => {
-          consoleLog.innerText += '[INFO] [Computer Use] 模擬操作：自動將 PM 志明 (過期) 變更為備降人員 Sophia (有效) PMP 證照。\n';
-          document.getElementById('node-status-3').innerText = '🟢 SLA 已對齊';
+          consoleLog.innerText += '[3/4] [Costing] 運行 SLA 溢價模型... 計算淨增成本 NT$ 300K。等待主管決策批准。\n';
+          document.getElementById('node-status-3').innerText = '⚠️ 成本超限';
+          document.getElementById('node-status-3').className = 'flow-node-status status-warn';
+          // 自動幫忙批准
+          slaApproved = true;
+          document.getElementById('node-status-3').innerText = '🟢 SLA 已批准';
           document.getElementById('node-status-3').className = 'flow-node-status status-done';
-        }, 1800);
+          document.getElementById('staff-sla-status').innerText = '🟢 已由主管批准為 2h SLA';
+          document.getElementById('staff-sla-status').style.color = 'var(--color-secondary)';
+          consoleLog.innerText += '[DECISION] 主管已批准 SLA 預算支出。\n';
+        }, delay);
+        delay += 600;
+
         setTimeout(() => {
-          consoleLog.innerText += '[SUCCESS] 整合跑測與差距比對全數通過！已產出最終合規對帳表，等待主管一鍵收割。\n';
-          document.getElementById('node-4').classList.add('active');
+          consoleLog.innerText += '[4/4] [Drafting] 從 NotebookLM 讀取 Sophia 的 2028 有效 PMP 證照與繁星得標實績... OK.\n';
+          consoleLog.innerText += '[INFO] 成功替換過期證照，合併生成建議書草稿。\n';
           document.getElementById('node-status-4').innerText = '已組裝';
           document.getElementById('node-status-4').className = 'flow-node-status status-done';
-        }, 2300);
+          document.getElementById('node-4').classList.add('active');
+        }, delay);
+        delay += 600;
+
+        setTimeout(() => {
+          consoleLog.innerText += '[SUCCESS] 一條龍整合跑測順利完成！已產出最終合規建議書草稿，請點擊一鍵收割同步至 SSOT。\n';
+          consoleLog.scrollTop = consoleLog.scrollHeight;
+        }, delay);
       }
     }
 
     function runHarvest() {
       const consoleLog = document.getElementById('supervisor-console');
       if (currentMode === 'manual') {
-        navigator.clipboard.writeText(prompts.commit).then(() => {
+        const commitPrompt = `你現在是決策審批 Agent。主管已批准「台南玩具總包標案」投標書。\n1. 請將 Staging 區的繁星展覽實績、Sophia 的 PM 資歷公文，一鍵寫入 SQLite 地端真理庫。\n2. 同步更新至 Google NotebookLM，完成最終的知識收割與發佈。`;
+        navigator.clipboard.writeText(commitPrompt).then(() => {
           alert('一鍵收割 Sync Prompt 已複製到剪貼簿！');
           consoleLog.innerText += '\n\n[INFO] 主管複製了「一鍵收割與寫回 SSOT Prompt」。';
         });
       } else {
-        consoleLog.innerText = '[SYSTEM] 觸發一鍵收割與 Sync & Commit 流程...\n';
+        consoleLog.innerText = '[SYSTEM] 觸發一鍵收割與 Sync & Commit 流程...
+';
         setTimeout(() => {
-          consoleLog.innerText += '[INFO] 正在將 Staging 區的台南玩具展總包投標書草稿寫入本地 SQLite 庫...\n';
-        }, 400);
+          consoleLog.innerText += '[INFO] 正在將 Staging 區的台南玩具展總包投標書草稿寫入地端 SQLite (ssot_historical_tenders.db)...\n';
+        }, 300);
         setTimeout(() => {
           consoleLog.innerText += '[INFO] [RAG Anti-Pollution] 執行防污染稽核... 安全無衝突\n';
-        }, 900);
+        }, 700);
         setTimeout(() => {
-          consoleLog.innerText += '[INFO] 更新 Google NotebookLM 的歷年得標黃金知識庫 (Sources) \n';
-        }, 1400);
+          consoleLog.innerText += '[INFO] 發布去敏感化黃金知識庫至 Google NotebookLM 脈絡大腦... OK\n';
+        }, 1100);
         setTimeout(() => {
-          consoleLog.innerText += '[SUCCESS] 最終招標書已發佈並寫入 SSOT！\n';
+          consoleLog.innerText += '[SUCCESS] 最終招標書已發佈並寫入 SSOT！一條龍工作流圓滿結束。\n';
           document.getElementById('node-5').classList.add('active');
           document.getElementById('node-status-5').innerText = '已收割';
           document.getElementById('node-status-5').className = 'flow-node-status status-done';
-        }, 1900);
+          consoleLog.scrollTop = consoleLog.scrollHeight;
+        }, 1500);
       }
+    }
+
+    // 初始化載入第一步
+    window.onload = function() {
+      showStep(0);
     }
   </script>
 </body>
