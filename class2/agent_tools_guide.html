@@ -186,6 +186,7 @@
       
       <div style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--text-muted);">
         <strong>輸入檔案：</strong> <code>台南玩具展_RFP.pdf</code>、<code>大同搭建商_實績證明.docx</code>、<code>名音燈光商_SLA承諾.txt</code><br>
+        <strong>一條龍環節：</strong> 1.1 採購網公告爬取 ➔ 1.2 地端檔案目錄掃描 ➔ 1.3 個資去識別化隔離<br>
         <strong>本地 CLI 指令：</strong> <code style="color: #fbbf24; font-family: monospace;">python3 scripts/prep_intake.py --source ./raw_tenders --output ./staging</code>
       </div>
 
@@ -196,7 +197,7 @@
         </div>
         <pre class="prompt-content" id="prompt-1">你現在是 Dev (Codex) 技術特工。請幫我整理本地專案目錄下的所有原始招標相關檔案（包括 pdf, docx, xlsx, txt 等）：
 1. 掃描目錄並將所有檔案依據「日期_大類_原檔名」進行重新命名。
-2. 自動提取出每個檔案 of Metadata（包括文件頁數、建立日期、所屬子模組）。
+2. 自動提取出每個檔案的 Metadata（包括文件頁數、建立日期、所屬子模組）。
 3. 撰寫一個 Python 腳本，將檔案以 UTF-8 編碼轉存為純文字（txt）或 JSON 結構，存放在 staging/ 目錄中，並輸出一個 file_manifest.json 索引檔以利後續的 AI 檢索。</pre>
       </div>
     </div>
@@ -210,6 +211,7 @@
       
       <div style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--text-muted);">
         <strong>輸入檔案：</strong> <code>staging/20260616_RFP_Tainan_ToyExpo.txt</code>、SQLite 歷史得標庫 <code>ssot_historical_tenders.db</code><br>
+        <strong>一條龍環節：</strong> 2.1 廢標條款自動提取 ➔ 2.2 PM 證照過期稽核 ➔ 2.3 SLA 技術對帳比對<br>
         <strong>本地 CLI 指令：</strong> <code style="color: #fbbf24; font-family: monospace;">python3 scripts/gap_audit.py --rfp ./staging/20260616_RFP_Tainan_ToyExpo.txt --db ./backup/ssot_historical_tenders.db</code>
       </div>
 
@@ -228,12 +230,13 @@
     <!-- 3. SLA 成本試算 -->
     <div class="guide-section">
       <div class="guide-title">
-        <span>📊</span> 3. SLA 成本溢價與決策試算 (SLA Surcharge & Costing)
+        <span>📊</span> 3. SLA 成本阻斷與決策試算 (SLA Surcharge & Costing)
       </div>
       <p>依據地端費率庫（目前木作因ESG上漲 5%），試算由 4h SLA 升至 2h SLA 增加的維運與排班成本，評估利潤安全空間。</p>
       
       <div style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--text-muted);">
         <strong>輸入檔案：</strong> SQLite 費率庫 <code>ssot_material_rates.db</code>、<code>20260616_SLA_Mingyin_Light.txt</code><br>
+        <strong>一條龍環節：</strong> 3.1 物料上漲費率調校 ➔ 3.2 2h SLA 加急成本計算 ➔ 3.3 毛利率與決策核算<br>
         <strong>本地 CLI 指令：</strong> <code style="color: #fbbf24; font-family: monospace;">python3 scripts/sla_cost_sim.py --tender-value 4500000 --light-base 800000 --wood-surcharge 0.05</code>
       </div>
 
@@ -258,6 +261,7 @@
       
       <div style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--text-muted);">
         <strong>輸入檔案：</strong> Google NotebookLM 去敏感知識庫、SQLite 歷史庫、草稿模板 <code>templates/tech_bid.md</code><br>
+        <strong>一條龍環節：</strong> 4.1 NotebookLM 真理檢索 ➔ 4.2 PM 備降人員替換 ➔ 4.3 標註人類審查點<br>
         <strong>本地 CLI 指令：</strong> <code style="color: #fbbf24; font-family: monospace;">python3 scripts/draft_assemble.py --template ./templates/tech_bid.md --output ./staging/draft_assembled.md</code>
       </div>
 
@@ -283,6 +287,7 @@
       
       <div style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--text-muted);">
         <strong>輸入檔案：</strong> <code>staging/draft_assembled.md</code>、SQLite 數據庫<br>
+        <strong>一條龍環節：</strong> 5.1 Computer Use 網頁上傳模擬 ➔ 5.2 SQLite SSOT 資料庫寫入 ➔ 5.3 知識大腦同步發布<br>
         <strong>本地 CLI 指令：</strong> <code style="color: #fbbf24; font-family: monospace;">python3 scripts/system_harvest.py --draft ./staging/draft_assembled.md --commit-to-db --sync-notebooklm</code>
       </div>
 
@@ -294,6 +299,30 @@
         <pre class="prompt-content" id="prompt-5">你現在是決策審批 Agent。主管已批准「台南玩具總包標案」投標書。
 1. 請將 Staging 區的繁星展覽實績、Sophia 的 PM 資歷公文，一鍵寫入 SQLite 地端真理庫。
 2. 同步更新至 Google NotebookLM，完成最終的知識收割與發佈。</pre>
+      </div>
+    </div>
+
+    <!-- 6. 進度控制與 AI PM 管理 -->
+    <div class="guide-section">
+      <div class="guide-title">
+        <span>📅</span> 6. 進度控制與 AI PM 管理 (Progress Control & AI PM Orchestration)
+      </div>
+      <p>透過背景 Scheduled Analyst 定時任務監控 7 天關鍵路徑甘特圖、專案起草延誤風險，並自動執行催辦協調。</p>
+      
+      <div style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--text-muted);">
+        <strong>輸入檔案：</strong> SQLite 專案排程表、Staging 執行日誌<br>
+        <strong>本地 CLI 指令：</strong> <code style="color: #fbbf24; font-family: monospace;">python3 scripts/ai_pm_scheduler.py --config ./config/scheduler_config.json --run-monitor</code>
+      </div>
+
+      <div class="prompt-card">
+        <div class="prompt-header">
+          <span class="prompt-title-text">💬 執行 Prompt：AI PM 排程監控與主動協調</span>
+          <button class="btn-copy" onclick="copyPrompt('prompt-6')">一鍵複製</button>
+        </div>
+        <pre class="prompt-content" id="prompt-6">你現在是負責排程與進度協調的 AI PM 大腦。請幫我設定背景定期分析員 (Scheduled Analyst) 運作邏輯：
+1. 定時監控 Staging 區與 SQLite 資料庫，檢查是否面臨專案進度延誤風險（例如撰寫落後預期時間 12 小時以上），若有延誤，自動產出警告日誌並提示主管調撥 AI 資源。
+2. 自動掃描協力廠商的檔案，若發現缺漏大同搭建商實績證明或名音燈光承諾書，自動起草催辦郵件，存入待發送區。
+3. 監控人員證書到期狀態，若發現 PM 證照失效，自動檢索備降名冊將其改為 Sophia (林淑芬) 並更新 RAG 來源。</pre>
       </div>
     </div>
   </main>

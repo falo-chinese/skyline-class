@@ -17,7 +17,15 @@
 
 ---
 
-## 🛠&nbsp; 2. 雙軌人機協同工作流 (Dual-Workflow)
+## 📅 2. 專案進度與 AI PM 控制面板 (Progress & AI PM Orchestration)
+
+本控制塔設計了專屬的 **AI PM 大腦監控與協調** 區塊：
+* **📊 7天關鍵路徑甘特圖 (Gantt Critical Path)**：展示招標生命的 7 天進度流程（D-7 整理、D-6 對帳、D-5 決策、D-4 草稿、D-3 評審、D-2 跑測、D-1 遞件），以不同顏色（綠色：已完成，紫色：當前，灰色：待執行）顯示目前進行中的節點。
+* **🔔 AI PM 主動催辦與調度日誌 (Proactive Logs)**：模擬展示背景運作之「定期分析員」的主動協調作為，包括「自動偵測大同搭建漏件並發送催辦」、「自動替換過期 PM 志明為 Sophia」、「SLA 成本上調導致毛利率波動預警」等，體現 AI 作為協調者 (Orchestrator) 的全局價值。
+
+---
+
+## 🛠&nbsp; 3. 雙軌人機協同工作流 (Dual-Workflow)
 
 為了在大規模投標中，極致發揮 AI 的能耐，同時避免 Token 成本失控與核心資料庫污染（RAG Pollution），系統採用了雙軌分流設計：
 
@@ -31,7 +39,7 @@
 
 ---
 
-## 📋 3. 手動與 API 加速雙模操作 (Manual vs. API)
+## 📋 4. 手動與 API 加速雙模操作 (Manual vs. API)
 
 為適應企業不同的金鑰與安全網路限制，控制塔提供了一鍵切換功能：
 * **✍️ 人工手動 (Prompt 複製)**：在無 API Key 的離線環境下，主管與同仁可以點擊卡片一鍵複製「編譯後帶變數的 Prompt」，貼到外部 ChatGPT/Claude 直接執行，作為 Fallback 方案。
@@ -39,22 +47,22 @@
 
 ---
 
-## 🔄 4. 一條龍步驟詳細內容 (End-to-End Steps)
+## 🔄 5. 一條龍步驟詳細內容 (End-to-End Steps)
 
-本控制塔細化了五大核心節點的運作細節：
+本控制塔細化了五大核心節點與其底層 15 個子環節的運作細節：
 
 1. **第一步：標前文件整理 (Intake & Prep)**：
-   - **地端輸入**：`台南玩具展_RFP.pdf` (1.4MB)、`大同搭建商_實績證明.docx` (450KB)、`名音燈光商_SLA承諾.txt` (120KB)。
-   - **Agent 指令**：調用技術特工掃描 `./raw_tenders` 目錄，透過 Python 將 Word/PDF 轉為乾淨 UTF-8 文字，存入 Staging 區並生成 `file_manifest.json` 索引檔。
+   - **地端輸入**：`台南玩具展_RFP.pdf`、`大同搭建商_實績證明.docx`、`名音燈光商_SLA承諾.txt`。
+   - **子環節**：1.1 採購網公告爬取 ➔ 1.2 地端檔案目錄掃描 ➔ 1.3 個資去識別化隔離。
 2. **第二步：合規差距比對 (Compliance & Gap Audit)**：
    - **地端輸入**：`staging/20260616_RFP_Tainan_ToyExpo.txt` 及 SQLite 歷史黃金庫。
-   - **Agent 指令**：比對 RFP 與 SQLite 證照與要求，分析發現專案經理志明證照過期（廢標紅線），且協力名音燈光商承諾 4h 與 RFP 規範之 2h 現場響應不合規。
+   - **子環節**：2.1 廢標條款自動提取 ➔ 2.2 PM 證照過期稽核 ➔ 2.3 SLA 技術對帳比對。
 3. **第三步：SLA 成本試算與決策 (SLA Surcharge & Costing)**：
    - **地端輸入**：SQLite 費率庫、名音燈光維運承諾。
-   - **Agent 指令**：計算從 4h 改為 2h SLA 增加的人工加班與風險金成本（淨增 NT$ 300,000，總維護成本升至 110 萬）。比對 450 萬總值，推算總成本 380 萬，利潤率 15.5%，高於利潤紅線 (15%)。由主管批准此變更。
+   - **子環節**：3.1 物料上漲費率調校 ➔ 3.2 2h SLA 加急成本計算 ➔ 3.3 毛利率與決策核算。由主管批准 2h SLA 溢價變更 (+NT$ 300,000)。
 4. **第四步：Delta 草稿自動組裝 (NotebookLM & Draft Compiling)**：
-   - **地端輸入**：NotebookLM 組織知識庫（含林淑芬 Sophia 2028 有效 PMP 證照）。
-   - **Agent 指令**：排除敏感身分個資，自動讀取 NotebookLM 黃金實績素材，組裝出技術建議書草稿段落，將 PM 志明替換為有效持證的 Sophia，並標記 `[人類審查點]`。
-5. **第五步：實機跑測與一鍵收割 (Sandbox Run & Harvest to SSOT)**：
+   - **地端輸入**：NotebookLM 組織知識庫。
+   - **子環節**：4.1 NotebookLM 真理檢索 ➔ 4.2 PM 備降人員替換（Sophia 取代志明） ➔ 4.3 標註人類審查點。
+5. **第五步：實機跑測與一鍵收割 (Sandbox Run & Harvest)**：
    - **地端輸入**：Staging 草稿、SQLite 地端真理庫。
-   - **Agent 指令**：主管點擊收割，啟動 Pro Agent 模擬登入政府採購網跑測上傳，並將得標範本一鍵寫回 SQLite (SSOT)，同步發佈至 NotebookLM，完成一條龍投標工作流。
+   - **子環節**：5.1 Computer Use 網頁上傳模擬 ➔ 5.2 SQLite SSOT 資料庫寫入 ➔ 5.3 知識大腦同步發布。

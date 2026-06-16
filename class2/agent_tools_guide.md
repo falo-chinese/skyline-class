@@ -1,6 +1,6 @@
 # 🤖 Agent 工具實戰指南 (Agent Tools Guide)
 
-本指南專為企業主管與開發同仁設計，詳細說明如何操作與調用 Pro 等級 AI Agent (特別是運作在「地端工作站」且動態測試能耐極佳的 **Codex 技術特工**)，配合 Google NotebookLM 脈絡大腦，以一條龍方式完成「台南玩具展總包標案 (450萬元)」的對帳、利潤核算與起草組裝。
+本指南專為企業主管與開發同仁設計，詳細說明如何操作與調用 Pro 等級 AI Agent (特別是運作在「地端工作站」且動態測試能耐極佳的 **Codex 技術特工**)，配合 Google NotebookLM 脈絡大腦，以一條龍方式完成「台南玩具展總包標案 (450萬元)」的對帳、利潤核算、甘特圖進度監控與草稿組裝。
 
 ---
 
@@ -8,7 +8,7 @@
 
 本指南與 **[🤖 智慧投標控制塔 (POC)](bidding_control_tower.html)** 是完全對齊的：
 * **本指南 (靜態手冊)**：提供底層 CLI 腳本與 Prompt 的黃金範本，是 NotebookLM 知識庫的參考源，適合工程師或主管在終端機 (CLI) 離線操作時參考。
-* **控制塔 (動態面板)**：將本指南的 5 大步驟整合為可點擊切換、手動/API 雙模式的一條龍展示平台，供 G總和 C董 快速理解與決策收割。
+* **控制塔 (動態面板)**：將本指南的 5 大步驟與進度監控整合為可點擊切換、手動/API 雙模式的一條龍展示平台，供 G總和 C董 快速理解與決策收割。
 
 ---
 
@@ -17,8 +17,8 @@
 在開始任何分析前，必須將地端隨意放置的歷史得標檔案、Excel、PDF 進行清洗與結構化，存入 staging/ 目錄以隔離 SSOT。
 
 * **輸入檔案**：`台南玩具展_RFP.pdf`、`大同搭建商_實績證明.docx`、`名音燈光商_SLA承諾.txt`。
+* **分環節**：1.1 採購網公告爬取 ➔ 1.2 地端檔案目錄掃描 ➔ 1.3 個資去識別化隔離。
 * **CLI 指令**：`python3 scripts/prep_intake.py --source ./raw_tenders --output ./staging`
-* **Agent 作用**：自動進行格式轉換 (PDF/Word 轉 UTF-8 文字)，並自動偵測去識別化個資 (遮蔽身分證字號)，生成 `file_manifest.json`。
 
 ### 💬 執行 Prompt：檔案整理與結構化工具調用
 ```text
@@ -34,9 +34,9 @@
 
 比對全新玩具展 RFP 與 SQLite 歷史得標庫，找出硬性廢標條款與合規缺失。
 
-* **輸入檔案**：`staging/20260616_RFP_Tainan_ToyExpo.txt`、SQLite 歷史數據庫。
+* **輸入檔案**：`staging/20260616_RFP_Tainan_ToyExpo.txt`、SQLite 歷史得標庫 `ssot_historical_tenders.db`。
+* **分環節**：2.1 廢標條款自動提取 ➔ 2.2 PM 證照過期稽核 ➔ 2.3 SLA 技術對帳比對。
 * **CLI 指令**：`python3 scripts/gap_audit.py --rfp ./staging/20260616_RFP_Tainan_ToyExpo.txt --db ./backup/ssot_historical_tenders.db`
-* **Agent 作用**：發現專案經理志明證照過期 (廢標紅線) 以及協力名音燈光商 4h SLA 與 RFP 要求的 2h SLA 現場響應不匹配。
 
 ### 💬 執行 Prompt：RFP 與歷史得標文件差距稽核
 ```text
@@ -52,9 +52,9 @@
 
 評估名音燈光商改為 2h SLA 增加的人工與保證金支出，對總利潤紅線 (15%) 的衝擊。
 
-* **輸入檔案**：SQLite 費率庫、燈光商加急承諾。
+* **輸入檔案**：SQLite 費率庫 `ssot_material_rates.db`、`20260616_SLA_Mingyin_Light.txt`。
+* **分環節**：3.1 物料上漲費率調校 ➔ 3.2 2h SLA 加急成本計算 ➔ 3.3 毛利率與決策核算。
 * **CLI 指令**：`python3 scripts/sla_cost_sim.py --tender-value 4500000 --light-base 800000 --wood-surcharge 0.05`
-* **Agent 作用**：試算出 2h SLA 淨增 30萬 (總維護費 110萬)。在 450萬標案下，扣除 2.7M 建置與 1.1M 維護，專案預估利潤為 70萬 (毛利率 15.5%)。建議主管批准。
 
 ### 💬 執行 Prompt：SLA 成本溢價決策分析
 ```text
@@ -70,9 +70,9 @@
 
 結合 Google NotebookLM 去識別化得標實績與有效證照，編譯技術建議書草稿。
 
-* **輸入檔案**：Google NotebookLM、得標範本。
+* **輸入檔案**：Google NotebookLM 脈絡庫、草稿模板 `templates/tech_bid.md`。
+* **分環節**：4.1 NotebookLM 真理檢索 ➔ 4.2 PM 備降人員替換（Sophia 取代志明） ➔ 4.3 標註人類審查點。
 * **CLI 指令**：`python3 scripts/draft_assemble.py --template ./templates/tech_bid.md --output ./staging/draft_assembled.md`
-* **Agent 作用**：讀取 NotebookLM 中 Sophia 2028 有效 PMP 證照取代過期志明，寫入 2h SLA 技術承諾，並標記 `[人類審查點]` 以供主管一鍵收割。
 
 ### 💬 執行 Prompt：投標書草稿組裝與合規起草
 ```text
@@ -90,12 +90,29 @@
 主管進行最後決策審批，啟動 Pro Agent 自動跑測上傳並同步 SSOT 地端黃金庫。
 
 * **輸入檔案**：`staging/draft_assembled.md`、SQLite 本地真理庫。
+* **分環節**：5.1 Computer Use 網頁上傳模擬 ➔ 5.2 SQLite SSOT 資料庫寫入 ➔ 5.3 知識大腦同步發布。
 * **CLI 指令**：`python3 scripts/system_harvest.py --draft ./staging/draft_assembled.md --commit-to-db --sync-notebooklm`
-* **Agent 作用**：主管點擊批准後，技術特工在本地沙盒 (利用 Computer Use 模擬瀏覽器) 跑測上傳投標文件，並將最終結果儲存於 SQLite 數據庫與寫回 NotebookLM。
 
 ### 💬 執行 Prompt：一鍵收割與地端真理庫同步
 ```text
 你現在是決策審批 Agent。主管已批准「台南玩具總包標案」投標書。
 1. 請將 Staging 區的繁星展覽實績、Sophia 的 PM 資歷公文，一鍵寫入 SQLite 地端真理庫。
 2. 同步更新至 Google NotebookLM，完成最終的知識收割與發佈。
+```
+
+---
+
+## 📅 6. 進度控制與 AI PM 管理 (Progress Control & AI PM Orchestration)
+
+定期分析員 (Scheduled Analyst) 負責在背景運作，主動監控 7 天甘特圖關鍵路徑、排班進度與協力廠通訊狀態，防範專案延誤。
+
+* **輸入檔案**：SQLite 排程配置表、Staging 寫作日誌。
+* **CLI 指令**：`python3 scripts/ai_pm_scheduler.py --config ./config/scheduler_config.json --run-monitor`
+
+### 💬 執行 Prompt：AI PM 排程監控與主動協調
+```text
+你現在是負責排程與進度協調的 AI PM 大腦。請幫我設定背景定期分析員 (Scheduled Analyst) 運作邏輯：
+1. 定時監控 Staging 區與 SQLite 資料庫，檢查是否面臨專案進度延誤風險（例如撰寫落後預期時間 12 小時以上），若有延誤，自動產出警告日誌並提示主管調撥 AI 資源。
+2. 自動掃描協力廠商的檔案，若發現缺漏大同搭建商實績證明或名音燈光承諾書，自動起草催辦郵件，存入待發送區。
+3. 監控人員證書到期狀態，若發現 PM 證照失效，自動檢索備降名冊將其改為 Sophia (林淑芬) 並更新 RAG 來源。
 ```
