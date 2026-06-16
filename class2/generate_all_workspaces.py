@@ -225,6 +225,7 @@ def generate_workspace(step_num):
     shutil.copytree(os.path.join(BASE_DIR, "原始標案資源"), os.path.join(part_dir, "原始標案資源"))
     shutil.copytree(os.path.join(BASE_DIR, "參考範例"), os.path.join(part_dir, "參考範例"))
     shutil.copytree(os.path.join(BASE_DIR, "notebooklm_shared_brains"), os.path.join(part_dir, "notebooklm_shared_brains"))
+    shutil.copy(os.path.join(BASE_DIR, "notebooklm_shared_brains.zip"), os.path.join(part_dir, "notebooklm_shared_brains.zip"))
     
     staging_dir = os.path.join(part_dir, "標案工作暫存區")
     os.makedirs(staging_dir, exist_ok=True)
@@ -410,6 +411,7 @@ def build_unified_workspace():
     shutil.copytree(os.path.join(BASE_DIR, "原始標案資源"), os.path.join(unified_dir, "原始標案資源"))
     shutil.copytree(os.path.join(BASE_DIR, "參考範例"), os.path.join(unified_dir, "參考範例"))
     shutil.copytree(os.path.join(BASE_DIR, "notebooklm_shared_brains"), os.path.join(unified_dir, "notebooklm_shared_brains"))
+    shutil.copy(os.path.join(BASE_DIR, "notebooklm_shared_brains.zip"), os.path.join(unified_dir, "notebooklm_shared_brains.zip"))
     
     staging_dir = os.path.join(unified_dir, "標案工作暫存區")
     os.makedirs(staging_dir, exist_ok=True)

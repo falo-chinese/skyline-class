@@ -2,6 +2,10 @@
 
 本文件說明如何將 **AI NotebookLM** 導入企業架構，並以 **G總 (Julie)** 提供的 [專案執行經驗與改善對策庫 (pm_experience_responses_raw.csv - 已用 AI 去識別化)](file:///Users/force/Google_Antigravity/horizon_class/skyline-class/class2/pm_experience_responses_raw.csv) 為核心案例，展示如何建立安全、可稽核且具成本效益的「地端真理中心 (SSOT)」資料流。
 
+> 📥 **NotebookLM 專屬企業共享大腦資源包 (NotebookLM Shared Brains Package)**
+> 為了協助企業同仁與學員快速建置專屬知識大腦，我們已將去敏後的完整訓練文檔（含標案黃金範本、協力商資歷合規庫、歷史專案經驗等）打包完成。
+> 請點此下載：**[notebooklm_shared_brains.zip (NotebookLM 企業大腦資源包)](notebooklm_shared_brains.zip)**，下載後解壓即可直接導入 NotebookLM。
+
 ---
 
 ## 🧩 0. 關注點分離：查詢網關與管理程式的解耦設計 (Separation of Concerns)
